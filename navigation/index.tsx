@@ -29,7 +29,13 @@ export default function AppNavigator() {
   return (
     <NavigationContainer>
       {isAuthenticated ? (
-        <Stack.Navigator initialRouteName="Home">
+        <Stack.Navigator
+          screenOptions={{
+            headerTransparent: true,
+            headerTitleStyle: { color: '#fff' }
+          }}
+          initialRouteName="Home"
+        >
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="Settings" component={Settings} />
           <Stack.Screen
