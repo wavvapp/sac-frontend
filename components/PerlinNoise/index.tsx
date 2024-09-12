@@ -29,55 +29,83 @@ interface PerlinNoiseProps {
 
 const PerlinNoise: React.FC<PerlinNoiseProps> = ({ color1, color2 }) => {
   // Create a Skia Runtime Effect for the noise shader
-  const noiseShader = Skia.RuntimeEffect.Make(`
-uniform vec2 u_resolution;
+  const noiseShader = Skia.RuntimeEffect.Make(`uniform float2 u_resolution;
 uniform float u_time;
-uniform vec4 u_color1;
-uniform vec4 u_color2;
+uniform half4 u_color1; // First color
+uniform half4 u_color2; // Second color
 
-vec2 random2( vec2 p ) {
-    return fract(sin(vec2(dot(p,vec2(127.1,311.7)),dot(p,vec2(269.5,183.3))))*43758.5453);
+// Fade function for smooth interpolation
+float fade(float t) { 
+    return t * t * t * (t * (t * 6.0 - 15.0) + 10.0); 
 }
 
-vec4 main(vec2 fragCoord) {
-    vec2 st = fragCoord.xy/u_resolution.xy;
-    st.x *= u_resolution.x/u_resolution.y;
-    vec3 color = vec3(.0);
+// Smooth transition for 2D vectors
+float2 _smooth(float2 x) { 
+    return float2(fade(x.x), fade(x.y)); 
+}
 
-    // Scale
-    st *= 5.;
+// Hash function to generate pseudo-random vectors based on input coordinates
+float2 hash(float2 co, float u_time) {
+    float m = dot(co, float2(12.9898, 78.233));
+    return fract(float2(sin(m), cos(m)) * 43758.5453 * (u_time + 50.0) * 0.000003) * 2.0 - 1.0;
+}
 
-    // Tile the space
-    vec2 i_st = floor(st);
-    vec2 f_st = fract(st);
+// 2D Perlin Noise function
+float perlinNoise(float2 uv, float u_time) {
+    float2 PT  = floor(uv);
+    float2 pt  = fract(uv);
+    float2 mmpt = _smooth(pt);
+    
+    float4 grads = float4(
+        dot(hash(PT + float2(0.0, 1.0), u_time), pt - float2(0.0, 1.0)), 
+        dot(hash(PT + float2(1.0, 1.0), u_time), pt - float2(1.0, 1.0)),
+        dot(hash(PT + float2(0.0, 0.0), u_time), pt - float2(0.0, 0.0)), 
+        dot(hash(PT + float2(1.0, 0.0), u_time), pt - float2(1.0, 0.0))
+    );
 
-    float m_dist = 0.4;  // minimum distance
-    for (int j= -1; j <= 1; j++ ) {
-        for (int i= -1; i <= 1; i++ ) {
-            // Neighbor place in the grid
-            vec2 neighbor = vec2(float(i),float(j));
+    return mix(
+        mix(grads.z, grads.w, mmpt.x), 
+        mix(grads.x, grads.y, mmpt.x), 
+        mmpt.y
+    );
+}
 
-            // Random position from current + neighbor place in the grid
-            vec2 offset = random2(i_st + neighbor);
+// Fractal Brownian Motion (fbm) function
+float fbm(float2 uv, float u_time) {
+    float finalNoise = 0.0;
+    finalNoise += 0.50000 * perlinNoise(2.0 * uv, u_time);
+    finalNoise += 0.25000 * perlinNoise(4.0 * uv, u_time);
+    finalNoise += 0.12500 * perlinNoise(8.0 * uv, u_time);
+    finalNoise += 0.06250 * perlinNoise(16.0 * uv, u_time);
+    finalNoise += 0.03125 * perlinNoise(32.0 * uv, u_time);
+    
+    return finalNoise;
+}
 
-            // Animate the offset
-            offset = 0.5 + 0.5*sin(u_time + 6.2831*offset);
+half4 main(float2 fragCoord) {
+    float2 uv = fragCoord.xy / u_resolution.y;
 
-            // Position of the cell
-            vec2 pos = neighbor + offset - f_st;
+    // Calculate noise sample
+    float noiseSample = fbm(2.0 * uv, u_time) + 0.5;
+    float x = fbm(2.0 * uv * (0.5 - noiseSample), u_time) + 0.5;
 
-            // Cell distance
-            float dist = length(pos);
+    // Base color interpolation between u_color1 and u_color2
+    half4 fragColor = mix(u_color1, u_color2, x);
 
-            // Metaball it!
-            m_dist = min(m_dist, m_dist*dist);
-        }
-    }
+    // Adjust the color based on conditions without overriding the base colors
+    if (x > -1.0)
+        fragColor = mix(fragColor, u_color1 * half4(0.0, 0.0, 0.0, 0.0), 1.0); // Darker tone of u_color1
+    
+    if (x > 0.3)
+        fragColor = mix(fragColor, u_color2 * half4(0.25, 1.5, 1.0, 1.0), 0.5); // Brighter tone of u_color2
+    
+    if (x > 0.4)
+        fragColor = mix(fragColor, half4(0.9, 0.9, 0.3, 1.0), 0.7); // Blend in a custom yellowish tone
+    
+    if (x > clamp(abs(sin(0.5 * u_time)), 0.45, 1.0))
+        fragColor = mix(fragColor, half4(0.8, 0.1, 0.3, 1.0), 0.7); // Blend in a reddish tone
 
-    // Draw cells
-    color = mix(u_color1.rgb, u_color2.rgb, smoothstep(0.0, 0.2, m_dist));
-
-    return vec4(color,1.0);
+    return fragColor; // Output the final color
 }
 `)! // Assert non-null with `!`
 

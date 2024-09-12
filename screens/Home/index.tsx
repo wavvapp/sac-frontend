@@ -14,7 +14,7 @@ export default function HomeScreen() {
 
   return (
     <GestureHandlerRootView style={styles.container}>
-      <PerlinNoise color1="#0E0D26" color2="#14163D" />
+      <PerlinNoise color1="green" color2="aqua" />
       <Button title="Settings" onPress={() => navigation.push('Settings')} />
       <Text>Hello {user?.name}</Text>
       <Text>your Email {user?.email}</Text>
