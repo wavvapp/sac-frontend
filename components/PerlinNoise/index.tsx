@@ -31,8 +31,8 @@ const PerlinNoise: React.FC<PerlinNoiseProps> = ({ color1, color2 }) => {
   // Create a Skia Runtime Effect for the noise shader
   const noiseShader = Skia.RuntimeEffect.Make(`uniform float2 u_resolution;
 uniform float u_time;
-uniform half4 u_color1; // First color
-uniform half4 u_color2; // Second color
+uniform half4 u_color1; // First custom color (white)
+uniform half4 u_color2; // Second custom color (red)
 
 // Fade function for smooth interpolation
 float fade(float t) { 
@@ -47,7 +47,7 @@ float2 _smooth(float2 x) {
 // Hash function to generate pseudo-random vectors based on input coordinates
 float2 hash(float2 co, float u_time) {
     float m = dot(co, float2(12.9898, 78.233));
-    return fract(float2(sin(m), cos(m)) * 43758.5453 * (u_time + 50.0) * 0.000003) * 2.0 - 1.0;
+    return fract(float2(sin(m), cos(m)) * 43758.5453 * (u_time + 50.0) * 0.0000009) * 15.0 - 1.0;
 }
 
 // 2D Perlin Noise function
@@ -89,28 +89,29 @@ half4 main(float2 fragCoord) {
     float noiseSample = fbm(2.0 * uv, u_time) + 0.5;
     float x = fbm(2.0 * uv * (0.5 - noiseSample), u_time) + 0.5;
 
-    // Base color interpolation between u_color1 and u_color2
-    half4 fragColor = mix(u_color1, u_color2, x);
+    half4 fragColor;
 
-    // Adjust the color based on conditions without overriding the base colors
-    if (x > -1.0)
-        fragColor = mix(fragColor, u_color1 * half4(0.0, 0.0, 0.0, 0.0), 1.0); // Darker tone of u_color1
-    
-    if (x > 0.3)
-        fragColor = mix(fragColor, u_color2 * half4(0.25, 1.5, 1.0, 1.0), 0.5); // Brighter tone of u_color2
-    
-    if (x > 0.4)
-        fragColor = mix(fragColor, half4(0.9, 0.9, 0.3, 1.0), 0.7); // Blend in a custom yellowish tone
-    
-    if (x > clamp(abs(sin(0.5 * u_time)), 0.45, 1.0))
-        fragColor = mix(fragColor, half4(0.8, 0.1, 0.3, 1.0), 0.7); // Blend in a reddish tone
+    // Use solid colors based on the value of 'x'
+    if (x > 0.8) {
+      fragColor = half4(1.0, 1.0, 1.0, 1.0); // Solid white
+      } else if (x > 0.6) {
+        fragColor = half4(0.0, 0.0, 0.0, 0.50); // Solid grey
+    } else if (x > 0.4) {
+        fragColor = u_color1;
+    } else if (x > 0.2) {
+        fragColor = half4(0.0, 0.0, 0.0, 1.0); // Solid black
+    } else if (x > 0.1) {
+        fragColor = u_color2; // Custom color 2
+    } else {
+        fragColor = half4(0.0, 0.0, 0.0, 0.25); // light grey
+    }
 
-    return fragColor; // Output the final color
+    return fragColor; // Output the final solid color
 }
 `)! // Assert non-null with `!`
 
   // Time variable for animation using Reanimated's shared value
-  const time = useSharedValue(0)
+  const time = useSharedValue(1)
   const randomValue = Math.random() * 60 // Generate the random value on the JS thread
 
   // Start a repeating animation for the time variable
@@ -119,14 +120,16 @@ half4 main(float2 fragCoord) {
     runOnUI(() => {
       time.value = withRepeat(
         withTiming(randomValue, {
-          duration: 8000,
-          easing: Easing.elastic() // Removed any easing effect
+          duration: 9000,
+          easing: Easing.linear // Removed any easing effect
         }),
         -1,
         true,
         () => {
+          console.log('triggered');
+          
           // Generate a new random value after each repeat cycle
-          time.value = Math.random() * 30 // This will be triggered after each cycle
+          time.value = Math.random() * 60 // This will be triggered after each cycle
         }
       )
     })()
@@ -147,14 +150,14 @@ half4 main(float2 fragCoord) {
     if (time.value === 0) {
       time.value = withRepeat(
         withTiming(randomValue, {
-          duration: 8000,
-          easing: Easing.elastic() // Removed any easing effect
+          duration: 9000,
+          easing: Easing.linear // Removed any easing effect
         }),
         -1,
         true,
         () => {
           // Generate a new random value after each repeat cycle
-          time.value = Math.random() * 30 // This will be triggered after each cycle
+          time.value = Math.random() * 60 // This will be triggered after each cycle
         }
       )
     } else {
