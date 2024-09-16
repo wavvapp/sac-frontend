@@ -4,8 +4,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { RootStackParamList } from "@/navigation";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import React from "react";
-import { Button, Text, View, StyleSheet } from "react-native";
+import { Button, Text, StyleSheet } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 type HomeScreenProps = NativeStackNavigationProp<RootStackParamList, "Home">;
 

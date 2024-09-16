@@ -6,14 +6,14 @@ type fontWeightVariants = "bold" | "medium" | "normal";
 
 const typographyStylesMap: Record<
   SizeVariants,
-  { fontSize: number; lineHeight: number; color: string }
+  { fontSize: number; lineHeight: number }
 > = {
-  "2xl": { fontSize: 40, lineHeight: 51.88, color: "#000000" },
-  xl: { fontSize: 28, lineHeight: 36.32, color: "#000000" },
-  lg: { fontSize: 18, lineHeight: 21.85, color: "#000000" },
-  base: { fontSize: 16, lineHeight: 19.42, color: "#000000" },
-  sm: { fontSize: 14, lineHeight: 18.16, color: "#000000" },
-  xs: { fontSize: 11, lineHeight: 13.26, color: "#000000" },
+  "2xl": { fontSize: 40, lineHeight: 51.88 },
+  xl: { fontSize: 28, lineHeight: 36.32 },
+  lg: { fontSize: 18, lineHeight: 21.85 },
+  base: { fontSize: 16, lineHeight: 19.42 },
+  sm: { fontSize: 14, lineHeight: 18.16 },
+  xs: { fontSize: 11, lineHeight: 13.26 },
 };
 
 const fontWeightMap: Record<
@@ -38,7 +38,7 @@ export default function CustomText({
   style,
   children,
 }: CustomTextProps) {
-  const textStyles = typographyStylesMap[size];
+  const textStyles = { ...typographyStylesMap[size], color: "#000000" };
   const fontWeightStyles = fontWeightMap[fontWeight];
 
   return <Text style={[textStyles, fontWeightStyles, style]}>{children}</Text>;
