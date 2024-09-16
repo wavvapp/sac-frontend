@@ -1,0 +1,42 @@
+import { Image, ImageSourcePropType, StyleSheet, View } from "react-native";
+
+interface UserProfileProps {
+  imageUrl: ImageSourcePropType;
+  size?: "small" | "large";
+}
+
+export default function UserAvatar({
+  size = "small",
+  imageUrl,
+}: UserProfileProps) {
+  return (
+    <View
+      style={[styles.container, size == "small" ? styles.small : styles.large]}
+    >
+      <Image source={imageUrl} style={styles.image} />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: "#353535",
+    overflow: "hidden",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 80,
+  },
+  image: {
+    width: "100%",
+    height: "100%",
+    resizeMode: "cover",
+  },
+  small: {
+    width: 56,
+    height: 56,
+  },
+  large: {
+    width: 160,
+    height: 160,
+  },
+});
