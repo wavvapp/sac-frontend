@@ -4,7 +4,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { RootStackParamList } from "@/navigation";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { Button, Text, StyleSheet } from "react-native";
+import { Button, Text, StyleSheet, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 type HomeScreenProps = NativeStackNavigationProp<RootStackParamList, "Home">;
 
@@ -18,24 +18,14 @@ export default function HomeScreen() {
       <Button title="Settings" onPress={() => navigation.push("Settings")} />
       <Text>Hello {user?.name}</Text>
       <Text>your Email {user?.email}</Text>
-      <CustomText size="2xl" style={styles.customText}>
-        2xl Typography
-      </CustomText>
-      <CustomText size="xl" style={styles.customText}>
-        xl Typography
-      </CustomText>
-      <CustomText size="lg" style={styles.customText}>
-        lg Typography
-      </CustomText>
-      <CustomText size="base" style={styles.customText}>
-        lg Typography
-      </CustomText>
-      <CustomText size="sm" style={styles.customText}>
-        sm Typography
-      </CustomText>
-      <CustomText size="xs" style={styles.customText}>
-        xs Typography
-      </CustomText>
+      <View style={styles.customText}>
+        <CustomText size="2xl">2xl Typography</CustomText>
+        <CustomText size="xl">xl Typography</CustomText>
+        <CustomText size="lg">lg Typography</CustomText>
+        <CustomText size="base">lg Typography</CustomText>
+        <CustomText size="sm">sm Typography</CustomText>
+        <CustomText size="xs">xs Typography</CustomText>
+      </View>
       <Button
         title="Edit Sgnal"
         onPress={() => navigation.push("EditSignal")}
@@ -53,6 +43,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   customText: {
-    color: "white",
+    padding: 4,
+    backgroundColor: "#ffffff",
   },
 });

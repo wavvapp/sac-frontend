@@ -1,5 +1,5 @@
-import { ReactNode } from "react";
-import { Text, TextStyle } from "react-native";
+import { ReactNode, useMemo } from "react";
+import { StyleSheet, Text, TextStyle } from "react-native";
 
 type SizeVariants = "2xl" | "xl" | "lg" | "base" | "sm" | "xs";
 type fontWeightVariants = "bold" | "medium" | "normal";
@@ -35,11 +35,19 @@ interface CustomTextProps {
 export default function CustomText({
   size = "base",
   fontWeight = "normal",
-  style,
+  style = {},
   children,
 }: CustomTextProps) {
-  const textStyles = { ...typographyStylesMap[size], color: "#000000" };
-  const fontWeightStyles = fontWeightMap[fontWeight];
+  const textStyles = useMemo(
+    () =>
+      StyleSheet.create({
+        typography: {
+          ...typographyStylesMap[size],
+          ...fontWeightMap[fontWeight],
+        },
+      }),
+    [size, fontWeight]
+  );
 
-  return <Text style={[textStyles, fontWeightStyles, style]}>{children}</Text>;
+  return <Text style={[textStyles.typography, style]}>{children}</Text>;
 }
