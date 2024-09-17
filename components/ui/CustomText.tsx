@@ -1,8 +1,6 @@
+import { fontWeightVariants, SizeVariants } from "@/types";
 import { ReactNode } from "react";
 import { StyleSheet, Text, TextProps, TextStyle } from "react-native";
-
-type SizeVariants = "2xl" | "xl" | "lg" | "base" | "sm" | "xs";
-type fontWeightVariants = "bold" | "medium" | "normal";
 
 const typographyStylesMap: Record<
   SizeVariants,
@@ -28,8 +26,6 @@ const fontWeightMap: Record<
 interface CustomTextProps extends TextProps {
   size?: SizeVariants;
   fontWeight?: fontWeightVariants;
-  style?: TextStyle;
-  children: ReactNode;
 }
 
 export default function CustomText({
@@ -39,15 +35,11 @@ export default function CustomText({
   children,
   ...rest
 }: CustomTextProps) {
-  const textStyles = StyleSheet.create({
-    typography: {
-      ...typographyStylesMap[size],
-      ...fontWeightMap[fontWeight],
-    },
-  });
-
   return (
-    <Text style={[textStyles.typography, style]} {...rest}>
+    <Text
+      style={[typographyStylesMap[size], fontWeightMap[fontWeight], style]}
+      {...rest}
+    >
       {children}
     </Text>
   );
