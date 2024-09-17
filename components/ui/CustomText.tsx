@@ -1,11 +1,7 @@
 import { fontWeightVariants, SizeVariants } from "@/types";
-import { ReactNode } from "react";
-import { StyleSheet, Text, TextProps, TextStyle } from "react-native";
+import { Text, TextProps, TextStyle } from "react-native";
 
-const typographyStylesMap: Record<
-  SizeVariants,
-  { fontSize: number; lineHeight: number }
-> = {
+const typographyStylesMap: Record<SizeVariants, TextStyle> = {
   "2xl": { fontSize: 40, lineHeight: 51.88 },
   xl: { fontSize: 28, lineHeight: 36.32 },
   lg: { fontSize: 18, lineHeight: 21.85 },
@@ -14,10 +10,7 @@ const typographyStylesMap: Record<
   xs: { fontSize: 11, lineHeight: 13.26 },
 };
 
-const fontWeightMap: Record<
-  fontWeightVariants,
-  { fontWeight: fontWeightVariants }
-> = {
+const fontWeightMap: Record<fontWeightVariants, TextStyle> = {
   bold: { fontWeight: "bold" },
   medium: { fontWeight: "medium" },
   normal: { fontWeight: "normal" },
