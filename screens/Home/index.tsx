@@ -16,7 +16,7 @@ export default function HomeScreen() {
   return (
     <GestureHandlerRootView style={styles.container}>
       <PerlinNoise color1="#0E0D26" color2="#14163D" />
-      <View style={{ backgroundColor: "#FFF", paddingVertical: 20, width: "100%", alignItems: "center", display: "flex", gap: 2 }}>
+      <View style={{ backgroundColor: "#FFF", paddingVertical: 20, width: "100%", alignItems: "center", gap: 16 }}>
         <CheckBox isChecked />
         <CheckBox isChecked={false} />
       </View>
