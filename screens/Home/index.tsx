@@ -6,6 +6,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import React from 'react'
 import { Button, Text, View, StyleSheet } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import { Button as CustomButton } from "@/components/ui/Button"
 type HomeScreenProps = NativeStackNavigationProp<RootStackParamList, 'Home'>
 
 export default function HomeScreen() {
@@ -18,6 +19,9 @@ export default function HomeScreen() {
       <Button title="Settings" onPress={() => navigation.push('Settings')} />
       <Text>Hello {user?.name}</Text>
       <Text>your Email {user?.email}</Text>
+      <View style={{ backgroundColor: "#FFF" }}>
+        <CustomButton />
+      </View>
       <Button
         title="Edit Sgnal"
         onPress={() => navigation.push('EditSignal')}
