@@ -1,27 +1,50 @@
 import { theme } from "@/theme";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View, ViewProps } from "react-native";
+import CustomText from "@/components/ui/CustomText";
 
-
-export default function Badge({name, variant = "default" }:{name:string, variant?:string}) {
-
-  return (
-   <View style={[styles.container, variant === "outline" ? styles.outline : styles.default ]}>
-    <Text style={textVariant[variant]}>{name}</Text>
-   </View>
-  )
+interface BadgeProps extends ViewProps {
+  name: string;
+  variant?: "default" | "outline";
 }
-const textVariant  = StyleSheet.create({
-  default: {
-    color: theme.colors.white,
-  },
-  outline: {
-    color: theme.colors.black,
-  },
-});
+
+export default function Badge({
+  name,
+  variant = "default",
+  style,
+  ...rest
+}: BadgeProps) {
+  return (
+    <View
+      {...rest}
+      style={[
+        styles.container,
+        variant === "outline" ? styles.outline : styles.default,
+        style,
+      ]}
+    >
+      <CustomText
+        size="xs"
+        fontWeight={variant === "outline" ? "normal" : "bold"}
+        style={[styles[`${variant}Text`], styles.text]}
+      >
+        {name}
+      </CustomText>
+    </View>
+  );
+}
 
 const styles = StyleSheet.create({
   container: {
     borderRadius: 100,
+  },
+  text: {
+    textTransform: "uppercase",
+  },
+  defaultText: {
+    color: theme.colors.white,
+  },
+  outlineText: {
+    color: theme.colors.black,
   },
   default: {
     backgroundColor: theme.colors.black,
@@ -29,7 +52,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 6,
   },
   outline: {
-    paddingVertical: 4, 
+    paddingVertical: 4,
     paddingHorizontal: 8,
     borderColor: theme.colors.black,
     borderWidth: 1,
