@@ -1,6 +1,12 @@
-import { Image, ImageSourcePropType, StyleSheet, View } from "react-native";
+import {
+  Image,
+  ImageSourcePropType,
+  StyleSheet,
+  View,
+  ViewProps,
+} from "react-native";
 
-interface UserProfileProps {
+interface UserProfileProps extends ViewProps {
   imageUrl: ImageSourcePropType;
   size?: "small" | "large";
 }
@@ -8,10 +14,17 @@ interface UserProfileProps {
 export default function UserAvatar({
   size = "small",
   imageUrl,
+  style,
+  ...rest
 }: UserProfileProps) {
   return (
     <View
-      style={[styles.container, size == "small" ? styles.small : styles.large]}
+      {...rest}
+      style={[
+        styles.container,
+        size == "small" ? styles.small : styles.large,
+        style,
+      ]}
     >
       <Image source={imageUrl} style={styles.image} />
     </View>
