@@ -2,10 +2,10 @@ import { View, StyleSheet } from "react-native"
 import CheckIcon from "@/components/Vectors/CheckIcon"
 import PlusIcon from "@/components/Vectors/PlusIcon"
 interface CheckBoxProps {
-    isChecked: boolean
+    isChecked?: boolean
 }
 
-export const CheckBox: React.FC<CheckBoxProps> = ({ isChecked = false }): JSX.Element => {
+export const CheckBox = ({ isChecked = false }: CheckBoxProps): JSX.Element => {
     return (
         <View style={[styles.container, isChecked && styles.checkedContainer]}>
             {isChecked ? <CheckIcon /> : <PlusIcon />}
