@@ -13,19 +13,15 @@ export default function Badge({
   style,
   ...rest
 }: BadgeProps) {
+  const variantStyle = variant === "outline" ? styles.outline : styles.default;
+  const customTextStyle =
+    variant === "outline" ? styles.outlineText : styles.defaultText;
   return (
-    <View
-      {...rest}
-      style={[
-        styles.container,
-        variant === "outline" ? styles.outline : styles.default,
-        style,
-      ]}
-    >
+    <View {...rest} style={[styles.container, variantStyle, style]}>
       <CustomText
         size="xs"
         fontWeight={variant === "outline" ? "normal" : "bold"}
-        style={[styles[`${variant}Text`], styles.text]}
+        style={[styles.text, customTextStyle]}
       >
         {name}
       </CustomText>
