@@ -16,7 +16,7 @@ export default function HomeScreen() {
   return (
     <GestureHandlerRootView style={styles.container}>
       <PerlinNoise color1="#0E0D26" color2="#14163D" />
-      <View style={{ display: "flex", flexDirection: "row", gap: 16, padding: 40, backgroundColor: "#FFF" }}>
+      <View style={{ flexDirection: "row", gap: 16, padding: 40, backgroundColor: "#FFF" }}>
         <CustomButton variant="primary" textSize="base" title='Primary' onPress={() => navigation.push("Settings")} />
         <CustomButton variant="secondary" textSize="base" title='Later' onPress={() => navigation.push("EditSignal")} />
         <CustomButton variant="secondary" active textSize="base" title="Now" onPress={() => navigation.push("EditSignal")} />

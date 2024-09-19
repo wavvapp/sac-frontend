@@ -1,37 +1,45 @@
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { GestureResponderEvent, StyleSheet, TextStyle, TouchableOpacity, TouchableOpacityProps, ViewStyle } from "react-native";
 import CustomText from "@/components/ui/CustomText";
 import { SizeVariants } from "@/types";
 
-type Variant = 'secondary' | 'primary' | null;
-interface ButtonProps {
-    onPress: (args: any) => void;
+type Variant = 'secondary' | 'primary';
+interface ButtonProps extends TouchableOpacityProps {
+    onPress: (event: GestureResponderEvent) => void;
     variant?: Variant;
     textSize: SizeVariants;
     title: string;
-    active?: boolean
+    active?: boolean,
+    containerStyles?: ViewStyle,
+    textStyles?: TextStyle
 }
-export function CustomButton({ variant = 'primary', onPress, textSize, active, title, ...rest }: ButtonProps): JSX.Element {
-    let containerClasses = {}
-    let textClasses = {}
-    switch (variant) {
-        case 'primary':
-            containerClasses = styles.primary
-            textClasses = styles.primaryVariantText
-            break;
+export function CustomButton(
+    {
+        variant = 'primary',
+        onPress,
+        textSize,
+        textStyles = {},
+        containerStyles = {},
+        active,
+        title,
+        ...rest
+    }: ButtonProps): JSX.Element {
 
-        case 'secondary':
-            containerClasses = [styles.secondary, active && styles.secondaryActive]
-            textClasses = [styles.secondaryVariantText, active && styles.secondaryActiveVariantText]
-            break;
-
-        default:
-            containerClasses = styles.primary
-            textClasses = styles.primaryVariantText
-            break;
+    const variantStyles = {
+        primary: {
+            container: styles.primary,
+            text: styles.primaryVariantText,
+        },
+        secondary: {
+            container: [styles.secondary, active && styles.secondaryActive],
+            text: [styles.secondaryVariantText, active && styles.secondaryActiveVariantText],
+        }
     }
+
+    const { container, text } = variantStyles[variant] || variantStyles.primary;
+
     return (
-        <TouchableOpacity onPress={onPress} style={containerClasses}  {...rest} >
-            <CustomText size={textSize} style={textClasses}>{title}</CustomText>
+        <TouchableOpacity onPress={onPress} style={[container, containerStyles]}  {...rest} >
+            <CustomText size={textSize} style={[text, textStyles]}>{title}</CustomText>
         </TouchableOpacity>
     )
 }
