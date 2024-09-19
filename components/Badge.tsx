@@ -13,7 +13,7 @@ export default function Badge({
   style,
   ...rest
 }: BadgeProps) {
-  const variantStyle = variant === "outline" ? styles.outline : styles.default;
+  const variantStyle = styles[variant];
   const customTextStyle =
     variant === "outline" ? styles.outlineText : styles.defaultText;
   return (
