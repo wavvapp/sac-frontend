@@ -3,6 +3,7 @@ import { CheckBox } from '@/components/ui/CheckBox';
 import CustomText from "@/components/ui/CustomText";
 import { useAuth } from '@/contexts/AuthContext'
 import { RootStackParamList } from '@/navigation'
+import { theme } from '@/theme';
 import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { Button, Text, View, StyleSheet } from 'react-native'
@@ -16,7 +17,7 @@ export default function HomeScreen() {
   return (
     <GestureHandlerRootView style={styles.container}>
       <PerlinNoise color1="#0E0D26" color2="#14163D" />
-      <View style={{ backgroundColor: "#FFF", paddingVertical: 20, width: "100%", alignItems: "center", gap: 16 }}>
+      <View style={{ backgroundColor: theme.colors.white, paddingVertical: 20, width: "100%", alignItems: "center", gap: 16 }}>
         <CheckBox isChecked />
         <CheckBox isChecked style={{ margin: 20 }} />
         <CheckBox isChecked={false} />
@@ -51,6 +52,6 @@ const styles = StyleSheet.create({
   },
   customText: {
     padding: 4,
-    backgroundColor: "#ffffff",
+    backgroundColor: theme.colors.white,
   },
 });

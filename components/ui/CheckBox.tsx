@@ -1,9 +1,10 @@
 import { View, StyleSheet, ViewStyle } from "react-native"
 import CheckIcon from "@/components/vectors/CheckIcon"
 import PlusIcon from "@/components/vectors/PlusIcon"
-interface CheckBoxProps {
+import { theme } from "@/theme";
+import { ViewProps } from "react-native-svg/lib/typescript/fabric/utils";
+interface CheckBoxProps extends ViewProps {
     isChecked?: boolean;
-    style?: ViewStyle
 }
 
 export const CheckBox = ({ isChecked = false, style = {} }: CheckBoxProps): JSX.Element => {
@@ -22,9 +23,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         display: "flex",
         borderRadius: 24,
-        backgroundColor: "#E3E3E3"
+        backgroundColor: theme.colors.gray
     },
     checkedContainer: {
-        backgroundColor: "#000"
+        backgroundColor: theme.colors.black
     },
 })
