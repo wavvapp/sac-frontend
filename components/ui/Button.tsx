@@ -1,10 +1,8 @@
-import { GestureResponderEvent, StyleSheet, TextStyle, TouchableOpacity, TouchableOpacityProps, ViewStyle } from "react-native";
+import { StyleSheet, TextStyle, TouchableOpacity, TouchableOpacityProps, ViewStyle } from "react-native";
 import CustomText from "@/components/ui/CustomText";
-import { SizeVariants } from "@/types";
-
-type Variant = 'secondary' | 'primary';
+import { ButtonVariant, SizeVariants } from "@/types";
 interface ButtonProps extends TouchableOpacityProps {
-    variant?: Variant;
+    variant?: ButtonVariant;
     textSize: SizeVariants;
     title: string;
     active?: boolean,
