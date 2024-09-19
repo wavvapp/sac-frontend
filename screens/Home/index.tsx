@@ -1,5 +1,6 @@
 import PerlinNoise from '@/components/PerlinNoise'
 import CustomText from "@/components/ui/CustomText";
+import UserAvailability from '@/components/UserAvailability';
 import { useAuth } from "@/contexts/AuthContext";
 import { RootStackParamList } from "@/navigation";
 import { useNavigation } from "@react-navigation/native";
@@ -31,6 +32,7 @@ export default function HomeScreen() {
         onPress={() => navigation.push("EditSignal")}
       />
       <Button title="Sign Out" onPress={signOut} />
+      <UserAvailability />
     </GestureHandlerRootView>
   );
 }
