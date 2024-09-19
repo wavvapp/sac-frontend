@@ -1,5 +1,5 @@
 import PerlinNoise from '@/components/PerlinNoise'
-import { CheckBox } from '@/components/ui/CheckBox';
+import CheckBox from '@/components/ui/CheckBox';
 import CustomText from "@/components/ui/CustomText";
 import { useAuth } from '@/contexts/AuthContext'
 import { RootStackParamList } from '@/navigation'

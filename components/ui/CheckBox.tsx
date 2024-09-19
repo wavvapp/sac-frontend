@@ -7,7 +7,7 @@ interface CheckBoxProps extends ViewProps {
     isChecked?: boolean;
 }
 
-export function CheckBox({ isChecked = false, style = {}, ...rest }: CheckBoxProps): JSX.Element {
+export default function CheckBox({ isChecked = false, style = {}, ...rest }: CheckBoxProps): JSX.Element {
     return (
         <View style={[styles.container, isChecked && styles.checkedContainer, style]} {...rest}>
             {isChecked ? <CheckIcon /> : <PlusIcon />}
