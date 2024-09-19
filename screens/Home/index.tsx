@@ -1,6 +1,5 @@
 import PerlinNoise from '@/components/PerlinNoise'
 import CustomText from "@/components/ui/CustomText";
-import { CheckBox } from '@/components/ui/checkbox'
 import { useAuth } from '@/contexts/AuthContext'
 import { RootStackParamList } from '@/navigation'
 import { useNavigation } from '@react-navigation/native'
@@ -17,8 +16,6 @@ export default function HomeScreen() {
     <GestureHandlerRootView style={styles.container}>
       <PerlinNoise color1="#0E0D26" color2="#14163D" />
       <View style={{ backgroundColor: "#FFF", paddingVertical: 20, width: "100%", alignItems: "center", gap: 16 }}>
-        <CheckBox isChecked />
-        <CheckBox isChecked={false} />
       </View>
       <Button title="Settings" onPress={() => navigation.push('Settings')} />
       <Button title="Settings" onPress={() => navigation.push("Settings")} />

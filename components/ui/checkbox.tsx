@@ -1,6 +1,6 @@
 import { View, StyleSheet } from "react-native"
-import CheckIcon from "@/components/Vectors/CheckIcon"
-import PlusIcon from "@/components/Vectors/PlusIcon"
+import CheckIcon from "@/components/vectors/CheckIcon"
+import PlusIcon from "@/components/vectors/PlusIcon"
 interface CheckBoxProps {
     isChecked?: boolean
 }
