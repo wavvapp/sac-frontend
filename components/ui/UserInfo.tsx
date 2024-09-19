@@ -1,20 +1,27 @@
-import { StyleSheet, View } from "react-native";
-import CustomText from "./CustomText";
+import { StyleSheet, View, ViewProps } from "react-native";
+import CustomText from "@/components/ui/CustomText";
+import Badge from "@/components/ui/Badge";
 
-interface UserInfoProps {
+interface UserInfoProps extends ViewProps {
   name: string;
   time: string;
   activity: string;
 }
 
-export default function UserInfo({ name, time, activity }: UserInfoProps) {
-  console.log("name, time, activity", name, time, activity);
+export default function UserInfo({
+  name,
+  time,
+  activity,
+  style,
+  ...rest
+}: UserInfoProps) {
   return (
-    <View style={styles.container}>
-      <CustomText size="xl" style={styles.nameContainer}>
+    <View style={(styles.container, style)} {...rest}>
+      <CustomText size="lg" style={styles.nameContainer} fontWeight="medium">
         {name}
       </CustomText>
-      <View style={styles.badgeContainer}>
+      <View style={styles.detailsContainer}>
+        <Badge name={time} variant="outline" />
         <CustomText size="sm">{activity}</CustomText>
       </View>
     </View>
@@ -24,12 +31,15 @@ export default function UserInfo({ name, time, activity }: UserInfoProps) {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "white",
+    flexDirection: "row",
   },
   nameContainer: {
     textTransform: "uppercase",
   },
-  badgeContainer: {
+  detailsContainer: {
     flexDirection: "row",
-    gap: 20,
+    alignItems: "center",
+    gap: 6,
+    marginTop: 2,
   },
 });

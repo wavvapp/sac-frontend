@@ -1,8 +1,9 @@
 import PerlinNoise from '@/components/PerlinNoise'
-import CustomText from "@/components/ui/CustomText";
+
 import UserInfo from "@/components/ui/UserInfo";
 import { useAuth } from "@/contexts/AuthContext";
 import { RootStackParamList } from "@/navigation";
+import { theme } from "@/theme";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { Button, Text, StyleSheet, View } from "react-native";
@@ -12,7 +13,11 @@ type HomeScreenProps = NativeStackNavigationProp<RootStackParamList, "Home">;
 export default function HomeScreen() {
   const navigation = useNavigation<HomeScreenProps>();
   const { user, signOut } = useAuth();
-  const userInfo = { name: "Emil WAgner", time: "Evening", activity: "club" };
+  const userInfo = {
+    name: "Emil WAgner",
+    time: "Evening",
+    activity: "Jodelkeller",
+  };
 
   return (
     <GestureHandlerRootView style={styles.container}>
@@ -20,12 +25,14 @@ export default function HomeScreen() {
       <Button title="Settings" onPress={() => navigation.push("Settings")} />
       <Text>Hello {user?.name}</Text>
       <Text>your Email {user?.email}</Text>
-      <UserInfo
-        // {...userInfo}
-        name={userInfo.name}
-        time={userInfo.time}
-        activity={userInfo.activity}
-      />
+      <View style={styles.userInfo}>
+        <UserInfo
+          name={userInfo.name}
+          time={userInfo.time}
+          activity={userInfo.activity}
+        />
+      </View>
+
       <Button
         title="Edit Sgnal"
         onPress={() => navigation.push("EditSignal")}
@@ -42,8 +49,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  customText: {
+  userInfo: {
     padding: 4,
-    backgroundColor: "#ffffff",
+    backgroundColor: theme.colors.white,
   },
 });
