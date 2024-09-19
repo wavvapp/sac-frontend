@@ -4,7 +4,6 @@ import { SizeVariants } from "@/types";
 
 type Variant = 'secondary' | 'primary';
 interface ButtonProps extends TouchableOpacityProps {
-    onPress: (event: GestureResponderEvent) => void;
     variant?: Variant;
     textSize: SizeVariants;
     title: string;
