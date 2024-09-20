@@ -1,4 +1,6 @@
-export const mockFriendsList: { id: number, name: string; active: boolean; }[] = [
+import { Friend } from "@/types";
+
+export const mockFriendsList: Friend[] = [
     { id: 1, name: "vincent", active: false },
     { id: 2, name: "vincent", active: false },
     { id: 3, name: "vincent", active: true },

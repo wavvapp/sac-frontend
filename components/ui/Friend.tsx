@@ -1,14 +1,15 @@
 import CustomText from "@/components/ui/CustomText";
-import { StyleSheet, View } from "react-native";
+import { Friend } from "@/types";
+import { StyleSheet, TouchableOpacity } from "react-native";
 
-export default function FriendCard({ name, active }: { name: string, active: boolean }) {
+export default function FriendCard({ user }: { user: Friend }) {
     return (
-        <View style={styles.container}>
+        <TouchableOpacity style={styles.container} onPress={() => console.log("The user clicked was: ------->", user.id)}>
             <CustomText size="sm">0</CustomText>
             <CustomText size="base">
-                {name}
+                {user.name}
             </CustomText>
-        </View>
+        </TouchableOpacity>
     )
 }
 
@@ -16,7 +17,7 @@ const styles = StyleSheet.create({
     container: {   
         flexDirection: "row",
         alignItems: "center",
-        marginBottom: 32,
+        paddingBottom: 32,
         gap: 8
     }
 })
