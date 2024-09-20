@@ -1,6 +1,7 @@
 import { StyleSheet, TextStyle, TouchableOpacity, TouchableOpacityProps, ViewStyle } from "react-native";
 import CustomText from "@/components/ui/CustomText";
 import { ButtonVariant, SizeVariants } from "@/types";
+import { theme } from "@/theme";
 interface ButtonProps extends TouchableOpacityProps {
     variant?: ButtonVariant;
     textSize: SizeVariants;
@@ -44,32 +45,32 @@ export function CustomButton(
 
 const styles = StyleSheet.create({
     primary: {
-        backgroundColor: "#000",
-        color: "#fff",
+        backgroundColor: theme.colors.black,
+        color: theme.colors.white,
         borderRadius: 4,
         paddingVertical: 10,
         paddingHorizontal: 24
     },
     primaryVariantText: {
-        color: "#fff",
+        color: theme.colors.white,
         fontWeight: 500
     },
     secondary: {
-        backgroundColor: "#ffff",
-        borderColor: "#000",
+        backgroundColor: theme.colors.white,
+        borderColor: theme.colors.black,
         borderWidth: 1,
         paddingVertical: 10,
         paddingHorizontal: 16,
         borderRadius: 100
     },
     secondaryActive: {
-        backgroundColor: "#000"
+        backgroundColor: theme.colors.black
     },
     secondaryVariantText: {
-        color: "#000",
+        color: theme.colors.black,
         textTransform: "uppercase"
     },
     secondaryActiveVariantText: {
-        color: "#FFF",
+        color: theme.colors.white,
     }
 })
