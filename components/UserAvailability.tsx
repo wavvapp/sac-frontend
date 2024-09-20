@@ -56,15 +56,14 @@ const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
     justifyContent: "flex-end",
-    backgroundColor: "#00000040",
+    backgroundColor: theme.colors.blackOverlay,
   },
   modalView: {
     width: "100%",
     backgroundColor: theme.colors.white,
     height: 600,
     borderRadius: 12,
-    paddingHorizontal: 16,
-    paddingVertical: 16,
+    padding:16,
     shadowOffset: {
       width: 0,
       height: 2,
