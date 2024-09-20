@@ -11,6 +11,7 @@ export default function EditSignal() {
         alignItems: "center",
         justifyContent: "center",
         gap: 10,
+        padding: 12
       }}
     >
       <FriendsList />

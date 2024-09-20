@@ -19,10 +19,8 @@ export default function FriendsList() {
 
 const styles = StyleSheet.create({
     container: {
-        borderColor: theme.colors.black,
-        borderWidth: 4,
-        flexDirection: "row",
+        flexDirection: "column",
         gap: 30,
         width: "100%"
-    }
+    },
 })
