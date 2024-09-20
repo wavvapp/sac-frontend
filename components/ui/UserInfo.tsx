@@ -1,6 +1,7 @@
 import { StyleSheet, View, ViewProps } from "react-native";
 import CustomText from "@/components/ui/CustomText";
 import Badge from "@/components/ui/Badge";
+import { theme } from "@/theme";
 
 interface UserInfoProps extends ViewProps {
   name: string;
@@ -30,7 +31,7 @@ export default function UserInfo({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "white",
+    backgroundColor: theme.colors.white,
     flexDirection: "row",
   },
   nameContainer: {
