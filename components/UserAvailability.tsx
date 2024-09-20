@@ -1,29 +1,73 @@
-import { Button, Text, TouchableOpacity, View } from "react-native";
+import { Modal, StyleSheet, TouchableOpacity, View } from "react-native";
 import CustomText from "@/components/ui/CustomText";
 import EditIcon from "@/components/vectors/EditIcon";
-import { useNavigation } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { RootStackParamList } from "@/navigation";
-
-type UserAvailabilityProps = NativeStackNavigationProp<RootStackParamList, "Home">;
+import { useState } from "react";
+import { theme } from "@/theme";
 
 export default function UserAvailability() {
-   const navigation = useNavigation<UserAvailabilityProps>();
+  const [modalVisible, setModalVisible] = useState(false);
   return (
-    <View style={{ gap: 15, width: "100%", paddingLeft: 12, paddingRight: 21, backgroundColor: "#FFFFFF" }}>
-      <CustomText
-        size="sm"
-        fontWeight="medium"
-        style={{ lineHeight: 17, letterSpacing: -1 }}
-      >
+    <View style={styles.container}>
+      <CustomText size="sm" fontWeight="medium" style={styles.signalText}>
         Signal
       </CustomText>
-      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+      <View style={styles.availableContainer}>
         <CustomText size="xl">Available</CustomText>
-        <TouchableOpacity onPress={()=> navigation.push('EditSignal')}>
+        <TouchableOpacity onPress={() => setModalVisible(true)}>
           <EditIcon />
         </TouchableOpacity>
       </View>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalView}>
+            <CustomText size="sm" fontWeight="medium" style={styles.signalText}>
+              Signal
+            </CustomText>
+            <CustomText size="xl">Available</CustomText>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    gap: 15,
+    width: "100%",
+    paddingLeft: 12,
+    paddingRight: 21,
+    paddingVertical: 5,
+    backgroundColor: theme.colors.white,
+  },
+  signalText: {
+    lineHeight: 17,
+    letterSpacing: -1,
+    textTransform: "uppercase",
+  },
+  availableContainer: { flexDirection: "row", justifyContent: "space-between" },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "flex-end",
+    backgroundColor: "#00000040",
+  },
+  modalView: {
+    width: "100%",
+    backgroundColor: theme.colors.white,
+    height: 600,
+    borderRadius: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 16,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+  },
+});
