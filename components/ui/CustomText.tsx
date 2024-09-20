@@ -11,7 +11,7 @@ const typographyStylesMap: Record<SizeVariants, TextStyle> = {
 };
 
 const fontWeightMap: Record<fontWeightVariants, TextStyle> = {
-  bold: { fontWeight: "bold" },
+  bold: { fontWeight: "500" },
   medium: { fontWeight: "medium" },
   normal: { fontWeight: "normal" },
 };
