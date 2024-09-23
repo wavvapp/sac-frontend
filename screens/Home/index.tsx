@@ -19,7 +19,7 @@ export default function HomeScreen() {
     <GestureHandlerRootView style={styles.container}>
       <PerlinNoise color1="#0E0D26" color2="#14163D" />
       <View style={{ backgroundColor: theme.colors.white, paddingVertical: 20, width: "100%", alignItems: "center", gap: 16 }}>
-        <CheckBox isChecked />
+        <CheckBox isChecked onCheckedChange={(isChecked) => console.log("The button is clicked", isChecked)} />
         <CheckBox isChecked style={{ margin: 20 }} />
         <CheckBox isChecked={false} />
       </View>
