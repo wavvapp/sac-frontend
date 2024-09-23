@@ -1,11 +1,10 @@
-import { View, StyleSheet, ViewStyle } from "react-native"
+import { StyleSheet, TouchableOpacityProps, TouchableOpacity } from "react-native"
 import CheckIcon from "@/components/vectors/CheckIcon"
 import PlusIcon from "@/components/vectors/PlusIcon"
 import { theme } from "@/theme";
-import { ViewProps } from "react-native-svg/lib/typescript/fabric/utils";
-import { useState } from "react";
-interface CheckBoxProps extends ViewProps {
-    isChecked?: boolean;
+
+interface CheckBoxProps extends TouchableOpacityProps {
+    isChecked: boolean;
     onCheckedChange?: (isChecked: boolean) => void;
 }
 
@@ -16,13 +15,13 @@ export default function CheckBox({ isChecked = false, style = {}, onCheckedChang
     };
 
     return (
-        <View
+        <TouchableOpacity
             style={[styles.container, isChecked && styles.checkedContainer, style]}
-            onTouchEnd={handleCheckedChange}
+            onPress={handleCheckedChange}
             {...rest}
         >
             {isChecked ? <CheckIcon /> : <PlusIcon />}
-        </View>
+        </TouchableOpacity>
     )
 }
 
