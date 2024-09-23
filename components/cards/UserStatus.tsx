@@ -4,6 +4,8 @@ import { theme } from "@/theme";
 import { User } from "@/types";
 import { useNavigation } from "@react-navigation/native";
 import { HomeScreenProps } from "@/screens/Home";
+import UserInfo from "../UserInfo";
+import EllipsisIcon from "../vectors/EllipsisIcon";
 
 interface UserStatusProps extends ViewStyle {
   friends: User[];
@@ -31,16 +33,21 @@ export default function UserStatus({
 
   return (
     <View style={[styles.container, style]} {...rest}>
+      <UserInfo
+        name={user.firstName}
+        time={user.time}
+        activity={user.activity}
+        style={styles.userContainer}
+      />
       <View style={styles.friendsContainer}>
-        <CustomText size="sm" fontWeight="medium">
-          Visible to {friends.length} friends
-        </CustomText>
+        <CustomText size="sm">Visible to {friends.length} friends</CustomText>
         <CustomText size="sm">{fullFriendsList}</CustomText>
       </View>
       <TouchableOpacity style={styles.editButton}>
         <CustomText
           onPress={() => navigation.push("EditSignal")}
           size="sm"
+          fontWeight="semibold"
           style={styles.editButtonText}
         >
           Tap to edit
@@ -57,13 +64,15 @@ const styles = StyleSheet.create({
     gap: 24,
     borderRadius: 12,
   },
+  userContainer: {
+    paddingHorizontal: 24,
+  },
   friendsContainer: {
     paddingHorizontal: 24,
   },
   editButton: {
     padding: 10,
     backgroundColor: theme.colors.black,
-    width: "100%",
   },
   editButtonText: {
     color: theme.colors.white,

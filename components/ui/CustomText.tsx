@@ -11,9 +11,10 @@ const typographyStylesMap: Record<SizeVariants, TextStyle> = {
 };
 
 const fontWeightMap: Record<fontWeightVariants, TextStyle> = {
-  bold: { fontWeight: "bold" },
-  medium: { fontWeight: "medium" },
-  normal: { fontWeight: "normal" },
+  bold: { fontWeight: 700 },
+  semibold: { fontWeight: 600 },
+  medium: { fontWeight: 500 },
+  normal: { fontWeight: 400 },
 };
 
 interface CustomTextProps extends TextProps {

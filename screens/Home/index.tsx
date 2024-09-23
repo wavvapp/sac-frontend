@@ -54,47 +54,14 @@ export default function HomeScreen() {
       activity: "Jodelkeller",
     },
   ];
- 
 
   return (
     <GestureHandlerRootView style={styles.container}>
       <PerlinNoise color1="#0E0D26" color2="#14163D" />
-      <View style={{ backgroundColor: theme.colors.white, paddingVertical: 20, width: "100%", alignItems: "center", gap: 16 }}>
-        <CheckBox isChecked onCheckedChange={(isChecked) => console.log("The button is clicked", isChecked)} />
-        <CheckBox isChecked style={{ margin: 20 }} />
-        <CheckBox isChecked={false} />
+      <View style={styles.customText}>
+        <Text>Hello {user?.name}</Text>
+        <Text>your Email {user?.email}</Text>
       </View>
-      <View
-        style={{
-          flexDirection: "row",
-          gap: 16,
-          padding: 40,
-          backgroundColor: "#FFF",
-        }}
-      >
-        <CustomButton
-          variant="primary"
-          textSize="base"
-          title="Primary"
-          onPress={() => navigation.push("Settings")}
-        />
-        <CustomButton
-          variant="secondary"
-          textSize="base"
-          title="Later"
-          onPress={() => navigation.push("EditSignal")}
-        />
-        <CustomButton
-          variant="secondary"
-          active
-          textSize="base"
-          title="Now"
-          onPress={() => navigation.push("EditSignal")}
-        />
-        <Button title="Normal" onPress={signOut} />
-      </View>
-      <Text>Hello {user?.name}</Text>
-      <Text>your Email {user?.email}</Text>
       <UserStatus friends={visibleFriends} user={userInfo} />
     </GestureHandlerRootView>
   );
@@ -109,6 +76,7 @@ const styles = StyleSheet.create({
   },
   customText: {
     padding: 4,
-    backgroundColor: "#ffffff",
+    backgroundColor: theme.colors.white,
+    marginVertical: 4,
   },
 });
