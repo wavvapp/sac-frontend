@@ -9,6 +9,7 @@ import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { Button, Text, StyleSheet, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import Status from '@/components/cards/Status';
 type HomeScreenProps = NativeStackNavigationProp<RootStackParamList, "Home">;
 
 export default function HomeScreen() {
@@ -45,7 +46,7 @@ export default function HomeScreen() {
         <CustomButton
           variant="secondary"
           textSize="base"
-          title="Later"
+          title="Edit Signal"
           onPress={() => navigation.push("EditSignal")}
         />
         <CustomButton
