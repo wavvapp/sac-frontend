@@ -1,4 +1,5 @@
 import Badge from '@/components/Badge';
+import Status from '@/components/cards/Status';
 import UserAvatar from '@/components/ui/UserAvatar';
 import { Text, View } from 'react-native'
 
@@ -20,6 +21,7 @@ export default function EditSignal() {
       <UserAvatar imageUrl={require("@/assets/images/adaptive-icon.png")} />
       <Badge variant="outline" name="Evening" />
       <Badge name="12" />
+      <Status timeSlots={['NOW','MORNING','Lunch','AFTERNOON','EVENING']} />
     </View>
   );
 }
