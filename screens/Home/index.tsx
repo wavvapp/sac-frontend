@@ -1,4 +1,5 @@
 import PerlinNoise from '@/components/PerlinNoise'
+import { CustomButton } from '@/components/ui/Button';
 
 import UserInfo from "@/components/ui/UserInfo";
 import { useAuth } from "@/contexts/AuthContext";
@@ -22,7 +23,35 @@ export default function HomeScreen() {
   return (
     <GestureHandlerRootView style={styles.container}>
       <PerlinNoise color1="#0E0D26" color2="#14163D" />
-      <Button title="Settings" onPress={() => navigation.push("Settings")} />
+      <View
+        style={{
+          flexDirection: "row",
+          gap: 16,
+          padding: 40,
+          backgroundColor: "#FFF",
+        }}
+      >
+        <CustomButton
+          variant="primary"
+          textSize="base"
+          title="Primary"
+          onPress={() => navigation.push("Settings")}
+        />
+        <CustomButton
+          variant="secondary"
+          textSize="base"
+          title="Later"
+          onPress={() => navigation.push("EditSignal")}
+        />
+        <CustomButton
+          variant="secondary"
+          active
+          textSize="base"
+          title="Now"
+          onPress={() => navigation.push("EditSignal")}
+        />
+        <Button title="Normal" onPress={signOut} />
+      </View>
       <Text>Hello {user?.name}</Text>
       <Text>your Email {user?.email}</Text>
       <View style={styles.userInfo}>
@@ -32,12 +61,6 @@ export default function HomeScreen() {
           activity={userInfo.activity}
         />
       </View>
-
-      <Button
-        title="Edit Sgnal"
-        onPress={() => navigation.push("EditSignal")}
-      />
-      <Button title="Sign Out" onPress={signOut} />
     </GestureHandlerRootView>
   );
 }
