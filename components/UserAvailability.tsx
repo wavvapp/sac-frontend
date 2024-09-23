@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     letterSpacing: -1,
     textTransform: "uppercase",
   },
-  availableContainer: { flexDirection: "row", justifyContent: "space-between" },
+  availableContainer: { flexDirection: "row", justifyContent: "space-between", alignItems:"center" },
   modalContainer: {
     flex: 1,
     justifyContent: "flex-end",
