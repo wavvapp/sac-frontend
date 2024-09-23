@@ -1,5 +1,6 @@
 import PerlinNoise from '@/components/PerlinNoise'
 import CheckBox from '@/components/ui/CheckBox';
+import { CustomButton } from '@/components/ui/Button';
 import CustomText from "@/components/ui/CustomText";
 import { useAuth } from '@/contexts/AuthContext'
 import { RootStackParamList } from '@/navigation'
@@ -24,6 +25,12 @@ export default function HomeScreen() {
       </View>
       <Button title="Settings" onPress={() => navigation.push('Settings')} />
       <Button title="Settings" onPress={() => navigation.push("Settings")} />
+      <View style={{ flexDirection: "row", gap: 16, padding: 40, backgroundColor: "#FFF" }}>
+        <CustomButton variant="primary" textSize="base" title='Primary' onPress={() => navigation.push("Settings")} />
+        <CustomButton variant="secondary" textSize="base" title='Later' onPress={() => navigation.push("EditSignal")} />
+        <CustomButton variant="secondary" active textSize="base" title="Now" onPress={() => navigation.push("EditSignal")} />
+        <Button title="Normal" onPress={signOut} />
+      </View>
       <Text>Hello {user?.name}</Text>
       <Text>your Email {user?.email}</Text>
       <View style={styles.customText}>
@@ -34,11 +41,7 @@ export default function HomeScreen() {
         <CustomText size="sm">sm Typography</CustomText>
         <CustomText size="xs">xs Typography</CustomText>
       </View>
-      <Button
-        title="Edit Sgnal"
-        onPress={() => navigation.push("EditSignal")}
-      />
-      <Button title="Sign Out" onPress={signOut} />
+
     </GestureHandlerRootView>
   );
 }
