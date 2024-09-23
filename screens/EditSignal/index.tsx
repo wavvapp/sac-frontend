@@ -1,5 +1,5 @@
-import Badge from '@/components/Badge';
 import Status from '@/components/cards/Status';
+import Badge from '@/components/ui/Badge';
 import UserAvatar from '@/components/ui/UserAvatar';
 import { Text, View } from 'react-native'
 
