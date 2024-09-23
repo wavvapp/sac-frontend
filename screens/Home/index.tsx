@@ -1,16 +1,24 @@
-import PerlinNoise from '@/components/PerlinNoise'
-import { CustomButton } from '@/components/ui/Button';
+import Signaling from "@/components/list/Signaling";
+import PerlinNoise from "@/components/PerlinNoise";
+import { CustomButton } from "@/components/ui/Button";
 import UserInfo from "@/components/UserInfo";
 import { useAuth } from "@/contexts/AuthContext";
 import { RootStackParamList } from "@/navigation";
 import { theme } from "@/theme";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useRef } from "react";
 import { Button, Text, StyleSheet, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 type HomeScreenProps = NativeStackNavigationProp<RootStackParamList, "Home">;
+import { SignalingRef } from "@/components/list/Signaling";
 
 export default function HomeScreen() {
+  const signalingRef = useRef<SignalingRef>(null);
+  const openSignalingBottomSheet = () => {
+    signalingRef.current?.openBottomSheet();
+  };
+
   const navigation = useNavigation<HomeScreenProps>();
   const { user, signOut } = useAuth();
   const userInfo = {
@@ -65,10 +73,9 @@ export default function HomeScreen() {
         onPress={() => navigation.push("EditSignal")}
       />
       <Button title="Sign Out" onPress={signOut} />
-      <Button
-        title="Friend List"
-        onPress={() => navigation.push("Signaling")}
-      />
+      <Signaling />
+      <Button title="Open Signaling" onPress={openSignalingBottomSheet} />
+      <Signaling ref={signalingRef} />
     </GestureHandlerRootView>
   );
 }
