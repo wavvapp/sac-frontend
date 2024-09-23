@@ -1,6 +1,6 @@
-import Badge from '@/components/Badge';
-import UserAvatar from '@/components/ui/UserAvatar';
-import { Text, View } from 'react-native'
+import Badge from "@/components/ui/Badge";
+import UserAvatar from "@/components/ui/UserAvatar";
+import { Text, View } from "react-native";
 
 export default function EditSignal() {
   return (
