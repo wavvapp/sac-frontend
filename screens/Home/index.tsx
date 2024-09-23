@@ -1,7 +1,6 @@
 import PerlinNoise from '@/components/PerlinNoise'
 import { CustomButton } from '@/components/ui/Button';
-
-import UserInfo from "@/components/ui/UserInfo";
+import UserInfo from "@/components/UserInfo";
 import { useAuth } from "@/contexts/AuthContext";
 import { RootStackParamList } from "@/navigation";
 import { theme } from "@/theme";
