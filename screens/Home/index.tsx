@@ -1,6 +1,7 @@
-import PerlinNoise from '@/components/PerlinNoise'
+import PerlinNoise from "@/components/PerlinNoise";
+import { CustomButton } from "@/components/ui/Button";
 import CustomText from "@/components/ui/CustomText";
-import UserAvailability from '@/components/UserAvailability';
+import UserAvailability from "@/components/UserAvailability";
 import { useAuth } from "@/contexts/AuthContext";
 import { RootStackParamList } from "@/navigation";
 import { useNavigation } from "@react-navigation/native";
@@ -16,7 +17,35 @@ export default function HomeScreen() {
   return (
     <GestureHandlerRootView style={styles.container}>
       <PerlinNoise color1="#0E0D26" color2="#14163D" />
-      <Button title="Settings" onPress={() => navigation.push("Settings")} />
+      <View
+        style={{
+          flexDirection: "row",
+          gap: 16,
+          padding: 40,
+          backgroundColor: "#FFF",
+        }}
+      >
+        <CustomButton
+          variant="primary"
+          textSize="base"
+          title="Primary"
+          onPress={() => navigation.push("Settings")}
+        />
+        <CustomButton
+          variant="secondary"
+          textSize="base"
+          title="Later"
+          onPress={() => navigation.push("EditSignal")}
+        />
+        <CustomButton
+          variant="secondary"
+          active
+          textSize="base"
+          title="Now"
+          onPress={() => navigation.push("EditSignal")}
+        />
+        <Button title="Normal" onPress={signOut} />
+      </View>
       <Text>Hello {user?.name}</Text>
       <Text>your Email {user?.email}</Text>
       <View style={styles.customText}>
@@ -27,11 +56,6 @@ export default function HomeScreen() {
         <CustomText size="sm">sm Typography</CustomText>
         <CustomText size="xs">xs Typography</CustomText>
       </View>
-      <Button
-        title="Edit Sgnal"
-        onPress={() => navigation.push("EditSignal")}
-      />
-      <Button title="Sign Out" onPress={signOut} />
       <UserAvailability />
     </GestureHandlerRootView>
   );
