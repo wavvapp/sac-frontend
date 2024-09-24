@@ -132,9 +132,7 @@ half4 main(float2 fragCoord) {
         }),
         -1,
         true,
-        () => {
-          console.log('triggered');
-          
+        () => {          
           // Generate a new random value after each repeat cycle
           time.value = Math.random() * 60 // This will be triggered after each cycle
         }
