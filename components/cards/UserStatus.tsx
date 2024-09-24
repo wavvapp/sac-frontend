@@ -1,11 +1,11 @@
 import { StyleSheet, TouchableOpacity, View, ViewStyle } from "react-native";
-import CustomText from "../ui/CustomText";
+import CustomText from "@/components/ui/CustomText";
 import { theme } from "@/theme";
 import { User } from "@/types";
 import { useNavigation } from "@react-navigation/native";
 import { HomeScreenProps } from "@/screens/Home";
-import UserInfo from "../UserInfo";
-import EllipsisIcon from "../vectors/EllipsisIcon";
+import UserInfo from "@/components/UserInfo";
+import EllipsisIcon from "@/components/vectors/EllipsisIcon";
 
 const MAX_VISIBLE_FRIENDS = 3;
 

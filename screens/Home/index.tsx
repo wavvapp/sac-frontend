@@ -1,13 +1,10 @@
 import UserStatus from "@/components/cards/UserStatus";
 import PerlinNoise from "@/components/PerlinNoise";
-import { CustomButton } from "@/components/ui/Button";
-import CheckBox from "@/components/ui/CheckBox";
 import { useAuth } from "@/contexts/AuthContext";
 import { RootStackParamList } from "@/navigation";
-import { theme } from "@/theme";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { Button, Text, StyleSheet, View } from "react-native";
+import { Text, StyleSheet, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
