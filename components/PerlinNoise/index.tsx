@@ -1,33 +1,29 @@
-import React, { useEffect } from 'react'
-import { Dimensions, StyleSheet } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { Dimensions, StyleSheet, View } from 'react-native'
 import {
   Easing,
+  runOnJS,
   runOnUI,
+  SharedValue,
   useDerivedValue,
   useSharedValue,
   withRepeat,
   withTiming
 } from 'react-native-reanimated'
-import {
-  Canvas,
-  Fill,
-  Shader,
-  Skia,
-  useTouchHandler,
-  vec
-} from '@shopify/react-native-skia'
-import { Gesture, GestureDetector } from 'react-native-gesture-handler'
+import { Canvas, Fill, Shader, Skia, vec } from '@shopify/react-native-skia'
 
 // Get device width and height
 const { width, height } = Dimensions.get('window')
 
 // Props for the PerlinNoise component
 interface PerlinNoiseProps {
+  isOn: SharedValue<boolean>
   color1: string // First color to be used
   color2: string // Second color to be used
 }
 
-const PerlinNoise: React.FC<PerlinNoiseProps> = ({ color1, color2 }) => {
+const PerlinNoise: React.FC<PerlinNoiseProps> = ({ color1, color2, isOn }) => {
+  const [showBackground, setShowBackground] = useState(false)
   // Create a Skia Runtime Effect for the noise shader
   const noiseShader = Skia.RuntimeEffect.Make(`uniform float2 u_resolution;
 uniform float u_time;
@@ -114,9 +110,20 @@ half4 main(float2 fragCoord) {
   const time = useSharedValue(1)
   const randomValue = Math.random() * 60 // Generate the random value on the JS thread
 
-  // Start a repeating animation for the time variable
+  useDerivedValue(() => {
+    // When the shared value changes, update React state
+    runOnJS(setShowBackground)(isOn.value) // Assuming 1 means "on"
+  }, [isOn])
 
+  // Start a repeating animation for the time variable
   useEffect(() => {
+    if (!showBackground) {
+      runOnUI(() => {
+        time.value = 0
+      })()
+      return
+    }
+
     runOnUI(() => {
       time.value = withRepeat(
         withTiming(randomValue, {
@@ -133,7 +140,7 @@ half4 main(float2 fragCoord) {
         }
       )
     })()
-  }, [time])
+  }, [showBackground])
 
   // Convert the color props to Skia's color format
   const skiaColor1 = Skia.Color(color1)
@@ -146,40 +153,25 @@ half4 main(float2 fragCoord) {
     u_color2: skiaColor2 // Second color
   }))
 
-  const tap = Gesture.Tap().onStart(() => {
-    if (time.value === 0) {
-      time.value = withRepeat(
-        withTiming(randomValue, {
-          duration: 9000,
-          easing: Easing.linear // Removed any easing effect
-        }),
-        -1,
-        true,
-        () => {
-          // Generate a new random value after each repeat cycle
-          time.value = Math.random() * 60 // This will be triggered after each cycle
-        }
-      )
-    } else {
-      time.value = 0 // Randomize the time value on tap
-    }
-  })
-
   // Render the canvas with the noise shader applied
-  return (
-    <GestureDetector gesture={tap}>
-      <Canvas style={styles.canvas}>
-        <Fill>
-          <Shader source={noiseShader} uniforms={uniforms} />
-        </Fill>
-      </Canvas>
-    </GestureDetector>
+  return showBackground ? (
+    <Canvas style={styles.canvas}>
+      <Fill>
+        <Shader source={noiseShader} uniforms={uniforms} />
+      </Fill>
+    </Canvas>
+  ) : (
+    <View style={styles.blackBackground} />
   )
 }
 
 const styles = StyleSheet.create({
   canvas: {
     ...StyleSheet.absoluteFillObject
+  },
+  blackBackground: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'black'
   }
 })
 
