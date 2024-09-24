@@ -58,11 +58,12 @@ export default function HomeScreen() {
   return (
     <GestureHandlerRootView style={styles.container}>
       <PerlinNoise color1="#0E0D26" color2="#14163D" />
-      <View style={styles.customText}>
-        <Text>Hello {user?.name}</Text>
-        <Text>your Email {user?.email}</Text>
+      <Text>Hello {user?.name}</Text>
+      <Text>your Email {user?.email}</Text>
+
+      <View style={styles.UserStatus}>
+        <UserStatus friends={visibleFriends} user={userInfo} />
       </View>
-      <UserStatus friends={visibleFriends} user={userInfo} />
     </GestureHandlerRootView>
   );
 }
@@ -74,9 +75,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  customText: {
-    padding: 4,
-    backgroundColor: theme.colors.white,
+  UserStatus: {
     marginVertical: 4,
   },
 });
