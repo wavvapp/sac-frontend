@@ -61,7 +61,7 @@ export const AnimatedSwitch = ({
     const moveValue = interpolate(
       Number(value.value),
       [0, 1],
-      [height.value * 0.75, height.value * 0.22]
+      [height.value * 0.65, height.value * 0.25]
     )
     const translateValue = withTiming(moveValue, { duration })
 

@@ -108,8 +108,8 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.white
   },
   switch: {
-    width: width / 4.5,
-    height: width / 2.5,
+    width: width * 0.18,
+    height: width * 0.35,
     padding: 10
   }
 })
