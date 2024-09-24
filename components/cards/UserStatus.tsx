@@ -10,7 +10,7 @@ import EllipsisIcon from "@/components/vectors/EllipsisIcon";
 const MAX_VISIBLE_FRIENDS = 3;
 
 interface UserStatusProps extends ViewStyle {
-  friends: User[];
+  friends: User[] | [];
   user: User;
   style?: ViewStyle;
 }
@@ -22,10 +22,7 @@ export default function UserStatus({
 }: UserStatusProps) {
   const navigation = useNavigation<HomeScreenProps>();
   const visibleFriends = friends.slice(0, MAX_VISIBLE_FRIENDS);
-  const remainingCount =
-    friends.length > MAX_VISIBLE_FRIENDS
-      ? friends.length - MAX_VISIBLE_FRIENDS
-      : 0;
+  const remainingCount = Math.max(friends.length - MAX_VISIBLE_FRIENDS, 0);
 
   const fullFriendsList = visibleFriends
     .map((friend) => `${friend.firstName} ${friend.lastName.charAt(0)}`)
@@ -33,8 +30,8 @@ export default function UserStatus({
 
   const visibleFriendsList =
     remainingCount > 0
-      ? `${fullFriendsList}, +${remainingCount} more.`
-      : `${fullFriendsList}.`;
+      ? `${fullFriendsList}, +${remainingCount} more`
+      : fullFriendsList;
 
   return (
     <View style={[styles.container, style]} {...rest}>
@@ -52,7 +49,9 @@ export default function UserStatus({
 
       <View style={styles.friendsContainer}>
         <CustomText size="sm">Visible to {friends.length} friends</CustomText>
-        <CustomText size="sm">{visibleFriendsList}</CustomText>
+        {visibleFriendsList && (
+          <CustomText size="sm">{visibleFriendsList}.</CustomText>
+        )}
       </View>
       <TouchableOpacity style={styles.editButton}>
         <CustomText
