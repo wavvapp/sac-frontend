@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { View, Text, ScrollView, StyleSheet } from "react-native";
+import { View, ScrollView, StyleSheet } from "react-native";
 import { CustomButton } from "@/components/ui/Button";
+import CustomText from "@/components/ui/CustomText";
 
 interface StatusProps {
   timeSlots: string[];
@@ -14,7 +15,7 @@ function Status({ timeSlots }: StatusProps) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>When</Text>
+      <CustomText style={styles.title} fontWeight="bold">When</CustomText>
       <ScrollView
         horizontal={true}
         showsHorizontalScrollIndicator={false}
@@ -46,8 +47,6 @@ const styles = StyleSheet.create({
   },
   title: {
     margin: 10,
-    fontSize: 18,
-    fontWeight: "bold",
     paddingHorizontal: 15,
   },
   scrollContainer: {
