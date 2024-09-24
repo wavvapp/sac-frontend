@@ -7,6 +7,8 @@ import { HomeScreenProps } from "@/screens/Home";
 import UserInfo from "../UserInfo";
 import EllipsisIcon from "../vectors/EllipsisIcon";
 
+const MAX_VISIBLE_FRIENDS = 3;
+
 interface UserStatusProps extends ViewStyle {
   friends: User[];
   user: User;
@@ -19,29 +21,38 @@ export default function UserStatus({
   ...rest
 }: UserStatusProps) {
   const navigation = useNavigation<HomeScreenProps>();
-  const visibleFriends = friends.slice(0, 3);
-  const remainingCount = Math.max(0, friends.length - 3);
+  const visibleFriends = friends.slice(0, MAX_VISIBLE_FRIENDS);
+  const remainingCount =
+    friends.length > MAX_VISIBLE_FRIENDS
+      ? friends.length - MAX_VISIBLE_FRIENDS
+      : 0;
 
-  const friendsText = visibleFriends
+  const fullFriendsList = visibleFriends
     .map((friend) => `${friend.firstName} ${friend.lastName.charAt(0)}`)
     .join(", ");
 
-  const fullFriendsList =
+  const visibleFriendsList =
     remainingCount > 0
-      ? `${friendsText}${remainingCount > 0 ? `, +${remainingCount} more` : ""}`
-      : friendsText;
+      ? `${fullFriendsList}, +${remainingCount} more.`
+      : `${fullFriendsList}.`;
 
   return (
     <View style={[styles.container, style]} {...rest}>
-      <UserInfo
-        name={user.firstName}
-        time={user.time}
-        activity={user.activity}
-        style={styles.userContainer}
-      />
+      <View style={styles.userContainer}>
+        <UserInfo
+          firstName={user.firstName}
+          lastName={user.lastName}
+          time={user.time}
+          activity={user.activity}
+        />
+        <TouchableOpacity>
+          <EllipsisIcon />
+        </TouchableOpacity>
+      </View>
+
       <View style={styles.friendsContainer}>
         <CustomText size="sm">Visible to {friends.length} friends</CustomText>
-        <CustomText size="sm">{fullFriendsList}</CustomText>
+        <CustomText size="sm">{visibleFriendsList}</CustomText>
       </View>
       <TouchableOpacity style={styles.editButton}>
         <CustomText
@@ -63,12 +74,15 @@ const styles = StyleSheet.create({
     paddingTop: 24,
     gap: 24,
     borderRadius: 12,
+    overflow: "hidden",
   },
   userContainer: {
-    paddingHorizontal: 24,
+    marginHorizontal: 24,
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   friendsContainer: {
-    paddingHorizontal: 24,
+    marginHorizontal: 24,
   },
   editButton: {
     padding: 10,

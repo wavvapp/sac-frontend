@@ -2,30 +2,30 @@ import { theme } from "@/theme";
 import Svg, { Path, SvgProps } from "react-native-svg";
 
 export default function EllipsisIcon({
-  width = 24,
-  height = 24,
-  color = theme.colors["light-gray"],
+  width = 2,
+  height = 16,
+  color = theme.colors.black,
   ...rest
 }: SvgProps): JSX.Element {
   return (
-    <Svg width="24" height="24" viewBox="0 0 24 24" fill="none" {...rest}>
+    <Svg width={width} height={height} viewBox="0 0 4 18" fill="none" {...rest}>
       <Path
-        d="M11 12C11 12.5523 11.4477 13 12 13C12.5523 13 13 12.5523 13 12C13 11.4477 12.5523 11 12 11C11.4477 11 11 11.4477 11 12Z"
-        stroke="black"
+        d="M1 9C1 9.55228 1.44771 10 2 10C2.55228 10 3 9.55228 3 9C3 8.44772 2.55228 8 2 8C1.44771 8 1 8.44772 1 9Z"
+        stroke={color}
         stroke-width="1.5"
         stroke-linecap="round"
         stroke-linejoin="round"
       />
       <Path
-        d="M11 19C11 19.5523 11.4477 20 12 20C12.5523 20 13 19.5523 13 19C13 18.4477 12.5523 18 12 18C11.4477 18 11 18.4477 11 19Z"
-        stroke="black"
+        d="M0.999999 16C0.999999 16.5523 1.44771 17 2 17C2.55228 17 3 16.5523 3 16C3 15.4477 2.55228 15 2 15C1.44771 15 0.999999 15.4477 0.999999 16Z"
+        stroke={color}
         stroke-width="1.5"
         stroke-linecap="round"
         stroke-linejoin="round"
       />
       <Path
-        d="M11 5C11 5.55228 11.4477 6 12 6C12.5523 6 13 5.55228 13 5C13 4.44772 12.5523 4 12 4C11.4477 4 11 4.44772 11 5Z"
-        stroke="black"
+        d="M1 2C1 2.55228 1.44772 3 2 3C2.55228 3 3 2.55228 3 2C3 1.44772 2.55228 1 2 1C1.44772 1 1 1.44772 1 2Z"
+        stroke={color}
         stroke-width="1.5"
         stroke-linecap="round"
         stroke-linejoin="round"
