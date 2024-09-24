@@ -1,37 +1,84 @@
 import PerlinNoise from '@/components/PerlinNoise'
-import { useAuth } from '@/contexts/AuthContext'
-import { RootStackParamList } from '@/navigation'
-import { useNavigation } from '@react-navigation/native'
-import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import React from 'react'
-import { Button, Text, View, StyleSheet } from 'react-native'
-import { GestureHandlerRootView } from 'react-native-gesture-handler'
-type HomeScreenProps = NativeStackNavigationProp<RootStackParamList, 'Home'>
+import CheckBox from '@/components/ui/CheckBox';
+import { CustomButton } from '@/components/ui/Button';
+import UserInfo from "@/components/UserInfo";
+import { useAuth } from "@/contexts/AuthContext";
+import { RootStackParamList } from "@/navigation";
+import { theme } from "@/theme";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { Button, Text, StyleSheet, View } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+type HomeScreenProps = NativeStackNavigationProp<RootStackParamList, "Home">;
 
 export default function HomeScreen() {
-  const navigation = useNavigation<HomeScreenProps>()
-  const { user, signOut } = useAuth()
+  const navigation = useNavigation<HomeScreenProps>();
+  const { user, signOut } = useAuth();
+  const userInfo = {
+    name: "Emil WAgner",
+    time: "Evening",
+    activity: "Jodelkeller",
+  };
 
   return (
     <GestureHandlerRootView style={styles.container}>
       <PerlinNoise color1="#281713" color2="blue" />
-      <Button title="Settings" onPress={() => navigation.push('Settings')} />
+      <View style={{ backgroundColor: theme.colors.white, paddingVertical: 20, width: "100%", alignItems: "center", gap: 16 }}>
+        <CheckBox isChecked onCheckedChange={(isChecked) => console.log("The button is clicked", isChecked)} />
+        <CheckBox isChecked style={{ margin: 20 }} />
+        <CheckBox isChecked={false} />
+      </View>
+      <View
+        style={{
+          flexDirection: "row",
+          gap: 16,
+          padding: 40,
+          backgroundColor: "#FFF",
+        }}
+      >
+        <CustomButton
+          variant="primary"
+          textSize="base"
+          title="Primary"
+          onPress={() => navigation.push("Settings")}
+        />
+        <CustomButton
+          variant="secondary"
+          textSize="base"
+          title="Later"
+          onPress={() => navigation.push("EditSignal")}
+        />
+        <CustomButton
+          variant="secondary"
+          active
+          textSize="base"
+          title="Now"
+          onPress={() => navigation.push("EditSignal")}
+        />
+        <Button title="Normal" onPress={signOut} />
+      </View>
       <Text>Hello {user?.name}</Text>
       <Text>your Email {user?.email}</Text>
-      <Button
-        title="Edit Sgnal"
-        onPress={() => navigation.push('EditSignal')}
-      />
-      <Button title="Sign Out" onPress={signOut} />
+      <View style={styles.userInfo}>
+        <UserInfo
+          name={userInfo.name}
+          time={userInfo.time}
+          activity={userInfo.activity}
+        />
+      </View>
     </GestureHandlerRootView>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    position: 'relative',
-    alignItems: 'center',
-    justifyContent: 'center'
-  }
-})
+    position: "relative",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  userInfo: {
+    padding: 4,
+    backgroundColor: theme.colors.white,
+  },
+});
