@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View, Text, ScrollView, StyleSheet } from "react-native";
-import { CustomButton } from "../ui/Button";
+import { CustomButton } from "@/components/ui/Button";
 
 interface StatusProps {
   timeSlots: string[];
