@@ -1,6 +1,7 @@
 import Signaling from "@/components/list/Signaling";
 import PerlinNoise from "@/components/PerlinNoise";
 import { CustomButton } from "@/components/ui/Button";
+import CheckBox from '@/components/ui/CheckBox';
 import UserInfo from "@/components/UserInfo";
 import { useAuth } from "@/contexts/AuthContext";
 import { RootStackParamList } from "@/navigation";
@@ -30,6 +31,11 @@ export default function HomeScreen() {
   return (
     <GestureHandlerRootView style={styles.container}>
       <PerlinNoise color1="#0E0D26" color2="#14163D" />
+      <View style={{ backgroundColor: theme.colors.white, paddingVertical: 20, width: "100%", alignItems: "center", gap: 16 }}>
+        <CheckBox isChecked onCheckedChange={(isChecked) => console.log("The button is clicked", isChecked)} />
+        <CheckBox isChecked style={{ margin: 20 }} />
+        <CheckBox isChecked={false} />
+      </View>
       <View
         style={{
           flexDirection: "row",
