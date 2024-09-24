@@ -1,25 +1,19 @@
 import Signaling from "@/components/list/Signaling";
 import PerlinNoise from "@/components/PerlinNoise";
 import { CustomButton } from "@/components/ui/Button";
-import CheckBox from '@/components/ui/CheckBox';
+import CheckBox from "@/components/ui/CheckBox";
 import UserInfo from "@/components/UserInfo";
 import { useAuth } from "@/contexts/AuthContext";
 import { RootStackParamList } from "@/navigation";
 import { theme } from "@/theme";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { useRef } from "react";
 import { Button, Text, StyleSheet, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+
 type HomeScreenProps = NativeStackNavigationProp<RootStackParamList, "Home">;
-import { SignalingRef } from "@/components/list/Signaling";
 
 export default function HomeScreen() {
-  const signalingRef = useRef<SignalingRef>(null);
-  const openSignalingBottomSheet = () => {
-    signalingRef.current?.openBottomSheet();
-  };
-
   const navigation = useNavigation<HomeScreenProps>();
   const { user, signOut } = useAuth();
   const userInfo = {
@@ -31,8 +25,21 @@ export default function HomeScreen() {
   return (
     <GestureHandlerRootView style={styles.container}>
       <PerlinNoise color1="#0E0D26" color2="#14163D" />
-      <View style={{ backgroundColor: theme.colors.white, paddingVertical: 20, width: "100%", alignItems: "center", gap: 16 }}>
-        <CheckBox isChecked onCheckedChange={(isChecked) => console.log("The button is clicked", isChecked)} />
+      <View
+        style={{
+          backgroundColor: theme.colors.white,
+          paddingVertical: 20,
+          width: "100%",
+          alignItems: "center",
+          gap: 16,
+        }}
+      >
+        <CheckBox
+          isChecked
+          onCheckedChange={(isChecked) =>
+            console.log("The button is clicked", isChecked)
+          }
+        />
         <CheckBox isChecked style={{ margin: 20 }} />
         <CheckBox isChecked={false} />
       </View>
@@ -80,8 +87,10 @@ export default function HomeScreen() {
       />
       <Button title="Sign Out" onPress={signOut} />
       <Signaling />
-      <Button title="Open Signaling" onPress={openSignalingBottomSheet} />
-      <Signaling ref={signalingRef} />
+      <Button
+        title="Signaling list"
+        onPress={() => navigation.push("Signaling")}
+      />
     </GestureHandlerRootView>
   );
 }

@@ -17,6 +17,7 @@ export type RootStackParamList = {
   Login: undefined;
   SignUp: undefined;
   Settings: undefined;
+  Signaling: undefined;
 };
 
 export default function AppNavigator() {
@@ -43,6 +44,11 @@ export default function AppNavigator() {
             name="EditSignal"
             options={{ presentation: "modal" }}
             component={EditSignal}
+          />
+          <Stack.Screen
+            name="Signaling"
+            options={{ presentation: "modal" }}
+            component={Signaling}
           />
         </Stack.Navigator>
       ) : (
