@@ -23,7 +23,7 @@ function Status({ timeSlots }: StatusProps) {
       >
         <View style={styles.buttonContainer}>
           {timeSlots.map((slot) => (
-            <View key={slot} style={styles.buttonWrapper}>
+            <View key={slot}>
               <CustomButton
                 title={slot}
                 onPress={() => handlePress(slot)}
@@ -46,16 +46,14 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   title: {
-    margin: 10,
     paddingHorizontal: 15,
+    paddingBottom:18
   },
   scrollContainer: {
     paddingHorizontal: 15,
   },
   buttonContainer: {
     flexDirection: "row",
-  },
-  buttonWrapper: {
-    margin: 5,
+    gap:8
   },
 });
