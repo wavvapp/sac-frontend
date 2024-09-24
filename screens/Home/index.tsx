@@ -18,7 +18,7 @@ const userInfo = {
   time: 'Evening',
   activity: 'Jodelkeller'
 }
-const { width, height } = Dimensions.get('window')
+const { width } = Dimensions.get('window')
 export default function HomeScreen() {
   const navigation = useNavigation<HomeScreenProps>()
   const { user, signOut } = useAuth()
@@ -36,7 +36,7 @@ export default function HomeScreen() {
         onPress={handlePress}
         style={styles.switch}
       />
-      {/* <View
+      <View
         style={{
           backgroundColor: theme.colors.white,
           paddingVertical: 20,
@@ -91,7 +91,7 @@ export default function HomeScreen() {
           time={userInfo.time}
           activity={userInfo.activity}
         />
-      </View> */}
+      </View>
     </GestureHandlerRootView>
   )
 }
