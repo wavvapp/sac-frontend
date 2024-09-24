@@ -1,7 +1,6 @@
-import Signaling from "@/components/list/Signaling";
 import PerlinNoise from "@/components/PerlinNoise";
-import { CustomButton } from "@/components/ui/Button";
 import CheckBox from "@/components/ui/CheckBox";
+import { CustomButton } from "@/components/ui/Button";
 import UserInfo from "@/components/UserInfo";
 import { useAuth } from "@/contexts/AuthContext";
 import { RootStackParamList } from "@/navigation";
@@ -10,6 +9,7 @@ import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { Button, Text, StyleSheet, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import Signaling from "@/components/lists/Signaling";
 
 type HomeScreenProps = NativeStackNavigationProp<RootStackParamList, "Home">;
 
@@ -81,13 +81,9 @@ export default function HomeScreen() {
           activity={userInfo.activity}
         />
       </View>
-      <Button
-        title="Edit Sgnal"
-        onPress={() => navigation.push("EditSignal")}
-      />
-      <Button title="Sign Out" onPress={signOut} />
-      <Signaling />
-      <Button
+      <CustomButton
+        active
+        textSize="base"
         title="Signaling list"
         onPress={() => navigation.push("Signaling")}
       />

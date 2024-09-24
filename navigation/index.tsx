@@ -9,7 +9,7 @@ import SignUp from "@/screens/Authentication/SignUp";
 import Login from "@/screens/Authentication/Login";
 import CustomSplashScreen from "@/screens/CustomSplashScreen";
 import Settings from "@/screens/Settings";
-import Signaling from "@/components/list/Signaling";
+import Signaling from "@/components/lists/Signaling";
 
 export type RootStackParamList = {
   Home: undefined;
@@ -47,7 +47,7 @@ export default function AppNavigator() {
           />
           <Stack.Screen
             name="Signaling"
-            options={{ presentation: "modal" }}
+            options={{ presentation: "modal",headerShown:false }}
             component={Signaling}
           />
         </Stack.Navigator>
