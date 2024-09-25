@@ -21,7 +21,6 @@ export const useFont = () => {
     "Suisse Int'l Thin Italic": require("../assets/fonts/Suisse Int'l/Suisse Int'l Thin Italic.otf"),
     "Suisse Int'l Ultralight": require("../assets/fonts/Suisse Int'l/Suisse Int'l Ultralight.otf"),
     "Suisse Int'l Ultralight Italic": require("../assets/fonts/Suisse Int'l/Suisse Int'l Ultralight Italic.otf"),
-    // Add more fonts here if needed
   });
 
   return { loaded, error };
