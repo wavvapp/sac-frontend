@@ -1,5 +1,5 @@
 import UserAvailability from '@/components/UserAvailability';
-import { View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import Status from '@/components/cards/Status';
 import { CustomButton } from '@/components/ui/Button';
 import UserAvatar from '@/components/ui/UserAvatar';
@@ -9,29 +9,17 @@ import { RootStackParamList } from "@/navigation";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import FriendsList from '@/components/lists/Friends';
 
-type EditSignalScrenProps= NativeStackNavigationProp<RootStackParamList, "EditSignal">;
+type EditSignalScrenProps = NativeStackNavigationProp<RootStackParamList, "EditSignal">;
 
 export default function EditSignal() {
   const navigation = useNavigation<EditSignalScrenProps>();
 
   return (
     <View
-      style={{
-        flex: 1,
-        alignItems: "center",
-        justifyContent: "center",
-        gap: 10,
-        marginTop: 44,
-      }}
+      style={style.container}
     >
-      <View style={{
-        justifyContent: "space-between",
-        alignItems: "center",
-        flexDirection: "row",
-        width: "100%",
-        paddingHorizontal: 15
-      }}>
-        <CrossMark onPress={() => navigation.push("Home")}/>
+      <View style={style.navBar}>
+        <CrossMark onPress={() => navigation.push("Home")} />
         <CustomButton variant='primary' title='Done' textSize='sm' />
       </View>
       <UserAvatar
@@ -44,3 +32,21 @@ export default function EditSignal() {
     </View>
   );
 }
+
+const style = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "flex-start",
+    gap: 10,
+    paddingTop: 44,
+  },
+  navBar: {
+    justifyContent: "space-between",
+    alignItems: "center",
+    flexDirection: "row",
+    width: "100%",
+    paddingHorizontal: 15
+  }
+})

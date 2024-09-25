@@ -33,6 +33,6 @@ const styles = StyleSheet.create({
         gap: 30,
         width: "100%",
         paddingHorizontal: 15,
-        height: 450,
+        height: 440
     },
 })
