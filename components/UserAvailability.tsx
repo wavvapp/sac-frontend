@@ -6,7 +6,12 @@ import { theme } from "@/theme";
 export default function UserAvailability() {
   return (
     <View style={styles.container}>
-      <CustomText size="sm" fontWeight="medium" style={styles.signalText}>
+      <CustomText
+        size="sm"
+        fontWeight="medium"
+        fontFamily="marfa"
+        style={styles.signalText}
+      >
         Signal
       </CustomText>
       <View style={styles.availableContainer}>

@@ -10,6 +10,7 @@ import { Text, StyleSheet, View, Dimensions } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useSharedValue } from "react-native-reanimated";
 import { AnimatedSwitch } from "@/components/AnimatedSwitch";
+import { CustomButton } from "@/components/ui/Button";
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
   "Home"

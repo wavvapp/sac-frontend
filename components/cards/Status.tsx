@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, ScrollView, StyleSheet } from "react-native";
 import { CustomButton } from "@/components/ui/Button";
-import CustomText from "@/components/ui/CustomText";
+import CustomText, { fontFamilyMap } from "@/components/ui/CustomText";
 
 interface StatusProps {
   timeSlots: string[];
@@ -15,7 +15,9 @@ function Status({ timeSlots }: StatusProps) {
 
   return (
     <View style={styles.container}>
-      <CustomText style={styles.title} fontWeight="bold">When</CustomText>
+      <CustomText style={styles.title} fontWeight="bold">
+        When
+      </CustomText>
       <ScrollView
         horizontal={true}
         showsHorizontalScrollIndicator={false}
@@ -30,6 +32,7 @@ function Status({ timeSlots }: StatusProps) {
                 textSize="lg"
                 variant="secondary"
                 active={activeSlot === slot}
+                textStyles={styles.buttonText}
               />
             </View>
           ))}
@@ -47,13 +50,16 @@ const styles = StyleSheet.create({
   },
   title: {
     paddingHorizontal: 15,
-    paddingBottom:18
+    paddingBottom: 18,
   },
   scrollContainer: {
     paddingHorizontal: 15,
   },
   buttonContainer: {
     flexDirection: "row",
-    gap:8
+    gap: 8,
+  },
+  buttonText: {
+    fontFamily: fontFamilyMap["normal"].regular,
   },
 });
