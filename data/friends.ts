@@ -1,10 +1,37 @@
-import { Friend } from "@/types";
+export const visibleFriends = [
+  {
+    id: "u1",
+    firstName: "Erin",
+    lastName: "Wagner",
+    time: "Evening",
+    activity: "Jodelkeller",
+    selected: false
+  },
+  {
+    id: "u2",
+    firstName: "Vincent",
+    lastName: "Russel",
+    time: "Evening",
+    activity: "Jodelkeller",
+    selected: true
 
-export const mockFriendsList: Friend[] = [
-    { id: 1, name: "Vincent Reichel", selected: false },
-    { id: 2, name: "Gretchen Casper", selected: false },
-    { id: 3, name: "Elizabeth Carroll", selected: true },
-    { id: 4, name: "Emil Wagner", selected: false },
-    { id: 5, name: "Kayla Leuschke", selected: true },
-    { id: 6, name: "vincent", selected: false },
-]
+  },
+  {
+    id: "u3",
+    firstName: "Johnnie",
+    lastName: "Hussel",
+    time: "Evening",
+    activity: "Jodelkeller",
+    selected: false
+
+  },
+  {
+    id: "u4",
+    firstName: "Emil",
+    lastName: "Wagner",
+    time: "Evening",
+    activity: "Jodelkeller",
+    selected: true
+
+  },
+];

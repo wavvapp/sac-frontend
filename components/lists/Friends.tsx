@@ -1,12 +1,12 @@
 import { FlatList, FlatListComponent, StyleSheet, View } from "react-native";
 import CustomText from "@/components/ui/CustomText";
 import FriendCard from "@/components/Friend";
-import { mockFriendsList } from "@/data/friends";
 import { useState } from "react";
+import { visibleFriends } from "@/data/friends";
 
 export default function FriendsList() {
-    const [friendsList, setfriendsList] = useState(mockFriendsList)
-    const updateFriendsList = (userId: number) => {
+    const [friendsList, setfriendsList] = useState(visibleFriends)
+    const updateFriendsList = (userId: string) => {
         setfriendsList(prevList =>
             prevList.map(user =>
                 user.id === userId ? { ...user, selected: !user.selected } : user
