@@ -40,7 +40,7 @@ export default function AppNavigator() {
           <Stack.Screen name="Settings" component={Settings} />
           <Stack.Screen
             name="EditSignal"
-            options={{ presentation: 'modal' }}
+            options={{ headerShown: false, presentation: 'modal' }}
             component={EditSignal}
           />
         </Stack.Navigator>
