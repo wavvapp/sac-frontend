@@ -19,7 +19,7 @@ export default function FriendsList() {
             <FlatList
                 data={friendsList}
                 renderItem={({ item }) => <FriendCard handleChange={() => updateFriendsList(item.id)} user={item} />}
-                keyExtractor={(_, index) => index.toString()}
+                keyExtractor={(item) => item.id.toString()}
             />
         </View>
     )
