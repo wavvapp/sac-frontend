@@ -34,12 +34,7 @@ export default function HomeScreen() {
           gap: 16,
         }}
       >
-        <CheckBox
-          isChecked
-          onCheckedChange={(isChecked) =>
-            console.log("The button is clicked", isChecked)
-          }
-        />
+        <CheckBox isChecked={true} />
         <CheckBox isChecked style={{ margin: 20 }} />
         <CheckBox isChecked={false} />
       </View>

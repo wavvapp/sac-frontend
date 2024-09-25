@@ -4,7 +4,7 @@ import CustomText from "@/components/ui/CustomText";
 import UserAvatar from "@/components/ui/UserAvatar";
 import UserInfo from "@/components/UserInfo";
 import Badge from "@/components/ui/Badge";
-import { defaultUsers } from "@/contexts/users";
+import { defaultUsers } from "@/datas/users";
 
 interface User {
   id: string;
