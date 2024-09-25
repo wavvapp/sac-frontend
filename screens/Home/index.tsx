@@ -1,24 +1,25 @@
-import PerlinNoise from '@/components/PerlinNoise'
-import CheckBox from '@/components/ui/CheckBox'
-import { CustomButton } from '@/components/ui/Button'
-import UserInfo from '@/components/UserInfo'
-import { useAuth } from '@/contexts/AuthContext'
-import { RootStackParamList } from '@/navigation'
-import { theme } from '@/theme'
-import { useNavigation } from '@react-navigation/native'
-import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { Button, Text, StyleSheet, View, Dimensions } from 'react-native'
-import { GestureHandlerRootView } from 'react-native-gesture-handler'
-import { useSharedValue } from 'react-native-reanimated'
-import { AnimatedSwitch } from '@/components/AnimatedSwitch'
-type HomeScreenProps = NativeStackNavigationProp<RootStackParamList, 'Home'>
+import PerlinNoise from "@/components/PerlinNoise";
+import { CustomButton } from "@/components/ui/Button";
+import CheckBox from '@/components/ui/CheckBox';
+import UserInfo from "@/components/UserInfo";
+import { useAuth } from "@/contexts/AuthContext";
+import { RootStackParamList } from "@/navigation";
+import { theme } from "@/theme";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { Button, Text, StyleSheet, View, Dimensions } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import Status from '@/components/cards/Status';
+import { useSharedValue } from "react-native-reanimated";
+import { AnimatedSwitch } from "@/components/AnimatedSwitch";
+type HomeScreenProps = NativeStackNavigationProp<RootStackParamList, "Home">;
 
 const userInfo = {
   name: 'Emil WAgner',
   time: 'Evening',
   activity: 'Jodelkeller'
 }
-const { width, height } = Dimensions.get('window')
+const { width } = Dimensions.get('window')
 export default function HomeScreen() {
   const navigation = useNavigation<HomeScreenProps>()
   const { user, signOut } = useAuth()
@@ -32,7 +33,7 @@ export default function HomeScreen() {
     <GestureHandlerRootView style={styles.container}>
       <PerlinNoise isOn={isOn} color1="#281713" color2="blue" />
       <AnimatedSwitch
-        value={isOn}
+        isOn={isOn}
         onPress={handlePress}
         style={styles.switch}
       />
@@ -71,8 +72,8 @@ export default function HomeScreen() {
         <CustomButton
           variant="secondary"
           textSize="base"
-          title="Later"
-          onPress={() => navigation.push('EditSignal')}
+          title="Edit Signal"
+          onPress={() => navigation.push("EditSignal")}
         />
         <CustomButton
           variant="secondary"
@@ -108,8 +109,8 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.white
   },
   switch: {
-    width: width / 4.5,
-    height: width / 2.5,
+    width: width * 0.18,
+    height: width * 0.35,
     padding: 10
   }
 })
