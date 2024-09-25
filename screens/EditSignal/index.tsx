@@ -1,8 +1,9 @@
+import UserAvailability from '@/components/UserAvailability';
+import { View } from "react-native";
 import Status from '@/components/cards/Status';
 import { CustomButton } from '@/components/ui/Button';
 import UserAvatar from '@/components/ui/UserAvatar';
 import CrossMark from '@/components/vectors/CrossMark';
-import { View } from 'react-native'
 import { useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "@/navigation";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -19,7 +20,7 @@ export default function EditSignal() {
         alignItems: "center",
         justifyContent: "center",
         gap: 10,
-        marginTop: 44
+        marginTop: 44,
       }}
     >
       <View style={{
@@ -36,6 +37,7 @@ export default function EditSignal() {
         imageUrl={require("@/assets/images/user-avatar.png")}
         size="large"
       />
+      <UserAvailability />
       <Status timeSlots={['NOW', 'MORNING', 'Lunch', 'AFTERNOON', 'EVENING']} />
     </View>
   );
