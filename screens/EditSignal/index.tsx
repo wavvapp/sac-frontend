@@ -1,8 +1,9 @@
-import UserAvailability from '@/components/UserAvailability';
-import { Text, View } from "react-native";
+import FriendsList from '@/components/lists/Friends';
 import Status from '@/components/cards/Status';
 import Badge from '@/components/ui/Badge';
 import UserAvatar from '@/components/ui/UserAvatar';
+import { View } from 'react-native'
+import UserAvailability from '@/components/UserAvailability';
 
 export default function EditSignal() {
   return (
@@ -12,13 +13,14 @@ export default function EditSignal() {
         alignItems: "center",
         justifyContent: "center",
         gap: 10,
+        padding: 12
       }}
     >
-      <Text>Edit Signal</Text>
       <UserAvatar
         imageUrl={require("@/assets/images/adaptive-icon.png")}
         size="large"
       />
+      <FriendsList />
       <UserAvatar imageUrl={require("@/assets/images/adaptive-icon.png")} />
       <Badge variant="outline" name="Evening" />
       <Badge name="12" />

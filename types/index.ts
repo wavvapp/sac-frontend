@@ -1,6 +1,6 @@
 export type SizeVariants = "2xl" | "xl" | "lg" | "base" | "sm" | "xs";
 export type FontWeightVariants =
-  | "black"
+  "black"
   | "bold"
   | "semibold"
   | "medium"
@@ -17,4 +17,5 @@ export interface User {
   lastName: string;
   time: string;
   activity: string;
+  selected?: boolean;
 }

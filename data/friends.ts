@@ -5,6 +5,7 @@ export const visibleFriends = [
     lastName: "Wagner",
     time: "Evening",
     activity: "Jodelkeller",
+    selected: false
   },
   {
     id: "u2",
@@ -12,6 +13,8 @@ export const visibleFriends = [
     lastName: "Russel",
     time: "Evening",
     activity: "Jodelkeller",
+    selected: true
+
   },
   {
     id: "u3",
@@ -19,12 +22,16 @@ export const visibleFriends = [
     lastName: "Hussel",
     time: "Evening",
     activity: "Jodelkeller",
+    selected: false
+
   },
   {
-    id: "u3",
+    id: "u4",
     firstName: "Emil",
     lastName: "Wagner",
     time: "Evening",
     activity: "Jodelkeller",
+    selected: true
+
   },
 ];

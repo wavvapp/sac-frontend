@@ -46,6 +46,13 @@ export default function HomeScreen() {
         title="Signaling list"
         onPress={() => navigation.push("Signaling")}
       />
+       <CustomButton
+        active
+        variant="secondary"
+        textSize="base"
+        title="Edit signal page"
+        onPress={() => navigation.push("EditSignal")}
+      />
     </GestureHandlerRootView>
   )
 }
