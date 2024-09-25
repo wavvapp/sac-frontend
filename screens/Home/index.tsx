@@ -39,6 +39,12 @@ export default function HomeScreen() {
       <View style={styles.UserStatus}>
         <UserStatus friends={visibleFriends} user={userInfo} />
       </View>
+      <CustomButton
+        active
+        textSize="base"
+        title="Signaling list"
+        onPress={() => navigation.push("Signaling")}
+      />
     </GestureHandlerRootView>
   )
 }
