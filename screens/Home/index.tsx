@@ -1,6 +1,5 @@
 import PerlinNoise from "@/components/PerlinNoise";
 import { CustomButton } from "@/components/ui/Button";
-import UserAvailability from "@/components/UserAvailability";
 import CheckBox from '@/components/ui/CheckBox';
 import UserInfo from "@/components/UserInfo";
 import { useAuth } from "@/contexts/AuthContext";
@@ -67,7 +66,6 @@ export default function HomeScreen() {
           activity={userInfo.activity}
         />
       </View>
-      <UserAvailability />
     </GestureHandlerRootView>
   );
 }

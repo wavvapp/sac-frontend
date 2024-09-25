@@ -1,11 +1,9 @@
-import { Modal, StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import CustomText from "@/components/ui/CustomText";
 import EditIcon from "@/components/vectors/EditIcon";
-import { useState } from "react";
 import { theme } from "@/theme";
 
 export default function UserAvailability() {
-  const [modalVisible, setModalVisible] = useState(false);
   return (
     <View style={styles.container}>
       <CustomText size="sm" fontWeight="medium" style={styles.signalText}>
@@ -13,27 +11,10 @@ export default function UserAvailability() {
       </CustomText>
       <View style={styles.availableContainer}>
         <CustomText size="xl">Available</CustomText>
-        <TouchableOpacity onPress={() => setModalVisible(true)}>
+        <TouchableOpacity onPress={() => ""}>
           <EditIcon />
         </TouchableOpacity>
       </View>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          setModalVisible(!modalVisible);
-        }}
-      >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalView}>
-            <CustomText size="sm" fontWeight="medium" style={styles.signalText}>
-              Signal
-            </CustomText>
-            <CustomText size="xl">Available</CustomText>
-          </View>
-        </View>
-      </Modal>
     </View>
   );
 }
@@ -52,21 +33,9 @@ const styles = StyleSheet.create({
     letterSpacing: -1,
     textTransform: "uppercase",
   },
-  availableContainer: { flexDirection: "row", justifyContent: "space-between", alignItems:"center" },
-  modalContainer: {
-    flex: 1,
-    justifyContent: "flex-end",
-    backgroundColor: theme.colors.black_400,
-  },
-  modalView: {
-    width: "100%",
-    backgroundColor: theme.colors.white,
-    height: 600,
-    borderRadius: 12,
-    padding:16,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
+  availableContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
 });
