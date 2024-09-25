@@ -1,6 +1,6 @@
 import { FlatList, FlatListComponent, StyleSheet, View } from "react-native";
 import CustomText from "@/components/ui/CustomText";
-import FriendCard from "@/components/ui/Friend";
+import FriendCard from "@/components/Friend";
 import { mockFriendsList } from "@/data/friends";
 import { useState } from "react";
 
