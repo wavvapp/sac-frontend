@@ -36,8 +36,21 @@ export default function HomeScreen() {
         onPress={handlePress}
         style={styles.switch}
       />
-      {/* <View style={{ backgroundColor: theme.colors.white, paddingVertical: 20, width: "100%", alignItems: "center", gap: 16 }}>
-        <CheckBox isChecked onCheckedChange={(isChecked) => console.log("The button is clicked", isChecked)} />
+      <View
+        style={{
+          backgroundColor: theme.colors.white,
+          paddingVertical: 20,
+          width: '100%',
+          alignItems: 'center',
+          gap: 16
+        }}
+      >
+        <CheckBox
+          isChecked
+          onCheckedChange={(isChecked) =>
+            console.log('The button is clicked', isChecked)
+          }
+        />
         <CheckBox isChecked style={{ margin: 20 }} />
         <CheckBox isChecked={false} />
       </View>
@@ -78,7 +91,7 @@ export default function HomeScreen() {
           time={userInfo.time}
           activity={userInfo.activity}
         />
-      </View> */}
+      </View>
     </GestureHandlerRootView>
   )
 }
