@@ -7,6 +7,7 @@ import CrossMark from '@/components/vectors/CrossMark';
 import { useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "@/navigation";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import FriendsList from '@/components/lists/Friends';
 
 type EditSignalScrenProps= NativeStackNavigationProp<RootStackParamList, "EditSignal">;
 
@@ -39,6 +40,7 @@ export default function EditSignal() {
       />
       <UserAvailability />
       <Status timeSlots={['NOW', 'MORNING', 'Lunch', 'AFTERNOON', 'EVENING']} />
+      <FriendsList />
     </View>
   );
 }
