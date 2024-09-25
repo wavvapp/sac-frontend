@@ -8,6 +8,7 @@ import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { Text, StyleSheet, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import Status from '@/components/cards/Status';
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
   "Home"
