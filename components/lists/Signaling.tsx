@@ -4,14 +4,9 @@ import CustomText from "@/components/ui/CustomText";
 import UserAvatar from "@/components/ui/UserAvatar";
 import UserInfo from "@/components/UserInfo";
 import Badge from "@/components/ui/Badge";
-import { defaultUsers } from "@/datas/users";
+import { defaultUsers } from "@/data/users";
+import { User } from "@/types";
 
-interface User {
-  id: string;
-  name: string;
-  status: string;
-  username: string;
-}
 
 interface SignalingProps {
   users?: User[];
@@ -31,16 +26,17 @@ const Signaling = (props: SignalingProps) => {
       <FlatList
         contentContainerStyle={styles.listContent}
         style={styles.flalist}
-        data={displayUsers}
+        data={displayUsers as User[]}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <View style={styles.userCard}>
             <UserAvatar imageUrl={0} />
             <View>
               <UserInfo
-                name={item.name}
-                time={item.status}
-                activity={item.username}
+                firstName={item.firstName}
+                lastName={item.lastName}
+                time={item.time}
+                activity={item.activity}
               />
             </View>
           </View>

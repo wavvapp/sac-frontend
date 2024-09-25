@@ -10,6 +10,7 @@ import { Text, StyleSheet, View, Dimensions } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useSharedValue } from "react-native-reanimated";
 import { AnimatedSwitch } from "@/components/AnimatedSwitch";
+import { CustomButton } from "@/components/ui/Button";
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
   "Home"
@@ -44,6 +45,13 @@ export default function HomeScreen() {
         textSize="base"
         title="Signaling list"
         onPress={() => navigation.push("Signaling")}
+      />
+       <CustomButton
+        active
+        variant="secondary"
+        textSize="base"
+        title="Edit signal page"
+        onPress={() => navigation.push("EditSignal")}
       />
     </GestureHandlerRootView>
   )

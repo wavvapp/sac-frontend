@@ -47,7 +47,7 @@ export default function AppNavigator() {
           />
           <Stack.Screen
             name="Signaling"
-            options={{ presentation: "modal",headerShown:false }}
+            options={{ presentation: "modal", headerShown:false }}
             component={Signaling}
           />
         </Stack.Navigator>
