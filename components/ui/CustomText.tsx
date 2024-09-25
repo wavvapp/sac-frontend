@@ -1,4 +1,4 @@
-import { fontWeightVariants, SizeVariants } from "@/types";
+import { FontWeightVariants, SizeVariants } from "@/types";
 import { Text, TextProps, TextStyle } from "react-native";
 
 const typographyStylesMap: Record<SizeVariants, TextStyle> = {
@@ -10,15 +10,16 @@ const typographyStylesMap: Record<SizeVariants, TextStyle> = {
   xs: { fontSize: 11, lineHeight: 13.26 },
 };
 
-const fontWeightMap: Record<fontWeightVariants, TextStyle> = {
-  bold: { fontWeight: "700" },
-  medium: { fontWeight: "500" },
-  normal: { fontWeight: "400" },
+const fontWeightMap: Record<FontWeightVariants, TextStyle> = {
+  bold: { fontWeight: 700 },
+  semibold: { fontWeight: 600 },
+  medium: { fontWeight: 500 },
+  normal: { fontWeight: 400 },
 };
 
 interface CustomTextProps extends TextProps {
   size?: SizeVariants;
-  fontWeight?: fontWeightVariants;
+  fontWeight?: FontWeightVariants;
 }
 
 export default function CustomText({
