@@ -1,24 +1,20 @@
+import UserStatus from "@/components/cards/UserStatus";
 import PerlinNoise from "@/components/PerlinNoise";
-import { CustomButton } from "@/components/ui/Button";
-import CheckBox from '@/components/ui/CheckBox';
-import UserInfo from "@/components/UserInfo";
 import { useAuth } from "@/contexts/AuthContext";
+import { visibleFriends } from "@/data/friends";
+import { userInfo } from "@/data/user";
 import { RootStackParamList } from "@/navigation";
-import { theme } from "@/theme";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { Button, Text, StyleSheet, View, Dimensions } from "react-native";
+import { Text, StyleSheet, View, Dimensions } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import Status from '@/components/cards/Status';
 import { useSharedValue } from "react-native-reanimated";
 import { AnimatedSwitch } from "@/components/AnimatedSwitch";
-type HomeScreenProps = NativeStackNavigationProp<RootStackParamList, "Home">;
+export type HomeScreenProps = NativeStackNavigationProp<
+  RootStackParamList,
+  "Home"
+>;
 
-const userInfo = {
-  name: 'Emil WAgner',
-  time: 'Evening',
-  activity: 'Jodelkeller'
-}
 const { width } = Dimensions.get('window')
 export default function HomeScreen() {
   const navigation = useNavigation<HomeScreenProps>()
@@ -37,61 +33,11 @@ export default function HomeScreen() {
         onPress={handlePress}
         style={styles.switch}
       />
-      <View
-        style={{
-          backgroundColor: theme.colors.white,
-          paddingVertical: 20,
-          width: '100%',
-          alignItems: 'center',
-          gap: 16
-        }}
-      >
-        <CheckBox
-          isChecked
-          onCheckedChange={(isChecked) =>
-            console.log('The button is clicked', isChecked)
-          }
-        />
-        <CheckBox isChecked style={{ margin: 20 }} />
-        <CheckBox isChecked={false} />
-      </View>
-      <View
-        style={{
-          flexDirection: 'row',
-          gap: 16,
-          padding: 40,
-          backgroundColor: '#FFF'
-        }}
-      >
-        <CustomButton
-          variant="primary"
-          textSize="base"
-          title="Primary"
-          onPress={() => navigation.push('Settings')}
-        />
-        <CustomButton
-          variant="secondary"
-          textSize="base"
-          title="Edit Signal"
-          onPress={() => navigation.push("EditSignal")}
-        />
-        <CustomButton
-          variant="secondary"
-          active
-          textSize="base"
-          title="Now"
-          onPress={() => navigation.push('EditSignal')}
-        />
-        <Button title="Normal" onPress={signOut} />
-      </View>
       <Text>Hello {user?.name}</Text>
       <Text>your Email {user?.email}</Text>
-      <View style={styles.userInfo}>
-        <UserInfo
-          name={userInfo.name}
-          time={userInfo.time}
-          activity={userInfo.activity}
-        />
+
+      <View style={styles.UserStatus}>
+        <UserStatus friends={visibleFriends} user={userInfo} />
       </View>
     </GestureHandlerRootView>
   )
@@ -104,9 +50,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
-  userInfo: {
-    padding: 4,
-    backgroundColor: theme.colors.white
+  UserStatus: {
+    marginVertical: 4,
   },
   switch: {
     width: width * 0.18,

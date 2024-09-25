@@ -4,13 +4,15 @@ import Badge from "@/components/ui/Badge";
 import { theme } from "@/theme";
 
 interface UserInfoProps extends ViewProps {
-  name: string;
+  firstName: string;
+  lastName: string;
   time: string;
   activity: string;
 }
 
 export default function UserInfo({
-  name,
+  firstName,
+  lastName,
   time,
   activity,
   style,
@@ -19,7 +21,7 @@ export default function UserInfo({
   return (
     <View style={(styles.container, style)} {...rest}>
       <CustomText size="lg" style={styles.nameContainer} fontWeight="medium">
-        {name}
+        {`${firstName} ${lastName}`}
       </CustomText>
       <View style={styles.detailsContainer}>
         <Badge name={time} variant="outline" />
