@@ -1,4 +1,4 @@
-import { FontFamilyVariant, fontWeightVariants, SizeVariants } from "@/types";
+import { FontFamilyVariant, FontWeightVariants, SizeVariants } from "@/types";
 import { FontStyle } from "@shopify/react-native-skia";
 import { Text, TextProps, TextStyle } from "react-native";
 
@@ -11,11 +11,13 @@ const typographyStylesMap: Record<SizeVariants, TextStyle> = {
   xs: { fontSize: 11, lineHeight: 13.26 },
 };
 
-const fontWeightMap: Record<fontWeightVariants, TextStyle> = {
-  bold: { fontWeight: "bold" },
-  medium: { fontWeight: "medium" },
-  normal: { fontWeight: "normal" },
+const fontWeightMap: Record<FontWeightVariants, TextStyle> = {
+  bold: { fontWeight: 700 },
+  semibold: { fontWeight: 600 },
+  medium: { fontWeight: 500 },
+  normal: { fontWeight: 400 },
 };
+
 const fontStyleMap: Record<string, TextStyle> = {
   normal: { fontStyle: "normal" },
   italic: { fontStyle: "italic" },
@@ -50,7 +52,7 @@ const fontFamilyMap: Record<string, { regular: string; italic: string }> = {
 
 interface CustomTextProps extends TextProps {
   size?: SizeVariants;
-  fontWeight?: fontWeightVariants;
+  fontWeight?: FontWeightVariants;
   fontFamily?: FontFamilyVariant;
   fontStyle?: "normal" | "italic";
 }

@@ -3,7 +3,7 @@ import { StyleSheet, View, ViewProps } from "react-native";
 import CustomText from "@/components/ui/CustomText";
 
 interface BadgeProps extends ViewProps {
-  name: string;
+  name: string | number;
   variant?: "default" | "outline";
 }
 
