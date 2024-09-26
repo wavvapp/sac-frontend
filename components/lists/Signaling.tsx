@@ -1,4 +1,4 @@
-import React, { forwardRef, useRef, useImperativeHandle, useMemo, useEffect } from "react";
+import React, { forwardRef } from "react";
 import { View, StyleSheet } from "react-native";
 import CustomText from "@/components/ui/CustomText";
 import UserAvatar from "@/components/ui/UserAvatar";
@@ -6,11 +6,9 @@ import UserInfo from "@/components/UserInfo";
 import Badge from "@/components/ui/Badge";
 import { defaultUsers } from "@/data/users";
 import { User } from "@/types";
-import BottomSheet, {
-  BottomSheetBackdrop,
-  BottomSheetBackdropProps,
-} from "@gorhom/bottom-sheet";
+
 import { FlatList } from "react-native-gesture-handler";
+import BottomDrawer from "@/components/BottomDrawer";
 export interface SignalingRef {
   openBottomSheet: () => void;
 }
@@ -20,35 +18,12 @@ interface SignalingProps {
 }
 
 const Signaling = forwardRef<SignalingRef, SignalingProps>((props, ref) => {
-  const bottomSheetRef = useRef<BottomSheet>(null);
-
-  useImperativeHandle(ref, () => ({
-    openBottomSheet: () => {
-      bottomSheetRef.current?.expand();
-    },
-  }));
 
   const displayUsers = props.users?.length ? props.users : defaultUsers;
 
-  const snapPoints = useMemo(() => ["20%", "88%"], []);
-
-  const renderBackdrop = (props: BottomSheetBackdropProps) => (
-    <BottomSheetBackdrop
-      {...props}
-      disappearsOnIndex={0}
-      appearsOnIndex={0}
-      pressBehavior="close"
-    />
-  );
 
   return (
-    <BottomSheet
-      ref={bottomSheetRef}
-      index={0}
-      snapPoints={snapPoints}
-      enablePanDownToClose={false}
-      backdropComponent={renderBackdrop}
-    >
+    <BottomDrawer ref={ref}>
       <View style={styles.container}>
         <View style={styles.header}>
           <Badge name={displayUsers.length.toString()} />
@@ -76,7 +51,7 @@ const Signaling = forwardRef<SignalingRef, SignalingProps>((props, ref) => {
           )}
         />
       </View>
-    </BottomSheet>
+    </BottomDrawer>
   );
 });
 
