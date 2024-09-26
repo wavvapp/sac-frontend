@@ -24,7 +24,7 @@ export const visibleFriends = [
     selected: true,
   },
   {
-    id: "u3",
+    id: "u4",
     firstName: "Emil",
     lastName: "Wagner",
     time: "Evening",

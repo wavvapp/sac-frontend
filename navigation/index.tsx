@@ -37,7 +37,7 @@ export default function AppNavigator() {
           }}
           initialRouteName="Home"
         >
-          <Stack.Screen name="Home" component={HomeScreen} />
+          <Stack.Screen name="Home" options={{ headerShown: false,}} component={HomeScreen} />
           <Stack.Screen name="Settings" component={Settings} />
           <Stack.Screen
             name="EditSignal"

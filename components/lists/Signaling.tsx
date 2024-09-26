@@ -1,4 +1,4 @@
-import React, { forwardRef, useRef, useImperativeHandle, useMemo } from "react";
+import React, { forwardRef, useRef, useImperativeHandle, useMemo, useEffect } from "react";
 import { View, FlatList, StyleSheet } from "react-native";
 import BottomSheet, {
   BottomSheetBackdrop,
@@ -29,7 +29,7 @@ const Signaling = forwardRef<SignalingRef, SignalingProps>((props, ref) => {
 
   const displayUsers = props.users?.length ? props.users : defaultUsers;
 
-  const snapPoints = useMemo(() => ["20%", "90%"], []);
+  const snapPoints = useMemo(() => ["20%", "88%"], []);
 
   const renderBackdrop = (props: BottomSheetBackdropProps) => (
     <BottomSheetBackdrop
@@ -62,7 +62,7 @@ const Signaling = forwardRef<SignalingRef, SignalingProps>((props, ref) => {
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <View style={styles.userCard}>
-              <UserAvatar imageUrl={0} />
+              <UserAvatar imageUrl={item.imageUrl || 0} />
               <View>
                 <UserInfo
                   firstName={item.firstName}

@@ -1,3 +1,5 @@
+import { ImageSourcePropType } from "react-native";
+
 export type SizeVariants = "2xl" | "xl" | "lg" | "base" | "sm" | "xs";
 export type FontWeightVariants = "bold" | "semibold" | "medium" | "normal";
 export type Friend = { id: number, name: string; selected: boolean; }
@@ -11,4 +13,5 @@ export interface User {
   time: string;
   activity: string;
   selected?: boolean
+  imageUrl?: ImageSourcePropType
 }
