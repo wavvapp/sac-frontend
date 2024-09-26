@@ -15,7 +15,9 @@ function Status({ timeSlots }: StatusProps) {
 
   return (
     <View style={styles.container}>
-      <CustomText style={styles.title} fontWeight="bold">When</CustomText>
+      <CustomText size="sm" style={styles.title} fontWeight="medium">
+        When
+      </CustomText>
       <ScrollView
         horizontal={true}
         showsHorizontalScrollIndicator={false}
@@ -27,7 +29,7 @@ function Status({ timeSlots }: StatusProps) {
               <CustomButton
                 title={slot}
                 onPress={() => handlePress(slot)}
-                textSize="lg"
+                textSize="base"
                 variant="secondary"
                 active={activeSlot === slot}
               />

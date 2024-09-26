@@ -1,12 +1,16 @@
 import React, { forwardRef, useRef, useImperativeHandle, useMemo, useEffect } from "react";
-import { View, FlatList, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import CustomText from "@/components/ui/CustomText";
 import UserAvatar from "@/components/ui/UserAvatar";
 import UserInfo from "@/components/UserInfo";
 import Badge from "@/components/ui/Badge";
 import { defaultUsers } from "@/data/users";
 import { User } from "@/types";
-import BottomSheet, { BottomSheetBackdrop, BottomSheetBackdropProps } from "@gorhom/bottom-sheet";
+import BottomSheet, {
+  BottomSheetBackdrop,
+  BottomSheetBackdropProps,
+} from "@gorhom/bottom-sheet";
+import { FlatList } from "react-native-gesture-handler";
 export interface SignalingRef {
   openBottomSheet: () => void;
 }
