@@ -1,6 +1,6 @@
 import { FlatList, FlatListComponent, SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
 import CustomText from "@/components/ui/CustomText";
-import FriendCard from "@/components/ui/Friend";
+import FriendCard from "@/components/Friend";
 import { visibleFriends } from "@/data/friends";
 import { useState } from "react";
 
