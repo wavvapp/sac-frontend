@@ -15,16 +15,15 @@ const queryClient = new QueryClient();
 export default function App() {
   const { loaded, error } = useFont();
 
-  if (!loaded && !error) {
-    return null;
-  }
-
   useEffect(() => {
     if (loaded || error) {
       SplashScreen.hideAsync();
     }
   }, [loaded, error]);
 
+  if (!loaded && !error) {
+    return null;
+  }
   return (
     <QueryClientProvider client={queryClient}>
       <StatusBar style="inverted" />
