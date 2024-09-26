@@ -28,7 +28,7 @@ export default function HomeScreen() {
 
   return (
     <GestureHandlerRootView style={styles.container}>
-      <PerlinNoise isOn={isOn} color1="#0E0D26" color2="#14163D" />
+      <PerlinNoise isOn={isOn} color1="#281713" color2="blue" />
       <AnimatedSwitch
         isOn={isOn}
         onPress={handlePress}
