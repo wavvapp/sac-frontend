@@ -1,6 +1,6 @@
 import { theme } from '@/theme'
-import React, {  useState } from 'react'
-import { Pressable,  StyleSheet, ViewStyle } from 'react-native'
+import React, { useState } from 'react'
+import { Pressable, StyleSheet, ViewStyle } from 'react-native'
 import Animated, {
   interpolate,
   useAnimatedStyle,
@@ -37,10 +37,9 @@ export const AnimatedSwitch = ({
   // This will listen for changes in the shared value and update the text accordingly with a delay
   useDerivedValue(() => {
     if (isOn.value) {
-      runOnJS(updateTextWithDelay)('ON')
-    } else {
-      runOnJS(updateTextWithDelay)('OFF')
+      return runOnJS(updateTextWithDelay)('ON')
     }
+    return runOnJS(updateTextWithDelay)('OFF')
   }, [isOn.value])
 
   const thumbAnimatedStyle = useAnimatedStyle(() => {
