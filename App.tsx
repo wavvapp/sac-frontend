@@ -4,6 +4,7 @@ import AppNavigator from "@/navigation";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { StatusBar } from 'expo-status-bar'
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useFont } from "@/hooks/useFont";
 import { useEffect } from "react";
 
@@ -28,8 +29,11 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
       <StatusBar style="inverted" />
       <AuthProvider>
-        <AppNavigator />
+        <GestureHandlerRootView>
+          <AppNavigator />
+        </GestureHandlerRootView>
       </AuthProvider>
     </QueryClientProvider>
   );
+
 }

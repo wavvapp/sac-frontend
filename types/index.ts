@@ -1,3 +1,5 @@
+import { ImageSourcePropType } from "react-native";
+
 export type SizeVariants = "2xl" | "xl" | "lg" | "base" | "sm" | "xs";
 export type FontWeightVariants =
   "black"
@@ -17,5 +19,6 @@ export interface User {
   lastName: string;
   time: string;
   activity: string;
-  selected?: boolean;
+  selected?: boolean
+  imageUrl?: ImageSourcePropType
 }

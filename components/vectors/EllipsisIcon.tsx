@@ -2,8 +2,8 @@ import { theme } from "@/theme";
 import Svg, { Path, SvgProps } from "react-native-svg";
 
 export default function EllipsisIcon({
-  width = 2,
-  height = 16,
+  width = 4,
+  height = 18,
   color = theme.colors.black,
   ...rest
 }: SvgProps): JSX.Element {
