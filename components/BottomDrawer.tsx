@@ -8,20 +8,19 @@ export default function BottomDrawer({ children, ref }: any) {
     const snapPoints = useMemo(() => ["20%", "88%"], []);
     const bottomSheetRef = useRef<BottomSheet>(null);
 
-
     useImperativeHandle(ref, () => ({
-        openBottomSheet: () => {
-            bottomSheetRef.current?.expand();
-        },
+      openBottomSheet: () => {
+        bottomSheetRef.current?.expand();
+      },
     }));
 
     const renderBackdrop = (props: BottomSheetBackdropProps) => (
-        <BottomSheetBackdrop
-            {...props}
-            disappearsOnIndex={0}
-            appearsOnIndex={0}
-            pressBehavior="close"
-        />
+      <BottomSheetBackdrop
+        {...props}
+        disappearsOnIndex={1}
+        appearsOnIndex={0}
+        pressBehavior="close"
+      />
     );
 
     return (
