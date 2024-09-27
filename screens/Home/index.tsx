@@ -1,28 +1,58 @@
-import PerlinNoise from '@/components/PerlinNoise'
-import { useAuth } from '@/contexts/AuthContext'
-import { RootStackParamList } from '@/navigation'
-import { useNavigation } from '@react-navigation/native'
-import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import React from 'react'
-import { Button, Text, View, StyleSheet } from 'react-native'
-import { GestureHandlerRootView } from 'react-native-gesture-handler'
-type HomeScreenProps = NativeStackNavigationProp<RootStackParamList, 'Home'>
+import UserStatus from "@/components/cards/UserStatus";
+import PerlinNoise from "@/components/PerlinNoise";
+import { useAuth } from "@/contexts/AuthContext";
+import { visibleFriends } from "@/data/friends";
+import { userInfo } from "@/data/user";
+import { RootStackParamList } from "@/navigation";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { Text, StyleSheet, View, Dimensions } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { useSharedValue } from "react-native-reanimated";
+import { AnimatedSwitch } from "@/components/AnimatedSwitch";
+import { CustomButton } from "@/components/ui/Button";
+export type HomeScreenProps = NativeStackNavigationProp<
+  RootStackParamList,
+  "Home"
+>;
 
+const { width } = Dimensions.get('window')
 export default function HomeScreen() {
   const navigation = useNavigation<HomeScreenProps>()
   const { user, signOut } = useAuth()
+  const isOn = useSharedValue(false)
+
+  const handlePress = () => {
+    isOn.value = !isOn.value
+  }
 
   return (
     <GestureHandlerRootView style={styles.container}>
-      <PerlinNoise color1="#0E0D26" color2="#14163D" />
-      <Button title="Settings" onPress={() => navigation.push('Settings')} />
+      <PerlinNoise isOn={isOn} color1="#281713" color2="blue" />
+      <AnimatedSwitch
+        isOn={isOn}
+        onPress={handlePress}
+        style={styles.switch}
+      />
       <Text>Hello {user?.name}</Text>
       <Text>your Email {user?.email}</Text>
-      <Button
-        title="Edit Sgnal"
-        onPress={() => navigation.push('EditSignal')}
+
+      <View style={styles.UserStatus}>
+        <UserStatus friends={visibleFriends} user={userInfo} />
+      </View>
+      <CustomButton
+        active
+        textSize="base"
+        title="Signaling list"
+        onPress={() => navigation.push("Signaling")}
       />
-      <Button title="Sign Out" onPress={signOut} />
+       <CustomButton
+        active
+        variant="secondary"
+        textSize="base"
+        title="Edit signal page"
+        onPress={() => navigation.push("EditSignal")}
+      />
     </GestureHandlerRootView>
   )
 }
@@ -33,5 +63,13 @@ const styles = StyleSheet.create({
     position: 'relative',
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  UserStatus: {
+    marginVertical: 4,
+  },
+  switch: {
+    width: width * 0.18,
+    height: width * 0.35,
+    padding: 10
   }
 })
