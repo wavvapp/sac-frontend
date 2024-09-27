@@ -3,7 +3,6 @@ import "react-native-reanimated";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "@/screens/Home";
 import EditSignal from "@/screens/EditSignal";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useAuth } from "@/contexts/AuthContext";
 import SignUp from "@/screens/Authentication/SignUp";
 import Login from "@/screens/Authentication/Login";
@@ -38,11 +37,11 @@ export default function AppNavigator() {
           }}
           initialRouteName="Home"
         >
-          <Stack.Screen name="Home" component={HomeScreen} />
+          <Stack.Screen name="Home" options={{ headerShown: false,}} component={HomeScreen} />
           <Stack.Screen name="Settings" component={Settings} />
           <Stack.Screen
             name="EditSignal"
-            options={{ presentation: "modal" }}
+            options={{ headerShown: false, presentation: 'modal' }}
             component={EditSignal}
           />
           <Stack.Screen

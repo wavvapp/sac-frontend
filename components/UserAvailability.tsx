@@ -26,7 +26,6 @@ const styles = StyleSheet.create({
     paddingLeft: 12,
     paddingRight: 21,
     paddingVertical: 5,
-    backgroundColor: theme.colors.white,
   },
   signalText: {
     lineHeight: 17,

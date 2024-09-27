@@ -15,26 +15,30 @@ function Status({ timeSlots }: StatusProps) {
 
   return (
     <View style={styles.container}>
-      <CustomText style={styles.title} fontWeight="bold">When</CustomText>
-      <ScrollView
-        horizontal={true}
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.scrollContainer}
-      >
-        <View style={styles.buttonContainer}>
-          {timeSlots.map((slot) => (
-            <View key={slot}>
-              <CustomButton
-                title={slot}
-                onPress={() => handlePress(slot)}
-                textSize="lg"
-                variant="secondary"
-                active={activeSlot === slot}
-              />
-            </View>
-          ))}
-        </View>
-      </ScrollView>
+      <CustomText size="sm" style={styles.title} fontWeight="medium">
+        When
+      </CustomText>
+      <View style={styles.scrollContainer}>
+        <ScrollView
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.scrollContentContainer}
+        >
+          <View style={styles.buttonContainer}>
+            {timeSlots.map((slot) => (
+              <View key={slot}>
+                <CustomButton
+                  title={slot}
+                  onPress={() => handlePress(slot)}
+                  textSize="base"
+                  variant="secondary"
+                  active={activeSlot === slot}
+                />
+              </View>
+            ))}
+          </View>
+        </ScrollView>
+      </View>
     </View>
   );
 }
@@ -43,17 +47,19 @@ export default Status;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    gap: 18,
   },
   title: {
     paddingHorizontal: 15,
-    paddingBottom:18
   },
   scrollContainer: {
+    flexDirection: "row",
+  },
+  scrollContentContainer: {
     paddingHorizontal: 15,
   },
   buttonContainer: {
     flexDirection: "row",
-    gap:8
+    gap: 8,
   },
 });
