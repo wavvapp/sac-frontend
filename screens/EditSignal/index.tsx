@@ -39,7 +39,7 @@ const style = StyleSheet.create({
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "flex-start",
-    gap: 10,
+    gap: 30,
     paddingTop: 44,
   },
   navBar: {
@@ -47,6 +47,6 @@ const style = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row",
     width: "100%",
-    paddingHorizontal: 15
-  }
-})
+    paddingHorizontal: 15,
+  },
+});
