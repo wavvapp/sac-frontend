@@ -42,30 +42,24 @@ export default function HomeScreen() {
   }, [isOn.value]);
 
   return (
-    <View>
-      <View style={styles.container}>
-        <PerlinNoise isOn={isOn} color1="#281713" color2="blue" />
-        <View style={{ width: "100%" }}>
-          <TouchableOpacity style={styles.iconContainer}>
-            <Settings />
-          </TouchableOpacity>
-        </View>
-        <View style={styles.UserStatus}>
-          {isVisible ? (
-            <UserStatus friends={visibleFriends} user={userInfo} />
-          ) : (
-            <CustomText size="2xl" style={styles.headlineText}>
-              What are you up to, today?
-            </CustomText>
-          )}
-        </View>
-        <AnimatedSwitch
-          isOn={isOn}
-          onPress={handlePress}
-          style={styles.switch}
-        />
-        <Signaling ref={signalingRef} />
+    <View style={styles.container}>
+      <PerlinNoise isOn={isOn} color1="#281713" color2="blue" />
+      <View style={{ width: "100%" }}>
+        <TouchableOpacity style={styles.iconContainer}>
+          <Settings />
+        </TouchableOpacity>
       </View>
+      <View style={styles.UserStatus}>
+        {isVisible ? (
+          <UserStatus friends={visibleFriends} user={userInfo} />
+        ) : (
+          <CustomText size="2xl" style={styles.headlineText}>
+            What are you up to, today?
+          </CustomText>
+        )}
+      </View>
+      <AnimatedSwitch isOn={isOn} onPress={handlePress} style={styles.switch} />
+      <Signaling ref={signalingRef} />
     </View>
   );
 }
