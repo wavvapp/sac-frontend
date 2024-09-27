@@ -16,7 +16,7 @@
 </p>
 
 
-## 🚀 How to Run the Project
+## How to Run the Project
 
 Follow these steps to run the project:
 
