@@ -6,12 +6,10 @@ import { userInfo } from "@/data/user";
 import { RootStackParamList } from "@/navigation";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { Text, StyleSheet, View, Dimensions, SafeAreaView, TouchableOpacity } from "react-native";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { StyleSheet, View, Dimensions, TouchableOpacity } from "react-native";
 import { runOnJS, useDerivedValue, useSharedValue } from "react-native-reanimated";
 import { AnimatedSwitch } from "@/components/AnimatedSwitch";
-import { CustomButton } from "@/components/ui/Button";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import Signaling, { SignalingRef } from "@/components/lists/Signaling";
 import Settings from "@/components/vectors/Settings";
 import { theme } from "@/theme";
@@ -21,44 +19,45 @@ export type HomeScreenProps = NativeStackNavigationProp<
   "Home"
 >;
 
-const { width } = Dimensions.get('window')
+const { width } = Dimensions.get("window");
 export default function HomeScreen() {
-  const navigation = useNavigation<HomeScreenProps>()
-  const { user, signOut } = useAuth()
-  const [isVisible, setIsVisible]= useState(false)
-  const isOn = useSharedValue(false)
+  const navigation = useNavigation<HomeScreenProps>();
+  const { user, signOut } = useAuth();
+  const [isVisible, setIsVisible] = useState(false);
+  const isOn = useSharedValue(false);
   const signalingRef = useRef<SignalingRef>(null);
   const openSignalingBottomSheet = () => {
     signalingRef.current?.openBottomSheet();
   };
 
   const handlePress = () => {
-    isOn.value = !isOn.value
-  }
-  
+    isOn.value = !isOn.value;
+  };
+
   useDerivedValue(() => {
     if (isOn.value) {
-      return runOnJS(setIsVisible)(true)
+      return runOnJS(setIsVisible)(true);
     }
-    return runOnJS(setIsVisible)(false)
-  }, [isOn.value])
-
+    return runOnJS(setIsVisible)(false);
+  }, [isOn.value]);
 
   return (
-    <GestureHandlerRootView >
+    <View>
       <View style={styles.container}>
         <PerlinNoise isOn={isOn} color1="#281713" color2="blue" />
         <View style={{ width: "100%" }}>
-          <TouchableOpacity style={styles.iconContainer}><Settings /></TouchableOpacity>
+          <TouchableOpacity style={styles.iconContainer}>
+            <Settings />
+          </TouchableOpacity>
         </View>
         <View style={styles.UserStatus}>
-          {isVisible ?
+          {isVisible ? (
             <UserStatus friends={visibleFriends} user={userInfo} />
-            :
-            <CustomText size="2xl"
-              style={styles.headlineText}>
+          ) : (
+            <CustomText size="2xl" style={styles.headlineText}>
               What are you up to, today?
-            </CustomText>}
+            </CustomText>
+          )}
         </View>
         <AnimatedSwitch
           isOn={isOn}
@@ -67,8 +66,8 @@ export default function HomeScreen() {
         />
         <Signaling ref={signalingRef} />
       </View>
-    </GestureHandlerRootView>
-  )
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
