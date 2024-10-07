@@ -27,32 +27,55 @@ const fontStyleMap: Record<string, TextStyle> = {
 };
 
 export const fontFamilyMap: Record<
-  FontWeightVariants | "marfa",
-  { regular: string; italic: string }
+  FontFamilyVariant,
+  Partial<Record<FontWeightVariants, { regular: string; italic: string }>>
 > = {
-  black: { regular: "Suisse Int'l Black", italic: "Suisse Int'l Black Italic" },
-  bold: { regular: "Suisse Int'l Black", italic: "Suisse Int'l Black Italic" },
-  semibold: {
-    regular: "Suisse Int'l SemiBold",
-    italic: "Suisse Int'l SemiBold Italic",
+  suisse: {
+    black: {
+      regular: "Suisse Int'l Black",
+      italic: "Suisse Int'l Black Italic",
+    },
+    bold: {
+      regular: "Suisse Int'l Black",
+      italic: "Suisse Int'l Black Italic",
+    },
+    semibold: {
+      regular: "Suisse Int'l SemiBold",
+      italic: "Suisse Int'l SemiBold Italic",
+    },
+    medium: {
+      regular: "Suisse Int'l Medium",
+      italic: "Suisse Int'l Medium Italic",
+    },
+    normal: {
+      regular: "Suisse Int'l Regular",
+      italic: "Suisse Int'l Regular Italic",
+    },
+    light: {
+      regular: "Suisse Int'l Light",
+      italic: "Suisse Int'l Light Italic",
+    },
+    extralight: {
+      regular: "Suisse Int'l Ultralight",
+      italic: "Suisse Int'l Ultralight Italic",
+    },
+    thin: { regular: "Suisse Int'l Thin", italic: "Suisse Int'l Thin Italic" },
   },
-  medium: {
-    regular: "Suisse Int'l Medium",
-    italic: "Suisse Int'l Medium Italic",
+  "writer-mono": {
+    bold: {
+      regular: "iAWriterMonoS-Bold",
+      italic: "iAWriterMonoS-BoldItalic",
+    },
+    normal: {
+      regular: "iAWriterMonoS-Regular",
+      italic: "iAWriterMonoS-Italic",
+    },
   },
-  normal: {
-    regular: "Suisse Int'l Regular",
-    italic: "Suisse Int'l Regular Italic",
-  },
-  light: { regular: "Suisse Int'l Light", italic: "Suisse Int'l Light Italic" },
-  extralight: {
-    regular: "Suisse Int'l Ultralight",
-    italic: "Suisse Int'l Ultralight Italic",
-  },
-  thin: { regular: "Suisse Int'l Thin", italic: "Suisse Int'l Thin Italic" },
   marfa: {
-    regular: "ABCMarfaVariableVF-Trial",
-    italic: "ABCMarfaVariableVF-Trial",
+    normal: {
+      regular: "ABCMarfaVariable-MonoRegularItalic",
+      italic: "ABCMarfaVariable-MonoRegularItalic",
+    },
   },
 };
 
@@ -74,12 +97,12 @@ export default function CustomText({
 }: CustomTextProps) {
   const fontFamilyStyle = () => {
     if (fontFamily === "marfa")
-      return { fontFamily: fontFamilyMap["marfa"].regular };
+      return { fontFamily: fontFamilyMap["marfa"].normal?.regular };
 
     if (fontStyle === "italic")
-      return { fontFamily: fontFamilyMap[fontWeight].italic };
+      return { fontFamily: fontFamilyMap[fontFamily]?.[fontWeight]?.italic };
 
-    return { fontFamily: fontFamilyMap[fontWeight].regular };
+    return { fontFamily: fontFamilyMap[fontFamily]?.[fontWeight]?.regular };
   };
 
   return (

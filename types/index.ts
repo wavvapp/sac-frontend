@@ -11,7 +11,7 @@ export type FontWeightVariants =
   | "extralight"
   | "thin";
 export type ButtonVariant = "secondary" | "primary";
-export type FontFamilyVariant = "suisse" | "marfa";
+export type FontFamilyVariant = "suisse" | "marfa" | "writer-mono";
 
 export interface User {
   id: string;
