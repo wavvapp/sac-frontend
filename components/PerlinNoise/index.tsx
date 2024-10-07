@@ -15,7 +15,7 @@ import { Canvas, Fill, Shader, Skia, vec } from '@shopify/react-native-skia'
 
 // Get device width and height
 const { width, height } = Dimensions.get('window')
-//1.0 + 0.5
+
 // Props for the PerlinNoise component
 interface PerlinNoiseProps {
   isOn: SharedValue<boolean>
