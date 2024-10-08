@@ -1,7 +1,12 @@
-import { FontFamilyVariant, FontWeightVariants, SizeVariants } from "@/types";
+import {
+  FontFamilyVariant,
+  fontStyleVariant,
+  FontWeightVariant,
+  SizeVariant,
+} from "@/types";
 import { Text, TextProps, TextStyle } from "react-native";
 
-const typographyStylesMap: Record<SizeVariants, TextStyle> = {
+const typographyStylesMap: Record<SizeVariant, TextStyle> = {
   "2xl": { fontSize: 40, lineHeight: 51.88 },
   xl: { fontSize: 28, lineHeight: 36.32 },
   lg: { fontSize: 18, lineHeight: 21.85 },
@@ -10,7 +15,7 @@ const typographyStylesMap: Record<SizeVariants, TextStyle> = {
   xs: { fontSize: 11, lineHeight: 13.26 },
 };
 
-const fontWeightMap: Record<FontWeightVariants, TextStyle> = {
+const fontWeightMap: Record<FontWeightVariant, TextStyle> = {
   black: { fontWeight: 900 },
   bold: { fontWeight: 700 },
   semibold: { fontWeight: 600 },
@@ -21,69 +26,69 @@ const fontWeightMap: Record<FontWeightVariants, TextStyle> = {
   thin: { fontWeight: 100 },
 };
 
-const fontStyleMap: Record<string, TextStyle> = {
+const fontStyleMap: Record<fontStyleVariant, TextStyle> = {
   normal: { fontStyle: "normal" },
   italic: { fontStyle: "italic" },
 };
 
 export const fontFamilyMap: Record<
   FontFamilyVariant,
-  Partial<Record<FontWeightVariants, { regular: string; italic: string }>>
+  Partial<Record<FontWeightVariant, { normal: string; italic: string }>>
 > = {
   suisse: {
     black: {
-      regular: "Suisse Int'l Black",
+      normal: "Suisse Int'l Black",
       italic: "Suisse Int'l Black Italic",
     },
     bold: {
-      regular: "Suisse Int'l Black",
+      normal: "Suisse Int'l Black",
       italic: "Suisse Int'l Black Italic",
     },
     semibold: {
-      regular: "Suisse Int'l SemiBold",
+      normal: "Suisse Int'l SemiBold",
       italic: "Suisse Int'l SemiBold Italic",
     },
     medium: {
-      regular: "Suisse Int'l Medium",
+      normal: "Suisse Int'l Medium",
       italic: "Suisse Int'l Medium Italic",
     },
     normal: {
-      regular: "Suisse Int'l Regular",
+      normal: "Suisse Int'l Regular",
       italic: "Suisse Int'l Regular Italic",
     },
     light: {
-      regular: "Suisse Int'l Light",
+      normal: "Suisse Int'l Light",
       italic: "Suisse Int'l Light Italic",
     },
     extralight: {
-      regular: "Suisse Int'l Ultralight",
+      normal: "Suisse Int'l Ultralight",
       italic: "Suisse Int'l Ultralight Italic",
     },
-    thin: { regular: "Suisse Int'l Thin", italic: "Suisse Int'l Thin Italic" },
+    thin: { normal: "Suisse Int'l Thin", italic: "Suisse Int'l Thin Italic" },
   },
   "writer-mono": {
     bold: {
-      regular: "iAWriterMonoS-Bold",
+      normal: "iAWriterMonoS-Bold",
       italic: "iAWriterMonoS-BoldItalic",
     },
     normal: {
-      regular: "iAWriterMonoS-Regular",
+      normal: "iAWriterMonoS-Regular",
       italic: "iAWriterMonoS-Italic",
     },
   },
   marfa: {
     normal: {
-      regular: "ABCMarfaVariable-MonoRegularItalic",
+      normal: "ABCMarfaVariable-MonoRegularItalic",
       italic: "ABCMarfaVariable-MonoRegularItalic",
     },
   },
 };
 
 interface CustomTextProps extends TextProps {
-  size?: SizeVariants;
-  fontWeight?: FontWeightVariants;
+  size?: SizeVariant;
+  fontWeight?: FontWeightVariant;
   fontFamily?: FontFamilyVariant;
-  fontStyle?: "normal" | "italic";
+  fontStyle?: fontStyleVariant;
 }
 
 export default function CustomText({
@@ -95,14 +100,13 @@ export default function CustomText({
   children,
   ...rest
 }: CustomTextProps) {
-  const fontFamilyStyle = () => {
-    if (fontFamily === "marfa")
-      return { fontFamily: fontFamilyMap["marfa"].normal?.regular };
+  const getFontFamilyStyle = (): TextStyle => {
+    const selectedFontWeight =
+      fontFamilyMap[fontFamily][fontWeight] || fontFamilyMap[fontFamily].normal;
+    const selectedFontFamily =
+      selectedFontWeight?.[fontStyle] || selectedFontWeight?.normal;
 
-    if (fontStyle === "italic")
-      return { fontFamily: fontFamilyMap[fontFamily]?.[fontWeight]?.italic };
-
-    return { fontFamily: fontFamilyMap[fontFamily]?.[fontWeight]?.regular };
+    return { fontFamily: selectedFontFamily };
   };
 
   return (
@@ -110,7 +114,7 @@ export default function CustomText({
       style={[
         typographyStylesMap[size],
         fontWeightMap[fontWeight],
-        fontFamilyStyle(),
+        getFontFamilyStyle(),
         fontStyleMap[fontStyle],
         style,
       ]}
