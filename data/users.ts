@@ -5,160 +5,180 @@ export const defaultUsers: User[] = [
     id: "1",
     firstName: "Emil",
     lastName: "Wagner",
+    username: "@emilWAgner",
     time: "Evening",
     activity: "jodelkeller",
-    imageUrl: require("@/assets/images/users/user1.png")
+    imageUrl: require("@/assets/images/users/user1.png"),
   },
   {
     id: "2",
     firstName: "Vincent",
     lastName: "Reichel",
+    username: "@vReichel",
     time: "Evening",
     activity: "jodelkeller",
-    imageUrl: require("@/assets/images/users/user2.png")
+    imageUrl: require("@/assets/images/users/user2.png"),
   },
   {
     id: "3",
     firstName: "Gretchen",
     lastName: "Casper",
+    username: "@casperGretchen",
     time: "Evening",
     activity: "jodelkeller",
-    imageUrl: require("@/assets/images/users/user3.png")
+    imageUrl: require("@/assets/images/users/user3.png"),
   },
   {
     id: "4",
     firstName: "Elizabeth",
     lastName: "Carroll",
+    username: "@carrolEl",
     time: "Evening",
     activity: "jodelkeller",
-    imageUrl: require("@/assets/images/users/user4.png")
+    imageUrl: require("@/assets/images/users/user4.png"),
   },
   {
     id: "5",
     firstName: "Kayla",
     lastName: "Leuschke",
+    username: "@kaylaLeuschke",
     time: "Evening",
     activity: "jodelkeller",
-    imageUrl: require("@/assets/images/users/user5.png")
+    imageUrl: require("@/assets/images/users/user5.png"),
   },
   {
     id: "6",
     firstName: "Johnny",
     lastName: "Hopie",
+    username: "@hopieJohn",
     time: "Evening",
     activity: "jodelkeller",
-    imageUrl: require("@/assets/images/users/user6.png")
+    imageUrl: require("@/assets/images/users/user6.png"),
   },
   {
     id: "7",
     firstName: "Sophia",
     lastName: "Davis",
+    username: "@sophiedavis",
     time: "Morning",
     activity: "sophiadv",
-    imageUrl: require("@/assets/images/users/user1.png")
+    imageUrl: require("@/assets/images/users/user1.png"),
   },
   {
     id: "8",
     firstName: "Oliver",
     lastName: "Twist",
+    username: "oliverTwist",
     time: "Afternoon",
     activity: "olivertwist",
-    imageUrl: require("@/assets/images/users/user2.png")
+    imageUrl: require("@/assets/images/users/user2.png"),
   },
   {
     id: "9",
     firstName: "Liam",
     lastName: "Johnson",
+    username: "@liamjohn",
     time: "Night",
     activity: "liamjohn",
-    imageUrl: require("@/assets/images/users/user3.png")
+    imageUrl: require("@/assets/images/users/user3.png"),
   },
   {
     id: "10",
     firstName: "Mia",
     lastName: "Miller",
+    username: "@miaMiller",
     time: "Morning",
     activity: "miam",
-    imageUrl: require("@/assets/images/users/user1.png")
+    imageUrl: require("@/assets/images/users/user1.png"),
   },
   {
     id: "11",
     firstName: "Lucas",
     lastName: "Brown",
+    username: "@lucasBrown",
     time: "Afternoon",
     activity: "lucasb",
-    imageUrl: require("@/assets/images/users/user1.png")
+    imageUrl: require("@/assets/images/users/user1.png"),
   },
   {
     id: "12",
     firstName: "Amelia",
     lastName: "Smith",
+    username: "@ameliasmith",
     time: "Evening",
     activity: "ameliasmith",
-    imageUrl: require("@/assets/images/users/user1.png")
+    imageUrl: require("@/assets/images/users/user1.png"),
   },
   {
     id: "13",
     firstName: "Ethan",
     lastName: "Moore",
+    username: "@ethanmoore",
     time: "Night",
     activity: "ethanmoore",
-    imageUrl: require("@/assets/images/users/user1.png")
+    imageUrl: require("@/assets/images/users/user1.png"),
   },
   {
     id: "14",
     firstName: "Isabella",
     lastName: "White",
+    username: "@isabellawhite",
     time: "Morning",
     activity: "isabellaw",
-    imageUrl: require("@/assets/images/users/user1.png")
+    imageUrl: require("@/assets/images/users/user1.png"),
   },
   {
     id: "15",
     firstName: "Mason",
     lastName: "Thomas",
+    username: "@thomasMason",
     time: "Afternoon",
     activity: "masont",
-    imageUrl: require("@/assets/images/users/user1.png")
+    imageUrl: require("@/assets/images/users/user1.png"),
   },
   {
     id: "16",
     firstName: "Ava",
     lastName: "Harris",
+    username: "@avaharris",
     time: "Evening",
     activity: "avaharris",
-    imageUrl: require("@/assets/images/users/user1.png")
+    imageUrl: require("@/assets/images/users/user1.png"),
   },
   {
     id: "17",
     firstName: "James",
     lastName: "Walker",
+    username: "@jamesWalker",
     time: "Morning",
     activity: "jamesw",
-    imageUrl: require("@/assets/images/users/user1.png")
+    imageUrl: require("@/assets/images/users/user1.png"),
   },
   {
     id: "18",
     firstName: "Harper",
     lastName: "Young",
+    username: "@youngHarper",
     time: "Afternoon",
     activity: "harpery",
-    imageUrl: require("@/assets/images/users/user1.png")
+    imageUrl: require("@/assets/images/users/user1.png"),
   },
   {
     id: "19",
     firstName: "Elijah",
     lastName: "King",
+    username: "@elijahKing",
     time: "Night",
     activity: "elijahk",
-    imageUrl: require("@/assets/images/users/user1.png")
+    imageUrl: require("@/assets/images/users/user1.png"),
   },
   {
     id: "20",
     firstName: "Charlotte",
     lastName: "Scott",
+    username: "@charlotteSCott",
     time: "Evening",
     activity: "charlottescott",
-    imageUrl: require("@/assets/images/users/user1.png")
+    imageUrl: require("@/assets/images/users/user1.png"),
   },
 ];

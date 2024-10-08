@@ -3,35 +3,36 @@ export const visibleFriends = [
     id: "u1",
     firstName: "Erin",
     lastName: "Wagner",
+    username: "@erinwagner",
     time: "Evening",
     activity: "Jodelkeller",
-    selected: false
+    selected: false,
   },
   {
     id: "u2",
     firstName: "Vincent",
     lastName: "Russel",
+    username: "@vincentRussel",
     time: "Evening",
     activity: "Jodelkeller",
-    selected: true
-
+    selected: true,
   },
   {
     id: "u3",
     firstName: "Johnnie",
     lastName: "Hussel",
+    username: "@JohnnieHussel",
     time: "Evening",
     activity: "Jodelkeller",
-    selected: false
-
+    selected: false,
   },
   {
     id: "u4",
     firstName: "Emil",
     lastName: "Wagner",
+    username: "@emilWagner",
     time: "Evening",
     activity: "Jodelkeller",
-    selected: true
-
+    selected: true,
   },
 ];
