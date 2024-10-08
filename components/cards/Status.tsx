@@ -34,7 +34,7 @@ function Status({ timeSlots }: StatusProps) {
                   variant="secondary"
                   active={activeSlot === slot}
                   textStyles={styles.buttonText}
-              />
+                />
               </View>
             ))}
           </View>
@@ -64,6 +64,6 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   buttonText: {
-    fontFamily: fontFamilyMap["normal"].regular,
+    fontFamily: fontFamilyMap["marfa"].normal?.normal,
   },
 });
