@@ -1,22 +1,22 @@
-import { useAuth } from '@/contexts/AuthContext'
-import { RootStackParamList } from '@/navigation'
-import { useNavigation } from '@react-navigation/native'
-import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import React, { useState } from 'react'
-import { View, TextInput, Button, StyleSheet, Text } from 'react-native'
+import { useAuth } from "@/contexts/AuthContext"
+import { RootStackParamList } from "@/navigation"
+import { useNavigation } from "@react-navigation/native"
+import { NativeStackNavigationProp } from "@react-navigation/native-stack"
+import React, { useState } from "react"
+import { View, TextInput, Button, StyleSheet, Text } from "react-native"
 
-type LoginProp = NativeStackNavigationProp<RootStackParamList, 'Login'>
+type LoginProp = NativeStackNavigationProp<RootStackParamList, "Login">
 
 export default function Login() {
   const navigation = useNavigation<LoginProp>()
   const { signIn } = useAuth()
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
 
   const handleLogin = () => {
     // Handle login logic here
-    console.log('Login clicked')
-    signIn('asdasdasda', { name: 'Anas', email, id: '1' })
+    console.log("Login clicked")
+    signIn("asdasdasda", { name: "Anas", email, id: "1" })
   }
 
   return (
@@ -38,8 +38,8 @@ export default function Login() {
       />
       <Button title="Login" onPress={handleLogin} />
       <Text style={styles.signupText}>
-        Don't have an account?{' '}
-        <Text style={styles.link} onPress={() => navigation.navigate('SignUp')}>
+        Don't have an account?{" "}
+        <Text style={styles.link} onPress={() => navigation.navigate("SignUp")}>
           Sign Up
         </Text>
       </Text>
@@ -50,27 +50,27 @@ export default function Login() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    paddingHorizontal: 20
+    justifyContent: "center",
+    paddingHorizontal: 20,
   },
   title: {
     fontSize: 24,
     marginBottom: 20,
-    textAlign: 'center'
+    textAlign: "center",
   },
   input: {
     height: 40,
-    borderColor: '#ccc',
+    borderColor: "#ccc",
     borderWidth: 1,
     marginBottom: 12,
     paddingLeft: 8,
-    borderRadius: 5
+    borderRadius: 5,
   },
   signupText: {
     marginTop: 20,
-    textAlign: 'center'
+    textAlign: "center",
   },
   link: {
-    color: 'blue'
-  }
+    color: "blue",
+  },
 })
