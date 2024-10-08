@@ -64,6 +64,6 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   buttonText: {
-    fontFamily: fontFamilyMap["marfa"].normal?.normal,
+    fontFamily: fontFamilyMap["writer-mono"].normal?.normal,
   },
 });

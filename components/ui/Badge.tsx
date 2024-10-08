@@ -21,7 +21,7 @@ export default function Badge({
       <CustomText
         size="xs"
         fontWeight={variant === "outline" ? "normal" : "bold"}
-        fontFamily="marfa"
+        fontFamily="writer-mono"
         style={[styles.text, customTextStyle]}
       >
         {name}
