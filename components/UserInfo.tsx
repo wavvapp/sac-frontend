@@ -6,27 +6,24 @@ import { theme } from "@/theme";
 interface UserInfoProps extends ViewProps {
   firstName: string;
   lastName: string;
-  time: string;
-  activity: string;
+  username: string;
 }
 
 export default function UserInfo({
   firstName,
   lastName,
-  time,
-  activity,
+  username,
   style,
   ...rest
 }: UserInfoProps) {
   return (
     <View style={(styles.container, style)} {...rest}>
-      <CustomText size="lg" style={styles.nameContainer} fontWeight="medium">
+      <CustomText size="lg" style={styles.nameContainer} fontWeight="semibold">
         {`${firstName} ${lastName}`}
       </CustomText>
-      <View style={styles.detailsContainer}>
-        <Badge name={time} variant="outline" />
-        <CustomText size="sm">{activity}</CustomText>
-      </View>
+      <CustomText size="sm" style={styles.usernameContainer}>
+        {username}
+      </CustomText>
     </View>
   );
 }
@@ -37,12 +34,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   nameContainer: {
-    textTransform: "uppercase",
+    fontSize: 15,
+    lineHeight: 20,
   },
-  detailsContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 6,
-    marginTop: 2,
+  usernameContainer: {
+    fontSize: 15,
+    lineHeight: 20,
+    color: "#00000080",
+    opacity: 50,
   },
 });

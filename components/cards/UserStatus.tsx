@@ -65,8 +65,7 @@ export default function UserStatus({
           <UserInfo
             firstName={user.firstName}
             lastName={user.lastName}
-            time={user.time}
-            activity={user.activity}
+            username={user.username}
           />
           <TouchableOpacity>
             <EllipsisIcon />
@@ -81,7 +80,7 @@ export default function UserStatus({
         </View>
         <TouchableOpacity style={styles.editButton}>
           <CustomText
-            onPress={() => navigation.push('EditSignal')}
+            onPress={() => navigation.push("EditSignal")}
             size="sm"
             fontWeight="semibold"
             style={styles.editButtonText}
@@ -91,7 +90,7 @@ export default function UserStatus({
         </TouchableOpacity>
       </Animated.View>
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
