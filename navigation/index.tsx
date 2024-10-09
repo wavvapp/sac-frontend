@@ -1,30 +1,30 @@
-import { NavigationContainer } from "@react-navigation/native";
-import "react-native-reanimated";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import HomeScreen from "@/screens/Home";
-import EditSignal from "@/screens/EditSignal";
-import { useAuth } from "@/contexts/AuthContext";
-import SignUp from "@/screens/Authentication/SignUp";
-import Login from "@/screens/Authentication/Login";
-import CustomSplashScreen from "@/screens/CustomSplashScreen";
-import Settings from "@/screens/Settings";
-import Signaling from "@/components/lists/Signaling";
+import { NavigationContainer } from "@react-navigation/native"
+import "react-native-reanimated"
+import { createNativeStackNavigator } from "@react-navigation/native-stack"
+import HomeScreen from "@/screens/Home"
+import EditSignal from "@/screens/EditSignal"
+import { useAuth } from "@/contexts/AuthContext"
+import SignUp from "@/screens/Authentication/SignUp"
+import Login from "@/screens/Authentication/Login"
+import CustomSplashScreen from "@/screens/CustomSplashScreen"
+import Settings from "@/screens/Settings"
+import Signaling from "@/components/lists/Signaling"
 
 export type RootStackParamList = {
-  Home: undefined;
-  EditSignal: undefined;
-  Login: undefined;
-  SignUp: undefined;
-  Settings: undefined;
-  Signaling: undefined;
-};
+  Home: undefined
+  EditSignal: undefined
+  Login: undefined
+  SignUp: undefined
+  Settings: undefined
+  Signaling: undefined
+}
 
 export default function AppNavigator() {
-  const Stack = createNativeStackNavigator<RootStackParamList>();
-  const { isAuthenticated, isLoading } = useAuth();
+  const Stack = createNativeStackNavigator<RootStackParamList>()
+  const { isAuthenticated, isLoading } = useAuth()
 
   if (isLoading) {
-    return <CustomSplashScreen />;
+    return <CustomSplashScreen />
   }
 
   return (
@@ -35,18 +35,21 @@ export default function AppNavigator() {
             headerTransparent: true,
             headerTitleStyle: { color: "#fff" },
           }}
-          initialRouteName="Home"
-        >
-          <Stack.Screen name="Home" options={{ headerShown: false,}} component={HomeScreen} />
+          initialRouteName="Home">
+          <Stack.Screen
+            name="Home"
+            options={{ headerShown: false }}
+            component={HomeScreen}
+          />
           <Stack.Screen name="Settings" component={Settings} />
           <Stack.Screen
             name="EditSignal"
-            options={{ headerShown: false, presentation: 'modal' }}
+            options={{ headerShown: false, presentation: "modal" }}
             component={EditSignal}
           />
           <Stack.Screen
             name="Signaling"
-            options={{ presentation: "modal", headerShown:false }}
+            options={{ presentation: "modal", headerShown: false }}
             component={Signaling}
           />
         </Stack.Navigator>
@@ -57,5 +60,5 @@ export default function AppNavigator() {
         </Stack.Navigator>
       )}
     </NavigationContainer>
-  );
+  )
 }

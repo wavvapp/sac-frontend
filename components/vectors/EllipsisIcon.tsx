@@ -1,5 +1,5 @@
-import { theme } from "@/theme";
-import Svg, { Path, SvgProps } from "react-native-svg";
+import { theme } from "@/theme"
+import Svg, { Path, SvgProps } from "react-native-svg"
 
 export default function EllipsisIcon({
   width = 4,
@@ -31,5 +31,5 @@ export default function EllipsisIcon({
         stroke-linejoin="round"
       />
     </Svg>
-  );
+  )
 }

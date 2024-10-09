@@ -1,20 +1,19 @@
-import { RootStackParamList } from '@/navigation'
-import { useNavigation } from '@react-navigation/native'
-import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import React, { useState } from 'react'
-import { View, TextInput, Button, StyleSheet, Text } from 'react-native'
+import { RootStackParamList } from "@/navigation"
+import { useNavigation } from "@react-navigation/native"
+import { NativeStackNavigationProp } from "@react-navigation/native-stack"
+import React, { useState } from "react"
+import { View, TextInput, Button, StyleSheet, Text } from "react-native"
 
-type SignUpProp = NativeStackNavigationProp<RootStackParamList, 'SignUp'>
+type SignUpProp = NativeStackNavigationProp<RootStackParamList, "SignUp">
 
 export default function SignUp() {
   const navigation = useNavigation<SignUpProp>()
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
 
   const handleSignUp = () => {
     // Handle sign-up logic here
-    console.log('Sign Up clicked')
   }
 
   return (
@@ -43,8 +42,8 @@ export default function SignUp() {
       />
       <Button title="Sign Up" onPress={handleSignUp} />
       <Text style={styles.signupText}>
-        Already have an account?{' '}
-        <Text style={styles.link} onPress={() => navigation.navigate('Login')}>
+        Already have an account?{" "}
+        <Text style={styles.link} onPress={() => navigation.navigate("Login")}>
           Login
         </Text>
       </Text>
@@ -55,27 +54,27 @@ export default function SignUp() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    paddingHorizontal: 20
+    justifyContent: "center",
+    paddingHorizontal: 20,
   },
   title: {
     fontSize: 24,
     marginBottom: 20,
-    textAlign: 'center'
+    textAlign: "center",
   },
   input: {
     height: 40,
-    borderColor: '#ccc',
+    borderColor: "#ccc",
     borderWidth: 1,
     marginBottom: 12,
     paddingLeft: 8,
-    borderRadius: 5
+    borderRadius: 5,
   },
   signupText: {
     marginTop: 20,
-    textAlign: 'center'
+    textAlign: "center",
   },
   link: {
-    color: 'blue'
-  }
+    color: "blue",
+  },
 })

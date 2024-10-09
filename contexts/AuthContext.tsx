@@ -3,10 +3,10 @@ import React, {
   useState,
   useEffect,
   useContext,
-  ReactNode
-} from 'react'
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import * as SplashScreen from 'expo-splash-screen'
+  ReactNode,
+} from "react"
+import AsyncStorage from "@react-native-async-storage/async-storage"
+import * as SplashScreen from "expo-splash-screen"
 
 interface User {
   id: string
@@ -25,7 +25,7 @@ interface AuthContextData {
 const AuthContext = createContext<AuthContextData>({} as AuthContextData)
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({
-  children
+  children,
 }) => {
   const [user, setUser] = useState<User | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -37,8 +37,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   async function loadStoredData(): Promise<void> {
     setIsLoading(true)
 
-    const storedUser = await AsyncStorage.getItem('@Auth:user')
-    const storedToken = await AsyncStorage.getItem('@Auth:token')
+    const storedUser = await AsyncStorage.getItem("@Auth:user")
+    const storedToken = await AsyncStorage.getItem("@Auth:token")
 
     if (storedUser && storedToken) {
       setUser(JSON.parse(storedUser))
@@ -49,15 +49,15 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   }
 
   async function signIn(token: string, userData: User): Promise<void> {
-    await AsyncStorage.setItem('@Auth:token', token)
-    await AsyncStorage.setItem('@Auth:user', JSON.stringify(userData))
+    await AsyncStorage.setItem("@Auth:token", token)
+    await AsyncStorage.setItem("@Auth:user", JSON.stringify(userData))
 
     setUser(userData)
   }
 
   async function signOut(): Promise<void> {
-    await AsyncStorage.removeItem('@Auth:token')
-    await AsyncStorage.removeItem('@Auth:user')
+    await AsyncStorage.removeItem("@Auth:token")
+    await AsyncStorage.removeItem("@Auth:user")
 
     setUser(null)
   }
@@ -69,9 +69,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         isLoading,
         signIn,
         signOut,
-        isAuthenticated: !!user
-      }}
-    >
+        isAuthenticated: !!user,
+      }}>
       {children}
     </AuthContext.Provider>
   )
@@ -81,7 +80,7 @@ export function useAuth(): AuthContextData {
   const context = useContext(AuthContext)
 
   if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider')
+    throw new Error("useAuth must be used within an AuthProvider")
   }
 
   return context

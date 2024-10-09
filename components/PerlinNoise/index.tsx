@@ -1,20 +1,19 @@
-import React, { useEffect, useMemo, useState } from 'react'
-import { Dimensions, StyleSheet, View } from 'react-native'
+import React, { useEffect } from "react"
+import { Dimensions, StyleSheet } from "react-native"
 import {
   Easing,
   interpolate,
-  runOnJS,
   runOnUI,
   SharedValue,
   useDerivedValue,
   useSharedValue,
   withRepeat,
-  withTiming
-} from 'react-native-reanimated'
-import { Canvas, Fill, Shader, Skia, vec } from '@shopify/react-native-skia'
+  withTiming,
+} from "react-native-reanimated"
+import { Canvas, Fill, Shader, Skia, vec } from "@shopify/react-native-skia"
 
 // Get device width and height
-const { width, height } = Dimensions.get('window')
+const { width, height } = Dimensions.get("window")
 
 // Props for the PerlinNoise component
 interface PerlinNoiseProps {
@@ -23,7 +22,7 @@ interface PerlinNoiseProps {
   color2: string // Second color to be used
 }
 
-const PerlinNoise: React.FC<PerlinNoiseProps> = ({ color1, color2, isOn }) => {
+const PerlinNoise: React.FC<PerlinNoiseProps> = ({ isOn }) => {
   // Create a Skia Runtime Effect for the noise shader
   const noiseShader = Skia.RuntimeEffect.Make(`uniform float2 u_resolution;
 uniform float u_time;
@@ -95,10 +94,10 @@ half4 main(float2 fragCoord) {
       time.value = withRepeat(
         withTiming(50, {
           duration: 80000,
-          easing: Easing.elastic() // Removed any easing effect
+          easing: Easing.elastic(), // Removed any easing effect
         }),
         -1,
-        true
+        true,
       )
     })()
   }, [isOn])
@@ -108,11 +107,11 @@ half4 main(float2 fragCoord) {
     const flasshness = interpolate(Number(isOn.value), [0, 1], [0.0, 0.5])
     u_brightness.value = withTiming(brightness, {
       duration: 400,
-      easing: Easing.elastic() // Removed any easing effect
+      easing: Easing.elastic(), // Removed any easing effect
     })
     u_flashness.value = withTiming(flasshness, {
       duration: 400,
-      easing: Easing.elastic() // Removed any easing effect
+      easing: Easing.elastic(), // Removed any easing effect
     })
   }, [isOn.value]) // Track correct dependencies
 
@@ -121,7 +120,7 @@ half4 main(float2 fragCoord) {
       u_time: time.value, // Time value for animation
       u_resolution: vec(width, height), // Screen resolution
       u_brightness: u_brightness.value, // Directly using the interpolated value
-      u_flashness: u_flashness.value // Directly using the interpolated value
+      u_flashness: u_flashness.value, // Directly using the interpolated value
     }
   }, [time.value, width, height, isOn.value]) // Track correct dependencies
 
@@ -137,8 +136,8 @@ half4 main(float2 fragCoord) {
 
 const styles = StyleSheet.create({
   canvas: {
-    ...StyleSheet.absoluteFillObject
-  }
+    ...StyleSheet.absoluteFillObject,
+  },
 })
 
 export default PerlinNoise
