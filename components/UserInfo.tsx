@@ -1,6 +1,5 @@
 import { StyleSheet, View, ViewProps } from "react-native";
 import CustomText from "@/components/ui/CustomText";
-import Badge from "@/components/ui/Badge";
 import { theme } from "@/theme";
 
 interface UserInfoProps extends ViewProps {
@@ -18,10 +17,10 @@ export default function UserInfo({
 }: UserInfoProps) {
   return (
     <View style={(styles.container, style)} {...rest}>
-      <CustomText size="lg" style={styles.nameContainer} fontWeight="semibold">
+      <CustomText size="lg" style={styles.name} fontWeight="semibold">
         {`${firstName} ${lastName}`}
       </CustomText>
-      <CustomText size="sm" style={styles.usernameContainer}>
+      <CustomText size="sm" style={styles.username}>
         {username}
       </CustomText>
     </View>
@@ -33,14 +32,14 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.white,
     flexDirection: "row",
   },
-  nameContainer: {
+  name: {
     fontSize: 15,
     lineHeight: 20,
   },
-  usernameContainer: {
+  username: {
     fontSize: 15,
     lineHeight: 20,
-    color: "#00000080",
-    opacity: 50,
+    color: "#000000",
+    opacity: 0.5,
   },
 });
