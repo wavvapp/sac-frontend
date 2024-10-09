@@ -1,9 +1,10 @@
+import { signInWithGoogle } from '@/constants/googleSignin'
 import { useAuth } from '@/contexts/AuthContext'
 import { RootStackParamList } from '@/navigation'
 import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import React, { useState } from 'react'
-import { View, TextInput, Button, StyleSheet, Text } from 'react-native'
+import { View, TextInput, TouchableOpacity, StyleSheet, Text } from 'react-native'
 
 type LoginProp = NativeStackNavigationProp<RootStackParamList, 'Login'>
 
@@ -17,6 +18,18 @@ export default function Login() {
     // Handle login logic here
     console.log('Login clicked')
     signIn('asdasdasda', { name: 'Anas', email, id: '1' })
+  }
+
+  const handleGoogleSignIn = async () => {
+    try {
+      const googleResponse = await signInWithGoogle()
+      if (googleResponse) {
+        console.log('Google Sign-In Success:', googleResponse)
+       
+      }
+    } catch (error) {
+      console.error('Google Sign-In Failed:', error)
+    }
   }
 
   return (
@@ -36,7 +49,14 @@ export default function Login() {
         onChangeText={setPassword}
         secureTextEntry
       />
-      <Button title="Login" onPress={handleLogin} />
+      <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+        <Text style={styles.loginButtonText}>Login</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.googleButton} onPress={handleGoogleSignIn}>
+        <Text style={styles.googleButtonText}>Sign in with Google</Text>
+      </TouchableOpacity>
+
       <Text style={styles.signupText}>
         Don't have an account?{' '}
         <Text style={styles.link} onPress={() => navigation.navigate('SignUp')}>
@@ -51,12 +71,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    paddingHorizontal: 20
+    paddingHorizontal: 20,
   },
   title: {
     fontSize: 24,
     marginBottom: 20,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   input: {
     height: 40,
@@ -64,13 +84,35 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 12,
     paddingLeft: 8,
-    borderRadius: 5
+    borderRadius: 5,
+  },
+  loginButton: {
+    backgroundColor: '#007BFF',
+    paddingVertical: 10,
+    borderRadius: 5,
+    marginBottom: 20,
+  },
+  loginButtonText: {
+    color: 'white',
+    textAlign: 'center',
+    fontSize: 18,
+  },
+  googleButton: {
+    backgroundColor: '#DB4437', // Google red color
+    paddingVertical: 10,
+    borderRadius: 5,
+    marginBottom: 20,
+  },
+  googleButtonText: {
+    color: 'white',
+    textAlign: 'center',
+    fontSize: 18,
   },
   signupText: {
     marginTop: 20,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   link: {
-    color: 'blue'
-  }
+    color: 'blue',
+  },
 })

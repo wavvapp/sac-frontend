@@ -1,15 +1,37 @@
+# Ignore Node modules
 node_modules/
+npm-debug.log
+package-lock.json
+yarn-error.log
+.env
+
+# Ignore Expo
 .expo/
 dist/
-npm-debug.*
-*.jks
-*.p8
-*.p12
-*.key
-*.mobileprovision
-*.orig.*
-web-build/
 
-# macOS
-.DS_Store
+# Ignore Android build artifacts
+android
+android/.gradle/
+android/app/build/
+android/app/src/main/assets/*.png
+android/app/src/main/assets/*.xml
+android/app/src/main/res/*
+android/app/src/main/jniLibs/*
+android/app/src/main/AndroidManifest.xml
+android/app/proguard-rules.pro
 
+# Ignore iOS build artifacts
+ios
+ios/build/
+ios/Pods/
+ios/Podfile.lock
+ios/*.xcworkspace
+ios/*.xcodeproj
+ios/Runner.xcworkspace/
+ios/*.xcuserdatad
+ios/*.xcscheme
+ios/*.xcodeproj/
+ios/*.xcuserstate
+ios/*.h
+ios/*.m
+ios/*.swift

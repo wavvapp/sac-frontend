@@ -52,8 +52,7 @@
 
   "plugins": ["@react-native-google-signin/google-signin"],
 
-  "extra": {
-    "IOS_CLIENT_ID": "351310982043-28dk2k254o76heo1d4pr3uftmgsjmihh.apps.googleusercontent.com",
-    "WEB_CLIENT_ID": "351310982043-rn17jbb55qhb381l7nr31mrbgqf8l2qc.apps.googleusercontent.com"
+  "ios": {
+    "bundleIdentifier": "com.apeunit.social.app"
   }
 }
