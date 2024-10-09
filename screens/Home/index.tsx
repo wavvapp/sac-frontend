@@ -18,16 +18,21 @@ import Signaling, { SignalingRef } from '@/components/lists/Signaling'
 import Settings from '@/components/vectors/Settings'
 import { theme } from '@/theme'
 import CustomText from '@/components/ui/CustomText'
+import { CustomButton } from '@/components/ui/Button'
+import CloseIcon from "@/components/vectors/CloseIcon";
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
   'Home'
 >
+
+type TestingProp = NativeStackNavigationProp<RootStackParamList, "Testing">;
 
 const { width } = Dimensions.get('window')
 export default function HomeScreen() {
   const [isVisible, setIsVisible] = useState(false)
   const isOn = useSharedValue(false)
   const signalingRef = useRef<SignalingRef>(null)
+    const navigation = useNavigation<TestingProp>();
   const openSignalingBottomSheet = () => {
     signalingRef.current?.openBottomSheet()
   }
@@ -46,18 +51,25 @@ export default function HomeScreen() {
   return (
     <View style={styles.container}>
       <PerlinNoise isOn={isOn} color1="#281713" color2="blue" />
-      <View style={{ width: '100%' }}>
+      <View style={{ width: "100%" }}>
         <TouchableOpacity style={styles.iconContainer}>
           <Settings />
         </TouchableOpacity>
       </View>
+      <TouchableOpacity>
+        <CustomButton
+          title="Testing"
+          variant="primary"
+          onPress={() => navigation.push("Testing")}
+        />
+      </TouchableOpacity>
       <View style={styles.UserStatus}>
         <UserStatus isOn={isOn} friends={visibleFriends} user={userInfo} />
       </View>
       <AnimatedSwitch isOn={isOn} onPress={handlePress} style={styles.switch} />
       <Signaling ref={signalingRef} />
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
