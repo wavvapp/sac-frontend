@@ -15,7 +15,6 @@ export default function Login() {
 
   const handleLogin = () => {
     // Handle login logic here
-    console.log("Login clicked")
     signIn("asdasdasda", { name: "Anas", email, id: "1" })
   }
 

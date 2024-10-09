@@ -14,7 +14,6 @@ export default function SignUp() {
 
   const handleSignUp = () => {
     // Handle sign-up logic here
-    console.log("Sign Up clicked")
   }
 
   return (
