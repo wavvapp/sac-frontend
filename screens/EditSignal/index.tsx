@@ -1,33 +1,45 @@
-import UserAvailability from '@/components/UserAvailability';
+import React from "react";
 import { StyleSheet, View } from "react-native";
-import Status from '@/components/cards/Status';
-import { CustomButton } from '@/components/ui/Button';
-import UserAvatar from '@/components/ui/UserAvatar';
-import CrossMark from '@/components/vectors/CrossMark';
+import Status from "@/components/cards/Status";
+import { CustomButton } from "@/components/ui/Button";
+import UserAvatar from "@/components/ui/UserAvatar";
+import CrossMark from "@/components/vectors/CrossMark";
 import { useNavigation } from "@react-navigation/native";
-import { RootStackParamList } from "@/navigation";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import FriendsList from '@/components/lists/Friends';
+import { RootStackParamList } from "@/navigation";
+import UserAvailability from "@/components/UserAvailability";
+import FriendsList from "@/components/lists/Friends";
+import { useAuth } from "@/contexts/AuthContext"; // Import useAuth for logout
 
-type EditSignalScrenProps = NativeStackNavigationProp<RootStackParamList, "EditSignal">;
+type EditSignalScreenProps = NativeStackNavigationProp<RootStackParamList, "EditSignal">;
 
 export default function EditSignal() {
-  const navigation = useNavigation<EditSignalScrenProps>();
+  const navigation = useNavigation<EditSignalScreenProps>();
+  const { signOut } = useAuth(); // Access the logout function
+
+  const handleLogout = () => {
+    signOut(); // Log the user out
+  };
 
   return (
-    <View
-      style={style.container}
-    >
+    <View style={style.container}>
+      {/* Logout Button */}
+      <CustomButton
+        variant="secondary"
+        title="Logout"
+        onPress={handleLogout}
+        textSize={"base"}
+      />
       <View style={style.navBar}>
         <CrossMark onPress={() => navigation.push("Home")} />
-        <CustomButton variant='primary' title='Done' textSize='sm' />
+        <CustomButton variant="primary" title="Done" textSize="sm" />
       </View>
       <UserAvatar
         imageUrl={require("@/assets/images/user-avatar.png")}
         size="large"
       />
       <UserAvailability />
-      <Status timeSlots={['NOW', 'MORNING', 'Lunch', 'AFTERNOON', 'EVENING']} />
+      <Status timeSlots={["NOW", "MORNING", "Lunch", "AFTERNOON", "EVENING"]} />
       <FriendsList />
     </View>
   );
