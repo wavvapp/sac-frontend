@@ -1,40 +1,40 @@
-import { StyleSheet, TextInput, TextInputProps, View } from "react-native";
-import { useState } from "react";
+import {
+  StyleSheet,
+  TextInput,
+  TextInputProps,
+  TextStyle,
+  View,
+} from "react-native";
+import { InputVariant, SizeVariants } from "@/types";
 
-interface BadgeProps extends TextInputProps {
-  variant?: "primary" | "secondary";
-  placeHolder: string;
-  validationPattern?: RegExp;
-  handleChange?: (text: string) => void;
-}
-
-const placeHolderColorMap: Record<"primary" | "secondary", string> = {
-  primary: "#00000080",
-  secondary: "#FFFFFF80",
+const inputSizeMap: Partial<Record<SizeVariants, TextStyle>> = {
+  lg: { fontSize: 20, lineHeight: 28 },
+  base: { fontSize: 16, lineHeight: 24 },
+  sm: { fontSize: 15, lineHeight: 28 },
 };
 
+const placeHolderColorMap: Record<InputVariant, string> = {
+  primary: "#00000080",
+  secondary: "#FFFFFF80",
+  ghost: "#00000080",
+};
+
+interface InputProps extends TextInputProps {
+  variant?: InputVariant;
+  textSize?: "lg" | "base" | "sm";
+  handleTextChange: (text: string) => void;
+}
+
 export default function Input({
+  value = "",
   variant = "primary",
-  placeHolder = "",
-  handleChange,
-  validationPattern,
+  textSize = "base",
+  placeholder = "",
+  handleTextChange,
   keyboardType = "default",
   style,
   ...rest
-}: BadgeProps) {
-  const [value, setValue] = useState<string>("");
-  const [isValid, setIsValid] = useState<Boolean>(false);
-
-  const handleInputChange = (value: string) => {
-    if (!value.trim()) return;
-    setValue(value);
-    if (validationPattern) {
-      setIsValid(validationPattern.test(value));
-    }
-    if (handleChange) {
-      handleChange(value);
-    }
-  };
+}: InputProps) {
   const variantStyles = {
     primary: {
       container: styles.primaryContainer,
@@ -44,16 +44,25 @@ export default function Input({
       container: styles.secondaryContainer,
       input: styles.secondaryInput,
     },
+    ghost: {
+      container: styles.ghostContainer,
+      input: styles.ghostInput,
+    },
   };
 
   return (
-    <View style={[styles.container, variantStyles[variant].container]}>
+    <View style={[styles.container, variantStyles?.[variant]?.container]}>
       <TextInput
-        style={[styles.input, variantStyles[variant].input, style]}
+        style={[
+          styles.input,
+          variantStyles[variant].input,
+          inputSizeMap[textSize],
+          style,
+        ]}
         value={value}
-        placeholder={placeHolder}
+        placeholder={placeholder}
         placeholderTextColor={placeHolderColorMap[variant]}
-        onChangeText={handleInputChange}
+        onChangeText={handleTextChange}
         keyboardType={keyboardType}
         {...rest}
       />
@@ -74,6 +83,10 @@ const styles = StyleSheet.create({
   secondaryContainer: {
     borderColor: "#FFFFFF33",
   },
+  ghostContainer: {
+    borderColor: "transparent",
+    paddingHorizontal: 0,
+  },
   input: {
     fontSize: 15,
     lineHeight: 28,
@@ -83,5 +96,8 @@ const styles = StyleSheet.create({
   },
   secondaryInput: {
     color: "#FFFFFF",
+  },
+  ghostInput: {
+    color: "#000000",
   },
 });
