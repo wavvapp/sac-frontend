@@ -46,14 +46,10 @@
     "extra": {
       "eas": {
         "projectId": "9579dea8-a434-4d27-8578-75b52ccb2328"
-      }
+      },
+      "IOS_CLIENT_ID": "351310982043-28dk2k254o76heo1d4pr3uftmgsjmihh.apps.googleusercontent.com",
+      "WEB_CLIENT_ID": "351310982043-rn17jbb55qhb381l7nr31mrbgqf8l2qc.apps.googleusercontent.com"
     }
   },
-
-  "plugins": ["@react-native-google-signin/google-signin"],
-
-  "extra": {
-    "IOS_CLIENT_ID": "351310982043-28dk2k254o76heo1d4pr3uftmgsjmihh.apps.googleusercontent.com",
-    "WEB_CLIENT_ID": "351310982043-rn17jbb55qhb381l7nr31mrbgqf8l2qc.apps.googleusercontent.com"
-  }
+  "plugins": ["@react-native-google-signin/google-signin"]
 }
