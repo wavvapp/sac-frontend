@@ -11,35 +11,51 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.yourcompany.yourappname",
-      "buildNumber": "1.0.0",
-      "infoPlist": {
-        "NSCameraUsageDescription": "This app uses the camera to scan barcodes on event tickets.",
-        "NSAppTransportSecurity": {
-          "NSExceptionDomains": {
-            "local.hey.bild.de": {
-              "NSIncludesSubdomains": true,
-              "NSTemporaryExceptionMinimumTLSVersion": "TLSv1.2",
-              "NSTemporaryExceptionAllowsInsecureHTTPLoads": true,
-              "NSTemporaryExceptionRequiresForwardSecrecy": false
-            }
+    "assetBundlePatterns": ["**/*"],
+    "infoPlist": {
+      "NSCameraUsageDescription": "This app uses the camera to scan barcodes on event tickets.",
+      "NSAppTransportSecurity": {
+        "NSExceptionDomains": {
+          "local.hey.bild.de": {
+            "NSIncludesSubdomains": true,
+            "NSTemporaryExceptionMinimumTLSVersion": "TLSv1.2",
+            "NSTemporaryExceptionAllowsInsecureHTTPLoads": true,
+            "NSTemporaryExceptionRequiresForwardSecrecy": false
           }
         }
-      }
+      },
+      "CFBundleURLTypes": [
+        {
+          "CFBundleURLSchemes": [
+            "com.googleusercontent.apps.351310982043-28dk2k254o76heo1d4pr3uftmgsjmihh"
+          ]
+        }
+      ]
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.apeunit.social.app"
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "9579dea8-a434-4d27-8578-75b52ccb2328"
+      },
+      "IOS_CLIENT_ID": "351310982043-28dk2k254o76heo1d4pr3uftmgsjmihh.apps.googleusercontent.com",
+      "WEB_CLIENT_ID": "351310982043-rn17jbb55qhb381l7nr31mrbgqf8l2qc.apps.googleusercontent.com"
+    },
+    "plugins": [
+      [
+        "@react-native-google-signin/google-signin",
+        {
+          "iosUrlScheme": "com.googleusercontent.apps.351310982043-28dk2k254o76heo1d4pr3uftmgsjmihh"
+        }
+      ]
+    ]
   }
 }
