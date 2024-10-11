@@ -1,5 +1,6 @@
 import CustomText from "@/components/ui/CustomText";
 import Input from "@/components/ui/Input";
+import { theme } from "@/theme";
 import { validationPatterns } from "@/utils";
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
@@ -64,10 +65,10 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   secondaryContainer: {
-    backgroundColor: "#000000",
+    backgroundColor: theme.colors.black,
     padding: 10,
   },
   invalidMessage: {
-    color: "#FFFFFF80",
+    color: theme.colors.white_500,
   },
 });

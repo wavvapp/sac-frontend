@@ -6,6 +6,7 @@ import {
   View,
 } from "react-native";
 import { InputVariant, SizeVariants } from "@/types";
+import { theme } from "@/theme";
 
 const inputSizeMap: Partial<Record<SizeVariants, TextStyle>> = {
   lg: { fontSize: 20, lineHeight: 28 },
@@ -14,9 +15,9 @@ const inputSizeMap: Partial<Record<SizeVariants, TextStyle>> = {
 };
 
 const placeHolderColorMap: Record<InputVariant, string> = {
-  primary: "#00000080",
-  secondary: "#FFFFFF80",
-  ghost: "#00000080",
+  primary: theme.colors.black_500,
+  secondary: theme.colors.white_500,
+  ghost: theme.colors.black_500,
 };
 
 interface InputProps extends TextInputProps {
@@ -78,10 +79,10 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   primaryContainer: {
-    borderColor: "#00000033",
+    borderColor: theme.colors.black_200,
   },
   secondaryContainer: {
-    borderColor: "#FFFFFF33",
+    borderColor: theme.colors.white_200,
   },
   ghostContainer: {
     borderColor: "transparent",
@@ -92,12 +93,12 @@ const styles = StyleSheet.create({
     lineHeight: 28,
   },
   primaryInput: {
-    color: "#000000",
+    color: theme.colors.black,
   },
   secondaryInput: {
-    color: "#FFFFFF",
+    color: theme.colors.white,
   },
   ghostInput: {
-    color: "#000000",
+    color: theme.colors.black,
   },
 });
