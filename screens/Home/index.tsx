@@ -18,46 +18,54 @@ import Signaling, { SignalingRef } from '@/components/lists/Signaling'
 import Settings from '@/components/vectors/Settings'
 import { theme } from '@/theme'
 import CustomText from '@/components/ui/CustomText'
+import { CustomButton } from "@/components/ui/Button";
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
-  'Home'
->
+  "Home"
+>;
 
-const { width } = Dimensions.get('window')
+const { width } = Dimensions.get("window");
 export default function HomeScreen() {
-  const [isVisible, setIsVisible] = useState(false)
-  const isOn = useSharedValue(false)
-  const signalingRef = useRef<SignalingRef>(null)
+  const [isVisible, setIsVisible] = useState(false);
+  const isOn = useSharedValue(false);
+  const signalingRef = useRef<SignalingRef>(null);
+  const navigation = useNavigation<HomeScreenProps>();
+
   const openSignalingBottomSheet = () => {
-    signalingRef.current?.openBottomSheet()
-  }
+    signalingRef.current?.openBottomSheet();
+  };
 
   const handlePress = () => {
-    isOn.value = !isOn.value
-  }
+    isOn.value = !isOn.value;
+  };
 
   useDerivedValue(() => {
     if (isOn.value) {
-      return runOnJS(setIsVisible)(true)
+      return runOnJS(setIsVisible)(true);
     }
-    return runOnJS(setIsVisible)(false)
-  }, [isOn.value])
+    return runOnJS(setIsVisible)(false);
+  }, [isOn.value]);
 
   return (
     <View style={styles.container}>
       <PerlinNoise isOn={isOn} color1="#281713" color2="blue" />
-      <View style={{ width: '100%' }}>
+      <View style={{ width: "100%" }}>
         <TouchableOpacity style={styles.iconContainer}>
           <Settings />
         </TouchableOpacity>
       </View>
       <View style={styles.UserStatus}>
         <UserStatus isOn={isOn} friends={visibleFriends} user={userInfo} />
+        <CustomButton
+          textSize="lg"
+          title="test screen"
+          onPress={() => navigation.push("Testing")}
+        />
       </View>
       <AnimatedSwitch isOn={isOn} onPress={handlePress} style={styles.switch} />
       <Signaling ref={signalingRef} />
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
