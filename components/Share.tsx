@@ -14,7 +14,7 @@ export default function Share() {
           Your friends are not on Wavv?
         </CustomText>
         <TouchableOpacity>
-          <CustomText style={styles.inviteButton}>
+          <CustomText style={styles.inviteButtonText}>
             Invite them to join you
           </CustomText>
         </TouchableOpacity>
@@ -35,11 +35,7 @@ const styles = StyleSheet.create({
     borderColor: theme.colors.black_200,
     padding: 12,
   },
-  text: {
-    fontSize: 15,
-    lineHeight: 20,
-  },
-  inviteButton: {
+  inviteButtonText: {
     color: theme.colors.black_500,
   },
 });
