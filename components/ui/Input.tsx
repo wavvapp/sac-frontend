@@ -9,9 +9,9 @@ import { InputVariant, SizeVariants } from "@/types";
 import { theme } from "@/theme";
 
 const inputSizeMap: Partial<Record<SizeVariants, TextStyle>> = {
-  lg: { fontSize: 20, lineHeight: 28 },
-  base: { fontSize: 15, lineHeight: 24 },
   sm: { fontSize: 13, lineHeight: 20 },
+  base: { fontSize: 15, lineHeight: 24 },
+  lg: { fontSize: 20, lineHeight: 28 },
 };
 
 const placeHolderColorMap: Record<InputVariant, string> = {
