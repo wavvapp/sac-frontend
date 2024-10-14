@@ -10,4 +10,4 @@ export const theme = {
     gray: "#E3E3E3",
     "light-gray": "#898989",
   },
-};
+}

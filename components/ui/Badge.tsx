@@ -1,10 +1,10 @@
-import { theme } from "@/theme";
-import { StyleSheet, View, ViewProps } from "react-native";
-import CustomText from "@/components/ui/CustomText";
+import { theme } from "@/theme"
+import { StyleSheet, View, ViewProps } from "react-native"
+import CustomText from "@/components/ui/CustomText"
 
 interface BadgeProps extends ViewProps {
-  name: string | number;
-  variant?: "default" | "outline";
+  name: string | number
+  variant?: "default" | "outline"
 }
 
 export default function Badge({
@@ -13,20 +13,20 @@ export default function Badge({
   style,
   ...rest
 }: BadgeProps) {
-  const variantStyle = styles[variant];
+  const variantStyle = variant === "outline" ? styles.outline : styles.default
   const customTextStyle =
-    variant === "outline" ? styles.outlineText : styles.defaultText;
+    variant === "outline" ? styles.outlineText : styles.defaultText
   return (
     <View {...rest} style={[styles.container, variantStyle, style]}>
       <CustomText
         size="xs"
         fontWeight={variant === "outline" ? "normal" : "bold"}
-        style={[styles.text, customTextStyle]}
-      >
+        fontFamily="writer-mono"
+        style={[styles.text, customTextStyle]}>
         {name}
       </CustomText>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -53,4 +53,4 @@ const styles = StyleSheet.create({
     borderColor: theme.colors.black,
     borderWidth: 1,
   },
-});
+})
