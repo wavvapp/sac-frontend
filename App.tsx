@@ -5,8 +5,8 @@ import { AuthProvider } from "./contexts/AuthContext"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { StatusBar } from "expo-status-bar"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
-import { useFont } from "@/hooks/useFont";
-import { useEffect } from "react";
+import { useFont } from "@/hooks/useFont"
+import { useEffect } from "react"
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync()
@@ -14,16 +14,16 @@ SplashScreen.preventAutoHideAsync()
 const queryClient = new QueryClient()
 
 export default function App() {
-  const { loaded, error } = useFont();
+  const { loaded, error } = useFont()
 
   useEffect(() => {
     if (loaded || error) {
-      SplashScreen.hideAsync();
+      SplashScreen.hideAsync()
     }
-  }, [loaded, error]);
+  }, [loaded, error])
 
   if (!loaded && !error) {
-    return null;
+    return null
   }
   return (
     <QueryClientProvider client={queryClient}>

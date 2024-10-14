@@ -1,4 +1,9 @@
-import { FontFamilyVariant, fontStyleVariant, FontWeightVariant, SizeVariant } from "@/types"
+import {
+  FontFamilyVariant,
+  fontStyleVariant,
+  FontWeightVariant,
+  SizeVariant,
+} from "@/types"
 import { Text, TextProps, TextStyle } from "react-native"
 
 const typographyStylesMap: Record<SizeVariant, TextStyle> = {
@@ -81,8 +86,8 @@ export const fontFamilyMap: Record<
 
 interface CustomTextProps extends TextProps {
   size?: SizeVariant
-  fontWeight?: FontWeightVariant;
-  fontFamily?: FontFamilyVariant;
+  fontWeight?: FontWeightVariant
+  fontFamily?: FontFamilyVariant
   fontStyle?: fontStyleVariant
 }
 
@@ -97,12 +102,12 @@ export default function CustomText({
 }: CustomTextProps) {
   const getFontFamilyStyle = (): TextStyle => {
     const selectedFontWeight =
-      fontFamilyMap[fontFamily][fontWeight] || fontFamilyMap[fontFamily].normal;
+      fontFamilyMap[fontFamily][fontWeight] || fontFamilyMap[fontFamily].normal
     const selectedFontFamily =
-      selectedFontWeight?.[fontStyle] || selectedFontWeight?.normal;
+      selectedFontWeight?.[fontStyle] || selectedFontWeight?.normal
 
-    return { fontFamily: selectedFontFamily };
-  };
+    return { fontFamily: selectedFontFamily }
+  }
 
   return (
     <Text
@@ -111,7 +116,7 @@ export default function CustomText({
         fontWeightMap[fontWeight],
         getFontFamilyStyle(),
         fontStyleMap[fontStyle],
-        style
+        style,
       ]}
       {...rest}>
       {children}

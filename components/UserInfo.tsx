@@ -24,8 +24,7 @@ export default function UserInfo({
         size="lg"
         style={styles.nameContainer}
         fontFamily="marfa"
-        fontWeight="medium"
-      >
+        fontWeight="medium">
         {`${firstName} ${lastName}`}
       </CustomText>
       <View style={styles.detailsContainer}>

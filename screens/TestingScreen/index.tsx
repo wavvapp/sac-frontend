@@ -19,21 +19,29 @@ export default function TestingScreen() {
         variant="secondary"
         fullWidth
       />
-      <CustomButton title="outline button" variant="outline" />
-      <CustomButton title="destructive button" variant="destructive" />
+      <CustomButton title="outline button" variant="outline" textSize="sm" />
+      <CustomButton
+        title="destructive button"
+        variant="destructive"
+        textSize="sm"
+      />
 
-      <CustomButton title="disabled" variant="primary" disabled />
+      <CustomButton title="disabled" variant="primary" disabled textSize="sm" />
 
-      <CustomButton disabled variant="primary" title="Username not availabile">
+      <CustomButton
+        disabled
+        variant="primary"
+        title="Username not available"
+        textSize="sm">
         <CirlceAlert />
       </CustomButton>
 
-      <CustomButton variant="ghost">
+      <CustomButton variant="ghost" textSize="sm">
         <CloseIcon />
       </CustomButton>
 
       <View style={styles.container2}>
-        <CustomButton variant="ghost">
+        <CustomButton variant="ghost" textSize="sm">
           <CloseIcon color={theme.colors.black} />
         </CustomButton>
 

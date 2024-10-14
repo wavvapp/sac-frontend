@@ -12,8 +12,8 @@ import { theme } from "@/theme"
 
 interface ButtonProps extends TouchableOpacityProps {
   variant?: ButtonVariant
-  textSize: SizeVariant
-  title: string
+  textSize?: SizeVariant
+  title?: string
   active?: boolean
   containerStyles?: ViewStyle
   textStyles?: TextStyle
@@ -81,7 +81,7 @@ export function CustomButton({
       {title && (
         <CustomText
           size={textSize}
-          style={[text, textStyles, styles.buttonText]}>
+          style={[text, styles.buttonText, textStyles]}>
           {title}
         </CustomText>
       )}
