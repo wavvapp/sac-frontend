@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native"
 
 export default function Page() {
   return (
@@ -8,7 +8,7 @@ export default function Page() {
         <Text style={styles.subtitle}>This is the first page of your app.</Text>
       </View>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -31,4 +31,4 @@ const styles = StyleSheet.create({
     fontSize: 36,
     color: "#38434D",
   },
-});
+})

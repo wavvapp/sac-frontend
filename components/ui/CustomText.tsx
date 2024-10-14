@@ -1,10 +1,5 @@
-import {
-  FontFamilyVariant,
-  fontStyleVariant,
-  FontWeightVariant,
-  SizeVariant,
-} from "@/types";
-import { Text, TextProps, TextStyle } from "react-native";
+import { FontFamilyVariant, fontStyleVariant, FontWeightVariant, SizeVariant } from "@/types"
+import { Text, TextProps, TextStyle } from "react-native"
 
 const typographyStylesMap: Record<SizeVariant, TextStyle> = {
   "2xl": { fontSize: 40, lineHeight: 51.88 },
@@ -13,7 +8,7 @@ const typographyStylesMap: Record<SizeVariant, TextStyle> = {
   base: { fontSize: 16, lineHeight: 19.42 },
   sm: { fontSize: 14, lineHeight: 18.16 },
   xs: { fontSize: 11, lineHeight: 13.26 },
-};
+}
 
 const fontWeightMap: Record<FontWeightVariant, TextStyle> = {
   black: { fontWeight: 900 },
@@ -24,12 +19,12 @@ const fontWeightMap: Record<FontWeightVariant, TextStyle> = {
   light: { fontWeight: 300 },
   extralight: { fontWeight: 200 },
   thin: { fontWeight: 100 },
-};
+}
 
 const fontStyleMap: Record<fontStyleVariant, TextStyle> = {
   normal: { fontStyle: "normal" },
   italic: { fontStyle: "italic" },
-};
+}
 
 export const fontFamilyMap: Record<
   FontFamilyVariant,
@@ -82,13 +77,13 @@ export const fontFamilyMap: Record<
       italic: "ABCMarfaVariable-MonoRegularItalic",
     },
   },
-};
+}
 
 interface CustomTextProps extends TextProps {
-  size?: SizeVariant;
+  size?: SizeVariant
   fontWeight?: FontWeightVariant;
   fontFamily?: FontFamilyVariant;
-  fontStyle?: fontStyleVariant;
+  fontStyle?: fontStyleVariant
 }
 
 export default function CustomText({
@@ -116,11 +111,10 @@ export default function CustomText({
         fontWeightMap[fontWeight],
         getFontFamilyStyle(),
         fontStyleMap[fontStyle],
-        style,
+        style
       ]}
-      {...rest}
-    >
+      {...rest}>
       {children}
     </Text>
-  );
+  )
 }

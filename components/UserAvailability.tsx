@@ -1,17 +1,11 @@
-import { StyleSheet, TouchableOpacity, View } from "react-native";
-import CustomText from "@/components/ui/CustomText";
-import EditIcon from "@/components/vectors/EditIcon";
-import { theme } from "@/theme";
+import { StyleSheet, TouchableOpacity, View } from "react-native"
+import CustomText from "@/components/ui/CustomText"
+import EditIcon from "@/components/vectors/EditIcon"
 
 export default function UserAvailability() {
   return (
     <View style={styles.container}>
-      <CustomText
-        size="sm"
-        fontWeight="medium"
-        fontFamily="marfa"
-        style={styles.signalText}
-      >
+      <CustomText size="sm" fontWeight="medium" style={styles.signalText}>
         Signal
       </CustomText>
       <View style={styles.availableContainer}>
@@ -21,7 +15,7 @@ export default function UserAvailability() {
         </TouchableOpacity>
       </View>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -42,4 +36,4 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
   },
-});
+})

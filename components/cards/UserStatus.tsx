@@ -1,17 +1,17 @@
-import { StyleSheet, TouchableOpacity, View, ViewStyle } from 'react-native'
-import CustomText from '@/components/ui/CustomText'
-import { theme } from '@/theme'
-import { User } from '@/types'
-import { useNavigation } from '@react-navigation/native'
-import { HomeScreenProps } from '@/screens/Home'
-import UserInfo from '@/components/UserInfo'
-import EllipsisIcon from '@/components/vectors/EllipsisIcon'
+import { StyleSheet, TouchableOpacity, View, ViewStyle } from "react-native"
+import CustomText from "@/components/ui/CustomText"
+import { theme } from "@/theme"
+import { User } from "@/types"
+import { useNavigation } from "@react-navigation/native"
+import { HomeScreenProps } from "@/screens/Home"
+import UserInfo from "@/components/UserInfo"
+import EllipsisIcon from "@/components/vectors/EllipsisIcon"
 import Animated, {
   interpolate,
   SharedValue,
   useAnimatedStyle,
-  withTiming
-} from 'react-native-reanimated'
+  withTiming,
+} from "react-native-reanimated"
 
 const MAX_VISIBLE_FRIENDS = 3
 
@@ -34,7 +34,7 @@ export default function UserStatus({
 
   const fullFriendsList = visibleFriends
     .map((friend) => `${friend.firstName} ${friend.lastName.charAt(0)}`)
-    .join(', ')
+    .join(", ")
 
   const visibleFriendsList =
     remainingCount > 0
@@ -46,7 +46,7 @@ export default function UserStatus({
     const opacity = withTiming(moveValue, { duration: 400 })
 
     return {
-      opacity
+      opacity,
     }
   })
 
@@ -59,8 +59,7 @@ export default function UserStatus({
       </Animated.View>
       <Animated.View
         style={[styles.container, style, cardAnimatedStyle]}
-        {...rest}
-      >
+        {...rest}>
         <View style={styles.userContainer}>
           <UserInfo
             firstName={user.firstName}
@@ -85,11 +84,10 @@ export default function UserStatus({
         </View>
         <TouchableOpacity style={styles.editButton}>
           <CustomText
-            onPress={() => navigation.push('EditSignal')}
+            onPress={() => navigation.push("EditSignal")}
             size="sm"
             fontWeight="semibold"
-            style={styles.editButtonText}
-          >
+            style={styles.editButtonText}>
             Tap to edit
           </CustomText>
         </TouchableOpacity>
@@ -104,30 +102,30 @@ const styles = StyleSheet.create({
     paddingTop: 24,
     gap: 24,
     borderRadius: 12,
-    overflow: 'hidden'
+    overflow: "hidden",
   },
   userContainer: {
     marginHorizontal: 24,
-    flexDirection: 'row',
-    justifyContent: 'space-between'
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   friendsContainer: {
-    marginHorizontal: 24
+    marginHorizontal: 24,
   },
   editButton: {
     padding: 10,
-    backgroundColor: theme.colors.black
+    backgroundColor: theme.colors.black,
   },
   editButtonText: {
     color: theme.colors.white,
-    textAlign: 'center'
+    textAlign: "center",
   },
   headlineText: {
     paddingTop: 24,
-    position:'absolute',
+    position: "absolute",
     color: theme.colors.white,
-    textAlign: 'center',
-    alignSelf: 'center',
-    minHeight: 189
-  }
+    textAlign: "center",
+    alignSelf: "center",
+    minHeight: 189,
+  },
 })
