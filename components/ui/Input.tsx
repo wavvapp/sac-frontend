@@ -10,8 +10,8 @@ import { theme } from "@/theme";
 
 const inputSizeMap: Partial<Record<SizeVariants, TextStyle>> = {
   lg: { fontSize: 20, lineHeight: 28 },
-  base: { fontSize: 16, lineHeight: 24 },
-  sm: { fontSize: 15, lineHeight: 28 },
+  base: { fontSize: 15, lineHeight: 24 },
+  sm: { fontSize: 13, lineHeight: 20 },
 };
 
 const placeHolderColorMap: Record<InputVariant, string> = {
@@ -54,12 +54,7 @@ export default function Input({
   return (
     <View style={[styles.container, variantStyles?.[variant]?.container]}>
       <TextInput
-        style={[
-          styles.input,
-          variantStyles[variant].input,
-          inputSizeMap[textSize],
-          style,
-        ]}
+        style={[variantStyles[variant].input, inputSizeMap[textSize], style]}
         value={value}
         placeholder={placeholder}
         placeholderTextColor={placeHolderColorMap[variant]}
@@ -87,10 +82,6 @@ const styles = StyleSheet.create({
   ghostContainer: {
     borderColor: "transparent",
     paddingHorizontal: 0,
-  },
-  input: {
-    fontSize: 15,
-    lineHeight: 28,
   },
   primaryInput: {
     color: theme.colors.black,
