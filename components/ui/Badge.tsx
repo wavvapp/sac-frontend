@@ -4,7 +4,7 @@ import CustomText from "@/components/ui/CustomText";
 
 interface BadgeProps extends ViewProps {
   name: string | number;
-  variant?: "default" | "outline";
+  variant?: "default" | "outline" | "primary";
 }
 
 export default function Badge({
@@ -14,13 +14,22 @@ export default function Badge({
   ...rest
 }: BadgeProps) {
   const variantStyle = styles[variant];
-  const customTextStyle =
-    variant === "outline" ? styles.outlineText : styles.defaultText;
+  let customTextStyle;
+  switch (variant) {
+    case "outline":
+      customTextStyle = styles.outlineText;
+      break;
+    case "primary":
+      customTextStyle = styles.primaryText;
+      break;
+    default:
+      customTextStyle = styles.defaultText;
+  }
+
   return (
-    <View {...rest} style={[styles.container, variantStyle, style]}>
+    <View style={[styles.container, variantStyle, style]} {...rest} >
       <CustomText
         size="xs"
-        fontWeight={variant === "outline" ? "normal" : "bold"}
         style={[styles.text, customTextStyle]}
       >
         {name}
@@ -32,15 +41,26 @@ export default function Badge({
 const styles = StyleSheet.create({
   container: {
     borderRadius: 100,
+    flexDirection: "row",
+    alignItems: "center",
+    alignSelf: "center"
   },
   text: {
     textTransform: "uppercase",
   },
   defaultText: {
     color: theme.colors.white,
+    fontWeight: 700
   },
   outlineText: {
     color: theme.colors.black,
+    fontWeight: 400
+  },
+  primaryText: {
+    color: theme.colors.black,
+    fontWeight: 700,
+    lineHeight: 14,
+    fontSize: 13
   },
   default: {
     backgroundColor: theme.colors.black,
@@ -52,5 +72,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     borderColor: theme.colors.black,
     borderWidth: 1,
+  },
+  primary: {
+    backgroundColor: theme.colors.white,
+    paddingVertical: 1,
+    paddingHorizontal: 8,
   },
 });

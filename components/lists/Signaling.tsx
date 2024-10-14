@@ -9,6 +9,7 @@ import { User } from "@/types";
 
 import { FlatList } from "react-native-gesture-handler";
 import BottomDrawer from "@/components/BottomDrawer";
+import { theme } from "@/theme";
 export interface SignalingRef {
   openBottomSheet: () => void;
 }
@@ -25,6 +26,10 @@ const Signaling = forwardRef<SignalingRef, SignalingProps>((props, ref) => {
   return (
     <BottomDrawer ref={ref}>
       <View style={styles.container}>
+        <View style={{ flexDirection: "row", height: 50, backgroundColor: theme.colors.black, gap: 12 }}>
+          <Badge variant="primary" name="2/4" />
+          <Badge variant="primary" name="3/4" style={{ opacity: 0.3 }} />
+        </View>
         <View style={styles.header}>
           <Badge name={displayUsers.length.toString()} />
           <CustomText size="sm" fontWeight="bold">
