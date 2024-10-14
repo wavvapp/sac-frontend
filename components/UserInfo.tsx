@@ -20,7 +20,11 @@ export default function UserInfo({
 }: UserInfoProps) {
   return (
     <View style={(styles.container, style)} {...rest}>
-      <CustomText size="lg" style={styles.nameContainer} fontWeight="medium">
+      <CustomText
+        size="lg"
+        style={styles.nameContainer}
+        fontFamily="marfa"
+        fontWeight="medium">
         {`${firstName} ${lastName}`}
       </CustomText>
       <View style={styles.detailsContainer}>

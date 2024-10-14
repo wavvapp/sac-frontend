@@ -6,11 +6,12 @@ import {
   ViewStyle,
 } from "react-native"
 import CustomText from "@/components/ui/CustomText"
-import { ButtonVariant, SizeVariants } from "@/types"
+import { ButtonVariant, SizeVariant } from "@/types"
 import { theme } from "@/theme"
+
 interface ButtonProps extends TouchableOpacityProps {
   variant?: ButtonVariant
-  textSize: SizeVariants
+  textSize: SizeVariant
   title: string
   active?: boolean
   containerStyles?: ViewStyle
