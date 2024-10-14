@@ -1,7 +1,7 @@
 import CustomText from "@/components/ui/CustomText";
 import Input from "@/components/ui/Input";
+import { VALIDATION_PATTERNS } from "@/constants/patterns";
 import { theme } from "@/theme";
-import { validationPatterns } from "@/utils";
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 
@@ -13,7 +13,7 @@ export default function TestingScreen() {
 
   const handleEmailChange = (text: string) => {
     setEmail(text);
-    setValidEmail(validationPatterns.email.test(text));
+    setValidEmail(VALIDATION_PATTERNS.email.test(text));
   };
   return (
     <View style={styles.container}>
