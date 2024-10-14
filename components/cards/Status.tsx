@@ -1,17 +1,17 @@
-import React, { useState } from "react";
-import { View, ScrollView, StyleSheet } from "react-native";
-import { CustomButton } from "@/components/ui/Button";
-import CustomText from "@/components/ui/CustomText";
+import React, { useState } from "react"
+import { View, ScrollView, StyleSheet } from "react-native"
+import { CustomButton } from "@/components/ui/Button"
+import CustomText from "@/components/ui/CustomText"
 
 interface StatusProps {
-  timeSlots: string[];
+  timeSlots: string[]
 }
 
 function Status({ timeSlots }: StatusProps) {
-  const [activeSlot, setActiveSlot] = useState<string>(timeSlots[0]);
+  const [activeSlot, setActiveSlot] = useState<string>(timeSlots[0])
   const handlePress = (slot: string) => {
-    setActiveSlot(slot);
-  };
+    setActiveSlot(slot)
+  }
 
   return (
     <View style={styles.container}>
@@ -22,8 +22,7 @@ function Status({ timeSlots }: StatusProps) {
         <ScrollView
           horizontal={true}
           showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.scrollContentContainer}
-        >
+          contentContainerStyle={styles.scrollContentContainer}>
           <View style={styles.buttonContainer}>
             {timeSlots.map((slot) => (
               <View key={slot}>
@@ -40,10 +39,10 @@ function Status({ timeSlots }: StatusProps) {
         </ScrollView>
       </View>
     </View>
-  );
+  )
 }
 
-export default Status;
+export default Status
 
 const styles = StyleSheet.create({
   container: {
@@ -62,4 +61,4 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 8,
   },
-});
+})

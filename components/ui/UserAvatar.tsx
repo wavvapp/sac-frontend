@@ -4,11 +4,11 @@ import {
   StyleSheet,
   View,
   ViewProps,
-} from "react-native";
+} from "react-native"
 
 interface UserProfileProps extends ViewProps {
-  imageUrl: ImageSourcePropType;
-  size?: "small" | "large";
+  imageUrl: ImageSourcePropType
+  size?: "small" | "large"
 }
 
 export default function UserAvatar({
@@ -22,13 +22,12 @@ export default function UserAvatar({
       {...rest}
       style={[
         styles.container,
-        size == "small" ? styles.small : styles.large,
+        size === "small" ? styles.small : styles.large,
         style,
-      ]}
-    >
+      ]}>
       <Image source={imageUrl} style={styles.image} />
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -52,4 +51,4 @@ const styles = StyleSheet.create({
     width: 160,
     height: 160,
   },
-});
+})
