@@ -22,9 +22,9 @@ export default function UserInfo({
         style={styles.name}
         fontWeight="semibold"
       >
-        {`${firstName} ${lastName}`}
+       {firstName} {lastName}
       </CustomText>
-      <CustomText size="sm" style={styles.username}>
+      <CustomText size="sm" fontFamily="writer-mono" style={styles.username}>
         {username}
       </CustomText>
     </View>
