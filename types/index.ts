@@ -1,7 +1,15 @@
 import { ImageSourcePropType } from "react-native"
 
-export type SizeVariants = "2xl" | "xl" | "lg" | "base" | "sm" | "xs"
-export type FontWeightVariants = "bold" | "semibold" | "medium" | "normal"
+export type SizeVariant = "2xl" | "xl" | "lg" | "base" | "sm" | "xs"
+export type FontWeightVariant =
+  | "black"
+  | "bold"
+  | "semibold"
+  | "medium"
+  | "normal"
+  | "light"
+  | "extralight"
+  | "thin"
 export type ButtonVariant =
   | "secondary"
   | "primary"
@@ -9,6 +17,9 @@ export type ButtonVariant =
   | "ghost"
   | "default"
   | "destructive"
+export type FontFamilyVariant = "suisse" | "marfa" | "writer-mono"
+export type fontStyleVariant = "normal" | "italic"
+
 export interface User {
   id: string
   firstName: string

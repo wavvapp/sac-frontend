@@ -6,13 +6,14 @@ import {
   View,
   ViewStyle,
 } from "react-native"
-import CustomText from "@/components/ui/CustomText"
-import { ButtonVariant, SizeVariants } from "@/types"
+import CustomText, { fontFamilyMap } from "@/components/ui/CustomText"
+import { ButtonVariant, SizeVariant } from "@/types"
 import { theme } from "@/theme"
+
 interface ButtonProps extends TouchableOpacityProps {
   variant?: ButtonVariant
-  textSize?: SizeVariants
-  title?: string
+  textSize: SizeVariant
+  title: string
   active?: boolean
   containerStyles?: ViewStyle
   textStyles?: TextStyle
@@ -20,6 +21,7 @@ interface ButtonProps extends TouchableOpacityProps {
   fullWidth?: boolean
   children?: React.ReactNode
 }
+
 export function CustomButton({
   variant = "default",
   onPress,
@@ -32,10 +34,7 @@ export function CustomButton({
   title,
   ...rest
 }: ButtonProps): JSX.Element {
-  const variantStyles: Record<
-    ButtonVariant,
-    { container: ViewStyle; text: TextStyle }
-  > = {
+  const variantStyles = {
     primary: {
       container: styles.primary,
       text: styles.primaryText,
@@ -111,6 +110,7 @@ const styles = StyleSheet.create({
     lineHeight: 14,
     letterSpacing: 0.03,
     textTransform: "uppercase",
+    fontFamily: fontFamilyMap["marfa"].semibold?.normal,
   },
   primary: {
     backgroundColor: theme.colors.white,
