@@ -1,9 +1,16 @@
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View, Share } from "react-native";
 import CustomText from "@/components/ui/CustomText";
 import { theme } from "@/theme";
 import ShareIcon from "./vectors/ShareIcon";
+import { APP_LINK } from "@/constants/Links";
 
-export default function Share() {
+export default function ShareCard() {
+  const onShare = async () => {
+    Share.share({
+      message: `Hey! Join me using Wavv and keep up to date with things I do! Download the app here:${APP_LINK}`,
+    });
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.iconContainer}>
@@ -13,7 +20,7 @@ export default function Share() {
         <CustomText fontWeight="semibold">
           Your friends are not on Wavv?
         </CustomText>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={onShare}>
           <CustomText style={styles.inviteButtonText}>
             Invite them to join you
           </CustomText>

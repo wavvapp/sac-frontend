@@ -1,10 +1,10 @@
-import Share from "@/components/Share";
+import ShareCard from "@/components/Share";
 import { StyleSheet, View } from "react-native";
 
 export default function TestingScreen() {
   return (
     <View style={styles.container}>
-      <Share />
+      <ShareCard />
     </View>
   );
 }
