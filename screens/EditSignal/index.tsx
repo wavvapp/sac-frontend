@@ -1,4 +1,3 @@
-import UserAvailability from "@/components/UserAvailability"
 import { StyleSheet, View } from "react-native"
 import Status from "@/components/cards/Status"
 import { CustomButton } from "@/components/ui/Button"
