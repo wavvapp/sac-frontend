@@ -5,10 +5,10 @@ import {
   TextStyle,
   View,
 } from "react-native";
-import { InputVariant, SizeVariants } from "@/types";
+import { InputVariant, SizeVariant } from "@/types";
 import { theme } from "@/theme";
 
-const inputSizeMap: Partial<Record<SizeVariants, TextStyle>> = {
+const inputSizeMap: Partial<Record<SizeVariant, TextStyle>> = {
   sm: { fontSize: 13, lineHeight: 20 },
   base: { fontSize: 15, lineHeight: 24 },
   lg: { fontSize: 20, lineHeight: 28 },
