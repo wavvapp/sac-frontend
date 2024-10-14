@@ -1,13 +1,13 @@
-import { StyleSheet, View, ViewProps } from "react-native";
-import CustomText from "@/components/ui/CustomText";
-import Badge from "@/components/ui/Badge";
-import { theme } from "@/theme";
+import { StyleSheet, View, ViewProps } from "react-native"
+import CustomText from "@/components/ui/CustomText"
+import Badge from "@/components/ui/Badge"
+import { theme } from "@/theme"
 
 interface UserInfoProps extends ViewProps {
-  firstName: string;
-  lastName: string;
-  time: string;
-  activity: string;
+  firstName: string
+  lastName: string
+  time: string
+  activity: string
 }
 
 export default function UserInfo({
@@ -20,7 +20,12 @@ export default function UserInfo({
 }: UserInfoProps) {
   return (
     <View style={(styles.container, style)} {...rest}>
-      <CustomText size="lg" style={styles.nameContainer} fontWeight="medium">
+      <CustomText
+        size="lg"
+        style={styles.nameContainer}
+        fontFamily="marfa"
+        fontWeight="medium"
+      >
         {`${firstName} ${lastName}`}
       </CustomText>
       <View style={styles.detailsContainer}>
@@ -28,7 +33,7 @@ export default function UserInfo({
         <CustomText size="sm">{activity}</CustomText>
       </View>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -45,4 +50,4 @@ const styles = StyleSheet.create({
     gap: 6,
     marginTop: 2,
   },
-});
+})

@@ -1,22 +1,22 @@
-import UserAvailability from '@/components/UserAvailability';
-import { StyleSheet, View } from "react-native";
-import Status from '@/components/cards/Status';
-import { CustomButton } from '@/components/ui/Button';
-import UserAvatar from '@/components/ui/UserAvatar';
-import CrossMark from '@/components/vectors/CrossMark';
-import { useNavigation } from "@react-navigation/native";
-import { RootStackParamList } from "@/navigation";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import FriendsList from '@/components/lists/Friends';
-import Activity from "@/components/Activity";
+import UserAvailability from "@/components/UserAvailability"
+import { StyleSheet, View } from "react-native"
+import Status from "@/components/cards/Status"
+import { CustomButton } from "@/components/ui/Button"
+import UserAvatar from "@/components/ui/UserAvatar"
+import CrossMark from "@/components/vectors/CrossMark"
+import { useNavigation } from "@react-navigation/native"
+import { RootStackParamList } from "@/navigation"
+import { NativeStackNavigationProp } from "@react-navigation/native-stack"
+import FriendsList from "@/components/lists/Friends"
+import Activity from "@/components/Activity"
 
 type EditSignalScrenProps = NativeStackNavigationProp<
   RootStackParamList,
   "EditSignal"
->;
+>
 
 export default function EditSignal() {
-  const navigation = useNavigation<EditSignalScrenProps>();
+  const navigation = useNavigation<EditSignalScrenProps>()
 
   return (
     <View style={style.container}>
@@ -32,7 +32,7 @@ export default function EditSignal() {
       <Status timeSlots={["NOW", "MORNING", "Lunch", "AFTERNOON", "EVENING"]} />
       <FriendsList />
     </View>
-  );
+  )
 }
 
 const style = StyleSheet.create({
@@ -51,4 +51,4 @@ const style = StyleSheet.create({
     width: "100%",
     paddingHorizontal: 15,
   },
-});
+})
