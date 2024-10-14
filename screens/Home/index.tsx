@@ -1,39 +1,34 @@
-import UserStatus from '@/components/cards/UserStatus'
-import PerlinNoise from '@/components/PerlinNoise'
-import { useAuth } from '@/contexts/AuthContext'
-import { visibleFriends } from '@/data/friends'
-import { userInfo } from '@/data/user'
-import { RootStackParamList } from '@/navigation'
+import UserStatus from "@/components/cards/UserStatus"
+import PerlinNoise from "@/components/PerlinNoise"
+import { visibleFriends } from "@/data/friends"
+import { userInfo } from "@/data/user"
+import { RootStackParamList } from "@/navigation"
 import { useNavigation } from '@react-navigation/native'
-import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { StyleSheet, View, Dimensions, TouchableOpacity } from 'react-native'
+import { NativeStackNavigationProp } from "@react-navigation/native-stack"
+import { StyleSheet, View, Dimensions, TouchableOpacity } from "react-native"
 import {
   runOnJS,
   useDerivedValue,
-  useSharedValue
-} from 'react-native-reanimated'
-import { AnimatedSwitch } from '@/components/AnimatedSwitch'
-import { useRef, useState } from 'react'
-import Signaling, { SignalingRef } from '@/components/lists/Signaling'
-import Settings from '@/components/vectors/Settings'
-import { theme } from '@/theme'
-import CustomText from '@/components/ui/CustomText'
-import { CustomButton } from "@/components/ui/Button";
+  useSharedValue,
+} from "react-native-reanimated"
+import { AnimatedSwitch } from "@/components/AnimatedSwitch"
+import { useRef, useState } from "react"
+import Signaling, { SignalingRef } from "@/components/lists/Signaling"
+import Settings from "@/components/vectors/Settings"
+import { theme } from "@/theme"
+import { CustomButton } from "@/components/ui/Button"
+
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
   "Home"
->;
+>
 
-const { width } = Dimensions.get("window");
+const { width } = Dimensions.get("window")
 export default function HomeScreen() {
-  const [isVisible, setIsVisible] = useState(false);
-  const isOn = useSharedValue(false);
-  const signalingRef = useRef<SignalingRef>(null);
-  const navigation = useNavigation<HomeScreenProps>();
-
-  const openSignalingBottomSheet = () => {
-    signalingRef.current?.openBottomSheet();
-  };
+  const [isVisible, setIsVisible] = useState(false)
+  const isOn = useSharedValue(false)
+  const signalingRef = useRef<SignalingRef>(null)
+  const navigation = useNavigation<HomeScreenProps>()
 
   const handlePress = () => {
     isOn.value = !isOn.value;
@@ -71,10 +66,10 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    position: 'relative',
-    alignItems: 'center',
+    position: "relative",
+    alignItems: "center",
     paddingTop: 44,
-    paddingHorizontal: 21
+    paddingHorizontal: 21,
   },
   iconContainer: {
     backgroundColor: theme.colors.gray,
@@ -82,19 +77,19 @@ const styles = StyleSheet.create({
     padding: 4,
     height: 48,
     width: 48,
-    justifyContent: 'center',
-    alignItems: 'center',
-    alignSelf: 'flex-end',
-    marginBottom: 16
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "flex-end",
+    marginBottom: 16,
   },
   UserStatus: {
     marginVertical: 4,
-    width: '100%'
+    width: "100%",
   },
   switch: {
     width: width * 0.18,
     height: width * 0.35,
     padding: 10,
-    marginVertical: 94
-  }
+    marginVertical: 94,
+  },
 })
