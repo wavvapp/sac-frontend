@@ -32,53 +32,41 @@ export function CustomButton({
   title,
   ...rest
 }: ButtonProps): JSX.Element {
-  const getVariantStyles = (
-    variant: string
-  ): { container: ViewStyle; text?: TextStyle } => {
-    if (variant === "primary") {
-      return {
-        container: styles.primary,
-        text: styles.primaryText,
-      };
-    }
-    if (variant === "secondary") {
-      return {
-        container: {
-          ...(fullWidth && styles.secondaryFullWidth),
-          ...styles.secondary,
-        },
-        text: styles.secondaryText,
-      };
-    }
-    if (variant === "outline") {
-      return {
-        container: styles.outline,
-        text: styles.outlineText,
-      };
-    }
-    if (variant === "destructive") {
-      return {
-        container: styles.destructive,
-        text: styles.descructiveText,
-      };
-    }
-    if (variant === "ghost") {
-      return {
-        container: styles.ghost,
-      };
-    }
-    if (variant === "default") {
-      return {
-        container: styles.default,
-        text: styles.secondaryText,
-      };
-    }
-    return {
-      container: {},
+
+
+  const variantStyles: Record<
+    ButtonVariant,
+    { container: ViewStyle; text: TextStyle }
+  > = {
+    primary: {
+      container: styles.primary,
+      text: styles.primaryText,
+    },
+    secondary: {
+      container: {
+        ...(fullWidth && styles.secondaryFullWidth),
+        ...styles.secondary,
+      },
+      text: styles.secondaryText,
+    },
+    outline: {
+      container: styles.outline,
+      text: styles.outlineText,
+    },
+    destructive: {
+      container: styles.destructive,
+      text: styles.descructiveText,
+    },
+    ghost: {
+      container: styles.ghost,
       text: {},
-    };
+    },
+    default: {
+      container: styles.default,
+      text: styles.secondaryText,
+    },
   };
-  const { container, text } = getVariantStyles(variant);
+  const { container, text } = variantStyles[variant] || variantStyles.default;
 
   return (
     <TouchableOpacity

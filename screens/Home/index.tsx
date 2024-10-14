@@ -56,13 +56,11 @@ export default function HomeScreen() {
           <Settings />
         </TouchableOpacity>
       </View>
-      <TouchableOpacity>
         <CustomButton
           title="Testing"
           variant="primary"
           onPress={() => navigation.push("Testing")}
         />
-      </TouchableOpacity>
       <View style={styles.UserStatus}>
         <UserStatus isOn={isOn} friends={visibleFriends} user={userInfo} />
       </View>
