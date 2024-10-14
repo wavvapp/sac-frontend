@@ -1,4 +1,5 @@
 import { CustomButton } from "@/components/ui/Button";
+import CirlceAlert from "@/components/vectors/CirlceAlert";
 import CloseIcon from "@/components/vectors/CloseIcon";
 import { theme } from "@/theme";
 import { StyleSheet, View } from "react-native";
@@ -8,7 +9,7 @@ export default function TestingScreen() {
     <View style={styles.container}>
       <CustomButton title="primary button" textSize="lg" variant="primary" />
       <CustomButton
-        title="secondary button "
+        title="secondary button"
         textSize="lg"
         variant="secondary"
       />
@@ -23,6 +24,10 @@ export default function TestingScreen() {
 
       <CustomButton title="disabled" variant="primary" disabled />
 
+      <CustomButton disabled variant="primary" title="Username not availabile">
+        <CirlceAlert />
+      </CustomButton>
+
       <CustomButton variant="ghost">
         <CloseIcon />
       </CustomButton>
@@ -31,6 +36,7 @@ export default function TestingScreen() {
         <CustomButton variant="ghost">
           <CloseIcon color={theme.colors.black} />
         </CustomButton>
+
         <CustomButton title="Default" />
       </View>
     </View>

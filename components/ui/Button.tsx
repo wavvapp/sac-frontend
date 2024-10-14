@@ -3,6 +3,7 @@ import {
   TextStyle,
   TouchableOpacity,
   TouchableOpacityProps,
+  View,
   ViewStyle,
 } from "react-native";
 import CustomText from "@/components/ui/CustomText";
@@ -32,8 +33,6 @@ export function CustomButton({
   title,
   ...rest
 }: ButtonProps): JSX.Element {
-
-
   const variantStyles: Record<
     ButtonVariant,
     { container: ViewStyle; text: TextStyle }
@@ -75,13 +74,12 @@ export function CustomButton({
         styles.buttonContainer,
         container,
         containerStyles,
-        disabled && styles.disabled,
+        disabled && styles.disabled
       ]}
       {...rest}
     >
-      {variant === "ghost" && children ? (
-        children
-      ) : (
+      <View style={ children && title ? [styles.childrenContainer]: {}}>{children}</View>
+      {title && (
         <CustomText
           size={textSize}
           style={[text, textStyles, styles.buttonText]}
@@ -96,6 +94,10 @@ export function CustomButton({
 const styles = StyleSheet.create({
   buttonContainer: {
     borderRadius: 6,
+    flexDirection: "row",
+    alignItems: "center",
+    position: "relative",
+    alignContent: "center",
   },
   default: {
     paddingHorizontal: 16,
@@ -115,13 +117,19 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.white,
     borderColor: theme.colors.white,
     borderWidth: 1,
-    paddingVertical: 21,
+    height: 56,
     width: 350,
     justifyContent: "center",
+    alignContent:"center",
     alignItems: "center",
   },
   primaryText: {
     color: theme.colors.black,
+  },
+  childrenContainer: {
+    position: "absolute",
+    left: 16,
+    top: 16,
   },
   secondary: {
     backgroundColor: theme.colors.black,
@@ -162,8 +170,6 @@ const styles = StyleSheet.create({
   ghost: {
     width: 48,
     height: 48,
-    paddingVertical: 12,
-    paddingHorizontal: 12,
     justifyContent: "center",
     alignItems: "center",
   },
