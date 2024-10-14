@@ -1,12 +1,12 @@
-import React from "react";
-import { StyleSheet, View, ViewProps } from "react-native";
-import CustomText from "../ui/CustomText";
+import React from "react"
+import { StyleSheet, View, ViewProps } from "react-native"
+import CustomText from "@/components/ui/CustomText"
 
 interface UserAvailabilityProps extends ViewProps {
-  firstName: string;
-  lastName: string;
-  time: string;
-  activity: string;
+  firstName: string
+  lastName: string
+  time: string
+  activity: string
 }
 
 export default function UserAvailability({
@@ -24,11 +24,15 @@ export default function UserAvailability({
           {firstName} {lastName}
         </CustomText>
         <View style={styles.dot} />
-        <CustomText style={styles.time} fontFamily="marfa">{time}</CustomText>
+        <CustomText style={styles.time} fontFamily="marfa">
+          {time}
+        </CustomText>
       </View>
-      <CustomText style={styles.activity} fontFamily="writer-mono">{activity}</CustomText>
+      <CustomText style={styles.activity} fontFamily="writer-mono">
+        {activity}
+      </CustomText>
     </View>
-  );
+  )
 }
 const styles = StyleSheet.create({
   container: {
@@ -56,4 +60,4 @@ const styles = StyleSheet.create({
   activity: {
     textTransform: "capitalize",
   },
-});
+})

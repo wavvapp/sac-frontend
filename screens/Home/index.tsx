@@ -3,7 +3,7 @@ import PerlinNoise from "@/components/PerlinNoise"
 import { visibleFriends } from "@/data/friends"
 import { userInfo } from "@/data/user"
 import { RootStackParamList } from "@/navigation"
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { StyleSheet, View, Dimensions, TouchableOpacity } from "react-native"
 import {
@@ -31,15 +31,15 @@ export default function HomeScreen() {
   const navigation = useNavigation<HomeScreenProps>()
 
   const handlePress = () => {
-    isOn.value = !isOn.value;
-  };
+    isOn.value = !isOn.value
+  }
 
   useDerivedValue(() => {
     if (isOn.value) {
-      return runOnJS(setIsVisible)(true);
+      return runOnJS(setIsVisible)(true)
     }
-    return runOnJS(setIsVisible)(false);
-  }, [isOn.value]);
+    return runOnJS(setIsVisible)(false)
+  }, [isOn.value])
 
   return (
     <View style={styles.container}>
@@ -60,7 +60,7 @@ export default function HomeScreen() {
       <AnimatedSwitch isOn={isOn} onPress={handlePress} style={styles.switch} />
       <Signaling ref={signalingRef} />
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({

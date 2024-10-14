@@ -1,13 +1,13 @@
-import { userInfo } from "@/data/user";
-import { RootStackParamList } from "@/navigation";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { StyleSheet, View } from "react-native";
-import UserAvailability from "@/components/cards/UserAvailability";
+import { userInfo } from "@/data/user"
+import { RootStackParamList } from "@/navigation"
+import { NativeStackNavigationProp } from "@react-navigation/native-stack"
+import { StyleSheet, View } from "react-native"
+import UserAvailability from "@/components/cards/UserAvailability"
 
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
   "Home"
->;
+>
 
 export default function TestingScreen() {
   return (
@@ -19,7 +19,7 @@ export default function TestingScreen() {
         activity={userInfo.activity}
       />
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -28,4 +28,4 @@ const styles = StyleSheet.create({
     paddingTop: 140,
     paddingHorizontal: 20,
   },
-});
+})
