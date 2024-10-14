@@ -2,8 +2,8 @@ import { userInfo } from "@/data/user";
 import { RootStackParamList } from "@/navigation";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { StyleSheet, View } from "react-native";
-
 import UserAvailability from "@/components/cards/UserAvailability";
+
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
   "Home"
