@@ -35,4 +35,4 @@ export const visibleFriends = [
     activity: "Jodelkeller",
     selected: true,
   },
-];
+]

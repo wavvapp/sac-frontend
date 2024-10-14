@@ -5,4 +5,4 @@ export const userInfo = {
   username: "@k.leuschke",
   time: "Evening",
   activity: "Jodelkeller",
-};
+}

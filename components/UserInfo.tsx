@@ -1,11 +1,11 @@
-import { StyleSheet, View, ViewProps } from "react-native";
-import CustomText from "@/components/ui/CustomText";
-import { theme } from "@/theme";
+import { StyleSheet, View, ViewProps } from "react-native"
+import CustomText from "@/components/ui/CustomText"
+import { theme } from "@/theme"
 
 interface UserInfoProps extends ViewProps {
-  firstName: string;
-  lastName: string;
-  username: string;
+  firstName: string
+  lastName: string
+  username: string
 }
 
 export default function UserInfo({
@@ -17,14 +17,18 @@ export default function UserInfo({
 }: UserInfoProps) {
   return (
     <View style={(styles.container, style)} {...rest}>
-      <CustomText size="lg" style={styles.name} fontWeight="semibold">
+      <CustomText
+        size="lg"
+        style={styles.name}
+        fontWeight="semibold"
+      >
         {`${firstName} ${lastName}`}
       </CustomText>
       <CustomText size="sm" style={styles.username}>
         {username}
       </CustomText>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -42,4 +46,4 @@ const styles = StyleSheet.create({
     color: "#000000",
     opacity: 0.5,
   },
-});
+})

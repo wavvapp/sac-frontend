@@ -1,4 +1,4 @@
-import { User } from "@/types";
+import { User } from "@/types"
 
 export const defaultUsers: User[] = [
   {
@@ -181,4 +181,4 @@ export const defaultUsers: User[] = [
     activity: "charlottescott",
     imageUrl: require("@/assets/images/users/user1.png"),
   },
-];
+]
