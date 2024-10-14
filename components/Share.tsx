@@ -9,8 +9,8 @@ export default function Share() {
       <View style={styles.iconContainer}>
         <ShareIcon />
       </View>
-      <View style={styles.contentContainer}>
-        <CustomText size="base" fontWeight="semibold" style={styles.text}>
+      <View>
+        <CustomText fontWeight="semibold">
           Your friends are not on Wavv?
         </CustomText>
         <TouchableOpacity>
@@ -31,15 +31,9 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     borderWidth: 1,
-    borderRadius: 100,
+    borderRadius: 50,
     borderColor: theme.colors.black_200,
     padding: 12,
-    height: 48,
-    width: 48,
-    alignItems: "center",
-  },
-  contentContainer: {
-    flexDirection: "column",
   },
   text: {
     fontSize: 15,
