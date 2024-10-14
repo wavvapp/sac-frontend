@@ -9,7 +9,7 @@ export type HomeScreenProps = NativeStackNavigationProp<
   "Home"
 >;
 
-export default function TestScreen() {
+export default function TestingScreen() {
   return (
     <View style={styles.container}>
       <UserAvailability
@@ -25,7 +25,7 @@ export default function TestScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 40,
+    paddingTop: 140,
     paddingHorizontal: 20,
   },
 });

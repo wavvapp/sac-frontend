@@ -24,9 +24,9 @@ export default function UserAvailability({
           {firstName} {lastName}
         </CustomText>
         <View style={styles.dot} />
-        <CustomText style={styles.time}>{time}</CustomText>
+        <CustomText style={styles.time} fontFamily="marfa">{time}</CustomText>
       </View>
-      <CustomText style={styles.activity}>{activity}</CustomText>
+      <CustomText style={styles.activity} fontFamily="writer-mono">{activity}</CustomText>
     </View>
   );
 }
