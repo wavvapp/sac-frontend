@@ -1,6 +1,6 @@
-import { theme } from '@/theme'
-import React, { useState } from 'react'
-import { Pressable, StyleSheet, ViewStyle } from 'react-native'
+import { theme } from "@/theme"
+import React, { useState } from "react"
+import { Pressable, StyleSheet, ViewStyle } from "react-native"
 import Animated, {
   interpolate,
   useAnimatedStyle,
@@ -8,8 +8,8 @@ import Animated, {
   withTiming,
   useDerivedValue,
   runOnJS,
-  SharedValue
-} from 'react-native-reanimated'
+  SharedValue,
+} from "react-native-reanimated"
 
 interface AnimatedSwitchProps {
   isOn: SharedValue<boolean> // The shared value (0 or 1) for the switch state
@@ -22,9 +22,9 @@ export const AnimatedSwitch = ({
   isOn,
   onPress,
   style,
-  duration = 400
+  duration = 400,
 }: AnimatedSwitchProps) => {
-  const [text, setText] = useState(isOn.value ? 'ON' : 'OFF')
+  const [text, setText] = useState(isOn.value ? "ON" : "OFF")
   const height = useSharedValue(0)
   const width = useSharedValue(0)
 
@@ -37,22 +37,22 @@ export const AnimatedSwitch = ({
   // This will listen for changes in the shared value and update the text accordingly with a delay
   useDerivedValue(() => {
     if (isOn.value) {
-      return runOnJS(updateTextWithDelay)('ON')
+      return runOnJS(updateTextWithDelay)("ON")
     }
-    return runOnJS(updateTextWithDelay)('OFF')
+    return runOnJS(updateTextWithDelay)("OFF")
   }, [isOn.value])
 
   const thumbAnimatedStyle = useAnimatedStyle(() => {
     const moveValue = interpolate(
       Number(isOn.value),
       [0, 1],
-      [0, height.value - width.value]
+      [0, height.value - width.value],
     )
     const translateValue = withTiming(moveValue, { duration })
 
     return {
       transform: [{ translateY: translateValue }],
-      borderRadius: 4
+      borderRadius: 4,
     }
   })
 
@@ -60,12 +60,12 @@ export const AnimatedSwitch = ({
     const moveValue = interpolate(
       Number(isOn.value),
       [0, 1],
-      [height.value * 0.65, height.value * 0.25]
+      [height.value * 0.65, height.value * 0.25],
     )
     const translateValue = withTiming(moveValue, { duration })
 
     return {
-      transform: [{ translateY: translateValue }]
+      transform: [{ translateY: translateValue }],
     }
   })
 
@@ -76,14 +76,12 @@ export const AnimatedSwitch = ({
           height.value = e.nativeEvent.layout.height
           width.value = e.nativeEvent.layout.width
         }}
-        style={[switchStyles.track, style]}
-      >
+        style={[switchStyles.track, style]}>
         <Animated.Text style={[switchStyles.text, textAnimatedStyle]}>
           {text}
         </Animated.Text>
         <Animated.View
-          style={[switchStyles.thumb, thumbAnimatedStyle]}
-        ></Animated.View>
+          style={[switchStyles.thumb, thumbAnimatedStyle]}></Animated.View>
       </Animated.View>
     </Pressable>
   )
@@ -91,22 +89,22 @@ export const AnimatedSwitch = ({
 
 const switchStyles = StyleSheet.create({
   track: {
-    alignItems: 'flex-start',
+    alignItems: "flex-start",
     width: 100,
     height: 40,
     padding: 5,
     backgroundColor: theme.colors.white,
-    borderRadius: 12
+    borderRadius: 12,
   },
   thumb: {
-    width: '100%',
+    width: "100%",
     aspectRatio: 1,
-    backgroundColor: theme.colors.black
+    backgroundColor: theme.colors.black,
   },
   text: {
-    position: 'absolute',
-    alignSelf: 'center',
+    position: "absolute",
+    alignSelf: "center",
     fontSize: 18,
-    fontWeight: 'bold'
-  }
+    fontWeight: "bold",
+  },
 })
