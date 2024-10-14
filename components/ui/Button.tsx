@@ -5,20 +5,20 @@ import {
   TouchableOpacityProps,
   View,
   ViewStyle,
-} from "react-native";
-import CustomText from "@/components/ui/CustomText";
-import { ButtonVariant, SizeVariants } from "@/types";
-import { theme } from "@/theme";
+} from "react-native"
+import CustomText from "@/components/ui/CustomText"
+import { ButtonVariant, SizeVariants } from "@/types"
+import { theme } from "@/theme"
 interface ButtonProps extends TouchableOpacityProps {
-  variant?: ButtonVariant;
-  textSize?: SizeVariants;
-  title?: string;
-  active?: boolean;
-  containerStyles?: ViewStyle;
-  textStyles?: TextStyle;
-  disabled?: boolean;
-  fullWidth?: boolean;
-  children?: React.ReactNode;
+  variant?: ButtonVariant
+  textSize?: SizeVariants
+  title?: string
+  active?: boolean
+  containerStyles?: ViewStyle
+  textStyles?: TextStyle
+  disabled?: boolean
+  fullWidth?: boolean
+  children?: React.ReactNode
 }
 export function CustomButton({
   variant = "default",
@@ -26,7 +26,6 @@ export function CustomButton({
   textSize,
   textStyles = {},
   containerStyles = {},
-  active,
   disabled,
   children,
   fullWidth,
@@ -64,8 +63,8 @@ export function CustomButton({
       container: styles.default,
       text: styles.secondaryText,
     },
-  };
-  const { container, text } = variantStyles[variant] || variantStyles.default;
+  }
+  const { container, text } = variantStyles[variant] || variantStyles.default
 
   return (
     <TouchableOpacity
@@ -74,21 +73,21 @@ export function CustomButton({
         styles.buttonContainer,
         container,
         containerStyles,
-        disabled && styles.disabled
+        disabled && styles.disabled,
       ]}
-      {...rest}
-    >
-      <View style={ children && title ? [styles.childrenContainer]: {}}>{children}</View>
+      {...rest}>
+      <View style={children && title ? [styles.childrenContainer] : {}}>
+        {children}
+      </View>
       {title && (
         <CustomText
           size={textSize}
-          style={[text, textStyles, styles.buttonText]}
-        >
+          style={[text, textStyles, styles.buttonText]}>
           {title}
         </CustomText>
       )}
     </TouchableOpacity>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -120,7 +119,7 @@ const styles = StyleSheet.create({
     height: 56,
     width: 350,
     justifyContent: "center",
-    alignContent:"center",
+    alignContent: "center",
     alignItems: "center",
   },
   primaryText: {
@@ -176,4 +175,4 @@ const styles = StyleSheet.create({
   disabled: {
     opacity: 0.3,
   },
-});
+})

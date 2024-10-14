@@ -4,4 +4,4 @@ export const userInfo = {
   lastName: "Wagner",
   time: "Evening",
   activity: "Jodelkeller",
-};
+}

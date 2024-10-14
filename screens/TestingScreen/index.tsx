@@ -1,8 +1,8 @@
-import { CustomButton } from "@/components/ui/Button";
-import CirlceAlert from "@/components/vectors/CirlceAlert";
-import CloseIcon from "@/components/vectors/CloseIcon";
-import { theme } from "@/theme";
-import { StyleSheet, View } from "react-native";
+import { CustomButton } from "@/components/ui/Button"
+import CirlceAlert from "@/components/vectors/CirlceAlert"
+import CloseIcon from "@/components/vectors/CloseIcon"
+import { theme } from "@/theme"
+import { StyleSheet, View } from "react-native"
 
 export default function TestingScreen() {
   return (
@@ -40,7 +40,7 @@ export default function TestingScreen() {
         <CustomButton title="Default" />
       </View>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -58,4 +58,4 @@ const styles = StyleSheet.create({
     padding: 15,
     width: "100%",
   },
-});
+})

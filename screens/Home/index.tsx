@@ -1,41 +1,35 @@
-import UserStatus from '@/components/cards/UserStatus'
-import PerlinNoise from '@/components/PerlinNoise'
-import { useAuth } from '@/contexts/AuthContext'
-import { visibleFriends } from '@/data/friends'
-import { userInfo } from '@/data/user'
-import { RootStackParamList } from '@/navigation'
-import { useNavigation } from '@react-navigation/native'
-import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { StyleSheet, View, Dimensions, TouchableOpacity } from 'react-native'
+import UserStatus from "@/components/cards/UserStatus"
+import PerlinNoise from "@/components/PerlinNoise"
+import { visibleFriends } from "@/data/friends"
+import { userInfo } from "@/data/user"
+import { RootStackParamList } from "@/navigation"
+import { NativeStackNavigationProp } from "@react-navigation/native-stack"
+import { StyleSheet, View, Dimensions, TouchableOpacity } from "react-native"
 import {
   runOnJS,
   useDerivedValue,
-  useSharedValue
-} from 'react-native-reanimated'
-import { AnimatedSwitch } from '@/components/AnimatedSwitch'
-import { useRef, useState } from 'react'
-import Signaling, { SignalingRef } from '@/components/lists/Signaling'
-import Settings from '@/components/vectors/Settings'
-import { theme } from '@/theme'
-import CustomText from '@/components/ui/CustomText'
-import { CustomButton } from '@/components/ui/Button'
-import CloseIcon from "@/components/vectors/CloseIcon";
+  useSharedValue,
+} from "react-native-reanimated"
+import { AnimatedSwitch } from "@/components/AnimatedSwitch"
+import { useRef, useState } from "react"
+import Signaling, { SignalingRef } from "@/components/lists/Signaling"
+import Settings from "@/components/vectors/Settings"
+import { theme } from "@/theme"
+import { CustomButton } from "@/components/ui/Button"
+import { useNavigation } from "@react-navigation/native"
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
-  'Home'
+  "Home"
 >
 
-type TestingProp = NativeStackNavigationProp<RootStackParamList, "Testing">;
+type TestingProp = NativeStackNavigationProp<RootStackParamList, "Testing">
 
-const { width } = Dimensions.get('window')
+const { width } = Dimensions.get("window")
 export default function HomeScreen() {
-  const [isVisible, setIsVisible] = useState(false)
+  const [_, setIsVisible] = useState(false)
   const isOn = useSharedValue(false)
   const signalingRef = useRef<SignalingRef>(null)
-    const navigation = useNavigation<TestingProp>();
-  const openSignalingBottomSheet = () => {
-    signalingRef.current?.openBottomSheet()
-  }
+  const navigation = useNavigation<TestingProp>()
 
   const handlePress = () => {
     isOn.value = !isOn.value
@@ -56,27 +50,27 @@ export default function HomeScreen() {
           <Settings />
         </TouchableOpacity>
       </View>
-        <CustomButton
-          title="Testing"
-          variant="primary"
-          onPress={() => navigation.push("Testing")}
-        />
+      <CustomButton
+        title="Testing"
+        variant="primary"
+        onPress={() => navigation.push("Testing")}
+      />
       <View style={styles.UserStatus}>
         <UserStatus isOn={isOn} friends={visibleFriends} user={userInfo} />
       </View>
       <AnimatedSwitch isOn={isOn} onPress={handlePress} style={styles.switch} />
       <Signaling ref={signalingRef} />
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    position: 'relative',
-    alignItems: 'center',
+    position: "relative",
+    alignItems: "center",
     paddingTop: 44,
-    paddingHorizontal: 21
+    paddingHorizontal: 21,
   },
   iconContainer: {
     backgroundColor: theme.colors.gray,
@@ -84,19 +78,19 @@ const styles = StyleSheet.create({
     padding: 4,
     height: 48,
     width: 48,
-    justifyContent: 'center',
-    alignItems: 'center',
-    alignSelf: 'flex-end',
-    marginBottom: 16
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "flex-end",
+    marginBottom: 16,
   },
   UserStatus: {
     marginVertical: 4,
-    width: '100%'
+    width: "100%",
   },
   switch: {
     width: width * 0.18,
     height: width * 0.35,
     padding: 10,
-    marginVertical: 94
-  }
+    marginVertical: 94,
+  },
 })
