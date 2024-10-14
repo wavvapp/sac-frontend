@@ -2,7 +2,7 @@ import { StyleSheet, TouchableOpacity, View, Share } from "react-native";
 import CustomText from "@/components/ui/CustomText";
 import { theme } from "@/theme";
 import ShareIcon from "./vectors/ShareIcon";
-import { APP_LINK } from "@/constants/Links";
+import { APP_LINK } from "@/constants/links";
 
 export default function ShareCard() {
   const onShare = async () => {
