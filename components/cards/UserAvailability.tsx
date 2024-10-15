@@ -1,6 +1,6 @@
-import React from "react"
 import { StyleSheet, View, ViewProps } from "react-native"
 import CustomText from "@/components/ui/CustomText"
+import { theme } from "@/theme"
 
 interface UserAvailabilityProps extends ViewProps {
   firstName: string
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
     textTransform: "capitalize",
   },
   dot: {
-    backgroundColor: "#000000",
+    backgroundColor: theme.colors.black,
     opacity: 0.5,
     height: 2,
     width: 2,
