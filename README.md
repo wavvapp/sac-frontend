@@ -1,10 +1,8 @@
 <p align="center" style="background-color: #F8A65D;">
     <h1 align="center">Wavv</h1>
 </p>
-<h4 align="center">Wavv is a mobile app that simplifies social planning by allowing users to signal their daily availability, share basic outing details, and view friends' availability status.</h4>
-<h4 align="center">
-Powered by the Internet Computer Protocol (ICP), Wavv creates a transparent, community-owned platform for decentralized social networking.
-</h4>
+<h4 align="center">Wavv is a mobile app powered by the Internet Computer Protocol (ICP), creating a transparent, community-owned platform for decentralized social networking. It simplifies social planning by allowing users to signal their daily availability, share basic outing details, and view friends' availability status.</h4>
+
 <br />
 
 
@@ -45,3 +43,10 @@ Follow these steps to run the project:
 
 5. Scan the QR code with the Expo Go app on your mobile device to view the app.
 
+
+## Powered by: 
+
+<p align="center">
+  <img src="./assets/images/icp.png" alt="screenshot-1" width="350" height="150">
+  <img src="./assets/images/apeunit.jpg" alt="screenshot-2" width="150" height="150">
+</p>
