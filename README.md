@@ -2,6 +2,9 @@
     <h1 align="center">Wavv</h1>
 </p>
 <h4 align="center">Wavv is a mobile app that simplifies social planning by allowing users to signal their daily availability, share basic outing details, and view friends' availability status.</h4>
+<h4 align="center">
+Powered by the Internet Computer Protocol (ICP), Wavv creates a transparent, community-owned platform for decentralized social networking.
+</h4>
 <br />
 
 
