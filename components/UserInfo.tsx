@@ -17,15 +17,11 @@ export default function UserInfo({
 }: UserInfoProps) {
   return (
     <View style={(styles.container, style)} {...rest}>
-      <CustomText
-        size="lg"
-        style={styles.name}
-        fontWeight="semibold"
-      >
-       {firstName} {lastName}
+      <CustomText size="lg" style={styles.name} fontWeight="semibold">
+        {firstName} {lastName}
       </CustomText>
       <CustomText size="sm" fontFamily="writer-mono" style={styles.username}>
-        {username}
+        @{username}
       </CustomText>
     </View>
   )
@@ -43,7 +39,7 @@ const styles = StyleSheet.create({
   username: {
     fontSize: 15,
     lineHeight: 20,
-    color: "#000000",
+    color: theme.colors.black,
     opacity: 0.5,
   },
 })
