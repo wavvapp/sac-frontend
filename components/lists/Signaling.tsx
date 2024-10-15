@@ -53,6 +53,8 @@ const Signaling = forwardRef<SignalingRef, SignalingProps>((props, ref) => {
   )
 })
 
+Signaling.displayName = "Signaling"
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

@@ -5,6 +5,18 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import React, { useState } from "react"
 import { View, TextInput, Button, StyleSheet, Text } from "react-native"
 
+import {
+  GoogleSignin,
+  GoogleSigninButton,
+} from "@react-native-google-signin/google-signin"
+
+GoogleSignin.configure({
+  webClientId:
+    "351310982043-d2sbe099g0aaq28ussbjfn2l51862t6i.apps.googleusercontent.com",
+  iosClientId:
+    "351310982043-28dk2k254o76heo1d4pr3uftmgsjmihh.apps.googleusercontent.com",
+  offlineAccess: true,
+})
 type LoginProp = NativeStackNavigationProp<RootStackParamList, "Login">
 
 export default function Login() {
@@ -13,9 +25,10 @@ export default function Login() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     // Handle login logic here
-    signIn("asdasdasda", { name: "Anas", email, id: "1" })
+    // signIn("asdasdasda", { name: "Anas", email, id: "1" })
+    await signIn()
   }
 
   return (
@@ -36,6 +49,14 @@ export default function Login() {
         secureTextEntry
       />
       <Button title="Login" onPress={handleLogin} />
+      <GoogleSigninButton
+        size={GoogleSigninButton.Size.Wide}
+        color={GoogleSigninButton.Color.Dark}
+        onPress={() => {
+          handleLogin
+        }}
+      />
+      ;
       <Text style={styles.signupText}>
         Don't have an account?{" "}
         <Text style={styles.link} onPress={() => navigation.navigate("SignUp")}>

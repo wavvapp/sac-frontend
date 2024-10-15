@@ -9,9 +9,10 @@ import Login from "@/screens/Authentication/Login"
 import CustomSplashScreen from "@/screens/CustomSplashScreen"
 import Settings from "@/screens/Settings"
 import Signaling from "@/components/lists/Signaling"
+import { userInfo } from "@/data/user"
 
 export type RootStackParamList = {
-  Home: undefined
+  Home: any
   EditSignal: undefined
   Login: undefined
   SignUp: undefined
