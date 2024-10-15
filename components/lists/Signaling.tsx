@@ -31,7 +31,7 @@ const Signaling = forwardRef<SignalingRef, SignalingProps>((props, ref) => {
             backgroundColor: theme.colors.black,
             gap: 12,
           }}>
-          <Badge variant="primary" name="2/4" />
+          <Badge variant="primary" name="100" />
           <Badge variant="primary" name="3/4" style={{ opacity: 0.3 }} />
         </View>
         <View style={styles.header}>

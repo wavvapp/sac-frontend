@@ -13,6 +13,7 @@ export type FontWeightVariant =
 export type ButtonVariant = "secondary" | "primary"
 export type FontFamilyVariant = "suisse" | "marfa" | "writer-mono"
 export type fontStyleVariant = "normal" | "italic"
+export type BadgeVariants = "default" | "outline" | "primary"
 
 export interface User {
   id: string

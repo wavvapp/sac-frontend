@@ -1,7 +1,7 @@
 import { theme } from "@/theme"
 import { StyleSheet, View, ViewProps, ViewStyle } from "react-native"
 import CustomText from "@/components/ui/CustomText"
-type BadgeVariants = "default" | "outline" | "primary"
+import { BadgeVariants } from "@/types"
 interface BadgeProps extends ViewProps {
   name: string | number
   variant?: BadgeVariants
@@ -14,39 +14,23 @@ export default function Badge({
   ...rest
 }: BadgeProps) {
   const variantStyle: Record<BadgeVariants, ViewStyle> = {
-    default: {
-      backgroundColor: theme.colors.black,
-      paddingVertical: 1,
-      paddingHorizontal: 6,
-    },
-    outline: {
-      paddingVertical: 4,
-      paddingHorizontal: 8,
-      borderColor: theme.colors.black,
-      borderWidth: 1,
-    },
-    primary: {
-      backgroundColor: theme.colors.white,
-      paddingVertical: 1,
-      paddingHorizontal: 8,
-    },
+    default: styles.default,
+    outline: styles.outline,
+    primary: styles.primary,
   }
 
-  let customTextStyle
-  switch (variant) {
-    case "outline":
-      customTextStyle = styles.outlineText
-      break
-    case "primary":
-      customTextStyle = styles.primaryText
-      break
-    default:
-      customTextStyle = styles.defaultText
+  const customTextStyle = {
+    default: styles.defaultText,
+    outline: styles.outlineText,
+    primary: styles.primaryText,
   }
 
   return (
     <View style={[styles.container, variantStyle[variant], style]} {...rest}>
-      <CustomText size="xs" style={[styles.text, customTextStyle]}>
+      <CustomText
+        size="xs"
+        style={[styles.text, customTextStyle[variant]]}
+        fontFamily="writer-mono">
         {name}
       </CustomText>
     </View>
@@ -76,5 +60,21 @@ const styles = StyleSheet.create({
     fontWeight: 700,
     lineHeight: 14,
     fontSize: 13,
+  },
+  default: {
+    backgroundColor: theme.colors.black,
+    paddingVertical: 1,
+    paddingHorizontal: 6,
+  },
+  outline: {
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    borderColor: theme.colors.black,
+    borderWidth: 1,
+  },
+  primary: {
+    backgroundColor: theme.colors.white,
+    paddingVertical: 1,
+    paddingHorizontal: 8,
   },
 })
