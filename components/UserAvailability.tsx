@@ -1,8 +1,15 @@
 import { StyleSheet, TouchableOpacity, View } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import EditIcon from "@/components/vectors/EditIcon"
-
+import { useNavigation } from "@react-navigation/native"
+import { NativeStackNavigationProp } from "@react-navigation/native-stack"
+import { RootStackParamList } from "@/navigation"
+type UserAvailabilityScreeProps = NativeStackNavigationProp<
+  RootStackParamList,
+  "EditAvailability"
+>
 export default function UserAvailability() {
+  const navigation = useNavigation<UserAvailabilityScreeProps>()
   return (
     <View style={styles.container}>
       <CustomText size="sm" fontWeight="medium" style={styles.signalText}>
@@ -10,7 +17,8 @@ export default function UserAvailability() {
       </CustomText>
       <View style={styles.availableContainer}>
         <CustomText size="xl">Available</CustomText>
-        <TouchableOpacity onPress={() => ""}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("EditAvailability")}>
           <EditIcon />
         </TouchableOpacity>
       </View>
