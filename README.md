@@ -47,6 +47,6 @@ Follow these steps to run the project:
 ## Powered by: 
 
 <p align="center">
-  <img src="./assets/images/icp.png" alt="screenshot-1" width="350" height="150">
-  <img src="./assets/images/apeunit.jpg" alt="screenshot-2" width="150" height="150">
+  <img src="./assets/images/icp.png" alt="icp image" width="350" height="150">
+  <img src="./assets/images/apeunit.jpg" alt="apeunit image" width="150" height="150">
 </p>
