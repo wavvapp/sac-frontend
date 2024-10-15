@@ -13,10 +13,6 @@ import {
   isErrorWithCode,
   statusCodes,
 } from "@react-native-google-signin/google-signin"
-import { useNavigation } from "@react-navigation/native"
-import { NativeStackNavigationProp } from "@react-navigation/native-stack"
-import { RootStackParamList } from "@/navigation"
-
 interface User {
   id: string
   name: string | null
@@ -25,8 +21,6 @@ interface User {
   familyName: string | null
   givenName: string | null
 }
-
-type HomeProp = NativeStackNavigationProp<RootStackParamList, "Home">
 
 interface AuthContextData {
   user: User | null
@@ -89,7 +83,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     }
 
     SplashScreen.hideAsync()
-    // setIsLoading(false)
+    setIsLoading(false)
+    console.log("Load complete, isLoading:", isLoading)
   }
 
   async function signOut(): Promise<void> {

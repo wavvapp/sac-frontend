@@ -53,10 +53,9 @@ export default function Login() {
         size={GoogleSigninButton.Size.Wide}
         color={GoogleSigninButton.Color.Dark}
         onPress={() => {
-          handleLogin
+          handleLogin()
         }}
       />
-      ;
       <Text style={styles.signupText}>
         Don't have an account?{" "}
         <Text style={styles.link} onPress={() => navigation.navigate("SignUp")}>
