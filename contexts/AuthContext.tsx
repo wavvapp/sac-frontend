@@ -14,6 +14,7 @@ import {
   statusCodes,
 } from "@react-native-google-signin/google-signin"
 import axios from "axios"
+import { Platform } from "react-native"
 interface User {
   id: string
   name: string | null
@@ -56,12 +57,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         await AsyncStorage.setItem("@Auth:user", JSON.stringify(user))
         setUser(user)
 
-        await axios.post(
-          "https://sac-api.up.railway.app/api/auth/google-signin",
-          {
-            token: idToken,
-          },
-        )
+        await axios.post("http://192.168.1.200:3000/api/auth/google-signin", {
+          token: idToken,
+          platform: Platform.OS,
+        })
       }
     } catch (error) {
       if (isErrorWithCode(error)) {
