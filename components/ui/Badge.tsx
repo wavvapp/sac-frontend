@@ -1,10 +1,10 @@
 import { theme } from "@/theme"
 import { StyleSheet, View, ViewProps, ViewStyle } from "react-native"
 import CustomText from "@/components/ui/CustomText"
-import { BadgeVariants } from "@/types"
+import { BadgeVariant } from "@/types"
 interface BadgeProps extends ViewProps {
   name: string | number
-  variant?: BadgeVariants
+  variant?: BadgeVariant
 }
 
 export default function Badge({
@@ -13,7 +13,7 @@ export default function Badge({
   style,
   ...rest
 }: BadgeProps) {
-  const variantStyle: Record<BadgeVariants, ViewStyle> = {
+  const variantStyle: Record<BadgeVariant, ViewStyle> = {
     default: styles.default,
     outline: styles.outline,
     primary: styles.primary,
