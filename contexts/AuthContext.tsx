@@ -7,17 +7,27 @@ import React, {
 } from "react"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import * as SplashScreen from "expo-splash-screen"
-
+import {
+  GoogleSignin,
+  isSuccessResponse,
+  isErrorWithCode,
+  statusCodes,
+} from "@react-native-google-signin/google-signin"
+import axios from "axios"
+import { Platform } from "react-native"
 interface User {
   id: string
-  name: string
+  name: string | null
   email: string
+  photo: string | null
+  familyName: string | null
+  givenName: string | null
 }
 
 interface AuthContextData {
   user: User | null
   isLoading: boolean
-  signIn: (token: string, user: User) => Promise<void>
+  signIn: () => Promise<void>
   signOut: () => Promise<void>
   isAuthenticated: boolean
 }
@@ -34,6 +44,37 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     loadStoredData()
   }, [])
 
+  const signIn = async () => {
+    try {
+      await GoogleSignin.hasPlayServices()
+      const response = await GoogleSignin.signIn()
+
+      if (isSuccessResponse(response)) {
+        const idToken = response.data.idToken ?? ""
+        const user = response.data.user
+        await AsyncStorage.setItem("@Auth:token", idToken)
+        await AsyncStorage.setItem("@Auth:user", JSON.stringify(user))
+        setUser(user)
+
+        await axios.post(`${process.env.API_BASE_URL}/auth/google-signin`, {
+          token: idToken,
+          platform: Platform.OS,
+        })
+      }
+    } catch (error) {
+      if (isErrorWithCode(error)) {
+        switch (error.code) {
+          case statusCodes.IN_PROGRESS:
+            break
+          case statusCodes.PLAY_SERVICES_NOT_AVAILABLE:
+            break
+          default:
+        }
+      } else {
+      }
+    }
+  }
+
   async function loadStoredData(): Promise<void> {
     setIsLoading(true)
 
@@ -46,13 +87,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
     SplashScreen.hideAsync()
     setIsLoading(false)
-  }
-
-  async function signIn(token: string, userData: User): Promise<void> {
-    await AsyncStorage.setItem("@Auth:token", token)
-    await AsyncStorage.setItem("@Auth:user", JSON.stringify(userData))
-
-    setUser(userData)
   }
 
   async function signOut(): Promise<void> {

@@ -1,15 +1,75 @@
+# Node Modules
 node_modules/
+
+# Expo specific
 .expo/
 dist/
+web-build/
+
+# Debug files
 npm-debug.*
+
+# Security-related files
 *.jks
 *.p8
 *.p12
 *.key
 *.mobileprovision
+
+# Backup or original files
 *.orig.*
-web-build/
 
 # macOS
 .DS_Store
 
+# Environment variables
+.env
+
+# Android
+/android/app/build/
+/android/.gradle/
+/android/build/
+/android/app/src/main/assets/shell-app.bundle
+/android/app/src/main/assets/shell-app.manifest
+/android/app/src/main/assets/expo-service-worker.js
+/android/app/src/main/assets/expo-service-worker.js.map
+/android/.idea/
+/android/local.properties
+
+# Android Resources
+android/app/src/main/res/drawable-*/splashscreen_image.png
+android/app/src/main/res/mipmap-*/ic_launcher*.png
+android/app/src/main/res/values/colors.xml
+android/app/src/main/res/values/strings.xml
+android/app/src/main/res/values/styles.xml
+android/app/src/main/res/values-night/colors.xml
+
+# Gradle Wrapper
+android/gradle/wrapper/gradle-wrapper.jar
+android/gradle/wrapper/gradle-wrapper.properties
+
+# React Settings Plugin
+android/react-settings-plugin/
+android/build.gradle
+android/gradle.properties
+android/settings.gradle
+
+# iOS
+ios/Pods/
+ios/build/
+ios/Podfile.lock
+ios/*.xcodeproj/project.xcworkspace/
+ios/*.xcodeproj/xcuserdata/
+ios/*.xcworkspace/
+ios/DerivedData/
+ios/expo-service-worker.js
+ios/expo-service-worker.js.map
+
+# iOS Resources
+ios/YourAppName/Images.xcassets/AppIcon.appiconset/*
+ios/YourAppName/Images.xcassets/LaunchImage.launchimage/*
+ios/YourAppName/GoogleService-Info.plist
+ios/YourAppName/*.entitlements
+
+# General
+*.log

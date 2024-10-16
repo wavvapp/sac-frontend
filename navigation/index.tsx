@@ -11,7 +11,7 @@ import Settings from "@/screens/Settings"
 import Signaling from "@/components/lists/Signaling"
 
 export type RootStackParamList = {
-  Home: undefined
+  Home: any
   EditSignal: undefined
   Login: undefined
   SignUp: undefined

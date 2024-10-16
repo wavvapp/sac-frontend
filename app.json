@@ -1,5 +1,13 @@
 {
   "expo": {
+    "plugins": [
+      [
+        "@react-native-google-signin/google-signin",
+        {
+          "iosUrlScheme": "com.googleusercontent.apps.351310982043-28dk2k254o76heo1d4pr3uftmgsjmihh"
+        }
+      ]
+    ],
     "name": "social_app",
     "slug": "social_app",
     "version": "1.0.0",
@@ -11,12 +19,10 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.yourcompany.yourappname",
+      "bundleIdentifier": "com.apeunit.social.app",
       "buildNumber": "1.0.0",
       "infoPlist": {
         "NSCameraUsageDescription": "This app uses the camera to scan barcodes on event tickets.",
@@ -36,7 +42,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.apeunit.socialapp"
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
