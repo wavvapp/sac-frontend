@@ -8,7 +8,7 @@ import { User } from "@/types"
 
 import { FlatList } from "react-native-gesture-handler"
 import BottomDrawer from "@/components/BottomDrawer"
-import { CustomButton } from "../ui/Button"
+import { CustomButton } from "@/components/ui/Button"
 import { theme } from "@/theme"
 export interface SignalingRef {
   openBottomSheet: () => void
@@ -75,7 +75,6 @@ const Signaling = forwardRef<SignalingRef, SignalingProps>((props, ref) => {
             </View>
           )}
         />
-
       </View>
     </BottomDrawer>
   )
@@ -116,7 +115,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: "flex-start",
     paddingBottom: 70,
-    backgroundColor: theme.colors.white_100
+    backgroundColor: theme.colors.white_100,
   },
 })
 

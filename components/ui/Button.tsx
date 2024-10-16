@@ -17,7 +17,6 @@ interface ButtonProps extends TouchableOpacityProps {
   containerStyles?: ViewStyle
   textStyles?: TextStyle
 }
-
 export function CustomButton({
   variant = "primary",
   onPress,
@@ -28,7 +27,6 @@ export function CustomButton({
   title,
   ...rest
 }: ButtonProps): JSX.Element {
-
   const variantStyles = {
     primary: {
       container: styles.primary,
