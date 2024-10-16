@@ -22,7 +22,7 @@ export default function UserAvatar({
       {...rest}
       style={[
         styles.container,
-        size == "small" ? styles.small : styles.large,
+        size === "small" ? styles.small : styles.large,
         style,
       ]}>
       <Image source={imageUrl} style={styles.image} />
