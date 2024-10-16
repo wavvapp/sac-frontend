@@ -1,6 +1,6 @@
 import { User } from "@/types"
 
-export const defaultUsers: User[] = [
+export const onlineUsers: User[] = [
   {
     id: "1",
     firstName: "Emil",
@@ -41,6 +41,8 @@ export const defaultUsers: User[] = [
     activity: "jodelkeller",
     imageUrl: require("@/assets/images/users/user5.png"),
   },
+]
+export const offlineUsers: User[] = [
   {
     id: "6",
     firstName: "Johnny",
