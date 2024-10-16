@@ -51,13 +51,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
       if (isSuccessResponse(response)) {
         const idToken = response.data.idToken ?? ""
-        console.log(idToken)
         const user = response.data.user
         await AsyncStorage.setItem("@Auth:token", idToken)
         await AsyncStorage.setItem("@Auth:user", JSON.stringify(user))
         setUser(user)
 
-        await axios.post("http://192.168.1.200:3000/api/auth/google-signin", {
+        await axios.post(`${process.env.API_BASE_URL}/auth/google-signin`, {
           token: idToken,
           platform: Platform.OS,
         })
