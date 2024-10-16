@@ -21,7 +21,6 @@ interface ButtonProps extends TouchableOpacityProps {
   fullWidth?: boolean
   children?: React.ReactNode
 }
-
 export function CustomButton({
   variant = "default",
   onPress,

@@ -19,6 +19,7 @@ export type ButtonVariant =
   | "destructive"
 export type FontFamilyVariant = "suisse" | "marfa" | "writer-mono"
 export type fontStyleVariant = "normal" | "italic"
+export type BadgeVariants = "default" | "outline" | "primary"
 
 export interface User {
   id: string
