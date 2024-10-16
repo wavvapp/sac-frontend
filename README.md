@@ -48,5 +48,4 @@ Follow these steps to run the project:
 
 <p align="center">
   <img src="./assets/images/icp.png" alt="icp image" width="350" height="150">
-  <img src="./assets/images/apeunit.jpg" alt="apeunit image" width="150" height="150">
 </p>
