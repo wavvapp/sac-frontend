@@ -13,6 +13,7 @@ import {
   isErrorWithCode,
   statusCodes,
 } from "@react-native-google-signin/google-signin"
+import axios from "axios"
 interface User {
   id: string
   name: string | null
@@ -46,13 +47,21 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     try {
       await GoogleSignin.hasPlayServices()
       const response = await GoogleSignin.signIn()
+
       if (isSuccessResponse(response)) {
-        await AsyncStorage.setItem("@Auth:token", response.data.idToken ?? "")
-        await AsyncStorage.setItem(
-          "@Auth:user",
-          JSON.stringify(response.data.user),
+        const idToken = response.data.idToken ?? ""
+        console.log(idToken)
+        const user = response.data.user
+        await AsyncStorage.setItem("@Auth:token", idToken)
+        await AsyncStorage.setItem("@Auth:user", JSON.stringify(user))
+        setUser(user)
+
+        await axios.post(
+          "https://sac-api.up.railway.app/api/auth/google-signin",
+          {
+            token: idToken,
+          },
         )
-        setUser(response.data.user)
       }
     } catch (error) {
       if (isErrorWithCode(error)) {
