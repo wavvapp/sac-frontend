@@ -3,7 +3,6 @@ import PerlinNoise from "@/components/PerlinNoise"
 import { visibleFriends } from "@/data/friends"
 import { userInfo } from "@/data/user"
 import { RootStackParamList } from "@/navigation"
-import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { StyleSheet, View, Dimensions, TouchableOpacity } from "react-native"
 import {
@@ -16,7 +15,6 @@ import { useRef, useState } from "react"
 import Signaling, { SignalingRef } from "@/components/lists/Signaling"
 import Settings from "@/components/vectors/Settings"
 import { theme } from "@/theme"
-import { CustomButton } from "@/components/ui/Button"
 
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -28,7 +26,6 @@ export default function HomeScreen() {
   const [isVisible, setIsVisible] = useState(false)
   const isOn = useSharedValue(false)
   const signalingRef = useRef<SignalingRef>(null)
-  const navigation = useNavigation<HomeScreenProps>()
 
   const handlePress = () => {
     isOn.value = !isOn.value
@@ -51,11 +48,6 @@ export default function HomeScreen() {
       </View>
       <View style={styles.UserStatus}>
         <UserStatus isOn={isOn} friends={visibleFriends} user={userInfo} />
-        <CustomButton
-          textSize="lg"
-          title="test screen"
-          onPress={() => navigation.push("Testing")}
-        />
       </View>
       <AnimatedSwitch isOn={isOn} onPress={handlePress} style={styles.switch} />
       <Signaling ref={signalingRef} />

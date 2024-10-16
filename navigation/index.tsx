@@ -9,7 +9,6 @@ import Login from "@/screens/Authentication/Login"
 import CustomSplashScreen from "@/screens/CustomSplashScreen"
 import Settings from "@/screens/Settings"
 import Signaling from "@/components/lists/Signaling"
-import TestingScreen from "@/screens/Testing"
 
 export type RootStackParamList = {
   Home: undefined
@@ -18,7 +17,6 @@ export type RootStackParamList = {
   SignUp: undefined
   Settings: undefined
   Signaling: undefined
-  Testing: undefined
 }
 
 export default function AppNavigator() {
@@ -53,12 +51,6 @@ export default function AppNavigator() {
             name="Signaling"
             options={{ presentation: "modal", headerShown: false }}
             component={Signaling}
-          />
-
-          <Stack.Screen
-            name="Testing"
-            options={{ headerShown: false, presentation: "modal" }}
-            component={TestingScreen}
           />
         </Stack.Navigator>
       ) : (
