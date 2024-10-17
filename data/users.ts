@@ -1,46 +1,46 @@
 import { User } from "@/types"
 
 export const onlineUsers: User[] = [
-  // {
-  //   id: "1",
-  //   firstName: "Emil",
-  //   lastName: "Wagner",
-  //   time: "Evening",
-  //   activity: "jodelkeller",
-  //   imageUrl: require("@/assets/images/users/user1.png"),
-  // },
-  // {
-  //   id: "2",
-  //   firstName: "Vincent",
-  //   lastName: "Reichel",
-  //   time: "Evening",
-  //   activity: "jodelkeller",
-  //   imageUrl: require("@/assets/images/users/user2.png"),
-  // },
-  // {
-  //   id: "3",
-  //   firstName: "Gretchen",
-  //   lastName: "Casper",
-  //   time: "Evening",
-  //   activity: "jodelkeller",
-  //   imageUrl: require("@/assets/images/users/user3.png"),
-  // },
-  // {
-  //   id: "4",
-  //   firstName: "Elizabeth",
-  //   lastName: "Carroll",
-  //   time: "Evening",
-  //   activity: "jodelkeller",
-  //   imageUrl: require("@/assets/images/users/user4.png"),
-  // },
-  // {
-  //   id: "5",
-  //   firstName: "Kayla",
-  //   lastName: "Leuschke",
-  //   time: "Evening",
-  //   activity: "jodelkeller",
-  //   imageUrl: require("@/assets/images/users/user5.png"),
-  // },
+  {
+    id: "1",
+    firstName: "Emil",
+    lastName: "Wagner",
+    time: "Evening",
+    activity: "jodelkeller",
+    imageUrl: require("@/assets/images/users/user1.png"),
+  },
+  {
+    id: "2",
+    firstName: "Vincent",
+    lastName: "Reichel",
+    time: "Evening",
+    activity: "jodelkeller",
+    imageUrl: require("@/assets/images/users/user2.png"),
+  },
+  {
+    id: "3",
+    firstName: "Gretchen",
+    lastName: "Casper",
+    time: "Evening",
+    activity: "jodelkeller",
+    imageUrl: require("@/assets/images/users/user3.png"),
+  },
+  {
+    id: "4",
+    firstName: "Elizabeth",
+    lastName: "Carroll",
+    time: "Evening",
+    activity: "jodelkeller",
+    imageUrl: require("@/assets/images/users/user4.png"),
+  },
+  {
+    id: "5",
+    firstName: "Kayla",
+    lastName: "Leuschke",
+    time: "Evening",
+    activity: "jodelkeller",
+    imageUrl: require("@/assets/images/users/user5.png"),
+  },
 ]
 export const offlineUsers: User[] = [
   {

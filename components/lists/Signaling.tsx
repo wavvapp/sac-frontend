@@ -1,14 +1,15 @@
 import React, { forwardRef } from "react"
-import { View, StyleSheet, SectionList } from "react-native"
+import { View, StyleSheet } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import UserAvatar from "@/components/ui/UserAvatar"
 import UserInfo from "@/components/UserInfo"
 import { onlineUsers, offlineUsers } from "@/data/users"
 import { User } from "@/types"
 
-import { FlatList } from "react-native-gesture-handler"
 import BottomDrawer from "@/components/BottomDrawer"
 import { CustomButton } from "@/components/ui/Button"
+import { BottomSheetSectionList } from "@gorhom/bottom-sheet"
+import { theme } from "@/theme"
 export interface SignalingRef {
   openBottomSheet: () => void
 }
@@ -20,47 +21,6 @@ interface SignalingProps {
 const Signaling = forwardRef<SignalingRef, SignalingProps>((props, ref) => {
   const availableUsers = props.users?.length ? props.users : onlineUsers
   const otherusers = props.users?.length ? props.users : offlineUsers
-
-  const sections: {
-    title: string
-    data: User[]
-    renderItem: ({ item }: { item: User }) => JSX.Element
-  }[] = [
-    {
-      title: "Products",
-      data: availableUsers,
-      renderItem: ({ item }: { item: User }) => (
-        <View style={styles.userCard}>
-          <UserAvatar imageUrl={item.imageUrl || 0} />
-          <View>
-            <UserInfo
-              firstName={item.firstName}
-              lastName={item.lastName}
-              time={item.time}
-              activity={item.activity}
-            />
-          </View>
-        </View>
-      ),
-    },
-    {
-      title: "Supervisors",
-      data: otherusers,
-      renderItem: ({ item }: { item: User }) => (
-        <View style={styles.userCard}>
-          <UserAvatar imageUrl={item.imageUrl || 0} />
-          <View>
-            <UserInfo
-              firstName={item.firstName}
-              lastName={item.lastName}
-              time={item.time}
-              activity={item.activity}
-            />
-          </View>
-        </View>
-      ),
-    },
-  ]
 
   return (
     <BottomDrawer ref={ref}>
@@ -77,27 +37,54 @@ const Signaling = forwardRef<SignalingRef, SignalingProps>((props, ref) => {
         />
       </View>
       {!availableUsers.length && (
-        <CustomText style={styles.noUsers}>None of your friends on Wavv are available today</CustomText>
+        <CustomText style={styles.noUsers}>
+          None of your friends on Wavv are available today
+        </CustomText>
       )}
-      <FlatList
-        data={[1]}
-        keyExtractor={(index) => index.toString()}
-        renderItem={() => (
-          <SectionList
-            sections={sections}
-            keyExtractor={(index) => index.toString()}
-          />
-        )}
+      <BottomSheetSectionList
+        sections={[
+          {
+            title: "available users",
+            data: availableUsers,
+            renderItem: ({ item }) => (
+              <View style={styles.userCard}>
+                <UserAvatar imageUrl={item.imageUrl || 0} />
+                <View>
+                  <UserInfo
+                    firstName={item.firstName}
+                    lastName={item.lastName}
+                    time={item.time}
+                    activity={item.activity}
+                  />
+                </View>
+              </View>
+            ),
+          },
+          {
+            title: "Other users",
+            data: otherusers,
+            renderItem: ({ item }) => (
+              <View style={[styles.userCard, styles.availableUserCard]}>
+                <UserAvatar imageUrl={item.imageUrl || 0} />
+                <View>
+                  <UserInfo
+                    firstName={item.firstName}
+                    lastName={item.lastName}
+                    time={item.time}
+                    activity={item.activity}
+                  />
+                </View>
+              </View>
+            ),
+          },
+        ]}
+        keyExtractor={(item) => item.id}
       />
     </BottomDrawer>
   )
 })
 
 const styles = StyleSheet.create({
-  // container: {
-  //   flex: 1,
-  //   paddingTop: 16,
-  // },
   header: {
     flexDirection: "row",
     alignItems: "center",
@@ -114,25 +101,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 10,
-    paddingBottom: 18,
+    paddingVertical: 9,
     paddingHorizontal: 20,
   },
-  // flalist: {
-  //   width: "100%",
-  // },
-  // availableUsers: {
-  //   flexGrow: 1,
-  //   justifyContent: "flex-start",
-  //   paddingBottom: 70,
-  // },
-  // avalableUserCard: {
-  //   flexDirection: "row",
-  //   alignItems: "center",
-  //   gap: 10,
-  //   backgroundColor: theme.colors.white_100,
-  //   paddingHorizontal: 20,
-  //   paddingVertical: 20,
-  // },
+  availableUserCard: {
+    backgroundColor: theme.colors.white_100,
+  },
   noUsers: {
     padding: 20,
   },

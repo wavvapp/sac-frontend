@@ -36,7 +36,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.yourcompany.yourappname"
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
