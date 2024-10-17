@@ -42,7 +42,7 @@ const Signaling = forwardRef<SignalingRef, SignalingProps>((props, ref) => {
         </View>
         <FlatList
           contentContainerStyle={styles.listContent}
-          style={styles.flalist}
+          style={styles.flatList}
           data={displayUsers as User[]}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
@@ -52,8 +52,7 @@ const Signaling = forwardRef<SignalingRef, SignalingProps>((props, ref) => {
                 <UserInfo
                   firstName={item.firstName}
                   lastName={item.lastName}
-                  time={item.time}
-                  activity={item.activity}
+                  username={item.username}
                 />
               </View>
             </View>
@@ -82,7 +81,7 @@ const styles = StyleSheet.create({
     gap: 10,
     paddingBottom: 18,
   },
-  flalist: {
+  flatList: {
     width: "100%",
   },
   listContent: {

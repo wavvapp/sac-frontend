@@ -20,6 +20,7 @@ export interface User {
   id: string
   firstName: string
   lastName: string
+  username: string
   time: string
   activity: string
   selected?: boolean
