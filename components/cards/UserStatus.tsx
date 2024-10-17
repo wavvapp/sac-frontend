@@ -92,7 +92,7 @@ export default function UserStatus({
         </TouchableOpacity>
       </Animated.View>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({

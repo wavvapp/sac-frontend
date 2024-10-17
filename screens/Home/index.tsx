@@ -23,7 +23,7 @@ export type HomeScreenProps = NativeStackNavigationProp<
 
 const { width } = Dimensions.get("window")
 export default function HomeScreen() {
-  const [isVisible, setIsVisible] = useState(false)
+  const [_, setIsVisible] = useState(false)
   const isOn = useSharedValue(false)
   const signalingRef = useRef<SignalingRef>(null)
 

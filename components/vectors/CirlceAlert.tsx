@@ -1,7 +1,7 @@
 import { theme } from "@/theme"
 import Svg, { Path, SvgProps } from "react-native-svg"
 
-export default function ShareIcon({
+export default function CirlceAlert({
   width = 24,
   height = 24,
   color = theme.colors.black,
@@ -15,11 +15,11 @@ export default function ShareIcon({
       fill="none"
       {...rest}>
       <Path
-        d="M4 12V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V12M16 6L12 2M12 2L8 6M12 2V15"
+        d="M12 8V12M12 16H12.01M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"
         stroke={color}
-        stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </Svg>
   )

@@ -4,26 +4,26 @@ import {
   TextInputProps,
   TextStyle,
   View,
-} from "react-native";
-import { InputVariant, SizeVariant } from "@/types";
-import { theme } from "@/theme";
+} from "react-native"
+import { InputVariant, SizeVariant } from "@/types"
+import { theme } from "@/theme"
 
 const inputSizeMap: Partial<Record<SizeVariant, TextStyle>> = {
   sm: { fontSize: 13, lineHeight: 20 },
   base: { fontSize: 15, lineHeight: 24 },
   lg: { fontSize: 20, lineHeight: 28 },
-};
+}
 
 const placeHolderColorMap: Record<InputVariant, string> = {
   primary: theme.colors.black_500,
   secondary: theme.colors.white_500,
   ghost: theme.colors.black_500,
-};
+}
 
 interface InputProps extends TextInputProps {
-  variant?: InputVariant;
-  textSize?: "lg" | "base" | "sm";
-  handleTextChange: (text: string) => void;
+  variant?: InputVariant
+  textSize?: "lg" | "base" | "sm"
+  handleTextChange: (text: string) => void
 }
 
 export default function Input({
@@ -49,7 +49,7 @@ export default function Input({
       container: styles.ghostContainer,
       input: styles.ghostInput,
     },
-  };
+  }
 
   return (
     <View style={[styles.container, variantStyles?.[variant]?.container]}>
@@ -63,7 +63,7 @@ export default function Input({
         {...rest}
       />
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -92,4 +92,4 @@ const styles = StyleSheet.create({
   ghostInput: {
     color: theme.colors.black,
   },
-});
+})
