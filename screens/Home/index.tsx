@@ -15,6 +15,7 @@ import { useRef, useState } from "react"
 import Signaling, { SignalingRef } from "@/components/lists/Signaling"
 import Settings from "@/components/vectors/Settings"
 import { theme } from "@/theme"
+
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
   "Home"
@@ -22,7 +23,7 @@ export type HomeScreenProps = NativeStackNavigationProp<
 
 const { width } = Dimensions.get("window")
 export default function HomeScreen() {
-  const [_, setIsVisible] = useState(false)
+  const [isVisible, setIsVisible] = useState(false)
   const isOn = useSharedValue(false)
   const signalingRef = useRef<SignalingRef>(null)
 
