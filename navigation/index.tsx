@@ -9,6 +9,7 @@ import Login from "@/screens/Authentication/Login"
 import CustomSplashScreen from "@/screens/CustomSplashScreen"
 import Settings from "@/screens/Settings"
 import Signaling from "@/components/lists/Signaling"
+import EditAvailability from "@/screens/EditAvailability"
 
 export type RootStackParamList = {
   Home: undefined
@@ -17,6 +18,8 @@ export type RootStackParamList = {
   SignUp: undefined
   Settings: undefined
   Signaling: undefined
+  UserAvailability: undefined
+  EditAvailability: undefined
 }
 
 export default function AppNavigator() {
@@ -46,6 +49,11 @@ export default function AppNavigator() {
             name="EditSignal"
             options={{ headerShown: false, presentation: "modal" }}
             component={EditSignal}
+          />
+          <Stack.Screen
+            name="EditAvailability"
+            options={{ headerShown: false, presentation: "modal" }}
+            component={EditAvailability}
           />
           <Stack.Screen
             name="Signaling"
