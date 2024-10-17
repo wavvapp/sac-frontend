@@ -26,23 +26,19 @@ const Signaling = forwardRef<SignalingRef, SignalingProps>((props, ref) => {
   return (
     <BottomDrawer ref={ref}>
       <View style={styles.header}>
-        <CustomText
-          size="xl"
-          fontFamily="suisse"
-          fontWeight="bold"
-          style={styles.headerText}>
+        <CustomText size="xl" fontWeight="bold" style={styles.headerText}>
           Friends
         </CustomText>
         {/* TODO: this should redirect to the search screen */}
         <CustomButton
-          variant="default"
+          variant="primary"
           textSize="sm"
           title="FIND"
           textStyles={{ fontWeight: 600 }}
         />
       </View>
       {!availableUsers.length && (
-        <CustomText style={styles.noUsers} fontFamily="suisse">
+        <CustomText style={styles.noUsers}>
           None of your friends on Wavv are available today
         </CustomText>
       )}
@@ -68,13 +64,8 @@ const Signaling = forwardRef<SignalingRef, SignalingProps>((props, ref) => {
           {
             title: "Other users",
             data: otherusers,
-            renderItem: ({ item, index }) => (
-              <View
-                style={[
-                  styles.userCard,
-                  styles.availableUserCard,
-                  index === 0 && { paddingTop: 20 },
-                ]}>
+            renderItem: ({ item }) => (
+              <View style={[styles.userCard, styles.availableUserCard]}>
                 <UserAvatar imageUrl={item.imageUrl || 0} />
                 <View>
                   <UserInfo
@@ -97,11 +88,12 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 16,
+    marginBottom: 20,
     justifyContent: "space-between",
     paddingHorizontal: 20,
   },
   headerText: {
+    fontFamily: "suisse",
     fontSize: 20,
     lineHeight: 28,
   },
@@ -109,18 +101,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 10,
-    paddingBottom: 12,
+    paddingVertical: 9,
     paddingHorizontal: 20,
   },
   availableUserCard: {
-    backgroundColor: theme.colors.white_100,
+    backgroundColor: theme.colors.black_250,
   },
   noUsers: {
-    marginBottom: 32,
-    marginLeft: 20,
-    maxWidth: 222,
-    fontSize: 15,
-    lineHeight: 24,
+    padding: 20,
   },
 })
 
