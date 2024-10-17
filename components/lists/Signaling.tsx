@@ -3,13 +3,14 @@ import { View, StyleSheet } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import UserAvatar from "@/components/ui/UserAvatar"
 import UserInfo from "@/components/UserInfo"
-import Badge from "@/components/ui/Badge"
-import { defaultUsers } from "@/data/users"
+import { onlineUsers, offlineUsers } from "@/data/users"
 import { User } from "@/types"
 
-import { FlatList } from "react-native-gesture-handler"
 import BottomDrawer from "@/components/BottomDrawer"
+import { CustomButton } from "@/components/ui/Button"
+import { BottomSheetSectionList } from "@gorhom/bottom-sheet"
 import { theme } from "@/theme"
+import UserAvailability from "../cards/UserAvailability"
 export interface SignalingRef {
   openBottomSheet: () => void
 }
@@ -19,76 +20,98 @@ interface SignalingProps {
 }
 
 const Signaling = forwardRef<SignalingRef, SignalingProps>((props, ref) => {
-  const displayUsers = props.users?.length ? props.users : defaultUsers
+  const availableUsers = props.users?.length ? props.users : onlineUsers
+  const otherusers = props.users?.length ? props.users : offlineUsers
 
   return (
     <BottomDrawer ref={ref}>
-      <View style={styles.container}>
-        <View
-          style={{
-            flexDirection: "row",
-            height: 50,
-            backgroundColor: theme.colors.black,
-            gap: 12,
-          }}>
-          <Badge variant="primary" name="100" />
-          <Badge variant="primary" name="3/4" style={{ opacity: 0.3 }} />
-        </View>
-        <View style={styles.header}>
-          <Badge name={displayUsers.length.toString()} />
-          <CustomText size="sm" fontWeight="bold">
-            Friends are signaling
-          </CustomText>
-        </View>
-        <FlatList
-          contentContainerStyle={styles.listContent}
-          style={styles.flatList}
-          data={displayUsers as User[]}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <View style={styles.userCard}>
-              <UserAvatar imageUrl={item.imageUrl || 0} />
-              <View>
-                <UserInfo
-                  firstName={item.firstName}
-                  lastName={item.lastName}
-                  username={item.username}
-                />
-              </View>
-            </View>
-          )}
+      <View style={styles.header}>
+        <CustomText size="xl" fontWeight="bold" style={styles.headerText}>
+          Friends
+        </CustomText>
+        {/* TODO: this should redirect to the search screen */}
+        <CustomButton
+          variant="primary"
+          textSize="sm"
+          title="FIND"
+          textStyles={{ fontWeight: 600 }}
         />
       </View>
+      {!availableUsers.length && (
+        <CustomText style={styles.noUsers}>
+          None of your friends on Wavv are available today
+        </CustomText>
+      )}
+      <BottomSheetSectionList
+        sections={[
+          {
+            title: "available users",
+            data: availableUsers,
+            renderItem: ({ item }) => (
+              <View style={styles.userCard}>
+                <UserAvatar imageUrl={item.imageUrl || 0} />
+                <View>
+                  <UserAvailability
+                    firstName={item.firstName}
+                    lastName={item.lastName}
+                    time={item.time}
+                    activity={item.activity}
+                  />
+                </View>
+              </View>
+            ),
+          },
+          {
+            title: "Other users",
+            data: otherusers,
+            renderItem: ({ item }) => (
+              <View style={[styles.userCard, styles.availableUserCard]}>
+                <UserAvatar imageUrl={item.imageUrl || 0} />
+                <View>
+                  <UserInfo
+                    firstName={item.firstName}
+                    lastName={item.lastName}
+                    username={item.username}
+                  />
+                </View>
+              </View>
+            ),
+          },
+        ]}
+        keyExtractor={(item) => item.id}
+      />
     </BottomDrawer>
   )
 })
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: 16,
-    paddingLeft: 16,
-  },
   header: {
     flexDirection: "row",
-    gap: 10,
     alignItems: "center",
     marginBottom: 20,
+    justifyContent: "space-between",
+    paddingHorizontal: 20,
+  },
+  headerText: {
+    fontFamily: "suisse",
+    fontSize: 20,
+    lineHeight: 28,
   },
   userCard: {
     flexDirection: "row",
     alignItems: "center",
     gap: 10,
-    paddingBottom: 18,
+    paddingVertical: 9,
+    paddingHorizontal: 20,
   },
-  flatList: {
-    width: "100%",
+  availableUserCard: {
+    backgroundColor: theme.colors.black_250,
   },
-  listContent: {
-    flexGrow: 1,
-    justifyContent: "flex-start",
-    paddingBottom: 70,
+  noUsers: {
+    padding: 20,
   },
 })
+
+Signaling.displayName = "Signaling"
 
 export default Signaling
