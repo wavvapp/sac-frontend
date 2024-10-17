@@ -10,6 +10,7 @@ import BottomDrawer from "@/components/BottomDrawer"
 import { CustomButton } from "@/components/ui/Button"
 import { BottomSheetSectionList } from "@gorhom/bottom-sheet"
 import { theme } from "@/theme"
+import UserAvailability from "../cards/UserAvailability"
 export interface SignalingRef {
   openBottomSheet: () => void
 }
@@ -50,7 +51,7 @@ const Signaling = forwardRef<SignalingRef, SignalingProps>((props, ref) => {
               <View style={styles.userCard}>
                 <UserAvatar imageUrl={item.imageUrl || 0} />
                 <View>
-                  <UserInfo
+                  <UserAvailability
                     firstName={item.firstName}
                     lastName={item.lastName}
                     time={item.time}
@@ -70,8 +71,7 @@ const Signaling = forwardRef<SignalingRef, SignalingProps>((props, ref) => {
                   <UserInfo
                     firstName={item.firstName}
                     lastName={item.lastName}
-                    time={item.time}
-                    activity={item.activity}
+                    username={item.username}
                   />
                 </View>
               </View>
@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   availableUserCard: {
-    backgroundColor: theme.colors.white_100,
+    backgroundColor: theme.colors.black_250,
   },
   noUsers: {
     padding: 20,
