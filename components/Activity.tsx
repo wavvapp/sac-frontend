@@ -2,7 +2,7 @@ import { StyleSheet, TouchableOpacity, View } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import EditIcon from "@/components/vectors/EditIcon"
 
-export default function UserAvailability() {
+export default function Activity() {
   return (
     <View style={styles.container}>
       <CustomText size="sm" fontWeight="medium" style={styles.signalText}>

@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 9,
     borderWidth: 1,
-    borderColor: theme.colors.black_300,
+    borderColor: theme.colors.black_200,
     backgroundColor: theme.colors.black,
   },
   buttonText: {
@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
   },
   outline: {
     backgroundColor: theme.colors.white,
-    borderColor: theme.colors.black_300,
+    borderColor: theme.colors.black_200,
     borderWidth: 1,
     paddingVertical: 9,
     paddingHorizontal: 16,
@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
     color: theme.colors.black,
   },
   destructive: {
-    borderColor: theme.colors.white_300,
+    borderColor: theme.colors.white_200,
     borderWidth: 1,
     paddingVertical: 21,
     width: 350,

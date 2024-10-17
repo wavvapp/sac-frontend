@@ -64,8 +64,7 @@ export default function UserStatus({
           <UserInfo
             firstName={user.firstName}
             lastName={user.lastName}
-            time={user.time}
-            activity={user.activity}
+            username={user.username}
           />
           <TouchableOpacity>
             <EllipsisIcon />
