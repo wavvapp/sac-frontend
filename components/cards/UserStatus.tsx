@@ -73,12 +73,12 @@ export default function UserStatus({
 
         <View style={styles.friendsContainer}>
           <CustomText size="sm" fontFamily="writer-mono">
-          Visible to {friends.length} friends
-        </CustomText>
+            Visible to {friends.length} friends
+          </CustomText>
           {visibleFriendsList && (
             <CustomText size="sm" fontFamily="writer-mono">
-            {visibleFriendsList}.
-          </CustomText>
+              {visibleFriendsList}.
+            </CustomText>
           )}
         </View>
         <TouchableOpacity style={styles.editButton}>
