@@ -1,7 +1,8 @@
 import React, { useState } from "react"
 import { View, ScrollView, StyleSheet } from "react-native"
 import { CustomButton } from "@/components/ui/Button"
-import CustomText, { fontFamilyMap } from "@/components/ui/CustomText"
+import CustomText from "@/components/ui/CustomText"
+import { theme } from "@/theme"
 
 interface StatusProps {
   timeSlots: string[]
@@ -63,6 +64,6 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   buttonText: {
-    fontFamily: fontFamilyMap["writer-mono"].normal?.normal,
+    fontFamily: theme.fontFamily["writer-mono"].normal?.normal,
   },
 })

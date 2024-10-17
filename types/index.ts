@@ -1,6 +1,6 @@
-import { ImageSourcePropType } from "react-native"
+import { ImageSourcePropType, TextStyle } from "react-native"
 
-export type SizeVariant = "2xl" | "xl" | "lg" | "base" | "sm" | "xs"
+export type SizeVariant = "lg" | "base" | "sm"
 export type FontWeightVariant =
   | "black"
   | "bold"
@@ -19,9 +19,19 @@ export type ButtonVariant =
   | "destructive"
 export type FontFamilyVariant = "suisse" | "marfa" | "writer-mono"
 export type fontStyleVariant = "normal" | "italic"
-export type BadgeVariants = "default" | "outline" | "primary"
+export type BadgeVariant = "default" | "outline" | "primary"
 export type InputVariant = "primary" | "secondary" | "ghost"
 
+export type Theme = {
+  colors: Record<string, string>
+  size: Record<SizeVariant, TextStyle>
+  fontWeight: Record<FontWeightVariant, TextStyle>
+  fontStyle: Record<fontStyleVariant, TextStyle>
+  fontFamily: Record<
+    FontFamilyVariant,
+    Partial<Record<FontWeightVariant, { normal: string; italic: string }>>
+  >
+}
 export interface User {
   id: string
   firstName: string

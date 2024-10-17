@@ -9,6 +9,7 @@ import Login from "@/screens/Authentication/Login"
 import CustomSplashScreen from "@/screens/CustomSplashScreen"
 import Settings from "@/screens/Settings"
 import Signaling from "@/components/lists/Signaling"
+import { theme } from "@/theme"
 
 export type RootStackParamList = {
   Home: undefined
@@ -33,7 +34,7 @@ export default function AppNavigator() {
         <Stack.Navigator
           screenOptions={{
             headerTransparent: true,
-            headerTitleStyle: { color: "#fff" },
+            headerTitleStyle: { color: theme.colors.white },
           }}
           initialRouteName="Home">
           <Stack.Screen
