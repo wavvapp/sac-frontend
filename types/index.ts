@@ -20,6 +20,7 @@ export type ButtonVariant =
 export type FontFamilyVariant = "suisse" | "marfa" | "writer-mono"
 export type fontStyleVariant = "normal" | "italic"
 export type BadgeVariants = "default" | "outline" | "primary"
+export type InputVariant = "primary" | "secondary" | "ghost"
 
 export interface User {
   id: string
