@@ -15,21 +15,16 @@ import { useRef, useState } from "react"
 import Signaling, { SignalingRef } from "@/components/lists/Signaling"
 import Settings from "@/components/vectors/Settings"
 import { theme } from "@/theme"
-import { CustomButton } from "@/components/ui/Button"
-import { useNavigation } from "@react-navigation/native"
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
   "Home"
 >
-
-type TestingProp = NativeStackNavigationProp<RootStackParamList, "Testing">
 
 const { width } = Dimensions.get("window")
 export default function HomeScreen() {
   const [_, setIsVisible] = useState(false)
   const isOn = useSharedValue(false)
   const signalingRef = useRef<SignalingRef>(null)
-  const navigation = useNavigation<TestingProp>()
 
   const handlePress = () => {
     isOn.value = !isOn.value
@@ -50,11 +45,6 @@ export default function HomeScreen() {
           <Settings />
         </TouchableOpacity>
       </View>
-      <CustomButton
-        title="Testing"
-        variant="primary"
-        onPress={() => navigation.push("Testing")}
-      />
       <View style={styles.UserStatus}>
         <UserStatus isOn={isOn} friends={visibleFriends} user={userInfo} />
       </View>
