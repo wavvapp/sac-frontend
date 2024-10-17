@@ -1,4 +1,4 @@
-import { useFonts } from "expo-font";
+import { useFonts } from "expo-font"
 
 export const useFont = () => {
   const [loaded, error] = useFonts({
@@ -25,7 +25,7 @@ export const useFont = () => {
     "iAWriterMonoS-Regular": require("../assets/fonts/ia-writer-mono_5.1.0/ia-writer-mono-latin-400-normal.ttf"),
     "iAWriterMonoS-BoldItalic": require("../assets/fonts/ia-writer-mono_5.1.0/ia-writer-mono-latin-700-italic.ttf"),
     "iAWriterMonoS-Bold": require("../assets/fonts/ia-writer-mono_5.1.0/ia-writer-mono-latin-700-normal.ttf"),
-  });
+  })
 
-  return { loaded, error };
-};
+  return { loaded, error }
+}
