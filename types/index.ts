@@ -9,10 +9,11 @@ export type FontWeightVariant =
   | "normal"
   | "light"
   | "extralight"
-  | "thin";
+  | "thin"
 export type ButtonVariant = "secondary" | "primary"
 export type FontFamilyVariant = "suisse" | "marfa" | "writer-mono"
 export type fontStyleVariant = "normal" | "italic"
+export type BadgeVariants = "default" | "outline" | "primary"
 export type InputVariant = "primary" | "secondary" | "ghost"
 
 export interface User {
