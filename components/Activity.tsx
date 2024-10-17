@@ -1,27 +1,46 @@
-import { StyleSheet, TouchableOpacity, View } from "react-native"
+import { StyleSheet, TouchableOpacity, View, Modal } from "react-native"
+import React, { useState } from "react"
 import CustomText from "@/components/ui/CustomText"
 import EditIcon from "@/components/vectors/EditIcon"
-import { useNavigation } from "@react-navigation/native"
-import { NativeStackNavigationProp } from "@react-navigation/native-stack"
-import { RootStackParamList } from "@/navigation"
-type UserAvailabilityScreeProps = NativeStackNavigationProp<
-  RootStackParamList,
-  "EditAvailability"
->
+import EditAvailability from "@/screens/EditAvailability"
+
 export default function Activity() {
-  const navigation = useNavigation<UserAvailabilityScreeProps>()
+  const [isModalVisible, setIsModalVisible] = useState(false)
+  const [availabilityText, setAvailabilityText] = useState("Available")
+
+  const openModal = () => setIsModalVisible(true)
+  const closeModal = () => setIsModalVisible(false)
+
+  const updateAvailabilityText = (newText: string) => {
+    setAvailabilityText(newText)
+    closeModal()
+  }
+
   return (
     <View style={styles.container}>
       <CustomText size="sm" fontWeight="medium" style={styles.signalText}>
         Signal
       </CustomText>
       <View style={styles.availableContainer}>
-        <CustomText size="xl">Available</CustomText>
-        <TouchableOpacity
-          onPress={() => navigation.navigate("EditAvailability")}>
+        <CustomText size="xl">{availabilityText}</CustomText>
+        <TouchableOpacity onPress={openModal}>
           <EditIcon />
         </TouchableOpacity>
       </View>
+
+      {isModalVisible && (
+        <Modal
+          visible={isModalVisible}
+          transparent={true}
+          animationType="slide"
+          presentationStyle="pageSheet"
+          onRequestClose={closeModal}>
+          <EditAvailability
+            closeModal={closeModal}
+            updateAvailabilityText={updateAvailabilityText}
+          />
+        </Modal>
+      )}
     </View>
   )
 }

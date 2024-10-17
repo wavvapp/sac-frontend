@@ -1,37 +1,54 @@
 import React, { useState } from "react"
-import { View, StyleSheet, TextInput, Dimensions } from "react-native"
+import {
+  View,
+  StyleSheet,
+  Dimensions,
+  Keyboard,
+  NativeSyntheticEvent,
+  TextInputKeyPressEventData,
+} from "react-native"
 import CustomText from "@/components/ui/CustomText"
-import { useNavigation } from "@react-navigation/native"
+import Input from "@/components/ui/Input"
 
 const { height } = Dimensions.get("window")
 
-export default function EditAvailability() {
+interface EditAvailabilityProps {
+  closeModal: () => void
+  updateAvailabilityText: (newText: string) => void
+}
+
+export default function EditAvailability({
+  updateAvailabilityText,
+}: EditAvailabilityProps) {
   const [text, setText] = useState("")
-  const navigation = useNavigation()
 
   const handleEdit = () => {
-    console.log("Edited Text:", text)
-    navigation.goBack()
+    updateAvailabilityText(text)
+  }
+
+  const handleKeyPress = (
+    nativeEvent: NativeSyntheticEvent<TextInputKeyPressEventData>,
+  ) => {
+    if (nativeEvent.nativeEvent.key === "Enter") {
+      handleEdit()
+      Keyboard.dismiss()
+    }
   }
 
   return (
     <View style={styles.overlay}>
       <View style={styles.modalContainer}>
-        <CustomText
-          fontWeight="normal"
-          fontFamily="suisse"
-          fontStyle="normal"
-          size="md">
+        <CustomText fontWeight="normal" fontFamily="suisse" size="lg">
           Status
         </CustomText>
-        <TextInput
-          style={styles.input}
-          placeholder="AVAILABLE"
+        <Input
+          textSize="lg"
+          placeholder="Available"
+          handleTextChange={setText}
           value={text}
-          onChangeText={setText}
           onSubmitEditing={handleEdit}
-          returnKeyType="done"
-          blurOnSubmit={true}
+          onKeyPress={handleKeyPress}
+          variant="ghost"
         />
       </View>
     </View>
@@ -50,11 +67,5 @@ const styles = StyleSheet.create({
     padding: 16,
     borderTopLeftRadius: 12,
     borderTopRightRadius: 12,
-  },
-  input: {
-    fontWeight: "600",
-    fontSize: 20,
-    lineHeight: 28,
-    marginTop: 20,
   },
 })
