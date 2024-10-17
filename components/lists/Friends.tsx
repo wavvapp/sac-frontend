@@ -1,11 +1,13 @@
-import { FlatList, SafeAreaView, StyleSheet, View } from "react-native"
+import { StyleSheet, View } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import FriendCard from "@/components/Friend"
-import { visibleFriends } from "@/data/friends"
 import { useState } from "react"
+import { defaultUsers } from "@/data/users"
+import { FlatList } from "react-native-gesture-handler"
+import ShareCard from "@/components/Share"
 
 export default function FriendsList() {
-  const [friendsList, setfriendsList] = useState(visibleFriends)
+  const [friendsList, setfriendsList] = useState(defaultUsers)
   const updateFriendsList = (userId: string) => {
     setfriendsList((prevList) =>
       prevList.map((user) =>
@@ -15,21 +17,20 @@ export default function FriendsList() {
   }
   return (
     <View style={styles.container}>
-      <CustomText size="sm" fontWeight="medium">
-        Who can see
+      <CustomText size="sm" fontWeight="medium" fontFamily="suisse">
+        Who can see it
       </CustomText>
-      <SafeAreaView>
-        <FlatList
-          data={friendsList}
-          renderItem={({ item }) => (
-            <FriendCard
-              handleChange={() => updateFriendsList(item.id)}
-              user={item}
-            />
-          )}
-          keyExtractor={(item) => item.id.toString()}
-        />
-      </SafeAreaView>
+      <FlatList
+        data={friendsList}
+        renderItem={({ item }) => (
+          <FriendCard
+            handleChange={() => updateFriendsList(item.id)}
+            user={item}
+          />
+        )}
+        keyExtractor={(item) => item.id.toString()}
+      />
+      <ShareCard />
     </View>
   )
 }
@@ -39,6 +40,6 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     gap: 30,
     width: "100%",
-    paddingHorizontal: 15,
+    paddingHorizontal: 20,
   },
 })
