@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
     borderColor: theme.colors.white,
     borderWidth: 1,
     height: 56,
-    // width: 350,
+    width: 350,
     justifyContent: "center",
     alignContent: "center",
     alignItems: "center",
