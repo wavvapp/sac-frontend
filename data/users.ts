@@ -1,6 +1,6 @@
 import { User } from "@/types"
 
-export const onlineUsers: User[] = [
+export const availableFriends: User[] = [
   {
     id: "1",
     firstName: "Emil",
@@ -47,7 +47,7 @@ export const onlineUsers: User[] = [
     imageUrl: require("@/assets/images/users/user5.png"),
   },
 ]
-export const offlineUsers: User[] = [
+export const offlineFriends: User[] = [
   {
     id: "6",
     firstName: "Johnny",
