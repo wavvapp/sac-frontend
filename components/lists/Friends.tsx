@@ -20,7 +20,7 @@ export default function FriendsList() {
       </CustomText>
       <ScrollView
         contentContainerStyle={{
-          rowGap: 16,
+          rowGap: 12,
         }}>
         {friendsList.map((item) => (
           <FriendCard
