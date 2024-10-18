@@ -28,19 +28,19 @@ export const theme: Theme = {
     },
   },
   fontWeight: {
-    black: { fontWeight: 900 },
-    bold: { fontWeight: 700 },
-    semibold: { fontWeight: 600 },
-    medium: { fontWeight: 500 },
-    normal: { fontWeight: 400 },
-    light: { fontWeight: 300 },
-    extralight: { fontWeight: 200 },
-    thin: { fontWeight: 100 },
+    black: 900,
+    bold: 700,
+    semibold: 600,
+    medium: 500,
+    normal: 400,
+    light: 300,
+    extralight: 200,
+    thin: 100,
   },
 
   fontStyle: {
-    normal: { fontStyle: "normal" },
-    italic: { fontStyle: "italic" },
+    normal: "normal",
+    italic: "italic",
   },
   fontFamily: {
     suisse: {

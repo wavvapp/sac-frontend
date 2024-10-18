@@ -35,14 +35,18 @@ export default function CustomText({
 
     return { fontFamily: selectedFontFamily }
   }
+  const getFontWeight = () => ({ fontWeight: theme.fontWeight[fontWeight] })
+  const getFontStyle = () => ({
+    fontStyle: theme.fontStyle[fontStyle],
+  })
 
   return (
     <Text
       style={[
         theme.size[size],
-        theme.fontWeight[fontWeight],
+        getFontWeight(),
         getFontFamilyStyle(),
-        theme.fontStyle[fontStyle],
+        getFontStyle(),
         style,
       ]}
       {...rest}>

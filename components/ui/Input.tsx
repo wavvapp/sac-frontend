@@ -42,7 +42,12 @@ export default function Input({
   return (
     <View style={[styles.container, variantStyles?.[variant]?.container]}>
       <TextInput
-        style={[variantStyles[variant].input, theme.size[textSize], style]}
+        style={[
+          styles.input,
+          variantStyles[variant].input,
+          theme.size[textSize],
+          style,
+        ]}
         value={value}
         placeholder={placeholder}
         placeholderTextColor={placeHolderColorMap[variant]}
@@ -60,6 +65,9 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     borderWidth: 1,
     borderRadius: 5,
+  },
+  input: {
+    fontFamily: theme.fontFamily.suisse.normal?.normal,
   },
   primaryContainer: {
     borderColor: theme.colors.black_200,

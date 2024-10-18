@@ -25,8 +25,11 @@ export type InputVariant = "primary" | "secondary" | "ghost"
 export type Theme = {
   colors: Record<string, string>
   size: Record<SizeVariant, TextStyle>
-  fontWeight: Record<FontWeightVariant, TextStyle>
-  fontStyle: Record<fontStyleVariant, TextStyle>
+  fontWeight: Record<
+    FontWeightVariant,
+    100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900
+  >
+  fontStyle: Record<fontStyleVariant, fontStyleVariant>
   fontFamily: Record<
     FontFamilyVariant,
     Partial<Record<FontWeightVariant, { normal: string; italic: string }>>

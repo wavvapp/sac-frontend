@@ -46,14 +46,14 @@ const styles = StyleSheet.create({
   },
   text: {
     textTransform: "uppercase",
-    fontWeight: theme.fontWeight.bold.fontWeight,
+    fontWeight: theme.fontWeight.bold,
   },
   defaultText: {
     color: theme.colors.white,
   },
   outlineText: {
     color: theme.colors.black,
-    fontWeight: theme.fontWeight.normal.fontWeight,
+    fontWeight: theme.fontWeight.normal,
   },
   primaryText: {
     color: theme.colors.black,
