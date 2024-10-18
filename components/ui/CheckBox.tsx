@@ -34,13 +34,14 @@ export default function CheckBox({
 
 const styles = StyleSheet.create({
   container: {
-    height: 24,
-    width: 24,
+    height: 32,
+    width: 32,
     justifyContent: "center",
     alignItems: "center",
     display: "flex",
     borderRadius: 24,
-    backgroundColor: theme.colors.gray,
+    borderWidth: 1,
+    borderColor: theme.colors.gray,
   },
   checkedContainer: {
     backgroundColor: theme.colors.black,
