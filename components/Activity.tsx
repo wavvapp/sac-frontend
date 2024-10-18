@@ -1,28 +1,28 @@
 import { StyleSheet, TouchableOpacity, View, Modal } from "react-native"
-import React, { useState } from "react"
+import { useState } from "react"
 import CustomText from "@/components/ui/CustomText"
 import EditIcon from "@/components/vectors/EditIcon"
-import EditAvailability from "@/screens/EditAvailability"
+import EditActivity from "@/screens/EditActivity"
 
 export default function Activity() {
   const [isModalVisible, setIsModalVisible] = useState(false)
-  const [availabilityText, setAvailabilityText] = useState("Available")
+  const [activity, setActivity] = useState("Available")
 
   const openModal = () => setIsModalVisible(true)
   const closeModal = () => setIsModalVisible(false)
 
   const updateAvailabilityText = (newText: string) => {
-    setAvailabilityText(newText)
+    setActivity(newText)
     closeModal()
   }
 
   return (
     <View style={styles.container}>
-      <CustomText size="sm" fontWeight="medium" style={styles.signalText}>
-        Signal
+      <CustomText size="sm" fontWeight="medium" style={styles.titleText}>
+        Status
       </CustomText>
-      <View style={styles.availableContainer}>
-        <CustomText size="xl">{availabilityText}</CustomText>
+      <View style={styles.statusContainer}>
+        <CustomText size="xl">{activity}</CustomText>
         <TouchableOpacity onPress={openModal}>
           <EditIcon />
         </TouchableOpacity>
@@ -35,9 +35,9 @@ export default function Activity() {
           animationType="slide"
           presentationStyle="pageSheet"
           onRequestClose={closeModal}>
-          <EditAvailability
+          <EditActivity
             closeModal={closeModal}
-            updateAvailabilityText={updateAvailabilityText}
+            updateEditActivityText={updateAvailabilityText}
           />
         </Modal>
       )}
@@ -53,12 +53,11 @@ const styles = StyleSheet.create({
     paddingRight: 21,
     paddingVertical: 5,
   },
-  signalText: {
+  titleText: {
     lineHeight: 17,
     letterSpacing: -1,
-    textTransform: "uppercase",
   },
-  availableContainer: {
+  statusContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",

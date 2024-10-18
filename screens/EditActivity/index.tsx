@@ -12,18 +12,18 @@ import Input from "@/components/ui/Input"
 
 const { height } = Dimensions.get("window")
 
-interface EditAvailabilityProps {
+interface EditActivityProps {
   closeModal: () => void
-  updateAvailabilityText: (newText: string) => void
+  updateEditActivityText: (newText: string) => void
 }
 
-export default function EditAvailability({
-  updateAvailabilityText,
-}: EditAvailabilityProps) {
+export default function EditActivity({
+  updateEditActivityText,
+}: EditActivityProps) {
   const [text, setText] = useState("")
 
   const handleEdit = () => {
-    updateAvailabilityText(text)
+    updateEditActivityText(text)
   }
 
   const handleKeyPress = (

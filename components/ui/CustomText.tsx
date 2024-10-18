@@ -11,7 +11,7 @@ const typographyStylesMap: Record<SizeVariant, TextStyle> = {
   xl: { fontSize: 28, lineHeight: 36.32 },
   lg: { fontSize: 18, lineHeight: 21.85 },
   base: { fontSize: 16, lineHeight: 19.42 },
-  md: { fontSize: 15, lineHeight: 20 },
+  // md: { fontSize: 15, lineHeight: 20 },
   sm: { fontSize: 14, lineHeight: 18.16 },
   xs: { fontSize: 11, lineHeight: 13.26 },
 }

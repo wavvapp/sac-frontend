@@ -9,7 +9,7 @@ import Login from "@/screens/Authentication/Login"
 import CustomSplashScreen from "@/screens/CustomSplashScreen"
 import Settings from "@/screens/Settings"
 import Signaling from "@/components/lists/Signaling"
-import EditAvailability from "@/screens/EditAvailability"
+import EditAvailability from "@/screens/EditActivity"
 
 export type RootStackParamList = {
   Home: undefined

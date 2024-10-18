@@ -1,6 +1,6 @@
 import { ImageSourcePropType } from "react-native"
 
-export type SizeVariant = "2xl" | "xl" | "lg" | "base" | "sm" | "md" | "xs"
+export type SizeVariant = "2xl" | "xl" | "lg" | "base" | "sm" | "xs"
 export type FontWeightVariant =
   | "black"
   | "bold"
