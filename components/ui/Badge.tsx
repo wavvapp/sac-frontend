@@ -58,8 +58,6 @@ const styles = StyleSheet.create({
   primaryText: {
     color: theme.colors.black,
     fontWeight: 700,
-    lineHeight: 14,
-    fontSize: 13,
   },
   default: {
     backgroundColor: theme.colors.black,

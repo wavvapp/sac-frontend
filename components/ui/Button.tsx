@@ -70,8 +70,8 @@ export function CustomButton({
       style={[
         styles.buttonContainer,
         container,
-        containerStyles,
         disabled && styles.disabled,
+        containerStyles,
       ]}
       {...rest}>
       <View style={children && title ? [styles.childrenContainer] : {}}>
