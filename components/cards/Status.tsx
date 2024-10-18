@@ -24,18 +24,15 @@ function Status({ timeSlots }: StatusProps) {
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.scrollContentContainer}>
           <View style={styles.buttonContainer}>
-            {timeSlots.map((slot) => {
-              console.log("slot", slot, activeSlot)
-              return (
-                <TouchableOpacity onPress={() => handlePress(slot)} key={slot}>
-                  <Badge
-                    name={slot}
-                    variant={activeSlot === slot ? "default" : "outline"}
-                    style={styles.badge}
-                  />
-                </TouchableOpacity>
-              )
-            })}
+            {timeSlots.map((slot) => (
+              <TouchableOpacity onPress={() => handlePress(slot)} key={slot}>
+                <Badge
+                  name={slot}
+                  variant={activeSlot === slot ? "default" : "outline"}
+                  style={styles.badge}
+                />
+              </TouchableOpacity>
+            ))}
           </View>
         </ScrollView>
       </View>
