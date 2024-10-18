@@ -70,8 +70,8 @@ export function CustomButton({
       style={[
         styles.buttonContainer,
         container,
-        containerStyles,
         disabled && styles.disabled,
+        containerStyles,
       ]}
       {...rest}>
       <View style={children && title ? [styles.childrenContainer] : {}}>
@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
     borderColor: theme.colors.white,
     borderWidth: 1,
     height: 56,
-    width: 350,
+    // width: 350,
     justifyContent: "center",
     alignContent: "center",
     alignItems: "center",
