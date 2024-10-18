@@ -1,17 +1,13 @@
-import React, { useState } from "react"
+import CustomText from "@/components/ui/CustomText"
+import Input from "@/components/ui/Input"
+import { useState } from "react"
 import {
   View,
   StyleSheet,
-  Dimensions,
+  KeyboardAvoidingView,
+  Platform,
   Keyboard,
-  NativeSyntheticEvent,
-  TextInputKeyPressEventData,
 } from "react-native"
-import CustomText from "@/components/ui/CustomText"
-import Input from "@/components/ui/Input"
-
-const { height } = Dimensions.get("window")
-
 interface EditActivityProps {
   closeModal: () => void
   updateEditActivityText: (newText: string) => void
@@ -24,20 +20,14 @@ export default function EditActivity({
 
   const handleEdit = () => {
     updateEditActivityText(text)
-  }
-
-  const handleKeyPress = (
-    nativeEvent: NativeSyntheticEvent<TextInputKeyPressEventData>,
-  ) => {
-    if (nativeEvent.nativeEvent.key === "Enter") {
-      handleEdit()
-      Keyboard.dismiss()
-    }
+    Keyboard.dismiss()
   }
 
   return (
     <View style={styles.overlay}>
-      <View style={styles.modalContainer}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={styles.modalContainer}>
         <CustomText fontWeight="normal" fontFamily="suisse" size="lg">
           Status
         </CustomText>
@@ -47,10 +37,9 @@ export default function EditActivity({
           handleTextChange={setText}
           value={text}
           onSubmitEditing={handleEdit}
-          onKeyPress={handleKeyPress}
           variant="ghost"
         />
-      </View>
+      </KeyboardAvoidingView>
     </View>
   )
 }
@@ -59,10 +48,10 @@ const styles = StyleSheet.create({
   overlay: {
     flex: 1,
     justifyContent: "flex-end",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    backgroundColor: "#00000080",
   },
   modalContainer: {
-    height: height * 0.7,
+    height: "60%",
     backgroundColor: "white",
     padding: 16,
     borderTopLeftRadius: 12,
