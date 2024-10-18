@@ -1,10 +1,8 @@
-import { StyleSheet, View } from "react-native"
+import { ScrollView, StyleSheet, View } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import FriendCard from "@/components/Friend"
 import { useState } from "react"
 import { defaultUsers } from "@/data/users"
-import { FlatList } from "react-native-gesture-handler"
-import ShareCard from "@/components/Share"
 
 export default function FriendsList() {
   const [friendsList, setfriendsList] = useState(defaultUsers)
@@ -17,20 +15,21 @@ export default function FriendsList() {
   }
   return (
     <View style={styles.container}>
-      <CustomText size="sm" fontWeight="medium" fontFamily="suisse">
+      <CustomText size="sm" fontWeight="normal" fontFamily="suisse">
         Who can see it
       </CustomText>
-      <FlatList
-        data={friendsList}
-        renderItem={({ item }) => (
+      <ScrollView
+        contentContainerStyle={{
+          rowGap: 16,
+        }}>
+        {friendsList.map((item) => (
           <FriendCard
+            key={item.id.toString()}
             handleChange={() => updateFriendsList(item.id)}
             user={item}
           />
-        )}
-        keyExtractor={(item) => item.id.toString()}
-      />
-      <ShareCard />
+        ))}
+      </ScrollView>
     </View>
   )
 }
@@ -38,7 +37,7 @@ export default function FriendsList() {
 const styles = StyleSheet.create({
   container: {
     flexDirection: "column",
-    gap: 30,
+    gap: 12,
     width: "100%",
     paddingHorizontal: 20,
   },

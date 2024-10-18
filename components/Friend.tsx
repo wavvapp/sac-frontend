@@ -31,7 +31,6 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     alignItems: "center",
-    paddingBottom: 12,
     gap: 8,
   },
   useInfoStyles: {

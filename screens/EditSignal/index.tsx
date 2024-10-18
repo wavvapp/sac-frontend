@@ -8,6 +8,10 @@ import { RootStackParamList } from "@/navigation"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import FriendsList from "@/components/lists/Friends"
 import Activity from "@/components/Activity"
+import { ScrollView } from "react-native-gesture-handler"
+import ShareCard from "@/components/Share"
+import CustomText from "@/components/ui/CustomText"
+import { theme } from "@/theme"
 
 type EditSignalScrenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -20,34 +24,68 @@ export default function EditSignal() {
   return (
     <View style={style.container}>
       <View style={style.navBar}>
+        <CustomText style={style.headerText} fontWeight="bold">
+          Edit status
+        </CustomText>
         <CrossMark onPress={() => navigation.push("Home")} />
-        <CustomButton variant="primary" title="Done" textSize="sm" />
       </View>
-      <UserAvatar
-        imageUrl={require("@/assets/images/user-avatar.png")}
-        size="large"
+      <ScrollView
+        contentContainerStyle={{
+          gap: 20,
+          paddingTop: 68,
+        }}>
+        <UserAvatar
+          imageUrl={require("@/assets/images/user-avatar.png")}
+          size="large"
+          style={{ alignSelf: "center" }}
+        />
+        <Activity />
+        <Status
+          timeSlots={["NOW", "MORNING", "Lunch", "AFTERNOON", "EVENING"]}
+        />
+        <FriendsList />
+        <ShareCard style={{ marginHorizontal: 20 }} />
+      </ScrollView>
+      <CustomButton
+        containerStyles={style.saveButton}
+        variant="secondary"
+        fullWidth
+        title="Save"
+        textSize="sm"
       />
-      <Activity />
-      <Status timeSlots={["NOW", "MORNING", "Lunch", "AFTERNOON", "EVENING"]} />
-      <FriendsList />
     </View>
   )
 }
 
 const style = StyleSheet.create({
   container: {
-    flex: 1,
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "flex-start",
-    gap: 30,
     paddingTop: 44,
+    paddingBottom: 88,
+    backgroundColor: theme.colors.white,
+    position: "relative",
   },
   navBar: {
     justifyContent: "space-between",
     alignItems: "center",
     flexDirection: "row",
     width: "100%",
-    paddingHorizontal: 15,
+    padding: 14,
+    position: "absolute",
+    top: 44,
+    backgroundColor: theme.colors.white,
+    zIndex: 10,
+  },
+  headerText: {
+    flexGrow: 1,
+    textAlign: "center",
+    fontSize: 20,
+    lineHeight: 28,
+  },
+  saveButton: {
+    position: "absolute",
+    bottom: 20,
+    zIndex: 10,
+    width: "90%",
+    marginHorizontal: 20,
   },
 })
