@@ -1,8 +1,6 @@
-import React, { forwardRef } from "react"
+import { forwardRef } from "react"
 import { View, StyleSheet } from "react-native"
 import CustomText from "@/components/ui/CustomText"
-import UserAvatar from "@/components/ui/UserAvatar"
-import UserInfo from "@/components/UserInfo"
 import { availableFriends, offlineFriends } from "@/data/users"
 import { User } from "@/types"
 
@@ -10,14 +8,15 @@ import BottomDrawer from "@/components/BottomDrawer"
 import { CustomButton } from "@/components/ui/Button"
 import { BottomSheetSectionList } from "@gorhom/bottom-sheet"
 import { theme } from "@/theme"
-import UserAvailability from "@/components/cards/UserAvailability"
+import AvailableUser from "@/components/AvailableUser"
+import offlineUser from "@/components/OffileUser"
 export interface SignalingRef {
   openBottomSheet: () => void
 }
 
 interface SignalingProps {
   availableFriends?: User[]
-  availableUsers?: User[]
+  offlineFriends?: User[]
 }
 
 const Signaling = forwardRef<SignalingRef, SignalingProps>((_, ref) => {
@@ -54,19 +53,7 @@ const Signaling = forwardRef<SignalingRef, SignalingProps>((_, ref) => {
                 />
               )
             },
-            renderItem: ({ item }) => (
-              <View style={styles.userCard}>
-                <UserAvatar imageUrl={item.imageUrl || 0} />
-                <View>
-                  <UserAvailability
-                    firstName={item.firstName}
-                    lastName={item.lastName}
-                    time={item.time}
-                    activity={item.activity}
-                  />
-                </View>
-              </View>
-            ),
+            renderItem: ({ item }) => AvailableUser(item),
           },
           {
             title: "Other users",
@@ -81,23 +68,7 @@ const Signaling = forwardRef<SignalingRef, SignalingProps>((_, ref) => {
                 />
               )
             },
-            renderItem: ({ item, index }) => (
-              <View
-                style={[
-                  styles.userCard,
-                  styles.availableUserCard,
-                  index === 0 && styles.firstCardInTheListStyles,
-                ]}>
-                <UserAvatar imageUrl={item.imageUrl || 0} />
-                <View>
-                  <UserInfo
-                    firstName={item.firstName}
-                    lastName={item.lastName}
-                    username={item.username}
-                  />
-                </View>
-              </View>
-            ),
+            renderItem: ({ item, index }) => offlineUser(item, index),
           },
         ]}
         keyExtractor={(item) => item.id}
@@ -118,19 +89,6 @@ const styles = StyleSheet.create({
     fontFamily: "suisse",
     fontSize: 20,
     lineHeight: 28,
-  },
-  userCard: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 10,
-    paddingHorizontal: 20,
-  },
-  availableUserCard: {
-    backgroundColor: theme.colors.black_100,
-  },
-  firstCardInTheListStyles: {
-    paddingTop: 20,
-    marginTop: 20,
   },
   noUsers: {
     padding: 20,
