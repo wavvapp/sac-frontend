@@ -86,7 +86,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   headerText: {
-    fontFamily: "suisse",
     fontSize: 20,
     lineHeight: 28,
   },
