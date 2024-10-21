@@ -5,9 +5,9 @@ import { useState } from "react"
 import { defaultUsers } from "@/data/users"
 
 export default function FriendsList() {
-  const [friendsList, setfriendsList] = useState(defaultUsers)
+  const [friendsList, setFriendsList] = useState(defaultUsers)
   const updateFriendsList = (userId: string) => {
-    setfriendsList((prevList) =>
+    setFriendsList((prevList) =>
       prevList.map((user) =>
         user.id === userId ? { ...user, selected: !user.selected } : user,
       ),
