@@ -28,14 +28,14 @@ export const theme: Theme = {
     },
   },
   fontWeight: {
-    black: 900,
-    bold: 700,
-    semibold: 600,
-    medium: 500,
-    normal: 400,
-    light: 300,
-    extralight: 200,
-    thin: 100,
+    black: "900",
+    bold: "700",
+    semibold: "600",
+    medium: "500",
+    normal: "400",
+    light: "300",
+    extralight: "200",
+    thin: "100",
   },
 
   fontStyle: {

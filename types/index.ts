@@ -27,7 +27,7 @@ export type Theme = {
   size: Record<SizeVariant, TextStyle>
   fontWeight: Record<
     FontWeightVariant,
-    100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900
+    "100" | "200" | "300" | "400" | "500" | "600" | "700" | "800" | "900"
   >
   fontStyle: Record<fontStyleVariant, fontStyleVariant>
   fontFamily: Record<
