@@ -91,6 +91,6 @@ const styles = StyleSheet.create({
   },
   ghostInput: {
     color: theme.colors.black,
-    fontWeight: 600,
+    fontWeight: "600",
   },
 })
