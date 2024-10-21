@@ -11,7 +11,7 @@ export default function Activity() {
   const openModal = () => setIsModalVisible(true)
   const closeModal = () => setIsModalVisible(false)
 
-  const updateAvailabilityText = (newText: string) => {
+  const updateActivity = (newText: string) => {
     setActivity(newText)
     closeModal()
   }
@@ -33,11 +33,11 @@ export default function Activity() {
           visible={isModalVisible}
           transparent={true}
           animationType="slide"
-          presentationStyle="pageSheet"
+          presentationStyle="overFullScreen"
           onRequestClose={closeModal}>
           <EditActivity
             closeModal={closeModal}
-            updateEditActivityText={updateAvailabilityText}
+            updateEditActivity={updateActivity}
           />
         </Modal>
       )}

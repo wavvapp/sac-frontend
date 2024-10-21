@@ -1,5 +1,6 @@
 import CustomText from "@/components/ui/CustomText"
 import Input from "@/components/ui/Input"
+import { theme } from "@/theme"
 import { useState } from "react"
 import {
   View,
@@ -7,40 +8,47 @@ import {
   KeyboardAvoidingView,
   Platform,
   Keyboard,
+  TouchableWithoutFeedback,
 } from "react-native"
+
 interface EditActivityProps {
   closeModal: () => void
-  updateEditActivityText: (newText: string) => void
+  updateEditActivity: (newText: string) => void
 }
 
 export default function EditActivity({
-  updateEditActivityText,
+  closeModal,
+  updateEditActivity,
 }: EditActivityProps) {
   const [text, setText] = useState("")
 
   const handleEdit = () => {
-    updateEditActivityText(text)
+    updateEditActivity(text)
     Keyboard.dismiss()
   }
 
   return (
-    <View style={styles.overlay}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={styles.modalContainer}>
-        <CustomText fontWeight="normal" fontFamily="suisse" size="lg">
-          Status
-        </CustomText>
-        <Input
-          textSize="lg"
-          placeholder="Available"
-          handleTextChange={setText}
-          value={text}
-          onSubmitEditing={handleEdit}
-          variant="ghost"
-        />
-      </KeyboardAvoidingView>
-    </View>
+    <TouchableWithoutFeedback onPress={closeModal}>
+      <View style={styles.overlay}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          style={styles.modalContainer}
+          onTouchStart={(e) => e.stopPropagation()} // Prevents closing when touching inside the modal
+        >
+          <CustomText fontWeight="normal" fontFamily="suisse" size="lg">
+            Status
+          </CustomText>
+          <Input
+            textSize="lg"
+            placeholder="Available"
+            handleTextChange={setText}
+            value={text}
+            onSubmitEditing={handleEdit}
+            variant="ghost"
+          />
+        </KeyboardAvoidingView>
+      </View>
+    </TouchableWithoutFeedback>
   )
 }
 
@@ -48,11 +56,11 @@ const styles = StyleSheet.create({
   overlay: {
     flex: 1,
     justifyContent: "flex-end",
-    backgroundColor: "#00000080",
+    backgroundColor: theme.colors.black_500,
   },
   modalContainer: {
     height: "60%",
-    backgroundColor: "white",
+    backgroundColor: theme.colors.white,
     padding: 16,
     borderTopLeftRadius: 12,
     borderTopRightRadius: 12,
