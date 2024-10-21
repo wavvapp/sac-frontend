@@ -17,7 +17,7 @@ export interface SignalingRef {
 
 interface SignalingProps {
   availableFriends?: User[]
-  otherFriends?: User[]
+  availableUsers?: User[]
 }
 
 const Signaling = forwardRef<SignalingRef, SignalingProps>((_, ref) => {
