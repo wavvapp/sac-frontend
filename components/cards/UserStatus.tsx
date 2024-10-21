@@ -10,7 +10,7 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
 } from "react-native-reanimated"
-import UserAvailability from "./UserAvailability"
+import UserAvailability from "@/components/cards/UserAvailability"
 
 const MAX_VISIBLE_FRIENDS = 3
 
