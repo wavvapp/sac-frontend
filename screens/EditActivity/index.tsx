@@ -33,8 +33,7 @@ export default function EditActivity({
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
           style={styles.modalContainer}
-          onTouchStart={(e) => e.stopPropagation()} // Prevents closing when touching inside the modal
-        >
+          onTouchStart={(e) => e.stopPropagation()}>
           <CustomText fontWeight="normal" fontFamily="suisse" size="lg">
             Status
           </CustomText>
