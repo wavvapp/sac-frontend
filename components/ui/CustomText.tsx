@@ -3,12 +3,12 @@ import {
   FontFamilyVariant,
   fontStyleVariant,
   FontWeightVariant,
-  SizeVariant,
+  TypographySizeVariant,
 } from "@/types"
 import { Text, TextProps, TextStyle } from "react-native"
 
 interface CustomTextProps extends TextProps {
-  size?: SizeVariant
+  size?: TypographySizeVariant
   fontWeight?: FontWeightVariant
   fontFamily?: FontFamilyVariant
   fontStyle?: fontStyleVariant
@@ -35,18 +35,15 @@ export default function CustomText({
 
     return { fontFamily: selectedFontFamily }
   }
-  const getFontWeight = () => ({ fontWeight: theme.fontWeight[fontWeight] })
-  const getFontStyle = () => ({
-    fontStyle: theme.fontStyle[fontStyle],
-  })
 
   return (
     <Text
       style={[
-        theme.size[size],
-        getFontWeight(),
+        { fontSize: theme.fontSize[size] },
+        { lineHeight: theme.lineHeight[size] },
+        { fontWeight: theme.fontWeight[fontWeight] },
+        { fontStyle: theme.fontStyle[fontStyle] },
         getFontFamilyStyle(),
-        getFontStyle(),
         style,
       ]}
       {...rest}>

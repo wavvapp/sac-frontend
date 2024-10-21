@@ -1,6 +1,8 @@
 import { ImageSourcePropType, TextStyle } from "react-native"
 
-export type SizeVariant = "lg" | "base" | "sm"
+export type TypographySizeVariant = "lg" | "base" | "sm"
+export type FontSizeVariant = TypographySizeVariant
+export type LineHeightVariant = TypographySizeVariant
 export type FontWeightVariant =
   | "black"
   | "bold"
@@ -24,11 +26,9 @@ export type InputVariant = "primary" | "secondary" | "ghost"
 
 export type Theme = {
   colors: Record<string, string>
-  size: Record<SizeVariant, TextStyle>
-  fontWeight: Record<
-    FontWeightVariant,
-    "100" | "200" | "300" | "400" | "500" | "600" | "700" | "800" | "900"
-  >
+  fontSize: Record<FontSizeVariant, TextStyle["fontSize"]>
+  lineHeight: Record<LineHeightVariant, TextStyle["lineHeight"]>
+  fontWeight: Record<FontWeightVariant, TextStyle["fontWeight"]>
   fontStyle: Record<fontStyleVariant, fontStyleVariant>
   fontFamily: Record<
     FontFamilyVariant,

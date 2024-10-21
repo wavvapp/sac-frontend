@@ -1,4 +1,4 @@
-import { Theme } from "./types"
+import { Theme } from "@/types"
 
 export const theme: Theme = {
   colors: {
@@ -13,19 +13,15 @@ export const theme: Theme = {
     "light-gray": "#898989",
     red: "#6B2222",
   },
-  size: {
-    sm: {
-      fontSize: 13,
-      lineHeight: 20,
-    },
-    base: {
-      fontSize: 15,
-      lineHeight: 24,
-    },
-    lg: {
-      fontSize: 20,
-      lineHeight: 28,
-    },
+  fontSize: {
+    sm: 13,
+    base: 15,
+    lg: 20,
+  },
+  lineHeight: {
+    sm: 20,
+    base: 24,
+    lg: 28,
   },
   fontWeight: {
     black: "900",

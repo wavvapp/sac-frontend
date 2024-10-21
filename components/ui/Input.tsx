@@ -1,5 +1,5 @@
 import { StyleSheet, TextInput, TextInputProps, View } from "react-native"
-import { InputVariant, SizeVariant } from "@/types"
+import { InputVariant, TypographySizeVariant } from "@/types"
 import { theme } from "@/theme"
 
 const placeHolderColorMap: Record<InputVariant, string> = {
@@ -10,7 +10,7 @@ const placeHolderColorMap: Record<InputVariant, string> = {
 
 interface InputProps extends TextInputProps {
   variant?: InputVariant
-  textSize?: SizeVariant
+  textSize?: TypographySizeVariant
   handleTextChange: (text: string) => void
 }
 
@@ -45,7 +45,8 @@ export default function Input({
         style={[
           styles.input,
           variantStyles[variant].input,
-          theme.size[textSize],
+          { fontSize: theme.fontSize[textSize] },
+          { lineHeight: theme.lineHeight[textSize] },
           style,
         ]}
         value={value}
@@ -87,5 +88,6 @@ const styles = StyleSheet.create({
   },
   ghostInput: {
     color: theme.colors.black,
+    fontWeight: theme.fontWeight.semibold,
   },
 })
