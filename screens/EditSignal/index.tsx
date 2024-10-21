@@ -21,7 +21,7 @@ export default function EditSignal() {
     <View style={style.container}>
       <View style={style.navBar}>
         <CrossMark onPress={() => navigation.push("Home")} />
-        <CustomButton variant="primary" title="Done" textSize="sm" />
+        <CustomButton title="Done" textSize="sm" />
       </View>
       <UserAvatar
         imageUrl={require("@/assets/images/user-avatar.png")}
