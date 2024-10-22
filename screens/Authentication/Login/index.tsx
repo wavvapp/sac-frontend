@@ -23,8 +23,6 @@ export default function Login() {
   const [password, setPassword] = useState("")
 
   const handleLogin = async () => {
-    // Handle login logic here
-    // signIn("asdasdasda", { name: "Anas", email, id: "1" })
     await signIn()
   }
 
