@@ -1,5 +1,3 @@
-import React from "react"
-import UserAvailability from "@/components/UserAvailability"
 import { StyleSheet, View } from "react-native"
 import Status from "@/components/cards/Status"
 import { CustomButton } from "@/components/ui/Button"
@@ -10,6 +8,7 @@ import { RootStackParamList } from "@/navigation"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import FriendsList from "@/components/lists/Friends"
 import { useAuth } from "@/contexts/AuthContext"
+import Activity from "@/components/Activity"
 
 type EditSignalScrenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -44,7 +43,7 @@ export default function EditSignal() {
         imageUrl={require("@/assets/images/user-avatar.png")}
         size="large"
       />
-      <UserAvailability />
+      <Activity />
       <Status timeSlots={["NOW", "MORNING", "Lunch", "AFTERNOON", "EVENING"]} />
       <FriendsList />
     </View>

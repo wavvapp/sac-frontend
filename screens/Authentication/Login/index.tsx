@@ -18,12 +18,21 @@ type LoginProp = NativeStackNavigationProp<RootStackParamList, "Login">
 
 export default function Login() {
   const navigation = useNavigation<LoginProp>()
-  const { signIn } = useAuth()
+  const { signInWithGoogle, signIn } = useAuth()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
 
-  const handleLogin = async () => {
-    await signIn()
+  const handleGoogleLogin = async () => {
+    await signInWithGoogle()
+  }
+  const handleLogin = () => {
+    // Handle login logic here
+    signIn("asdasdasda", {
+      name: "Anas",
+      email,
+      id: "1",
+      photo: null,
+    })
   }
 
   return (
@@ -48,7 +57,7 @@ export default function Login() {
         size={GoogleSigninButton.Size.Wide}
         color={GoogleSigninButton.Color.Dark}
         onPress={() => {
-          handleLogin()
+          handleGoogleLogin()
         }}
       />
       <Text style={styles.signupText}>

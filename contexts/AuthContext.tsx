@@ -20,14 +20,13 @@ interface User {
   name: string | null
   email: string
   photo: string | null
-  familyName: string | null
-  givenName: string | null
 }
 
 interface AuthContextData {
   user: User | null
   isLoading: boolean
-  signIn: () => Promise<void>
+  signIn: (token: string, user: User) => Promise<void>
+  signInWithGoogle: () => Promise<void>
   signOut: () => Promise<void>
   isAuthenticated: boolean
 }
@@ -43,8 +42,14 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   useEffect(() => {
     loadStoredData()
   }, [])
+  async function signIn(token: string, userData: User): Promise<void> {
+    await AsyncStorage.setItem("@Auth:token", token)
+    await AsyncStorage.setItem("@Auth:user", JSON.stringify(userData))
 
-  const signIn = async () => {
+    setUser(userData)
+  }
+
+  const signInWithGoogle = async () => {
     try {
       await GoogleSignin.hasPlayServices()
       const response = await GoogleSignin.signIn()
@@ -102,6 +107,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         user,
         isLoading,
         signIn,
+        signInWithGoogle,
         signOut,
         isAuthenticated: !!user,
       }}>

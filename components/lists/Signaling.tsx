@@ -9,6 +9,7 @@ import { User } from "@/types"
 
 import { FlatList } from "react-native-gesture-handler"
 import BottomDrawer from "@/components/BottomDrawer"
+import { theme } from "@/theme"
 export interface SignalingRef {
   openBottomSheet: () => void
 }
@@ -23,6 +24,16 @@ const Signaling = forwardRef<SignalingRef, SignalingProps>((props, ref) => {
   return (
     <BottomDrawer ref={ref}>
       <View style={styles.container}>
+        <View
+          style={{
+            flexDirection: "row",
+            height: 50,
+            backgroundColor: theme.colors.black,
+            gap: 12,
+          }}>
+          <Badge variant="primary" name="100" />
+          <Badge variant="primary" name="3/4" style={{ opacity: 0.3 }} />
+        </View>
         <View style={styles.header}>
           <Badge name={displayUsers.length.toString()} />
           <CustomText size="sm" fontWeight="bold">
@@ -31,7 +42,7 @@ const Signaling = forwardRef<SignalingRef, SignalingProps>((props, ref) => {
         </View>
         <FlatList
           contentContainerStyle={styles.listContent}
-          style={styles.flalist}
+          style={styles.flatList}
           data={displayUsers as User[]}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
@@ -41,8 +52,7 @@ const Signaling = forwardRef<SignalingRef, SignalingProps>((props, ref) => {
                 <UserInfo
                   firstName={item.firstName}
                   lastName={item.lastName}
-                  time={item.time}
-                  activity={item.activity}
+                  username={item.username}
                 />
               </View>
             </View>
@@ -73,7 +83,7 @@ const styles = StyleSheet.create({
     gap: 10,
     paddingBottom: 18,
   },
-  flalist: {
+  flatList: {
     width: "100%",
   },
   listContent: {
