@@ -75,6 +75,7 @@ const FindFriends = () => {
                   <CheckBox isChecked={true} />
                 ) : (
                   <CustomButton
+                    variant="outline"
                     title="Add"
                     onPress={() => handleAddFriend(friend.id)}
                   />
