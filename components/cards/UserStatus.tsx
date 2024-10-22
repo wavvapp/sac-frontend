@@ -4,14 +4,13 @@ import { theme } from "@/theme"
 import { User } from "@/types"
 import { useNavigation } from "@react-navigation/native"
 import { HomeScreenProps } from "@/screens/Home"
-import UserInfo from "@/components/UserInfo"
-import EllipsisIcon from "@/components/vectors/EllipsisIcon"
 import Animated, {
   interpolate,
   SharedValue,
   useAnimatedStyle,
   withTiming,
 } from "react-native-reanimated"
+import UserAvailability from "@/components/cards/UserAvailability"
 
 const MAX_VISIBLE_FRIENDS = 3
 
@@ -61,25 +60,30 @@ export default function UserStatus({
         style={[styles.container, style, cardAnimatedStyle]}
         {...rest}>
         <View style={styles.userContainer}>
-          <UserInfo
+          <UserAvailability
             firstName={user.firstName}
             lastName={user.lastName}
-            username={user.username}
+            time={user.time}
+            activity={user.activity}
           />
-          <TouchableOpacity>
-            <EllipsisIcon />
-          </TouchableOpacity>
         </View>
-
         <View style={styles.friendsContainer}>
-          <CustomText size="sm" fontFamily="writer-mono">
-            Visible to {friends.length} friends
+          <CustomText
+            size="sm"
+            fontFamily="writer-mono"
+            style={styles.statusText}>
+            {friends.length
+              ? `Visible to ${friends.length} friends`
+              : "This status is not visible to anyone"}
           </CustomText>
-          {visibleFriendsList && (
-            <CustomText size="sm" fontFamily="writer-mono">
-              {visibleFriendsList}.
-            </CustomText>
-          )}
+          <CustomText
+            size="sm"
+            fontFamily="writer-mono"
+            style={styles.statusText}>
+            {visibleFriendsList
+              ? `${visibleFriendsList}.`
+              : "Tap to edit your preferences."}
+          </CustomText>
         </View>
         <TouchableOpacity style={styles.editButton}>
           <CustomText
@@ -126,5 +130,10 @@ const styles = StyleSheet.create({
     textAlign: "center",
     alignSelf: "center",
     minHeight: 189,
+  },
+  // TODO: to be removed when the typography is updated
+  statusText: {
+    fontSize: 13,
+    lineHeight: 15.78,
   },
 })
