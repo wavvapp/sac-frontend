@@ -8,8 +8,7 @@ import BottomDrawer from "@/components/BottomDrawer"
 import { CustomButton } from "@/components/ui/Button"
 import { BottomSheetSectionList } from "@gorhom/bottom-sheet"
 import { theme } from "@/theme"
-import AvailableUser from "@/components/AvailableUser"
-import offlineUser from "@/components/OffileUser"
+import SignalingUser from "@/components/SignalingUser"
 export interface SignalingRef {
   openBottomSheet: () => void
 }
@@ -53,7 +52,7 @@ const Signaling = forwardRef<SignalingRef, SignalingProps>((_, ref) => {
                 />
               )
             },
-            renderItem: ({ item }) => AvailableUser(item),
+            renderItem: ({ item: user }) => SignalingUser(user, true),
           },
           {
             title: "Other users",
@@ -68,7 +67,7 @@ const Signaling = forwardRef<SignalingRef, SignalingProps>((_, ref) => {
                 />
               )
             },
-            renderItem: ({ item, index }) => offlineUser(item, index),
+            renderItem: ({ item, index }) => SignalingUser(item, false, index),
           },
         ]}
         keyExtractor={(item) => item.id}
