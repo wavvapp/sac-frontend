@@ -48,6 +48,7 @@ export default function UserStatus({
       opacity,
     }
   })
+
   return (
     <View>
       <Animated.View>
@@ -67,39 +68,22 @@ export default function UserStatus({
           />
         </View>
         <View style={styles.friendsContainer}>
-          {!friends.length ? (
-            <>
-              <CustomText
-                size="sm"
-                fontFamily="writer-mono"
-                style={styles.statusText}>
-                This status in not visible to anyone.
-              </CustomText>
-              <CustomText
-                size="sm"
-                fontFamily="writer-mono"
-                style={styles.statusText}>
-                Tap to edit your preferences.
-              </CustomText>
-            </>
-          ) : (
-            <>
-              <CustomText
-                size="sm"
-                fontFamily="writer-mono"
-                style={styles.statusText}>
-                Visible to {friends.length} friends
-              </CustomText>
-              {visibleFriendsList && (
-                <CustomText
-                  size="sm"
-                  fontFamily="writer-mono"
-                  style={styles.statusText}>
-                  {visibleFriendsList}.
-                </CustomText>
-              )}
-            </>
-          )}
+          <CustomText
+            size="sm"
+            fontFamily="writer-mono"
+            style={styles.statusText}>
+            {friends.length
+              ? `Visible to ${friends.length} friends`
+              : "This status is not visible to anyone"}
+          </CustomText>
+          <CustomText
+            size="sm"
+            fontFamily="writer-mono"
+            style={styles.statusText}>
+            {visibleFriendsList
+              ? `${visibleFriendsList}.`
+              : "Tap to edit your preferences."}
+          </CustomText>
         </View>
         <TouchableOpacity style={styles.editButton}>
           <CustomText
