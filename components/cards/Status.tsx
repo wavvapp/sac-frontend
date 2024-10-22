@@ -1,7 +1,7 @@
 import React, { useState } from "react"
-import { View, ScrollView, StyleSheet } from "react-native"
-import { CustomButton } from "@/components/ui/Button"
+import { View, ScrollView, StyleSheet, TouchableOpacity } from "react-native"
 import CustomText, { fontFamilyMap } from "@/components/ui/CustomText"
+import Badge from "@/components/ui/Badge"
 
 interface StatusProps {
   timeSlots: string[]
@@ -25,16 +25,13 @@ function Status({ timeSlots }: StatusProps) {
           contentContainerStyle={styles.scrollContentContainer}>
           <View style={styles.buttonContainer}>
             {timeSlots.map((slot) => (
-              <View key={slot}>
-                <CustomButton
-                  title={slot}
-                  onPress={() => handlePress(slot)}
-                  textSize="base"
-                  variant="secondary"
-                  active={activeSlot === slot}
-                  textStyles={styles.buttonText}
+              <TouchableOpacity onPress={() => handlePress(slot)} key={slot}>
+                <Badge
+                  name={slot}
+                  variant={activeSlot === slot ? "default" : "outline"}
+                  style={styles.badge}
                 />
-              </View>
+              </TouchableOpacity>
             ))}
           </View>
         </ScrollView>
@@ -62,7 +59,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 8,
   },
-  buttonText: {
+  badge: {
     fontFamily: fontFamilyMap["writer-mono"].normal?.normal,
+    paddingVertical: 7.5,
+    paddingHorizontal: 16,
+    fontSize: 13,
+    lineHeight: 20,
   },
 })
