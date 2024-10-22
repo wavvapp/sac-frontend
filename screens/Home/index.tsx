@@ -1,6 +1,6 @@
 import UserStatus from "@/components/cards/UserStatus"
 import PerlinNoise from "@/components/PerlinNoise"
-import { visibleFriends } from "@/data/friends"
+import { defaultUsers } from "@/data/users"
 import { userInfo } from "@/data/user"
 import { RootStackParamList } from "@/navigation"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
@@ -47,7 +47,7 @@ export default function HomeScreen() {
         </TouchableOpacity>
       </View>
       <View style={styles.UserStatus}>
-        <UserStatus isOn={isOn} friends={visibleFriends} user={userInfo} />
+        <UserStatus isOn={isOn} friends={defaultUsers} user={userInfo} />
       </View>
       <AnimatedSwitch isOn={isOn} onPress={handlePress} style={styles.switch} />
       <Signaling ref={signalingRef} />

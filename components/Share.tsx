@@ -1,10 +1,16 @@
-import { StyleSheet, TouchableOpacity, View, Share } from "react-native"
+import {
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  Share,
+  ViewStyle,
+} from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import { theme } from "@/theme"
 import ShareIcon from "@/components/vectors/ShareIcon"
 import { APP_LINK } from "@/constants/links"
 
-export default function ShareCard() {
+export default function ShareCard({ style }: { style?: ViewStyle }) {
   const onShare = async () => {
     Share.share({
       message: `Hey! Join me using Wavv and keep up to date with things I do! Download the app here: ${APP_LINK}`,
@@ -13,7 +19,7 @@ export default function ShareCard() {
 
   return (
     <TouchableOpacity onPress={onShare}>
-      <View style={styles.container}>
+      <View style={[styles.container, style]}>
         <View style={styles.iconContainer}>
           <ShareIcon />
         </View>

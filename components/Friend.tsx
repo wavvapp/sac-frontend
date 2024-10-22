@@ -1,4 +1,5 @@
-import CustomText from "@/components/ui/CustomText"
+import UserAvatar from "@/components/ui/UserAvatar"
+import UserInfo from "@/components/UserInfo"
 import { User } from "@/types"
 import { StyleSheet, TouchableOpacity } from "react-native"
 import CheckBox from "@/components/ui/CheckBox"
@@ -14,10 +15,14 @@ export default function FriendCard({
     <TouchableOpacity
       style={styles.container}
       onPress={() => handleChange(user.id)}>
+      <UserAvatar imageUrl={user.imageUrl || 0} />
+      <UserInfo
+        firstName={user.firstName}
+        lastName={user.lastName}
+        username={user.username}
+        style={styles.useInfoStyles}
+      />
       <CheckBox isChecked={!!user.selected} />
-      <CustomText size="base" style={styles.text}>
-        {user.firstName} {user.lastName}
-      </CustomText>
     </TouchableOpacity>
   )
 }
@@ -26,10 +31,9 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     alignItems: "center",
-    paddingBottom: 32,
     gap: 8,
   },
-  text: {
-    textTransform: "capitalize",
+  useInfoStyles: {
+    flexGrow: 1,
   },
 })
