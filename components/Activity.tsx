@@ -18,11 +18,11 @@ export default function Activity() {
 
   return (
     <View style={styles.container}>
-      <CustomText size="sm" fontWeight="medium" style={styles.titleText}>
+      <CustomText size="base" fontWeight="medium">
         Status
       </CustomText>
       <View style={styles.statusContainer}>
-        <CustomText size="xl">{activity}</CustomText>
+        <CustomText size="lg">{activity}</CustomText>
         <TouchableOpacity onPress={openModal}>
           <EditIcon />
         </TouchableOpacity>
@@ -52,10 +52,6 @@ const styles = StyleSheet.create({
     paddingLeft: 12,
     paddingRight: 21,
     paddingVertical: 5,
-  },
-  titleText: {
-    lineHeight: 17,
-    letterSpacing: -1,
   },
   statusContainer: {
     flexDirection: "row",

@@ -52,7 +52,7 @@ export default function UserStatus({
   return (
     <View>
       <Animated.View>
-        <CustomText size="2xl" style={styles.headlineText}>
+        <CustomText size="base" style={styles.headlineText}>
           What are you up to, today?
         </CustomText>
       </Animated.View>
@@ -68,18 +68,12 @@ export default function UserStatus({
           />
         </View>
         <View style={styles.friendsContainer}>
-          <CustomText
-            size="sm"
-            fontFamily="writer-mono"
-            style={styles.statusText}>
+          <CustomText size="sm" fontFamily="writer-mono">
             {friends.length
               ? `Visible to ${friends.length} friends`
               : "This status is not visible to anyone"}
           </CustomText>
-          <CustomText
-            size="sm"
-            fontFamily="writer-mono"
-            style={styles.statusText}>
+          <CustomText size="sm" fontFamily="writer-mono">
             {visibleFriendsList
               ? `${visibleFriendsList}.`
               : "Tap to edit your preferences."}
@@ -130,10 +124,5 @@ const styles = StyleSheet.create({
     textAlign: "center",
     alignSelf: "center",
     minHeight: 189,
-  },
-  // TODO: to be removed when the typography is updated
-  statusText: {
-    fontSize: 13,
-    lineHeight: 15.78,
   },
 })

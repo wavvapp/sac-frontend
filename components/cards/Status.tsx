@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     fontFamily: theme.fontFamily["writer-mono"].normal?.normal,
     paddingVertical: 7.5,
     paddingHorizontal: 16,
-    fontSize: 13,
-    lineHeight: 20,
+    fontSize: theme.fontSize.sm,
+    lineHeight: theme.lineHeight.sm,
   },
 })
