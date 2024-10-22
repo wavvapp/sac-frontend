@@ -28,7 +28,7 @@ export default function Badge({
   return (
     <View style={[styles.container, variantStyle[variant], style]} {...rest}>
       <CustomText
-        size="xs"
+        size="sm"
         style={[styles.text, customTextStyle[variant]]}
         fontFamily="writer-mono">
         {name}
@@ -46,18 +46,17 @@ const styles = StyleSheet.create({
   },
   text: {
     textTransform: "uppercase",
+    fontWeight: theme.fontWeight.bold,
   },
   defaultText: {
     color: theme.colors.white,
-    fontWeight: 700,
   },
   outlineText: {
     color: theme.colors.black,
-    fontWeight: 400,
+    fontWeight: theme.fontWeight.normal,
   },
   primaryText: {
     color: theme.colors.black,
-    fontWeight: 700,
   },
   default: {
     backgroundColor: theme.colors.black,

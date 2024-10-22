@@ -6,13 +6,13 @@ import {
   View,
   ViewStyle,
 } from "react-native"
-import CustomText, { fontFamilyMap } from "@/components/ui/CustomText"
-import { ButtonVariant, SizeVariant } from "@/types"
+import CustomText from "@/components/ui/CustomText"
+import { ButtonVariant, TypographySizeVariant } from "@/types"
 import { theme } from "@/theme"
 
 interface ButtonProps extends TouchableOpacityProps {
   variant?: ButtonVariant
-  textSize?: SizeVariant
+  textSize?: TypographySizeVariant
   title?: string
   active?: boolean
   containerStyles?: ViewStyle
@@ -24,7 +24,7 @@ interface ButtonProps extends TouchableOpacityProps {
 export function CustomButton({
   variant = "default",
   onPress,
-  textSize,
+  textSize = "sm",
   textStyles = {},
   containerStyles = {},
   disabled,
@@ -80,6 +80,8 @@ export function CustomButton({
       {title && (
         <CustomText
           size={textSize}
+          fontWeight="semibold"
+          fontFamily="marfa"
           style={[text, styles.buttonText, textStyles]}>
           {title}
         </CustomText>
@@ -104,12 +106,8 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.black,
   },
   buttonText: {
-    fontSize: 13,
-    fontWeight: 600,
-    lineHeight: 14,
     letterSpacing: 0.03,
     textTransform: "uppercase",
-    fontFamily: fontFamilyMap["marfa"].semibold?.normal,
   },
   primary: {
     backgroundColor: theme.colors.white,

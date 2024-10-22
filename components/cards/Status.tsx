@@ -1,7 +1,8 @@
 import React, { useState } from "react"
 import { View, ScrollView, StyleSheet, TouchableOpacity } from "react-native"
-import CustomText, { fontFamilyMap } from "@/components/ui/CustomText"
+import CustomText from "@/components/ui/CustomText"
 import Badge from "@/components/ui/Badge"
+import { theme } from "@/theme"
 
 interface StatusProps {
   timeSlots: string[]
@@ -60,10 +61,10 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   badge: {
-    fontFamily: fontFamilyMap["writer-mono"].normal?.normal,
+    fontFamily: theme.fontFamily["writer-mono"].normal?.normal,
     paddingVertical: 7.5,
     paddingHorizontal: 16,
-    fontSize: 13,
-    lineHeight: 20,
+    fontSize: theme.fontSize.sm,
+    lineHeight: theme.lineHeight.sm,
   },
 })

@@ -17,10 +17,10 @@ export default function UserInfo({
 }: UserInfoProps) {
   return (
     <View style={(styles.container, style)} {...rest}>
-      <CustomText size="lg" style={styles.name} fontWeight="semibold">
+      <CustomText fontWeight="semibold">
         {firstName} {lastName}
       </CustomText>
-      <CustomText size="sm" fontFamily="writer-mono" style={styles.username}>
+      <CustomText fontFamily="writer-mono" style={styles.username}>
         @{username}
       </CustomText>
     </View>
@@ -32,13 +32,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.white,
     flexDirection: "row",
   },
-  name: {
-    fontSize: 15,
-    lineHeight: 20,
-  },
   username: {
-    fontSize: 15,
-    lineHeight: 20,
     color: theme.colors.black,
     opacity: 0.5,
   },

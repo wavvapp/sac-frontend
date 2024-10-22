@@ -1,18 +1,6 @@
-import {
-  StyleSheet,
-  TextInput,
-  TextInputProps,
-  TextStyle,
-  View,
-} from "react-native"
-import { InputVariant, SizeVariant } from "@/types"
+import { StyleSheet, TextInput, TextInputProps, View } from "react-native"
+import { InputVariant, TypographySizeVariant } from "@/types"
 import { theme } from "@/theme"
-
-const inputSizeMap: Partial<Record<SizeVariant, TextStyle>> = {
-  sm: { fontSize: 13, lineHeight: 20 },
-  base: { fontSize: 15, lineHeight: 24 },
-  lg: { fontSize: 20, lineHeight: 28 },
-}
 
 const placeHolderColorMap: Record<InputVariant, string> = {
   primary: theme.colors.black_500,
@@ -22,7 +10,7 @@ const placeHolderColorMap: Record<InputVariant, string> = {
 
 interface InputProps extends TextInputProps {
   variant?: InputVariant
-  textSize?: "lg" | "base" | "sm"
+  textSize?: TypographySizeVariant
   handleTextChange: (text: string) => void
 }
 
@@ -54,7 +42,13 @@ export default function Input({
   return (
     <View style={[styles.container, variantStyles?.[variant]?.container]}>
       <TextInput
-        style={[variantStyles[variant].input, inputSizeMap[textSize], style]}
+        style={[
+          styles.input,
+          variantStyles[variant].input,
+          { fontSize: theme.fontSize[textSize] },
+          { lineHeight: theme.lineHeight[textSize] },
+          style,
+        ]}
         value={value}
         placeholder={placeholder}
         placeholderTextColor={placeHolderColorMap[variant]}
@@ -72,6 +66,9 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     borderWidth: 1,
     borderRadius: 5,
+  },
+  input: {
+    fontFamily: theme.fontFamily.suisse.normal?.normal,
   },
   primaryContainer: {
     borderColor: theme.colors.black_200,
@@ -91,6 +88,6 @@ const styles = StyleSheet.create({
   },
   ghostInput: {
     color: theme.colors.black,
-    fontWeight: "600",
+    fontWeight: theme.fontWeight.semibold,
   },
 })
