@@ -72,7 +72,7 @@ const FindFriends = () => {
                   </View>
                 </View>
                 {addedFriends[friend.id] ? (
-                  <CheckBox isChecked={true} />
+                  <CheckBox isChecked={true} unshaded />
                 ) : (
                   <CustomButton
                     variant="outline"
