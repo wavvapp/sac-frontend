@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, View } from "react-native"
+import { StyleSheet, View } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import FriendCard from "@/components/Friend"
 import { useState } from "react"
@@ -18,18 +18,13 @@ export default function FriendsList() {
       <CustomText size="sm" fontWeight="normal" fontFamily="suisse">
         Who can see it
       </CustomText>
-      <ScrollView
-        contentContainerStyle={{
-          rowGap: 12,
-        }}>
-        {friendsList.map((item) => (
-          <FriendCard
-            key={item.id.toString()}
-            handleChange={() => updateFriendsList(item.id)}
-            user={item}
-          />
-        ))}
-      </ScrollView>
+      {friendsList.map((item) => (
+        <FriendCard
+          key={item.id.toString()}
+          handleChange={() => updateFriendsList(item.id)}
+          user={item}
+        />
+      ))}
     </View>
   )
 }
