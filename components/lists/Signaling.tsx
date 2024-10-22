@@ -1,94 +1,98 @@
-import React, { forwardRef } from "react"
+import { forwardRef } from "react"
 import { View, StyleSheet } from "react-native"
 import CustomText from "@/components/ui/CustomText"
-import UserAvatar from "@/components/ui/UserAvatar"
-import UserInfo from "@/components/UserInfo"
-import Badge from "@/components/ui/Badge"
-import { defaultUsers } from "@/data/users"
+import { availableFriends, offlineFriends } from "@/data/users"
 import { User } from "@/types"
 
-import { FlatList } from "react-native-gesture-handler"
 import BottomDrawer from "@/components/BottomDrawer"
+import { CustomButton } from "@/components/ui/Button"
+import { BottomSheetSectionList } from "@gorhom/bottom-sheet"
 import { theme } from "@/theme"
+import SignalingUser from "@/components/SignalingUser"
 export interface SignalingRef {
   openBottomSheet: () => void
 }
 
 interface SignalingProps {
-  users?: User[]
+  availableFriends?: User[]
+  offlineFriends?: User[]
 }
 
-const Signaling = forwardRef<SignalingRef, SignalingProps>((props, ref) => {
-  const displayUsers = props.users?.length ? props.users : defaultUsers
-
+const Signaling = forwardRef<SignalingRef, SignalingProps>((_, ref) => {
   return (
     <BottomDrawer ref={ref}>
-      <View style={styles.container}>
-        <View
-          style={{
-            flexDirection: "row",
-            height: 50,
-            backgroundColor: theme.colors.black,
-            gap: 12,
-          }}>
-          <Badge variant="primary" name="100" />
-          <Badge variant="primary" name="3/4" style={{ opacity: 0.3 }} />
-        </View>
-        <View style={styles.header}>
-          <Badge name={displayUsers.length.toString()} />
-          <CustomText size="sm" fontWeight="bold">
-            Friends are signaling
-          </CustomText>
-        </View>
-        <FlatList
-          contentContainerStyle={styles.listContent}
-          style={styles.flatList}
-          data={displayUsers as User[]}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <View style={styles.userCard}>
-              <UserAvatar imageUrl={item.imageUrl || 0} />
-              <View>
-                <UserInfo
-                  firstName={item.firstName}
-                  lastName={item.lastName}
-                  username={item.username}
-                />
-              </View>
-            </View>
-          )}
+      <View style={styles.header}>
+        <CustomText size="xl" fontWeight="bold" style={styles.headerText}>
+          Friends
+        </CustomText>
+        {/* TODO: this should redirect to the search screen */}
+        <CustomButton
+          variant="default"
+          textSize="sm"
+          title="FIND"
+          textStyles={{ fontWeight: 600 }}
         />
       </View>
+      {!availableFriends.length && (
+        <CustomText style={styles.noUsers}>
+          None of your friends on Wavv are available today
+        </CustomText>
+      )}
+      <BottomSheetSectionList
+        sections={[
+          {
+            title: "available users",
+            data: availableFriends,
+            ItemSeparatorComponent: () => {
+              return (
+                <View
+                  style={{
+                    height: 12,
+                  }}
+                />
+              )
+            },
+            renderItem: ({ item: user }) => SignalingUser(user, true),
+          },
+          {
+            title: "Other users",
+            data: offlineFriends,
+            ItemSeparatorComponent: () => {
+              return (
+                <View
+                  style={{
+                    height: 12,
+                    backgroundColor: theme.colors.black_100,
+                  }}
+                />
+              )
+            },
+            renderItem: ({ item, index }) => SignalingUser(item, false, index),
+          },
+        ]}
+        keyExtractor={(item) => item.id}
+      />
     </BottomDrawer>
   )
 })
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: 16,
-    paddingLeft: 16,
-  },
   header: {
     flexDirection: "row",
-    gap: 10,
     alignItems: "center",
     marginBottom: 20,
+    justifyContent: "space-between",
+    paddingHorizontal: 20,
   },
-  userCard: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 10,
-    paddingBottom: 18,
+  headerText: {
+    fontSize: 20,
+    lineHeight: 28,
   },
-  flatList: {
-    width: "100%",
-  },
-  listContent: {
-    flexGrow: 1,
-    justifyContent: "flex-start",
-    paddingBottom: 70,
+  noUsers: {
+    padding: 20,
   },
 })
+
+Signaling.displayName = "Signaling"
 
 export default Signaling
