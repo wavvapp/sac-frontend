@@ -62,7 +62,7 @@ const FindFriends = () => {
             filteredFriends.map((friend) => (
               <View key={friend.id} style={styles.friendItem}>
                 <View style={styles.userDetails}>
-                  <UserAvatar imageUrl={0} />
+                  <UserAvatar imageUrl={friend.imageUrl || 0} />
                   <View style={{ marginLeft: 8 }}>
                     <UserInfo
                       firstName={friend.firstName}
