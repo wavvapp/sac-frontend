@@ -64,43 +64,43 @@ const FindFriends = () => {
       />
 
       <ScrollView style={styles.friendsList}>
+        {search &&
+          filteredFriends.length > 0 &&
+          filteredFriends.map((friend) => (
+            <TouchableOpacity
+              key={friend.id}
+              style={styles.friendItem}
+              onPress={() => handleAddFriend(friend)}>
+              <View style={styles.userDetails}>
+                <UserAvatar imageUrl={friend.imageUrl || 0} />
+                <View style={{ marginLeft: 8 }}>
+                  <UserInfo
+                    firstName={friend.firstName}
+                    lastName={friend.lastName}
+                    username={friend.username}
+                  />
+                </View>
+              </View>
+              {addedFriends.some(
+                (addedFriend) => addedFriend.id === friend.id,
+              ) ? (
+                <CheckBox
+                  isChecked={true}
+                  unshaded
+                  onPress={() => handleAddFriend(friend)}
+                />
+              ) : (
+                <CustomButton
+                  variant="outline"
+                  title="Add"
+                  onPress={() => handleAddFriend(friend)}
+                />
+              )}
+            </TouchableOpacity>
+          ))}
         <View style={styles.share}>
           <ShareCard />
         </View>
-        {search && filteredFriends.length > 0
-          ? filteredFriends.map((friend) => (
-              <TouchableOpacity
-                key={friend.id}
-                style={styles.friendItem}
-                onPress={() => handleAddFriend(friend)}>
-                <View style={styles.userDetails}>
-                  <UserAvatar imageUrl={friend.imageUrl || 0} />
-                  <View style={{ marginLeft: 8 }}>
-                    <UserInfo
-                      firstName={friend.firstName}
-                      lastName={friend.lastName}
-                      username={friend.username}
-                    />
-                  </View>
-                </View>
-                {addedFriends.some(
-                  (addedFriend) => addedFriend.id === friend.id,
-                ) ? (
-                  <CheckBox
-                    isChecked={true}
-                    unshaded
-                    onPress={() => handleAddFriend(friend)}
-                  />
-                ) : (
-                  <CustomButton
-                    variant="outline"
-                    title="Add"
-                    onPress={() => handleAddFriend(friend)}
-                  />
-                )}
-              </TouchableOpacity>
-            ))
-          : null}
       </ScrollView>
     </View>
   )
