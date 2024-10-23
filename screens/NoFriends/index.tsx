@@ -23,8 +23,13 @@ export default function NoFriendsScreen() {
           <CustomText style={styles.descriptionText}>
             Add your friends to signal your availability
           </CustomText>
-          {/* //TODO: Redirect to the friends screen once it's ready */}
-          <CustomButton title="FIND FRIENDS" textStyles={styles.button} />
+          {/* //TODO: Redirect to the search screen once it's ready */}
+          <CustomButton
+            title="FIND FRIENDS"
+            variant="secondary"
+            textSize="sm"
+            textStyles={styles.button}
+          />
         </View>
       </View>
     </View>
@@ -39,7 +44,8 @@ const styles = StyleSheet.create({
   contentContainer: {
     borderRadius: 12,
     overflow: "hidden",
-    paddingHorizontal: 20,
+    marginHorizontal: 20,
+    borderWidth: 1,
   },
   content: {
     backgroundColor: theme.colors.white,
