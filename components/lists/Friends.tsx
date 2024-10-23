@@ -1,4 +1,4 @@
-import { StyleSheet, ScrollView } from "react-native"
+import { StyleSheet, View } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import FriendCard from "@/components/Friend"
 import { useState } from "react"
@@ -14,7 +14,7 @@ export default function FriendsList() {
     )
   }
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
       <CustomText size="sm" fontWeight="normal" fontFamily="suisse">
         Who can see it
       </CustomText>
@@ -25,7 +25,7 @@ export default function FriendsList() {
           user={item}
         />
       ))}
-    </ScrollView>
+    </View>
   )
 }
 

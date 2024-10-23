@@ -42,6 +42,8 @@ export default function CustomText({
       style={[
         { fontSize: theme.fontSize[size] },
         { lineHeight: theme.lineHeight[size] },
+        { fontWeight: theme.fontWeight[fontWeight] },
+        { fontStyle: theme.fontStyle[fontStyle] },
         getFontFamilyStyle(),
         style,
       ]}
