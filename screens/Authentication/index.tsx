@@ -5,16 +5,20 @@ import { theme } from "@/theme"
 import LogoIcon from "@/components/vectors/LogoIcon"
 import CustomText from "@/components/ui/CustomText"
 import { useSharedValue } from "react-native-reanimated"
+import { useNavigation } from "@react-navigation/native"
+import { RootStackParamList } from "@/navigation"
+import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 
+type SignUpProp = NativeStackNavigationProp<RootStackParamList, "SignUp">
 export default function EntryScreen() {
+  const navigation = useNavigation<SignUpProp>()
   const handleCreateAccount = () => {
     // this will navigate to create an account
     // navigation.navigate("CreateAccount")
   }
 
   const handleSignIn = () => {
-    // to do this will navigate to the signinPage
-    // navigation.navigate("SignIn")
+    navigation.navigate("SignUp")
   }
   const noise = useSharedValue(false)
 
@@ -39,7 +43,10 @@ export default function EntryScreen() {
             title="Sign In"
             onPress={handleSignIn}
           />
-          <CustomText fontFamily="writer-mono" style={styles.agreementText}>
+          <CustomText
+            fontFamily="writer-mono"
+            size="lg"
+            style={styles.agreementText}>
             By clicking on{" "}
             <Text style={{ fontWeight: "bold" }}>
               Sign In / Create an account
