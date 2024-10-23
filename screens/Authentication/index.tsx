@@ -16,15 +16,11 @@ export default function EntryScreen() {
     // to do this will navigate to the signinPage
     // navigation.navigate("SignIn")
   }
-  const noise = useSharedValue(true)
+  const noise = useSharedValue(false)
 
   return (
     <View style={styles.container}>
-      <PerlinNoise
-        isOn={noise}
-        color1={theme.colors.black}
-        color2={theme.colors.white}
-      />
+      <PerlinNoise isOn={noise} color1="#281713" color2="blue" />
       <View style={styles.content}>
         <View style={styles.logoContainer}>
           <LogoIcon />
