@@ -4,18 +4,17 @@ import { CustomButton } from "@/components/ui/Button"
 import { theme } from "@/theme"
 import LogoIcon from "@/components/vectors/LogoIcon"
 import CustomText from "@/components/ui/CustomText"
-import { useNavigation } from "@react-navigation/native"
 import { useSharedValue } from "react-native-reanimated"
 
 export default function EntryScreen() {
-  const navigation = useNavigation()
-
   const handleCreateAccount = () => {
-    navigation.navigate("CreateAccount")
+    // this will navigate to create an account
+    // navigation.navigate("CreateAccount")
   }
 
   const handleSignIn = () => {
-    navigation.navigate("SignIn")
+    // to do this will navigate to the signinPage
+    // navigation.navigate("SignIn")
   }
   const noise = useSharedValue(true)
 
@@ -94,7 +93,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     gap: 12,
-    flex: 1,
+    flex: 0,
   },
 
   agreementText: {
