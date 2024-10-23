@@ -12,7 +12,7 @@ export default function CustomSplashScreen() {
     <View style={styles.container}>
       <PerlinNoise isOn={isOn} color1="#281713" color2="blue" />
       <View style={styles.content}>
-        <WavvLogo />
+        <WavvLogo width={390} height={80} />
         <CustomText size="sm" fontFamily="marfa" style={styles.subText}>
           Signal friends your availability
         </CustomText>
@@ -33,5 +33,6 @@ const styles = StyleSheet.create({
   },
   subText: {
     color: theme.colors.white,
+    textAlign: "center",
   },
 })
