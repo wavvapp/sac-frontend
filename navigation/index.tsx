@@ -9,7 +9,7 @@ import Login from "@/screens/Authentication/Login"
 import CustomSplashScreen from "@/screens/CustomSplashScreen"
 import Settings from "@/screens/Settings"
 import Signaling from "@/components/lists/Signaling"
-import Search from "@/components/Search"
+import Search from "@/screens/Search/Search"
 import { theme } from "@/theme"
 
 export type RootStackParamList = {

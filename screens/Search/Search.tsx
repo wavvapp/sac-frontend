@@ -1,7 +1,7 @@
-import { View, StyleSheet, Text, ScrollView } from "react-native"
+import { View, StyleSheet, ScrollView } from "react-native"
 import Input from "@/components/ui/Input"
 import UserInfo from "@/components/UserInfo"
-import CheckBox from "@/components/ui/CheckBox" // You can remove this if not using
+import CheckBox from "@/components/ui/CheckBox"
 import ShareCard from "@/components/Share"
 import { CustomButton } from "@/components/ui/Button"
 import { useState } from "react"
@@ -9,13 +9,14 @@ import { AntDesign } from "@expo/vector-icons"
 import { availableFriends } from "@/data/users"
 import { useNavigation } from "@react-navigation/native"
 import UserAvatar from "@/components/ui/UserAvatar"
+import CustomText from "@/components/ui/CustomText"
+import { User } from "@/types"
+import { theme } from "@/theme"
 
 const FindFriends = () => {
   const navigation = useNavigation()
   const [search, setSearch] = useState("")
-  const [addedFriends, setAddedFriends] = useState<{ [key: string]: boolean }>(
-    {},
-  )
+  const [addedFriends, setAddedFriends] = useState<User[]>([])
   const [filteredFriends, setFilteredFriends] = useState(availableFriends)
 
   const handleSearch = (text: string) => {
@@ -30,11 +31,15 @@ const FindFriends = () => {
     setFilteredFriends(filtered)
   }
 
-  const handleAddFriend = (id: string) => {
-    setAddedFriends((prev) => ({
-      ...prev,
-      [id]: !prev[id],
-    }))
+  const handleAddFriend = (friend: User) => {
+    setAddedFriends((prev) => {
+      const isAdded = prev.some((addedFriend) => addedFriend.id === friend.id)
+      if (isAdded) {
+        return prev.filter((addedFriend) => addedFriend.id !== friend.id)
+      } else {
+        return [...prev, friend]
+      }
+    })
   }
 
   const handleClose = () => {
@@ -45,7 +50,9 @@ const FindFriends = () => {
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={styles.spacer} />
-        <Text style={styles.title}>Find Friends</Text>
+        <CustomText fontFamily="suisse" size="lg" fontWeight="semibold">
+          Find Friends
+        </CustomText>
         <AntDesign name="close" size={24} color="black" onPress={handleClose} />
       </View>
       <Input
@@ -57,36 +64,36 @@ const FindFriends = () => {
       />
 
       <ScrollView style={styles.friendsList}>
-        {search ? (
-          filteredFriends.length > 0 ? (
-            filteredFriends.map((friend) => (
-              <View key={friend.id} style={styles.friendItem}>
-                <View style={styles.userDetails}>
-                  <UserAvatar imageUrl={friend.imageUrl || 0} />
-                  <View style={{ marginLeft: 8 }}>
-                    <UserInfo
-                      firstName={friend.firstName}
-                      lastName={friend.lastName}
-                      username={friend.username}
-                    />
-                  </View>
-                </View>
-                {addedFriends[friend.id] ? (
-                  <CheckBox isChecked={true} unshaded />
-                ) : (
-                  <CustomButton
-                    variant="outline"
-                    title="Add"
-                    onPress={() => handleAddFriend(friend.id)}
+        {search && filteredFriends.length > 0 ? (
+          filteredFriends.map((friend) => (
+            <View key={friend.id} style={styles.friendItem}>
+              <View style={styles.userDetails}>
+                <UserAvatar imageUrl={friend.imageUrl || 0} />
+                <View style={{ marginLeft: 8 }}>
+                  <UserInfo
+                    firstName={friend.firstName}
+                    lastName={friend.lastName}
+                    username={friend.username}
                   />
-                )}
+                </View>
               </View>
-            ))
-          ) : (
-            <View style={styles.share}>
-              <ShareCard />
+              {addedFriends.some(
+                (addedFriend) => addedFriend.id === friend.id,
+              ) ? (
+                <CheckBox
+                  isChecked={true}
+                  unshaded
+                  onPress={() => handleAddFriend(friend)}
+                />
+              ) : (
+                <CustomButton
+                  variant="outline"
+                  title="Add"
+                  onPress={() => handleAddFriend(friend)}
+                />
+              )}
             </View>
-          )
+          ))
         ) : (
           <View style={styles.share}>
             <ShareCard />
@@ -102,7 +109,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 20,
     paddingVertical: 70,
-    backgroundColor: "#fff",
+    backgroundColor: theme.colors.white,
   },
   header: {
     flexDirection: "row",
@@ -112,12 +119,6 @@ const styles = StyleSheet.create({
   },
   spacer: {
     width: 24,
-  },
-  title: {
-    flex: 1,
-    textAlign: "center",
-    fontSize: 18,
-    fontWeight: "bold",
   },
   friendsList: {
     marginTop: 10,
