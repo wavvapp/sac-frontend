@@ -1,11 +1,11 @@
-import { View, StyleSheet, ScrollView } from "react-native"
+import { View, StyleSheet, ScrollView, TouchableOpacity } from "react-native"
 import Input from "@/components/ui/Input"
 import UserInfo from "@/components/UserInfo"
 import CheckBox from "@/components/ui/CheckBox"
 import ShareCard from "@/components/Share"
 import { CustomButton } from "@/components/ui/Button"
 import { useState } from "react"
-import { AntDesign } from "@expo/vector-icons"
+import CloseIcon from "@/components/vectors/CloseIcon"
 import { availableFriends } from "@/data/users"
 import { useNavigation } from "@react-navigation/native"
 import UserAvatar from "@/components/ui/UserAvatar"
@@ -50,10 +50,10 @@ const FindFriends = () => {
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={styles.spacer} />
-        <CustomText fontFamily="suisse" size="lg" fontWeight="semibold">
+        <CustomText size="lg" fontWeight="semibold">
           Find Friends
         </CustomText>
-        <AntDesign name="close" size={24} color="black" onPress={handleClose} />
+        <CloseIcon color={theme.colors.black} onPress={handleClose} />
       </View>
       <Input
         variant="primary"
@@ -64,41 +64,43 @@ const FindFriends = () => {
       />
 
       <ScrollView style={styles.friendsList}>
-        {search && filteredFriends.length > 0 ? (
-          filteredFriends.map((friend) => (
-            <View key={friend.id} style={styles.friendItem}>
-              <View style={styles.userDetails}>
-                <UserAvatar imageUrl={friend.imageUrl || 0} />
-                <View style={{ marginLeft: 8 }}>
-                  <UserInfo
-                    firstName={friend.firstName}
-                    lastName={friend.lastName}
-                    username={friend.username}
-                  />
+        <View style={styles.share}>
+          <ShareCard />
+        </View>
+        {search && filteredFriends.length > 0
+          ? filteredFriends.map((friend) => (
+              <TouchableOpacity
+                key={friend.id}
+                style={styles.friendItem}
+                onPress={() => handleAddFriend(friend)}>
+                <View style={styles.userDetails}>
+                  <UserAvatar imageUrl={friend.imageUrl || 0} />
+                  <View style={{ marginLeft: 8 }}>
+                    <UserInfo
+                      firstName={friend.firstName}
+                      lastName={friend.lastName}
+                      username={friend.username}
+                    />
+                  </View>
                 </View>
-              </View>
-              {addedFriends.some(
-                (addedFriend) => addedFriend.id === friend.id,
-              ) ? (
-                <CheckBox
-                  isChecked={true}
-                  unshaded
-                  onPress={() => handleAddFriend(friend)}
-                />
-              ) : (
-                <CustomButton
-                  variant="outline"
-                  title="Add"
-                  onPress={() => handleAddFriend(friend)}
-                />
-              )}
-            </View>
-          ))
-        ) : (
-          <View style={styles.share}>
-            <ShareCard />
-          </View>
-        )}
+                {addedFriends.some(
+                  (addedFriend) => addedFriend.id === friend.id,
+                ) ? (
+                  <CheckBox
+                    isChecked={true}
+                    unshaded
+                    onPress={() => handleAddFriend(friend)}
+                  />
+                ) : (
+                  <CustomButton
+                    variant="outline"
+                    title="Add"
+                    onPress={() => handleAddFriend(friend)}
+                  />
+                )}
+              </TouchableOpacity>
+            ))
+          : null}
       </ScrollView>
     </View>
   )

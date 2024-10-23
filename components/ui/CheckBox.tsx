@@ -37,8 +37,8 @@ export default function CheckBox({
       {isChecked ? (
         <CheckIcon
           color={unshaded ? theme.colors.black : theme.colors.white}
-          height={unshaded ? 50 : 32}
-          width={unshaded ? 50 : 32}
+          height={unshaded ? 24 : 32}
+          width={unshaded ? 24 : 32}
         />
       ) : (
         <PlusIcon />
