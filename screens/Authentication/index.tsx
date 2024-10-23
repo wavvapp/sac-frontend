@@ -37,11 +37,13 @@ export default function EntryScreen() {
             variant="primary"
             title="Create Account"
             onPress={handleCreateAccount}
+            textStyles={styles.buttonText}
           />
           <CustomButton
             variant="destructive"
             title="Sign In"
             onPress={handleSignIn}
+            textStyles={styles.buttonText}
           />
           <CustomText
             fontFamily="writer-mono"
@@ -104,5 +106,8 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: theme.colors.white_500,
     lineHeight: 20,
+  },
+  buttonText: {
+    fontWeight: theme.fontWeight.bold,
   },
 })
