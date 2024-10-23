@@ -1,11 +1,11 @@
-import { StyleSheet, View } from "react-native"
+import { StyleSheet, ScrollView } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import FriendCard from "@/components/Friend"
 import { useState } from "react"
-import { defaultUsers } from "@/data/users"
+import { availableFriends } from "@/data/users"
 
 export default function FriendsList() {
-  const [friendsList, setFriendsList] = useState(defaultUsers)
+  const [friendsList, setFriendsList] = useState(availableFriends)
   const updateFriendsList = (userId: string) => {
     setFriendsList((prevList) =>
       prevList.map((user) =>
@@ -14,7 +14,7 @@ export default function FriendsList() {
     )
   }
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <CustomText size="sm" fontWeight="normal" fontFamily="suisse">
         Who can see it
       </CustomText>
@@ -25,7 +25,7 @@ export default function FriendsList() {
           user={item}
         />
       ))}
-    </View>
+    </ScrollView>
   )
 }
 
