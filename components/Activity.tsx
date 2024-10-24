@@ -22,7 +22,9 @@ export default function Activity() {
         Status
       </CustomText>
       <View style={styles.statusContainer}>
-        <CustomText size="lg">{activity}</CustomText>
+        <CustomText size="lg" fontWeight="bold">
+          {activity}
+        </CustomText>
         <TouchableOpacity onPress={openModal}>
           <EditIcon />
         </TouchableOpacity>
