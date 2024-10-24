@@ -31,9 +31,10 @@ export default function EditSignal() {
       </View>
       <ScrollView
         contentContainerStyle={{
+          flexGrow: 1,
           gap: 20,
           paddingTop: 62,
-          paddingBottom: 88,
+          paddingBottom: 50,
         }}>
         <UserAvatar
           imageUrl={require("@/assets/images/user-avatar.png")}
@@ -60,6 +61,7 @@ export default function EditSignal() {
 
 const style = StyleSheet.create({
   container: {
+    flex: 1,
     paddingTop: 44,
     backgroundColor: theme.colors.white,
     position: "relative",
@@ -82,10 +84,8 @@ const style = StyleSheet.create({
     lineHeight: 28,
   },
   saveButton: {
-    position: "absolute",
-    bottom: 10,
     zIndex: 10,
-    width: "90%",
-    marginHorizontal: 20,
+    bottom: 35,
+    alignSelf: "center",
   },
 })
