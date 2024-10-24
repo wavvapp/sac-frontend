@@ -18,6 +18,8 @@ import { theme } from "@/theme"
 import Badge from "@/components/ui/Badge"
 import ShareIcon from "@/components/vectors/ShareIcon"
 import { CustomButton } from "@/components/ui/Button"
+import { useNavigation } from "@react-navigation/native"
+import { onShare } from "@/utils/share"
 
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -29,6 +31,7 @@ export default function HomeScreen() {
   const [_, setIsVisible] = useState(false)
   const isOn = useSharedValue(false)
   const signalingRef = useRef<SignalingRef>(null)
+  const navigation = useNavigation<HomeScreenProps>()
 
   const handlePress = () => {
     isOn.value = !isOn.value
@@ -47,10 +50,12 @@ export default function HomeScreen() {
       <View style={styles.header}>
         <Badge variant="primary" name="100" />
         <View style={styles.buttonContainer}>
-          <CustomButton style={styles.iconButton}>
+          <CustomButton style={styles.iconButton} onPress={onShare}>
             <ShareIcon color={theme.colors.white} />
           </CustomButton>
-          <CustomButton style={styles.iconButton}>
+          <CustomButton
+            style={styles.iconButton}
+            onPress={() => navigation.push("Settings")}>
             <Settings color={theme.colors.white} />
           </CustomButton>
         </View>
