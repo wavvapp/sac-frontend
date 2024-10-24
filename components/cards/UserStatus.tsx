@@ -52,8 +52,8 @@ export default function UserStatus({
   return (
     <View>
       <Animated.View>
-        <CustomText size="base" style={styles.headlineText}>
-          What are you up to, today?
+        <CustomText fontFamily="writer-mono" style={styles.headlineText}>
+          Turn it on to signal your availability
         </CustomText>
       </Animated.View>
       <Animated.View
