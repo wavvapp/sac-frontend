@@ -22,7 +22,7 @@ export default function Activity() {
         Status
       </CustomText>
       <View style={styles.statusContainer}>
-        <CustomText size="lg" fontWeight="bold">
+        <CustomText size="lg" fontWeight="semibold">
           {activity}
         </CustomText>
         <TouchableOpacity onPress={openModal}>
