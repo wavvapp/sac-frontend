@@ -11,6 +11,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated"
 import UserAvailability from "@/components/cards/UserAvailability"
+import { CustomButton } from "@/components/ui/Button"
 
 const MAX_VISIBLE_FRIENDS = 3
 
@@ -55,6 +56,15 @@ export default function UserStatus({
         <CustomText size="base" style={styles.headlineText}>
           What are you up to, today?
         </CustomText>
+        <CustomButton
+          title="Go to the credentials screen"
+          fullWidth
+          variant="primary"
+          textStyles={{
+            fontWeight: theme.fontWeight.bold,
+          }}
+          onPress={() => navigation.push("CreateCredentials")}
+        />
       </Animated.View>
       <Animated.View
         style={[styles.container, style, cardAnimatedStyle]}
