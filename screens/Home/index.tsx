@@ -4,13 +4,7 @@ import { offlineFriends } from "@/data/users"
 import { userInfo } from "@/data/user"
 import { RootStackParamList } from "@/navigation"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
-import {
-  StyleSheet,
-  View,
-  Dimensions,
-  TouchableOpacity,
-  Text,
-} from "react-native"
+import { StyleSheet, View, Dimensions } from "react-native"
 import {
   runOnJS,
   useDerivedValue,
