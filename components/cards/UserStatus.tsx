@@ -11,6 +11,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated"
 import UserAvailability from "@/components/cards/UserAvailability"
+import { CustomButton } from "@/components/ui/Button"
 
 const MAX_VISIBLE_FRIENDS = 3
 
@@ -55,6 +56,10 @@ export default function UserStatus({
         <CustomText size="base" style={styles.headlineText}>
           What are you up to, today?
         </CustomText>
+        <CustomButton
+          title="Sign up"
+          onPress={() => navigation.push("editName")}
+        />
       </Animated.View>
       <Animated.View
         style={[styles.container, style, cardAnimatedStyle]}
