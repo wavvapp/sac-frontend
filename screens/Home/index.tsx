@@ -4,7 +4,13 @@ import { offlineFriends } from "@/data/users"
 import { userInfo } from "@/data/user"
 import { RootStackParamList } from "@/navigation"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
-import { StyleSheet, View, Dimensions, TouchableOpacity } from "react-native"
+import {
+  StyleSheet,
+  View,
+  Dimensions,
+  TouchableOpacity,
+  Text,
+} from "react-native"
 import {
   runOnJS,
   useDerivedValue,
@@ -17,6 +23,7 @@ import Settings from "@/components/vectors/Settings"
 import { theme } from "@/theme"
 import Badge from "@/components/ui/Badge"
 import ShareIcon from "@/components/vectors/ShareIcon"
+import { CustomButton } from "@/components/ui/Button"
 
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -46,12 +53,12 @@ export default function HomeScreen() {
       <View style={styles.header}>
         <Badge variant="primary" name="100" />
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.iconContainer}>
+          <CustomButton style={styles.iconButton}>
             <ShareIcon color={theme.colors.white} />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.iconContainer}>
+          </CustomButton>
+          <CustomButton style={styles.iconButton}>
             <Settings color={theme.colors.white} />
-          </TouchableOpacity>
+          </CustomButton>
         </View>
       </View>
       <View style={styles.UserStatus}>
@@ -82,7 +89,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: "row",
   },
-  iconContainer: {
+  iconButton: {
     borderRadius: 100,
     padding: 12,
   },
