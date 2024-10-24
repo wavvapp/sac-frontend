@@ -76,6 +76,8 @@ const Signaling = forwardRef<SignalingRef, SignalingProps>((_, ref) => {
   )
 })
 
+Signaling.displayName = "Signaling"
+
 const styles = StyleSheet.create({
   header: {
     flexDirection: "row",

@@ -12,7 +12,7 @@ import Signaling from "@/components/lists/Signaling"
 import { theme } from "@/theme"
 
 export type RootStackParamList = {
-  Home: undefined
+  Home: any
   EditSignal: undefined
   Login: undefined
   SignUp: undefined
