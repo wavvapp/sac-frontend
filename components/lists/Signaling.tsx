@@ -22,7 +22,7 @@ const Signaling = forwardRef<SignalingRef, SignalingProps>((_, ref) => {
   return (
     <BottomDrawer ref={ref}>
       <View style={styles.header}>
-        <CustomText size="xl" fontWeight="bold" style={styles.headerText}>
+        <CustomText size="lg" fontWeight="bold" style={styles.headerText}>
           Friends
         </CustomText>
         {/* TODO: this should redirect to the search screen */}
