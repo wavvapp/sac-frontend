@@ -15,9 +15,7 @@ export default function FriendsList() {
   }
   return (
     <View style={styles.container}>
-      <CustomText size="sm" fontWeight="normal" fontFamily="suisse">
-        Who can see it
-      </CustomText>
+      <CustomText size="sm">Who can see it</CustomText>
       {friendsList.map((item) => (
         <FriendCard
           key={item.id.toString()}
