@@ -1,7 +1,6 @@
 import { View, StyleSheet, ScrollView, TouchableOpacity } from "react-native"
 import Input from "@/components/ui/Input"
 import UserInfo from "@/components/UserInfo"
-import CheckBox from "@/components/ui/CheckBox"
 import ShareCard from "@/components/Share"
 import { CustomButton } from "@/components/ui/Button"
 import { useState } from "react"
@@ -12,6 +11,7 @@ import UserAvatar from "@/components/ui/UserAvatar"
 import CustomText from "@/components/ui/CustomText"
 import { User } from "@/types"
 import { theme } from "@/theme"
+import CheckIcon from "@/components/vectors/CheckIcon"
 
 const FindFriends = () => {
   const navigation = useNavigation()
@@ -84,9 +84,8 @@ const FindFriends = () => {
               {addedFriends.some(
                 (addedFriend) => addedFriend.id === friend.id,
               ) ? (
-                <CheckBox
-                  isChecked={true}
-                  unshaded
+                <CheckIcon
+                  color={theme.colors.black}
                   onPress={() => handleAddFriend(friend)}
                 />
               ) : (

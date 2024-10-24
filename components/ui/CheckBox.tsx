@@ -10,14 +10,12 @@ import { theme } from "@/theme"
 interface CheckBoxProps extends TouchableOpacityProps {
   isChecked: boolean
   onCheckedChange?: (isChecked: boolean) => void
-  unshaded?: boolean
 }
 
 export default function CheckBox({
   isChecked = false,
   style = {},
   onCheckedChange,
-  unshaded = false,
   ...rest
 }: CheckBoxProps): JSX.Element {
   const handleCheckedChange = () => {
@@ -26,23 +24,10 @@ export default function CheckBox({
 
   return (
     <TouchableOpacity
-      style={[
-        styles.container,
-        isChecked && !unshaded && styles.checkedContainer,
-        unshaded && styles.unshadedContainer,
-        style,
-      ]}
+      style={[styles.container, isChecked && styles.checkedContainer, style]}
       onPress={handleCheckedChange}
       {...rest}>
-      {isChecked ? (
-        <CheckIcon
-          color={unshaded ? theme.colors.black : theme.colors.white}
-          height={unshaded ? 24 : 32}
-          width={unshaded ? 24 : 32}
-        />
-      ) : (
-        <PlusIcon />
-      )}
+      {isChecked ? <CheckIcon /> : <PlusIcon />}
     </TouchableOpacity>
   )
 }
@@ -60,9 +45,5 @@ const styles = StyleSheet.create({
   },
   checkedContainer: {
     backgroundColor: theme.colors.black,
-  },
-  unshadedContainer: {
-    backgroundColor: theme.colors.white,
-    borderWidth: 0,
   },
 })
