@@ -11,7 +11,7 @@ export default function CheckIcon({
     <Svg
       width={width}
       height={height}
-      viewBox="0 0 32 32"
+      viewBox={`0 0 ${width} ${height}`}
       fill="none"
       {...rest}>
       <Path

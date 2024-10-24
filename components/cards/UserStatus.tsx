@@ -22,7 +22,7 @@ interface UserStatusProps extends ViewStyle {
   isOn: SharedValue<boolean>
 }
 export default function UserStatus({
-  friends,
+  friends = [],
   user,
   style,
   isOn,
