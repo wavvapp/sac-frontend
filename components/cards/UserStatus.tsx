@@ -57,8 +57,13 @@ export default function UserStatus({
           What are you up to, today?
         </CustomText>
         <CustomButton
-          title="Sign up"
-          onPress={() => navigation.push("editName")}
+          title="Go to the credentials screen"
+          fullWidth
+          variant="primary"
+          textStyles={{
+            fontWeight: theme.fontWeight.bold,
+          }}
+          onPress={() => navigation.push("CreateCredentials")}
         />
       </Animated.View>
       <Animated.View

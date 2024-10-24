@@ -10,7 +10,7 @@ import CustomSplashScreen from "@/screens/CustomSplashScreen"
 import Settings from "@/screens/Settings"
 import Signaling from "@/components/lists/Signaling"
 import { theme } from "@/theme"
-import EditName from "@/screens/Authentication/SignUp/EditName"
+import CreateCredentials from "@/screens/Authentication/SignUp/CreateCredentials"
 
 export type RootStackParamList = {
   Home: undefined
@@ -19,7 +19,7 @@ export type RootStackParamList = {
   SignUp: undefined
   Settings: undefined
   Signaling: undefined
-  editName: undefined
+  CreateCredentials: undefined
 }
 
 export default function AppNavigator() {
@@ -56,9 +56,9 @@ export default function AppNavigator() {
             component={Signaling}
           />
           <Stack.Screen
-            name="editName"
+            name="CreateCredentials"
             options={{ presentation: "modal", headerShown: false }}
-            component={EditName}
+            component={CreateCredentials}
           />
         </Stack.Navigator>
       ) : (

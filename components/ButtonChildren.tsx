@@ -2,6 +2,7 @@ import { StyleSheet, View } from "react-native"
 import LoaderIcon from "@/components/vectors/LoaderIcon"
 import InfoIcon from "@/components/vectors/InfoIcon"
 import CustomText from "@/components/ui/CustomText"
+import { theme } from "@/theme"
 
 export default function ButtonChildren({
   text,
@@ -37,5 +38,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     textTransform: "uppercase",
     letterSpacing: 0.003,
+    fontWeight: theme.fontWeight.bold,
   },
 })

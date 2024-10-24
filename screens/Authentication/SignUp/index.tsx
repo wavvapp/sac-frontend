@@ -1,8 +1,9 @@
+import { CustomButton } from "@/components/ui/Button"
 import { RootStackParamList } from "@/navigation"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import React, { useState } from "react"
-import { View, TextInput, Button, StyleSheet, Text } from "react-native"
+import { View, TextInput, StyleSheet, Text } from "react-native"
 
 type SignUpProp = NativeStackNavigationProp<RootStackParamList, "SignUp">
 
@@ -40,7 +41,12 @@ export default function SignUp() {
         onChangeText={setConfirmPassword}
         secureTextEntry
       />
-      <Button title="Sign Up" onPress={handleSignUp} />
+      <CustomButton
+        title="Sign Up now"
+        fullWidth
+        variant="secondary"
+        onPress={handleSignUp}
+      />
       <Text style={styles.signupText}>
         Already have an account?{" "}
         <Text style={styles.link} onPress={() => navigation.navigate("Login")}>

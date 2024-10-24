@@ -10,15 +10,16 @@ import { theme } from "@/theme"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { useEffect, useMemo, useState } from "react"
-import { StyleSheet, View, SafeAreaView } from "react-native"
+import { StyleSheet, View, TouchableOpacity } from "react-native"
 
-type EditNameScrenProps = NativeStackNavigationProp<
+type CredentialsScrenProps = NativeStackNavigationProp<
   RootStackParamList,
   "EditSignal"
 >
 
-export default function EditName({ step = 2 }: { step?: number }) {
-  const navigation = useNavigation<EditNameScrenProps>()
+export default function CreateCredentials() {
+  const navigation = useNavigation<CredentialsScrenProps>()
+  const [step, setStep] = useState<1 | 2>(1)
   const [text, setText] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [isError, setIsError] = useState(false)
@@ -59,9 +60,8 @@ export default function EditName({ step = 2 }: { step?: number }) {
   }, [isError, isLoading])
 
   const handleUsernameSubmit = async () => {
-    // setTimeout to mock fetching username from the backend.
     setIsLoading(true)
-
+    // setTimeout to mock fetching username from the backend.
     await new Promise((resolve) => setTimeout(resolve, 2000))
     if (text === "Username123") setIsError(true)
     setIsLoading(false)
@@ -69,6 +69,8 @@ export default function EditName({ step = 2 }: { step?: number }) {
 
   const handleNameSubmit = () => {
     // TODO: logic for name submission.
+    setText("")
+    setStep(2)
   }
 
   const handleSubmit = async () => {
@@ -85,7 +87,7 @@ export default function EditName({ step = 2 }: { step?: number }) {
   }, [text])
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <View style={styles.navigation}>
         <View
           style={{
@@ -97,10 +99,11 @@ export default function EditName({ step = 2 }: { step?: number }) {
             style={[isDisabled && styles.disabledBadge]}
           />
         </View>
-        <CrossMark
-          color={theme.colors.white}
-          onPress={() => navigation.push("Home")}
-        />
+        <TouchableOpacity
+          style={styles.crossMarkContainer}
+          onPress={() => navigation.push("Home")}>
+          <CrossMark color={theme.colors.white} />
+        </TouchableOpacity>
       </View>
       <View style={styles.mainContent}>
         <CustomText style={styles.title} size="lg">
@@ -124,6 +127,7 @@ export default function EditName({ step = 2 }: { step?: number }) {
         title={buttonText}
         variant="primary"
         containerStyles={{ width: "100%" }}
+        textStyles={styles.buttonText}
         onPress={handleSubmit}>
         {(isLoading || isError) && (
           <ButtonChildren
@@ -134,7 +138,7 @@ export default function EditName({ step = 2 }: { step?: number }) {
           />
         )}
       </CustomButton>
-    </SafeAreaView>
+    </View>
   )
 }
 
@@ -143,14 +147,23 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.black,
     flex: 1,
     paddingTop: 44,
-    paddingHorizontal: 20,
     paddingBottom: 20,
+    paddingHorizontal: 20,
   },
   navigation: {
     justifyContent: "space-between",
     alignItems: "center",
     flexDirection: "row",
-    zIndex: 10,
+    position: "relative",
+    paddingVertical: 20,
+  },
+  crossMarkContainer: {
+    height: 48,
+    width: 48,
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    right: 0,
   },
   title: {
     color: theme.colors.white,
@@ -166,5 +179,8 @@ const styles = StyleSheet.create({
   },
   disabledBadge: {
     opacity: 0.3,
+  },
+  buttonText: {
+    fontWeight: theme.fontWeight.bold,
   },
 })
