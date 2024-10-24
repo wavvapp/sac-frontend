@@ -15,6 +15,8 @@ import { useRef, useState } from "react"
 import Signaling, { SignalingRef } from "@/components/lists/Signaling"
 import Settings from "@/components/vectors/Settings"
 import { theme } from "@/theme"
+import Badge from "@/components/ui/Badge"
+import ShareIcon from "@/components/vectors/ShareIcon"
 
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -41,10 +43,16 @@ export default function HomeScreen() {
   return (
     <View style={styles.container}>
       <PerlinNoise isOn={isOn} color1="#281713" color2="blue" />
-      <View style={{ width: "100%" }}>
-        <TouchableOpacity style={styles.iconContainer}>
-          <Settings />
-        </TouchableOpacity>
+      <View style={styles.header}>
+        <Badge variant="primary" name="100" />
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity style={styles.iconContainer}>
+            <ShareIcon color={theme.colors.white} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.iconContainer}>
+            <Settings color={theme.colors.white} />
+          </TouchableOpacity>
+        </View>
       </View>
       <View style={styles.UserStatus}>
         <UserStatus isOn={isOn} friends={offlineFriends} user={userInfo} />
@@ -63,16 +71,20 @@ const styles = StyleSheet.create({
     paddingTop: 44,
     paddingHorizontal: 21,
   },
-  iconContainer: {
-    backgroundColor: theme.colors.gray,
-    borderRadius: 100,
-    padding: 4,
-    height: 48,
-    width: 48,
-    justifyContent: "center",
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
     alignItems: "center",
-    alignSelf: "flex-end",
-    marginBottom: 16,
+    width: "100%",
+    marginTop: 20,
+    marginBottom: 20,
+  },
+  buttonContainer: {
+    flexDirection: "row",
+  },
+  iconContainer: {
+    borderRadius: 100,
+    padding: 12,
   },
   UserStatus: {
     marginVertical: 4,
