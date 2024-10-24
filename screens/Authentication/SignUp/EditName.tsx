@@ -4,6 +4,7 @@ import { CustomButton } from "@/components/ui/Button"
 import CustomText from "@/components/ui/CustomText"
 import Input from "@/components/ui/Input"
 import CrossMark from "@/components/vectors/CrossMark"
+import { VALIDATION_PATTERNS } from "@/constants/patterns"
 import { RootStackParamList } from "@/navigation"
 import { theme } from "@/theme"
 import { useNavigation } from "@react-navigation/native"
@@ -15,52 +16,74 @@ type EditNameScrenProps = NativeStackNavigationProp<
   RootStackParamList,
   "EditSignal"
 >
-const isNameScreen = true
 
-export default function EditName() {
+export default function EditName({ step = 2 }: { step?: number }) {
   const navigation = useNavigation<EditNameScrenProps>()
   const [text, setText] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [isError, setIsError] = useState(false)
 
+  const isInputValid = useMemo(() => {
+    if (text.trim().length <= 10) return false
+
+    if (step === 1 && VALIDATION_PATTERNS.fullName.test(text)) return true
+    if (step === 2 && VALIDATION_PATTERNS.username.test(text)) return true
+  }, [step, text])
+
   const isDisabled = useMemo(() => {
     if (isLoading || isError) return true
-    return text.trim().length <= 10
-  }, [isError, isLoading, text])
+    return !isInputValid
+  }, [isError, isInputValid, isLoading])
 
-  const badgeName = isNameScreen ? "3/4" : "4/4"
-  const badgeOpacity = isNameScreen ? 0.3 : 1
+  const badgeName: { [key: number]: string } = {
+    1: "3/4",
+    2: "4/4",
+  }
+  const titleText: { [key: number]: string } = {
+    1: "What is your name?",
+    2: "Add your username",
+  }
+  const inputPlaceholder: { [key: number]: string } = {
+    1: "Full name",
+    2: "Username",
+  }
+  const descriptionText: { [key: number]: string } = {
+    1: "Add your name so friends can find you.",
+    2: "Usernames can only contain letter, numbers, underscores and periods.",
+  }
 
-  const titleText = isNameScreen ? "What is your name?" : "Add your username"
-  const inputPlaceholder = isNameScreen ? "Full name" : "Username"
-  const descriptionText = isNameScreen
-    ? "Add your name so friends can find you."
-    : "Usernames can only contain letter, numbers, underscores and periods."
   const buttonText = useMemo(() => {
-    if (isNameScreen) return "NEXT"
+    if (isLoading || isError) return "" // we then use the <ButtonChildren component
 
-    // if it loading or disabled we clear the button text so that we can use `children` prop instead of using a text
-    if (isLoading || isError) return ""
     return "NEXT"
   }, [isError, isLoading])
 
-  const handleSubmit = () => {
-    if (text.trim().length <= 10) return
+  const handleUsernameSubmit = async () => {
+    // setTimeout to mock fetching username from the backend.
     setIsLoading(true)
 
-    setTimeout(() => {
-      if (text === "Known username") setIsError(true)
-      setIsLoading(false)
-    }, 2000)
+    await new Promise((resolve) => setTimeout(resolve, 2000))
+    if (text === "Username123") setIsError(true)
+    setIsLoading(false)
   }
 
-  // This is a temporaly solution to reset the states once the text is empty again.
+  const handleNameSubmit = () => {
+    // TODO: logic for name submission.
+  }
+
+  const handleSubmit = async () => {
+    if (!isInputValid) return
+
+    if (step === 1) handleNameSubmit()
+    else await handleUsernameSubmit()
+  }
+
+  // Clear the states on every keystroke
   useEffect(() => {
-    if (text.trim() === "") {
-      setIsLoading(false)
-      setIsError(false)
-    }
+    setIsLoading(false)
+    setIsError(false)
   }, [text])
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.navigation}>
@@ -70,8 +93,8 @@ export default function EditName() {
           }}>
           <Badge
             variant="primary"
-            name={badgeName}
-            style={isDisabled ? { opacity: badgeOpacity } : {}}
+            name={badgeName[step]}
+            style={[isDisabled && styles.disabledBadge]}
           />
         </View>
         <CrossMark
@@ -81,18 +104,18 @@ export default function EditName() {
       </View>
       <View style={styles.mainContent}>
         <CustomText style={styles.title} size="lg">
-          {titleText}
+          {titleText[step]}
         </CustomText>
         <Input
           handleTextChange={setText}
           variant="secondary"
-          placeholder={inputPlaceholder}
+          placeholder={inputPlaceholder[step]}
           value={text}
           onSubmitEditing={handleSubmit}
           autoFocus
         />
         <CustomText size="base" style={styles.description}>
-          {descriptionText}
+          {descriptionText[step]}
         </CustomText>
       </View>
       <CustomButton
@@ -104,8 +127,10 @@ export default function EditName() {
         onPress={handleSubmit}>
         {(isLoading || isError) && (
           <ButtonChildren
-            text={isLoading ? "checking availability" : "username not found"}
-            icon={isLoading ? "loader" : "info"}
+            text={
+              isLoading ? "checking availability" : "username not available"
+            }
+            icon={isError ? "info" : "loader"}
           />
         )}
       </CustomButton>
@@ -138,5 +163,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     gap: 12,
+  },
+  disabledBadge: {
+    opacity: 0.3,
   },
 })

@@ -1,5 +1,6 @@
 import { StyleSheet, View } from "react-native"
-import Loader from "@/components/vectors/Loader"
+import LoaderIcon from "@/components/vectors/LoaderIcon"
+import InfoIcon from "@/components/vectors/InfoIcon"
 import CustomText from "@/components/ui/CustomText"
 
 export default function ButtonChildren({
@@ -11,7 +12,7 @@ export default function ButtonChildren({
 }) {
   return (
     <View style={styles.buttonChildren}>
-      {icon === "loader" ? <Loader /> : <Loader />}
+      {icon === "loader" ? <LoaderIcon /> : <InfoIcon />}
       <CustomText
         fontWeight="semibold"
         fontFamily="marfa"

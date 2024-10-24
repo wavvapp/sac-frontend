@@ -1,7 +1,7 @@
 import { theme } from "@/theme"
 import Svg, { Path, SvgProps } from "react-native-svg"
 
-export default function Loader({
+export default function LoaderIcon({
   width = 16,
   height = 16,
   color = theme.colors.black,
