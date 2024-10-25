@@ -4,18 +4,35 @@ import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import React, { useState } from "react"
 import { View, TextInput, Button, StyleSheet, Text } from "react-native"
+import {
+  GoogleSignin,
+  GoogleSigninButton,
+} from "@react-native-google-signin/google-signin"
 
+GoogleSignin.configure({
+  webClientId: process.env.WEB_CLIENT_ID,
+  iosClientId: process.env.IOS_CLIENT_ID,
+  offlineAccess: true,
+})
 type LoginProp = NativeStackNavigationProp<RootStackParamList, "Login">
 
 export default function Login() {
   const navigation = useNavigation<LoginProp>()
-  const { signIn } = useAuth()
+  const { signInWithGoogle, signIn } = useAuth()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
 
+  const handleGoogleLogin = async () => {
+    await signInWithGoogle()
+  }
   const handleLogin = () => {
     // Handle login logic here
-    signIn("asdasdasda", { name: "Anas", email, id: "1" })
+    signIn("asdasdasda", {
+      name: "Anas",
+      email,
+      id: "1",
+      photo: null,
+    })
   }
 
   return (
@@ -36,6 +53,13 @@ export default function Login() {
         secureTextEntry
       />
       <Button title="Login" onPress={handleLogin} />
+      <GoogleSigninButton
+        size={GoogleSigninButton.Size.Wide}
+        color={GoogleSigninButton.Color.Dark}
+        onPress={() => {
+          handleGoogleLogin()
+        }}
+      />
       <Text style={styles.signupText}>
         Don't have an account?{" "}
         <Text style={styles.link} onPress={() => navigation.navigate("SignUp")}>

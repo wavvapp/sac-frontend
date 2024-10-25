@@ -9,6 +9,9 @@ import { CustomButton } from "@/components/ui/Button"
 import { BottomSheetSectionList } from "@gorhom/bottom-sheet"
 import { theme } from "@/theme"
 import SignalingUser from "@/components/SignalingUser"
+import { useNavigation } from "@react-navigation/native"
+import { NativeStackNavigationProp } from "@react-navigation/native-stack"
+import { RootStackParamList } from "@/navigation"
 export interface SignalingRef {
   openBottomSheet: () => void
 }
@@ -17,20 +20,22 @@ interface SignalingProps {
   availableFriends?: User[]
   offlineFriends?: User[]
 }
+type SearchProp = NativeStackNavigationProp<RootStackParamList, "Search">
 
 const Signaling = forwardRef<SignalingRef, SignalingProps>((_, ref) => {
+  const navigation = useNavigation<SearchProp>()
   return (
     <BottomDrawer ref={ref}>
       <View style={styles.header}>
         <CustomText size="xl" fontWeight="bold" style={styles.headerText}>
           Friends
         </CustomText>
-        {/* TODO: this should redirect to the search screen */}
         <CustomButton
           variant="default"
           textSize="sm"
           title="FIND"
           textStyles={{ fontWeight: 600 }}
+          onPress={() => navigation.navigate("Search")}
         />
       </View>
       {!availableFriends.length && (
@@ -75,6 +80,8 @@ const Signaling = forwardRef<SignalingRef, SignalingProps>((_, ref) => {
     </BottomDrawer>
   )
 })
+
+Signaling.displayName = "Signaling"
 
 const styles = StyleSheet.create({
   header: {
