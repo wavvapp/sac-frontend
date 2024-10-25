@@ -32,8 +32,7 @@ export default function AppNavigator() {
     //TODO: Uncomment this line once the screen's implementation is approved. This line was commented so we could taste the nofriend screen
     // const friends = [...availableFriends, ...offlineFriends]
     const friends = []
-    if (friends.length !== 0) return true
-    return false
+    return friends.length !== 0
   }, [])
 
   if (isLoading) {
