@@ -7,10 +7,17 @@ import CrossMark from "@/components/vectors/CrossMark"
 import { VALIDATION_PATTERNS } from "@/constants/patterns"
 import { RootStackParamList } from "@/navigation"
 import { theme } from "@/theme"
+import { AccountCreationStep } from "@/types"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { useEffect, useMemo, useState } from "react"
-import { StyleSheet, View, TouchableOpacity } from "react-native"
+import {
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native"
 
 type CredentialsScrenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -19,7 +26,7 @@ type CredentialsScrenProps = NativeStackNavigationProp<
 
 export default function CreateCredentials() {
   const navigation = useNavigation<CredentialsScrenProps>()
-  const [step, setStep] = useState<1 | 2>(1)
+  const [step, setStep] = useState<AccountCreationStep>(1)
   const [text, setText] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [isError, setIsError] = useState(false)
@@ -36,21 +43,28 @@ export default function CreateCredentials() {
     return !isInputValid
   }, [isError, isInputValid, isLoading])
 
-  const badgeName: { [key: number]: string } = {
-    1: "3/4",
-    2: "4/4",
-  }
-  const titleText: { [key: number]: string } = {
-    1: "What is your name?",
-    2: "Add your username",
-  }
-  const inputPlaceholder: { [key: number]: string } = {
-    1: "Full name",
-    2: "Username",
-  }
-  const descriptionText: { [key: number]: string } = {
-    1: "Add your name so friends can find you.",
-    2: "Usernames can only contain letter, numbers, underscores and periods.",
+  const stepsData: Record<
+    AccountCreationStep,
+    {
+      badgeName: string
+      titleText: string
+      inputPlaceholder: string
+      descriptionText: string
+    }
+  > = {
+    1: {
+      badgeName: "3/4",
+      titleText: "What is your name?",
+      inputPlaceholder: "Full name",
+      descriptionText: "Add your name so friends can find you.",
+    },
+    2: {
+      badgeName: "4/4",
+      titleText: "Add your username",
+      inputPlaceholder: "Username",
+      descriptionText:
+        "Usernames can only contain letters, numbers, underscores, and periods.",
+    },
   }
 
   const buttonText = useMemo(() => {
@@ -95,7 +109,7 @@ export default function CreateCredentials() {
           }}>
           <Badge
             variant="primary"
-            name={badgeName[step]}
+            name={stepsData[step].badgeName}
             style={[isDisabled && styles.disabledBadge]}
           />
         </View>
@@ -105,39 +119,44 @@ export default function CreateCredentials() {
           <CrossMark color={theme.colors.white} />
         </TouchableOpacity>
       </View>
-      <View style={styles.mainContent}>
-        <CustomText style={styles.title} size="lg">
-          {titleText[step]}
-        </CustomText>
-        <Input
-          handleTextChange={setText}
-          variant="secondary"
-          placeholder={inputPlaceholder[step]}
-          value={text}
-          onSubmitEditing={handleSubmit}
-          autoFocus
-        />
-        <CustomText size="base" style={styles.description}>
-          {descriptionText[step]}
-        </CustomText>
-      </View>
-      <CustomButton
-        disabled={isDisabled}
-        fullWidth
-        title={buttonText}
-        variant="primary"
-        containerStyles={{ width: "100%" }}
-        textStyles={styles.buttonText}
-        onPress={handleSubmit}>
-        {(isLoading || isError) && (
-          <ButtonChildren
-            text={
-              isLoading ? "checking availability" : "username not available"
-            }
-            icon={isError ? "info" : "loader"}
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={styles.modalContainer}
+        onTouchStart={(e) => e.stopPropagation()}>
+        <View style={styles.mainContent}>
+          <CustomText style={styles.title} size="lg">
+            {stepsData[step].titleText}
+          </CustomText>
+          <Input
+            handleTextChange={setText}
+            variant="secondary"
+            placeholder={stepsData[step].inputPlaceholder}
+            value={text}
+            onSubmitEditing={handleSubmit}
+            autoFocus
           />
-        )}
-      </CustomButton>
+          <CustomText size="base" style={styles.description}>
+            {stepsData[step].descriptionText}
+          </CustomText>
+        </View>
+        <CustomButton
+          disabled={isDisabled}
+          fullWidth
+          title={buttonText}
+          variant="primary"
+          containerStyles={{ width: "100%" }}
+          textStyles={styles.buttonText}
+          onPress={handleSubmit}>
+          {(isLoading || isError) && (
+            <ButtonChildren
+              text={
+                isLoading ? "checking availability" : "username not available"
+              }
+              icon={isError ? "info" : "loader"}
+            />
+          )}
+        </CustomButton>
+      </KeyboardAvoidingView>
     </View>
   )
 }
@@ -182,5 +201,8 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontWeight: theme.fontWeight.bold,
+  },
+  modalContainer: {
+    height: "100%",
   },
 })
