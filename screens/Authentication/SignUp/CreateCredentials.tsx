@@ -145,7 +145,7 @@ export default function CreateCredentials() {
           fullWidth
           title={buttonText}
           variant="primary"
-          containerStyles={{ width: "100%", marginBottom: 50 }}
+          containerStyles={{ width: "100%", marginBottom: 20 }}
           textStyles={styles.buttonText}
           onPress={handleSubmit}>
           {(isLoading || isError) && (
