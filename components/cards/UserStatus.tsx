@@ -135,6 +135,6 @@ const styles = StyleSheet.create({
     flexShrink: 1,
   },
   textContainer: {
-    maxWidth: 181,
+    maxWidth: 277,
   },
 })
