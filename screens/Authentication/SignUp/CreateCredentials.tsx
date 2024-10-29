@@ -32,7 +32,7 @@ export default function CreateCredentials() {
   const [isError, setIsError] = useState(false)
 
   const isInputValid = useMemo(() => {
-    if (text.trim().length <= 10) return false
+    if (text.trim().length < 5) return false
 
     if (step === 1 && VALIDATION_PATTERNS.fullName.test(text)) return true
     if (step === 2 && VALIDATION_PATTERNS.username.test(text)) return true
@@ -102,27 +102,27 @@ export default function CreateCredentials() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.navigation}>
-        <View
-          style={{
-            flexGrow: 1,
-          }}>
-          <Badge
-            variant="primary"
-            name={stepsData[step].badgeName}
-            style={[isDisabled && styles.disabledBadge]}
-          />
-        </View>
-        <TouchableOpacity
-          style={styles.crossMarkContainer}
-          onPress={() => navigation.push("Home")}>
-          <CrossMark color={theme.colors.white} />
-        </TouchableOpacity>
-      </View>
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={styles.modalContainer}
+        style={[styles.modalContainer]}
         onTouchStart={(e) => e.stopPropagation()}>
+        <View style={styles.navigation}>
+          <View
+            style={{
+              flexGrow: 1,
+            }}>
+            <Badge
+              variant="primary"
+              name={stepsData[step].badgeName}
+              style={[isDisabled && styles.disabledBadge]}
+            />
+          </View>
+          <TouchableOpacity
+            style={styles.crossMarkContainer}
+            onPress={() => navigation.push("Home")}>
+            <CrossMark color={theme.colors.white} />
+          </TouchableOpacity>
+        </View>
         <View style={styles.mainContent}>
           <CustomText style={styles.title} size="lg">
             {stepsData[step].titleText}
@@ -139,12 +139,13 @@ export default function CreateCredentials() {
             {stepsData[step].descriptionText}
           </CustomText>
         </View>
+
         <CustomButton
           disabled={isDisabled}
           fullWidth
           title={buttonText}
           variant="primary"
-          containerStyles={{ width: "100%" }}
+          containerStyles={{ width: "100%", marginBottom: 30 }}
           textStyles={styles.buttonText}
           onPress={handleSubmit}>
           {(isLoading || isError) && (
@@ -166,7 +167,6 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.black,
     flex: 1,
     paddingTop: 44,
-    paddingBottom: 20,
     paddingHorizontal: 20,
   },
   navigation: {
@@ -204,5 +204,6 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     height: "100%",
+    flex: 1,
   },
 })
