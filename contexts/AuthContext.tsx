@@ -61,10 +61,15 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         await AsyncStorage.setItem("@Auth:user", JSON.stringify(user))
         setUser(user)
 
-        await axios.post(`${process.env.API_BASE_URL}/auth/google-signin`, {
-          token: idToken,
-          platform: Platform.OS,
-        })
+        const data = await axios.post(
+          `${process.env.API_BASE_URL}api/auth/google-signin`,
+          {
+            token: idToken,
+            platform: Platform.OS === "ios" ? "web" : "android",
+          },
+        )
+        const accessToken = data.data.access_token
+        await signIn(accessToken, user)
       }
     } catch (error) {
       if (isErrorWithCode(error)) {
@@ -75,6 +80,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
             break
           default:
         }
+        console.error("Error with loggin in", error)
       } else {
       }
     }

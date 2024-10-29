@@ -4,6 +4,7 @@ node_modules/
 # Expo specific
 .expo/
 dist/
+ios/
 web-build/
 
 # Debug files
