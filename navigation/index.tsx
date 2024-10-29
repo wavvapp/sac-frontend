@@ -13,6 +13,7 @@ import Search from "@/screens/Search"
 import { theme } from "@/theme"
 import { useMemo } from "react"
 import NoFriendsScreen from "@/screens/NoFriends"
+import { availableFriends, offlineFriends } from "@/data/users"
 
 export type RootStackParamList = {
   Home: any
@@ -29,9 +30,7 @@ export default function AppNavigator() {
   const Stack = createNativeStackNavigator<RootStackParamList>()
   const { isAuthenticated, isLoading } = useAuth()
   const hasFriends = useMemo(() => {
-    //TODO: Uncomment this line once the screen's implementation is approved. This line was commented so we could taste the nofriend screen
-    // const friends = [...availableFriends, ...offlineFriends]
-    const friends = []
+    const friends = [...availableFriends, ...offlineFriends]
     return friends.length !== 0
   }, [])
 
