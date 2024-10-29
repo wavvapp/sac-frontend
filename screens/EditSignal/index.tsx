@@ -50,7 +50,7 @@ export default function EditSignal() {
           flexGrow: 1,
           gap: 20,
           paddingTop: 62,
-          paddingBottom: 50,
+          paddingBottom: 122,
         }}>
         <UserAvatar
           imageUrl={require("@/assets/images/user-avatar.png")}
@@ -100,8 +100,10 @@ const style = StyleSheet.create({
     lineHeight: 28,
   },
   saveButton: {
+    position: "absolute",
+    bottom: 20,
     zIndex: 10,
-    bottom: 35,
-    alignSelf: "center",
+    width: "90%",
+    marginHorizontal: 20,
   },
 })
