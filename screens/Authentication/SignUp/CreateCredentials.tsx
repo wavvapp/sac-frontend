@@ -1,6 +1,5 @@
-import ButtonChildren from "@/components/ButtonChildren"
+import CredentialsButton from "@/components/CredentialsButton"
 import Badge from "@/components/ui/Badge"
-import { CustomButton } from "@/components/ui/Button"
 import CustomText from "@/components/ui/CustomText"
 import Input from "@/components/ui/Input"
 import CrossMark from "@/components/vectors/CrossMark"
@@ -36,6 +35,8 @@ export default function CreateCredentials() {
 
     if (step === 1 && VALIDATION_PATTERNS.fullName.test(text)) return true
     if (step === 2 && VALIDATION_PATTERNS.username.test(text)) return true
+
+    return false
   }, [step, text])
 
   const isDisabled = useMemo(() => {
@@ -67,15 +68,9 @@ export default function CreateCredentials() {
     },
   }
 
-  const buttonText = useMemo(() => {
-    if (isLoading || isError) return "" // we then use the <ButtonChildren component
-
-    return "NEXT"
-  }, [isError, isLoading])
-
   const handleUsernameSubmit = async () => {
     setIsLoading(true)
-    // setTimeout to mock fetching username from the backend.
+    // #TODO Handle logic for checking username from backend
     await new Promise((resolve) => setTimeout(resolve, 2000))
     if (text === "Username123") setIsError(true)
     setIsLoading(false)
@@ -139,24 +134,12 @@ export default function CreateCredentials() {
             {stepsData[step].descriptionText}
           </CustomText>
         </View>
-
-        <CustomButton
-          disabled={isDisabled}
-          fullWidth
-          title={buttonText}
-          variant="primary"
-          containerStyles={{ width: "100%", marginBottom: 20 }}
-          textStyles={styles.buttonText}
-          onPress={handleSubmit}>
-          {(isLoading || isError) && (
-            <ButtonChildren
-              text={
-                isLoading ? "checking availability" : "username not available"
-              }
-              icon={isError ? "info" : "loader"}
-            />
-          )}
-        </CustomButton>
+        <CredentialsButton
+          isDisabled={isDisabled}
+          isLoading={isLoading}
+          isError={isError}
+          handleSubmit={handleSubmit}
+        />
       </KeyboardAvoidingView>
     </View>
   )
@@ -198,9 +181,6 @@ const styles = StyleSheet.create({
   },
   disabledBadge: {
     opacity: 0.3,
-  },
-  buttonText: {
-    fontWeight: theme.fontWeight.bold,
   },
   modalContainer: {
     height: "100%",
