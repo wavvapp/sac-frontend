@@ -12,7 +12,6 @@ interface CustomTextProps extends TextProps {
   fontWeight?: FontWeightVariant
   fontFamily?: FontFamilyVariant
   fontStyle?: fontStyleVariant
-  children?: React.ReactNode
 }
 
 export default function CustomText({

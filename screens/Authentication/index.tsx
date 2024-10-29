@@ -47,24 +47,14 @@ export default function EntryScreen() {
           />
           <CustomText
             fontFamily="writer-mono"
-            size="lg"
+            size="sm"
             style={styles.agreementText}>
-            By clicking on{" "}
-            <Text style={{ fontWeight: "bold" }}>
-              Sign In / Create an account
-            </Text>{" "}
+            By clicking on
+            <Text> Sign In / Create an account </Text>
             you agree to our{" "}
-            <Text style={{ textDecorationLine: "underline" }}>
-              Terms of Services
-            </Text>
-            . Learn more about our{" "}
-            <Text style={{ textDecorationLine: "underline" }}>
-              Privacy Policy
-            </Text>{" "}
-            and{" "}
-            <Text style={{ textDecorationLine: "underline" }}>
-              Cookies Policy
-            </Text>
+            <Text style={styles.underline}>Terms of Services</Text>. Learn more
+            about our <Text style={styles.underline}>Privacy Policy</Text> and{" "}
+            <Text style={styles.underline}>Cookies Policy</Text>.
           </CustomText>
         </View>
       </View>
@@ -103,11 +93,12 @@ const styles = StyleSheet.create({
 
   agreementText: {
     textAlign: "center",
-    fontSize: 13,
     color: theme.colors.white_500,
-    lineHeight: 20,
   },
   buttonText: {
     fontWeight: theme.fontWeight.bold,
+  },
+  underline: {
+    textDecorationLine: "underline",
   },
 })
