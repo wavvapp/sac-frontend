@@ -59,7 +59,7 @@ export default function AppNavigator() {
           />
           <Stack.Screen
             name="CreateCredentials"
-            options={{ presentation: "modal", headerShown: false }}
+            options={{ headerShown: false }}
             component={CreateCredentials}
           />
           <Stack.Screen
