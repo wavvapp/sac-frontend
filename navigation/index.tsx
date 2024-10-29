@@ -9,15 +9,17 @@ import Login from "@/screens/Authentication/Login"
 import CustomSplashScreen from "@/screens/CustomSplashScreen"
 import Settings from "@/screens/Settings"
 import Signaling from "@/components/lists/Signaling"
+import Search from "@/screens/Search"
 import { theme } from "@/theme"
 
 export type RootStackParamList = {
-  Home: undefined
+  Home: any
   EditSignal: undefined
   Login: undefined
   SignUp: undefined
   Settings: undefined
   Signaling: undefined
+  Search: undefined
 }
 
 export default function AppNavigator() {
@@ -52,6 +54,11 @@ export default function AppNavigator() {
             name="Signaling"
             options={{ presentation: "modal", headerShown: false }}
             component={Signaling}
+          />
+          <Stack.Screen
+            name="Search"
+            options={{ headerShown: false }}
+            component={Search}
           />
         </Stack.Navigator>
       ) : (
