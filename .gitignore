@@ -1,12 +1,22 @@
+# Node Modules
 node_modules/
+
+# Expo specific
 .expo/
 dist/
+web-build/
+
+# Debug files
 npm-debug.*
+
+# Security-related files
 *.jks
 *.p8
 *.p12
 *.key
 *.mobileprovision
+
+# Backup or original files
 *.orig.*
 web-build/
 .env
