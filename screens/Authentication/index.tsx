@@ -9,17 +9,15 @@ import { useNavigation } from "@react-navigation/native"
 import { RootStackParamList } from "@/navigation"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 
-type SignUpProp = NativeStackNavigationProp<RootStackParamList, "SignUp">
+type SignInProp = NativeStackNavigationProp<RootStackParamList, "Login">
 export default function EntryScreen() {
-  const navigation = useNavigation<SignUpProp>()
+  const navigation = useNavigation<SignInProp>()
   const handleCreateAccount = () => {
     // this will navigate to create an account
     // navigation.navigate("CreateAccount")
   }
 
-  const handleSignIn = () => {
-    navigation.navigate("SignUp")
-  }
+  const handleSignUp = () => navigation.navigate("Login")
   const noise = useSharedValue(false)
 
   return (
@@ -42,7 +40,7 @@ export default function EntryScreen() {
           <CustomButton
             variant="destructive"
             title="Sign In"
-            onPress={handleSignIn}
+            onPress={handleSignUp}
             textStyles={styles.buttonText}
           />
           <CustomText
