@@ -21,17 +21,12 @@ export default function SignalingUser(
       <View>
         {online ? (
           <UserAvailability
-            firstName={user.firstName}
-            lastName={user.lastName}
+            fullName={user.fullname}
             time={user.time}
             activity={user.activity}
           />
         ) : (
-          <UserInfo
-            firstName={user.firstName}
-            lastName={user.lastName}
-            username={user.username}
-          />
+          <UserInfo fullName={user.fullname} username={user.username} />
         )}
       </View>
     </View>
