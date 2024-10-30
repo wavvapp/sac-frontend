@@ -13,13 +13,14 @@ import ShareCard from "@/components/Share"
 import CustomText from "@/components/ui/CustomText"
 import { theme } from "@/theme"
 import { useAuth } from "@/contexts/AuthContext"
-type EditSignalScrenProps = NativeStackNavigationProp<
+
+type EditSignalScreenProps = NativeStackNavigationProp<
   RootStackParamList,
   "EditSignal"
 >
 
 export default function EditSignal() {
-  const navigation = useNavigation<EditSignalScrenProps>()
+  const navigation = useNavigation<EditSignalScreenProps>()
   const { signOut } = useAuth()
   const handleSignOut = async () => {
     try {
@@ -44,9 +45,10 @@ export default function EditSignal() {
       </View>
       <ScrollView
         contentContainerStyle={{
+          flexGrow: 1,
           gap: 20,
           paddingTop: 62,
-          paddingBottom: 88,
+          paddingBottom: 122,
         }}>
         <UserAvatar
           imageUrl={require("@/assets/images/user-avatar.png")}
@@ -73,6 +75,7 @@ export default function EditSignal() {
 
 const style = StyleSheet.create({
   container: {
+    flex: 1,
     paddingTop: 44,
     backgroundColor: theme.colors.white,
     position: "relative",
@@ -96,7 +99,7 @@ const style = StyleSheet.create({
   },
   saveButton: {
     position: "absolute",
-    bottom: 10,
+    bottom: 20,
     zIndex: 10,
     width: "90%",
     marginHorizontal: 20,
