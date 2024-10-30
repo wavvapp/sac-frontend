@@ -1,7 +1,6 @@
 import UserStatus from "@/components/cards/UserStatus"
-// import PerlinNoise from "@/components/PerlinNoise"
+import PerlinNoise from "@/components/PerlinNoise"
 import { offlineFriends } from "@/data/users"
-import { userInfo } from "@/data/user"
 import { RootStackParamList } from "@/navigation"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { StyleSheet, View, Dimensions } from "react-native"
@@ -11,7 +10,7 @@ import {
   useSharedValue,
 } from "react-native-reanimated"
 import { AnimatedSwitch } from "@/components/AnimatedSwitch"
-import { useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import Signaling, { SignalingRef } from "@/components/lists/Signaling"
 import Settings from "@/components/vectors/Settings"
 import { theme } from "@/theme"
@@ -20,6 +19,8 @@ import ShareIcon from "@/components/vectors/ShareIcon"
 import { CustomButton } from "@/components/ui/Button"
 import { useNavigation } from "@react-navigation/native"
 import { onShare } from "@/utils/share"
+import AsyncStorage from "@react-native-async-storage/async-storage"
+import { User } from "@/types"
 
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -32,10 +33,19 @@ export default function HomeScreen() {
   const isOn = useSharedValue(false)
   const signalingRef = useRef<SignalingRef>(null)
   const navigation = useNavigation<HomeScreenProps>()
+  const [userInfo, setUserInfo] = useState<User | null>(null)
 
   const handlePress = () => {
     isOn.value = !isOn.value
   }
+
+  const getUser = useCallback(async () => {
+    const user = await AsyncStorage.getItem("@Auth:user")
+    if (!user) return
+    const userInfo = JSON.parse(user)
+    console.log("userinfo", userInfo)
+    setUserInfo(userInfo)
+  }, [])
 
   useDerivedValue(() => {
     if (isOn.value) {
@@ -44,6 +54,9 @@ export default function HomeScreen() {
     return runOnJS(setIsVisible)(false)
   }, [isOn.value])
 
+  useEffect(() => {
+    getUser()
+  }, [getUser])
   return (
     <View style={styles.container}>
       {/* <PerlinNoise isOn={isOn} color1="#281713" color2="blue" /> */}

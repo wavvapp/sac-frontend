@@ -34,7 +34,8 @@ api.interceptors.response.use(
     return response
   },
   async (error: AxiosError) => {
-    if (error.response?.status === 401) {
+    const refreshToken = await AsyncStorage.getItem("@Auth:refreshToken")
+    if (error.response?.status === 401 && refreshToken) {
       // Handle unauthorized errors
     }
     return Promise.reject(error)

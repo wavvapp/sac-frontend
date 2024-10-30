@@ -16,7 +16,7 @@ const MAX_VISIBLE_FRIENDS = 3
 
 interface UserStatusProps extends ViewStyle {
   friends: User[] | []
-  user: User
+  user: User | null
   style?: ViewStyle
   isOn: SharedValue<boolean>
 }
@@ -32,7 +32,7 @@ export default function UserStatus({
   const remainingCount = Math.max(friends.length - MAX_VISIBLE_FRIENDS, 0)
 
   const fullFriendsList = visibleFriends
-    .map((friend) => `${friend.firstName} ${friend.lastName.charAt(0)}`)
+    .map((friend) => `${friend.firstName} ${friend.lastName ?? ""}`)
     .join(", ")
 
   const visibleFriendsList =
@@ -60,12 +60,14 @@ export default function UserStatus({
         style={[styles.container, style, cardAnimatedStyle]}
         {...rest}>
         <View style={styles.userContainer}>
-          <UserAvailability
-            firstName={user.firstName}
-            lastName={user.lastName}
-            time={user.time}
-            activity={user.activity}
-          />
+          {user && (
+            <UserAvailability
+              firstName={user.firstName}
+              lastName={user.lastName}
+              time={user.time}
+              activity={user.activity}
+            />
+          )}
         </View>
         <View style={styles.friendsContainer}>
           <CustomText size="sm" fontFamily="writer-mono">

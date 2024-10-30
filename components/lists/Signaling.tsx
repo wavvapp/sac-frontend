@@ -35,7 +35,7 @@ const Signaling = forwardRef<SignalingRef, SignalingProps>((_, ref) => {
       const { data } = await api.get("friendships")
       return data
     } catch (error) {
-      console.warn("Error fetching data:", error)
+      console.log("Unable to fetch friendships:", error)
       return null
     } finally {
       setIsLoading(false)
