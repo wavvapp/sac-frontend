@@ -3,7 +3,7 @@ import { User } from "@/types"
 export const availableFriends: User[] = [
   {
     id: "1",
-    fullname: "Emil Wagner",
+    name: "Emil Wagner",
     username: "emilWAgner",
     time: "Evening",
     activity: "jodelkeller",
@@ -11,7 +11,7 @@ export const availableFriends: User[] = [
   },
   {
     id: "2",
-    fullname: "Vincent Reichel",
+    name: "Vincent Reichel",
     username: "vReichel",
     time: "Evening",
     activity: "jodelkeller",
@@ -19,7 +19,7 @@ export const availableFriends: User[] = [
   },
   {
     id: "3",
-    fullname: "Gretchen Casper",
+    name: "Gretchen Casper",
     username: "casperGretchen",
     time: "Evening",
     activity: "jodelkeller",
@@ -27,7 +27,7 @@ export const availableFriends: User[] = [
   },
   {
     id: "4",
-    fullname: "Elizabeth Carroll",
+    name: "Elizabeth Carroll",
     username: "carrolEl",
     time: "Evening",
     activity: "jodelkeller",
@@ -35,7 +35,7 @@ export const availableFriends: User[] = [
   },
   {
     id: "5",
-    fullname: "Kayla Leuschke",
+    name: "Kayla Leuschke",
     username: "kaylaLeuschke",
     time: "Evening",
     activity: "jodelkeller",
@@ -46,7 +46,7 @@ export const availableFriends: User[] = [
 export const offlineFriends: User[] = [
   {
     id: "6",
-    fullname: "Johnny Hopie",
+    name: "Johnny Hopie",
     username: "hopieJohn",
     time: "Evening",
     activity: "jodelkeller",
@@ -54,7 +54,7 @@ export const offlineFriends: User[] = [
   },
   {
     id: "7",
-    fullname: "Sophia Davis",
+    name: "Sophia Davis",
     username: "sophiedavis",
     time: "Morning",
     activity: "sophiadv",
@@ -62,7 +62,7 @@ export const offlineFriends: User[] = [
   },
   {
     id: "8",
-    fullname: "Oliver Twist",
+    name: "Oliver Twist",
     username: "oliverTwist",
     time: "Afternoon",
     activity: "olivertwist",
@@ -70,7 +70,7 @@ export const offlineFriends: User[] = [
   },
   {
     id: "9",
-    fullname: "Liam Johnson",
+    name: "Liam Johnson",
     username: "liamjohn",
     time: "Night",
     activity: "liamjohn",
@@ -78,7 +78,7 @@ export const offlineFriends: User[] = [
   },
   {
     id: "10",
-    fullname: "Mia Miller",
+    name: "Mia Miller",
     username: "miaMiller",
     time: "Morning",
     activity: "miam",
@@ -86,7 +86,7 @@ export const offlineFriends: User[] = [
   },
   {
     id: "11",
-    fullname: "Lucas Brown",
+    name: "Lucas Brown",
     username: "lucasBrown",
     time: "Afternoon",
     activity: "lucasb",
@@ -94,7 +94,7 @@ export const offlineFriends: User[] = [
   },
   {
     id: "12",
-    fullname: "Amelia Smith",
+    name: "Amelia Smith",
     username: "ameliasmith",
     time: "Evening",
     activity: "ameliasmith",
@@ -102,7 +102,7 @@ export const offlineFriends: User[] = [
   },
   {
     id: "13",
-    fullname: "Ethan Moore",
+    name: "Ethan Moore",
     username: "ethanmoore",
     time: "Night",
     activity: "ethanmoore",
@@ -110,7 +110,7 @@ export const offlineFriends: User[] = [
   },
   {
     id: "14",
-    fullname: "Isabella White",
+    name: "Isabella White",
     username: "isabellawhite",
     time: "Morning",
     activity: "isabellaw",
@@ -118,7 +118,7 @@ export const offlineFriends: User[] = [
   },
   {
     id: "15",
-    fullname: "Mason Thomas",
+    name: "Mason Thomas",
     username: "thomasMason",
     time: "Afternoon",
     activity: "masont",
@@ -126,7 +126,7 @@ export const offlineFriends: User[] = [
   },
   {
     id: "16",
-    fullname: "Ava Harris",
+    name: "Ava Harris",
     username: "avaharris",
     time: "Evening",
     activity: "avaharris",
@@ -134,7 +134,7 @@ export const offlineFriends: User[] = [
   },
   {
     id: "17",
-    fullname: "James Walker",
+    name: "James Walker",
     username: "jamesWalker",
     time: "Morning",
     activity: "jamesw",
@@ -142,7 +142,7 @@ export const offlineFriends: User[] = [
   },
   {
     id: "18",
-    fullname: "Harper Young",
+    name: "Harper Young",
     username: "youngHarper",
     time: "Afternoon",
     activity: "harpery",
@@ -150,7 +150,7 @@ export const offlineFriends: User[] = [
   },
   {
     id: "19",
-    fullname: "Elijah King",
+    name: "Elijah King",
     username: "elijahKing",
     time: "Night",
     activity: "elijahk",
@@ -158,7 +158,7 @@ export const offlineFriends: User[] = [
   },
   {
     id: "20",
-    fullname: "Charlotte Scott",
+    name: "Charlotte Scott",
     username: "charlotteSCott",
     time: "Evening",
     activity: "charlottescott",

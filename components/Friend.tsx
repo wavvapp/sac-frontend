@@ -17,7 +17,7 @@ export default function FriendCard({
       onPress={() => handleChange(user.id)}>
       <UserAvatar imageUrl={user.imageUrl || 0} />
       <UserInfo
-        fullName={user.fullname}
+        fullName={user.name}
         username={user.username}
         style={styles.useInfoStyles}
       />

@@ -38,7 +38,7 @@ export type Theme = {
 export interface User {
   id: string
   username: string
-  fullname: string
+  name: string
   time: string
   activity: string
   selected?: boolean

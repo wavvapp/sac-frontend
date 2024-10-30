@@ -32,7 +32,7 @@ export default function UserStatus({
   const remainingCount = Math.max(friends.length - MAX_VISIBLE_FRIENDS, 0)
 
   const fullFriendsList = visibleFriends
-    .map((friend) => `${friend.fullname}`)
+    .map((friend) => `${friend.name}`)
     .join(", ")
 
   const visibleFriendsList =
@@ -64,7 +64,7 @@ export default function UserStatus({
         <View style={styles.userContainer}>
           <View style={styles.userContainer}>
             <UserAvailability
-              fullName={user.fullname}
+              fullName={user.name}
               time={user.time}
               activity={user.activity}
             />
