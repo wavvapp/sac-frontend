@@ -1,5 +1,5 @@
 import UserStatus from "@/components/cards/UserStatus"
-import PerlinNoise from "@/components/PerlinNoise"
+// import PerlinNoise from "@/components/PerlinNoise"
 import { offlineFriends } from "@/data/users"
 import { userInfo } from "@/data/user"
 import { RootStackParamList } from "@/navigation"
@@ -46,7 +46,7 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      <PerlinNoise isOn={isOn} color1="#281713" color2="blue" />
+      {/* <PerlinNoise isOn={isOn} color1="#281713" color2="blue" /> */}
       <View style={styles.header}>
         <Badge variant="primary" name="100" />
         <View style={styles.buttonContainer}>

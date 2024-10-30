@@ -18,8 +18,8 @@ import axios from "axios"
 const FindFriends = () => {
   const navigation = useNavigation()
   const [search, setSearch] = useState("")
-  const [addedFriends, setAddedFriends] = useState<User[]>([])
-  const [filteredFriends, setFilteredFriends] = useState(availableFriends)
+  const [addedUsers, setAddedUsers] = useState<User[]>([])
+  const [filteredUsers, setFilteredUsers] = useState(availableFriends)
   const [allUsers, setAllUsers] = useState<User[]>([])
   useEffect(() => {
     fetchUsers()
@@ -44,32 +44,29 @@ const FindFriends = () => {
       }))
 
       console.log(users, "fetched freind")
-      setAllUsers(response.data)
-      setFilteredFriends(response.data)
+      setAllUsers(users)
+      setFilteredUsers(users)
     } catch (error) {
       console.error("error fetching users", error)
     }
   }
 
-  const handleSearch = (text: string) => {
-    setSearch(text)
+  const handleSearch = (name: string) => {
+    setSearch(name)
     const filtered = allUsers
-      .filter((users) =>
-        `${users.firstName} ${users.lastName}`
-          .toLowerCase()
-          .includes(text.toLowerCase()),
-      )
-      .sort((a, b) => a.firstName.localeCompare(b.firstName))
-    setFilteredFriends(filtered)
+      .filter((user) => user.name.toLowerCase().includes(name.toLowerCase()))
+      .sort((a, b) => a.name.localeCompare(b.name))
+    setFilteredUsers(filtered)
+    console.log(filtered, "filtered")
   }
 
-  const handleAddFriend = (friend: User) => {
-    setAddedFriends((prev) => {
-      const isAdded = prev.some((addedFriend) => addedFriend.id === friend.id)
+  const handleAddFriend = (user: User) => {
+    setAddedUsers((prev) => {
+      const isAdded = prev.some((addedFriend) => addedFriend.id === user.id)
       if (isAdded) {
-        return prev.filter((addedFriend) => addedFriend.id !== friend.id)
+        return prev.filter((addedFriend) => addedFriend.id !== user.id)
       } else {
-        return [...prev, friend]
+        return [...prev, user]
       }
     })
   }
@@ -97,34 +94,32 @@ const FindFriends = () => {
 
       <ScrollView style={styles.friendsList}>
         {search &&
-          filteredFriends.length > 0 &&
-          filteredFriends.map((friend) => (
+          filteredUsers.length > 0 &&
+          filteredUsers.map((user) => (
             <TouchableOpacity
-              key={friend.id}
+              key={user.id}
               style={styles.friendItem}
-              onPress={() => handleAddFriend(friend)}>
+              onPress={() => handleAddFriend(user)}>
               <View style={styles.userDetails}>
-                <UserAvatar imageUrl={friend.imageUrl || 0} />
+                <UserAvatar imageUrl={user.imageUrl} />
                 <View style={{ marginLeft: 8 }}>
                   <UserInfo
-                    firstName={friend.firstName}
-                    lastName={friend.lastName}
-                    username={friend.username}
+                    firstName={user.username} // Use username as first name
+                    lastName={user.username} // Use username as last name
+                    username={user.username} // Optional: if you want to show username somewhere
                   />
                 </View>
               </View>
-              {addedFriends.some(
-                (addedFriend) => addedFriend.id === friend.id,
-              ) ? (
+              {addedUsers.some((addedUsers) => addedUsers.id === user.id) ? (
                 <CheckIcon
                   color={theme.colors.black}
-                  onPress={() => handleAddFriend(friend)}
+                  onPress={() => handleAddFriend(user)}
                 />
               ) : (
                 <CustomButton
                   variant="outline"
                   title="Add"
-                  onPress={() => handleAddFriend(friend)}
+                  onPress={() => handleAddFriend(user)}
                 />
               )}
             </TouchableOpacity>
