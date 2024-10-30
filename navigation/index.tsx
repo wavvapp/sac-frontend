@@ -11,9 +11,6 @@ import Settings from "@/screens/Settings"
 import Signaling from "@/components/lists/Signaling"
 import Search from "@/screens/Search"
 import { theme } from "@/theme"
-import { useMemo } from "react"
-import NoFriendsScreen from "@/screens/NoFriends"
-import { availableFriends, offlineFriends } from "@/data/users"
 
 export type RootStackParamList = {
   Home: any
@@ -23,16 +20,11 @@ export type RootStackParamList = {
   Settings: undefined
   Signaling: undefined
   Search: undefined
-  NoFriends: undefined
 }
 
 export default function AppNavigator() {
   const Stack = createNativeStackNavigator<RootStackParamList>()
   const { isAuthenticated, isLoading } = useAuth()
-  const hasFriends = useMemo(() => {
-    const friends = [...availableFriends, ...offlineFriends]
-    return friends.length !== 0
-  }, [])
 
   if (isLoading) {
     return <CustomSplashScreen />
@@ -47,19 +39,11 @@ export default function AppNavigator() {
             headerTitleStyle: { color: theme.colors.white },
           }}
           initialRouteName="Home">
-          {hasFriends ? (
-            <Stack.Screen
-              name="Home"
-              options={{ headerShown: false }}
-              component={HomeScreen}
-            />
-          ) : (
-            <Stack.Screen
-              name="NoFriends"
-              options={{ headerShown: false }}
-              component={NoFriendsScreen}
-            />
-          )}
+          <Stack.Screen
+            name="Home"
+            options={{ headerShown: false }}
+            component={HomeScreen}
+          />
           <Stack.Screen name="Settings" component={Settings} />
           <Stack.Screen
             name="EditSignal"
