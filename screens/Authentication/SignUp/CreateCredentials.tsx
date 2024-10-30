@@ -89,7 +89,6 @@ export default function CreateCredentials() {
     else await handleUsernameSubmit()
   }
 
-  // Clear the states on every keystroke
   useEffect(() => {
     setIsLoading(false)
     setIsError(false)
