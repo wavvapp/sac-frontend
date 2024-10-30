@@ -4,7 +4,7 @@ import { availableFriends, offlineFriends } from "@/data/users"
 import { userInfo } from "@/data/user"
 import { RootStackParamList } from "@/navigation"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
-import { StyleSheet, View, Dimensions, TouchableOpacity } from "react-native"
+import { StyleSheet, View, Dimensions } from "react-native"
 import {
   runOnJS,
   useDerivedValue,
@@ -15,6 +15,11 @@ import { useMemo, useRef, useState } from "react"
 import Signaling, { SignalingRef } from "@/components/lists/Signaling"
 import Settings from "@/components/vectors/Settings"
 import { theme } from "@/theme"
+import Badge from "@/components/ui/Badge"
+import ShareIcon from "@/components/vectors/ShareIcon"
+import { CustomButton } from "@/components/ui/Button"
+import { useNavigation } from "@react-navigation/native"
+import { onShare } from "@/utils/share"
 import NoFriends from "@/components/cards/NoFriends"
 
 export type HomeScreenProps = NativeStackNavigationProp<
@@ -27,6 +32,7 @@ export default function HomeScreen() {
   const [_, setIsVisible] = useState(false)
   const isOn = useSharedValue(false)
   const signalingRef = useRef<SignalingRef>(null)
+  const navigation = useNavigation<HomeScreenProps>()
 
   const hasFriends = useMemo(() => {
     // TODO: Use the actual friends list, once BE is integrated */
@@ -48,10 +54,18 @@ export default function HomeScreen() {
   return (
     <View style={styles.container}>
       <PerlinNoise isOn={isOn} color1="#281713" color2="blue" />
-      <View style={{ width: "100%" }}>
-        <TouchableOpacity style={styles.iconContainer}>
-          <Settings />
-        </TouchableOpacity>
+      <View style={styles.header}>
+        <Badge variant="primary" name="100" />
+        <View style={styles.buttonContainer}>
+          <CustomButton style={styles.iconButton} onPress={onShare}>
+            <ShareIcon color={theme.colors.white} />
+          </CustomButton>
+          <CustomButton
+            style={styles.iconButton}
+            onPress={() => navigation.push("Settings")}>
+            <Settings color={theme.colors.white} />
+          </CustomButton>
+        </View>
       </View>
       {!hasFriends ? (
         <NoFriends />
@@ -80,16 +94,20 @@ const styles = StyleSheet.create({
     paddingTop: 44,
     paddingHorizontal: 21,
   },
-  iconContainer: {
-    backgroundColor: theme.colors.gray,
-    borderRadius: 100,
-    padding: 4,
-    height: 48,
-    width: 48,
-    justifyContent: "center",
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
     alignItems: "center",
-    alignSelf: "flex-end",
-    marginBottom: 16,
+    width: "100%",
+    marginTop: 20,
+    marginBottom: 20,
+  },
+  buttonContainer: {
+    flexDirection: "row",
+  },
+  iconButton: {
+    borderRadius: 100,
+    padding: 12,
   },
   UserStatus: {
     marginVertical: 4,
