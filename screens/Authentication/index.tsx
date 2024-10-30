@@ -9,9 +9,9 @@ import { useNavigation } from "@react-navigation/native"
 import { RootStackParamList } from "@/navigation"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 
-type SignInProp = NativeStackNavigationProp<RootStackParamList, "Login">
+type EntryScreenProps = NativeStackNavigationProp<RootStackParamList, "Login">
 export default function EntryScreen() {
-  const navigation = useNavigation<SignInProp>()
+  const navigation = useNavigation<EntryScreenProps>()
   const handleCreateAccount = () => {
     // this will navigate to create an account
     // navigation.navigate("CreateAccount")
