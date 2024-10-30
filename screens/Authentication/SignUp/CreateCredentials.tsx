@@ -74,6 +74,7 @@ export default function CreateCredentials() {
     await new Promise((resolve) => setTimeout(resolve, 2000))
     if (text === "Username123") setIsError(true)
     setIsLoading(false)
+    navigation.navigate("Home")
   }
 
   const handleNameSubmit = () => {
