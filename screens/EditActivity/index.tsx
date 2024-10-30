@@ -23,8 +23,12 @@ export default function EditActivity({
   const [text, setText] = useState("")
 
   const handleEdit = () => {
-    updateEditActivity(text)
-    Keyboard.dismiss()
+    if (text.trim()) {
+      updateEditActivity(text.trim())
+      Keyboard.dismiss()
+    } else {
+      closeModal()
+    }
   }
 
   return (
