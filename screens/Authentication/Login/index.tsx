@@ -12,7 +12,7 @@ import {
 GoogleSignin.configure({
   webClientId: process.env.WEB_CLIENT_ID,
   iosClientId: process.env.IOS_CLIENT_ID,
-  offlineAccess: false,
+  offlineAccess: true,
 })
 type LoginProp = NativeStackNavigationProp<RootStackParamList, "Login">
 
