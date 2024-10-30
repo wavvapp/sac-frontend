@@ -57,14 +57,28 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       if (isSuccessResponse(response)) {
         const idToken = response.data.idToken ?? ""
         const user = response.data.user
+        const apiResponse = await axios.post(
+          `${process.env.API_BASE_URL}/auth/google-signin`,
+          {
+            token: idToken,
+            platform: Platform.OS === "ios" ? "web" : "android",
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          },
+        )
+        console.log("API Response:", apiResponse.data)
+        const { access_token: accessToken, refresh_token: refreshToken } =
+          apiResponse.data
+        console.log("Access Token:", accessToken)
+        console.log("Refresh Token:", refreshToken)
+        await AsyncStorage.setItem("@Auth:accessToken", accessToken)
+        await AsyncStorage.setItem("@Auth:refreshToken", refreshToken)
         await AsyncStorage.setItem("@Auth:token", idToken)
         await AsyncStorage.setItem("@Auth:user", JSON.stringify(user))
         setUser(user)
-
-        await axios.post(`${process.env.API_BASE_URL}/auth/google-signin`, {
-          token: idToken,
-          platform: Platform.OS,
-        })
       }
     } catch (error) {
       if (isErrorWithCode(error)) {
@@ -74,8 +88,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
           case statusCodes.PLAY_SERVICES_NOT_AVAILABLE:
             break
           default:
+            console.error("Error:", error)
         }
       } else {
+        console.error("Unexpected Error:", error)
       }
     }
   }
@@ -85,6 +101,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
     const storedUser = await AsyncStorage.getItem("@Auth:user")
     const storedToken = await AsyncStorage.getItem("@Auth:token")
+    console.log(storedToken)
 
     if (storedUser && storedToken) {
       setUser(JSON.parse(storedUser))

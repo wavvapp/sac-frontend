@@ -3,7 +3,7 @@ import Input from "@/components/ui/Input"
 import UserInfo from "@/components/UserInfo"
 import ShareCard from "@/components/Share"
 import { CustomButton } from "@/components/ui/Button"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import CloseIcon from "@/components/vectors/CloseIcon"
 import { availableFriends } from "@/data/users"
 import { useNavigation } from "@react-navigation/native"
@@ -12,18 +12,50 @@ import CustomText from "@/components/ui/CustomText"
 import { User } from "@/types"
 import { theme } from "@/theme"
 import CheckIcon from "@/components/vectors/CheckIcon"
+import AsyncStorage from "@react-native-async-storage/async-storage"
+import axios from "axios"
 
 const FindFriends = () => {
   const navigation = useNavigation()
   const [search, setSearch] = useState("")
   const [addedFriends, setAddedFriends] = useState<User[]>([])
   const [filteredFriends, setFilteredFriends] = useState(availableFriends)
+  const [allUsers, setAllUsers] = useState<User[]>([])
+  useEffect(() => {
+    fetchUsers()
+  }, [])
+  const fetchUsers = async () => {
+    try {
+      const accessToken = await AsyncStorage.getItem("@Auth:accessToken")
+      if (!accessToken) {
+        console.log("Access token not found ")
+        return
+      }
+      const response = await axios.get(`${process.env.API_BASE_URL}/users`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      const users = response.data.map((user: any) => ({
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        imageUrl: user.profile,
+      }))
+
+      console.log(users, "fetched freind")
+      setAllUsers(response.data)
+      setFilteredFriends(response.data)
+    } catch (error) {
+      console.error("error fetching users", error)
+    }
+  }
 
   const handleSearch = (text: string) => {
     setSearch(text)
-    const filtered = availableFriends
-      .filter((friend) =>
-        `${friend.firstName} ${friend.lastName} ${friend.username}`
+    const filtered = allUsers
+      .filter((users) =>
+        `${users.firstName} ${users.lastName}`
           .toLowerCase()
           .includes(text.toLowerCase()),
       )
