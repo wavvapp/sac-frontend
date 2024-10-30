@@ -14,10 +14,10 @@ GoogleSignin.configure({
   iosClientId: process.env.IOS_CLIENT_ID,
   offlineAccess: true,
 })
-type SignProp = NativeStackNavigationProp<RootStackParamList, "Login">
+type LoginProps = NativeStackNavigationProp<RootStackParamList, "Login">
 
 export default function Login() {
-  const navigation = useNavigation<SignProp>()
+  const navigation = useNavigation<LoginProps>()
   const { signInWithGoogle, signIn } = useAuth()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
