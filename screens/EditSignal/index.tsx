@@ -7,38 +7,22 @@ import { useNavigation } from "@react-navigation/native"
 import { RootStackParamList } from "@/navigation"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import FriendsList from "@/components/lists/Friends"
-import { useAuth } from "@/contexts/AuthContext"
 import Activity from "@/components/Activity"
 import { ScrollView } from "react-native-gesture-handler"
 import ShareCard from "@/components/Share"
 import CustomText from "@/components/ui/CustomText"
 import { theme } from "@/theme"
 
-type EditSignalScrenProps = NativeStackNavigationProp<
+type EditSignalScreenProps = NativeStackNavigationProp<
   RootStackParamList,
   "EditSignal"
 >
 
 export default function EditSignal() {
-  const navigation = useNavigation<EditSignalScrenProps>()
-  const { signOut } = useAuth()
-
-  const handleSignOut = async () => {
-    try {
-      await signOut()
-      navigation.navigate("Login") // Navigate to the Login screen after signing out
-    } catch (error) {
-      console.error("Error signing out:", error)
-    }
-  }
+  const navigation = useNavigation<EditSignalScreenProps>()
 
   return (
     <View style={style.container}>
-      <CustomButton
-        title="Sign Out"
-        onPress={handleSignOut}
-        textSize={"base"}
-      />
       <View style={style.navBar}>
         <CustomText style={style.headerText} fontWeight="bold">
           Edit status
