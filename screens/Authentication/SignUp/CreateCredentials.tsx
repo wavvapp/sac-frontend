@@ -54,13 +54,13 @@ export default function CreateCredentials() {
     }
   > = {
     1: {
-      badgeName: "3/4",
+      badgeName: "1/2",
       titleText: "What is your name?",
       inputPlaceholder: "Full name",
       descriptionText: "Add your name so friends can find you.",
     },
     2: {
-      badgeName: "4/4",
+      badgeName: "2/2",
       titleText: "Add your username",
       inputPlaceholder: "Username",
       descriptionText:
