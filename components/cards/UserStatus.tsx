@@ -32,7 +32,7 @@ export default function UserStatus({
   const remainingCount = Math.max(friends.length - MAX_VISIBLE_FRIENDS, 0)
 
   const fullFriendsList = visibleFriends
-    .map((friend) => `${friend.firstName} ${friend.lastName ?? ""}`)
+    .map((friend) => `${friend.firstName} ${friend.lastName?.charAt(0)}`)
     .join(", ")
 
   const visibleFriendsList =

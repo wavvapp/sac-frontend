@@ -43,7 +43,6 @@ export default function HomeScreen() {
     const user = await AsyncStorage.getItem("@Auth:user")
     if (!user) return
     const userInfo = JSON.parse(user)
-    console.log("userinfo", userInfo)
     setUserInfo(userInfo)
   }, [])
 
@@ -59,7 +58,7 @@ export default function HomeScreen() {
   }, [getUser])
   return (
     <View style={styles.container}>
-      {/* <PerlinNoise isOn={isOn} color1="#281713" color2="blue" /> */}
+      <PerlinNoise isOn={isOn} color1="#281713" color2="blue" />
       <View style={styles.header}>
         <Badge variant="primary" name="100" />
         <View style={styles.buttonContainer}>

@@ -17,7 +17,7 @@ const api = axios.create({
 // Request Interceptor
 api.interceptors.request.use(
   async (config: InternalAxiosRequestConfig) => {
-    const token = await AsyncStorage.getItem("@Auth:token") // Dynamically get token
+    const token = await AsyncStorage.getItem("@Auth:token")
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
     }
@@ -36,7 +36,20 @@ api.interceptors.response.use(
   async (error: AxiosError) => {
     const refreshToken = await AsyncStorage.getItem("@Auth:refreshToken")
     if (error.response?.status === 401 && refreshToken) {
-      // Handle unauthorized errors
+      const url = `${process.env.API_BASE_URL}/api/auth/refresh-token`
+      const body = {
+        refresh_token: refreshToken,
+      }
+      const { data } = await axios.post(url, body)
+
+      const accessToken = data.access_token
+      const new_refreshToken = data.refresh_token
+      await AsyncStorage.setItem("@Auth:token", accessToken)
+      await AsyncStorage.setItem("@Auth:refreshToken", new_refreshToken)
+
+      error.response.config.headers["Authorization"] = "Bearer " + accessToken
+      console.log("============Successfully refresh token!=============")
+      return axios(error.response.config)
     }
     return Promise.reject(error)
   },
