@@ -32,7 +32,7 @@ export default function UserStatus({
   const remainingCount = Math.max(friends.length - MAX_VISIBLE_FRIENDS, 0)
 
   const fullFriendsList = visibleFriends
-    .map((friend) => `${friend.firstName} ${friend.lastName.charAt(0)}`)
+    .map((friend) => `${friend.name}`)
     .join(", ")
 
   const visibleFriendsList =
@@ -50,22 +50,25 @@ export default function UserStatus({
   })
 
   return (
-    <View>
-      <Animated.View>
-        <CustomText size="base" style={styles.headlineText}>
-          What are you up to, today?
-        </CustomText>
+    <View style={styles.container}>
+      <Animated.View style={styles.textContainer}>
+        {!isOn.value && (
+          <CustomText fontFamily="writer-mono" style={styles.headlineText}>
+            Turn it on to signal your availability
+          </CustomText>
+        )}
       </Animated.View>
       <Animated.View
-        style={[styles.container, style, cardAnimatedStyle]}
+        style={[styles.animationContainer, style, cardAnimatedStyle]}
         {...rest}>
         <View style={styles.userContainer}>
-          <UserAvailability
-            firstName={user.firstName}
-            lastName={user.lastName}
-            time={user.time}
-            activity={user.activity}
-          />
+          <View style={styles.userContainer}>
+            <UserAvailability
+              fullName={user.name}
+              time={user.time}
+              activity={user.activity}
+            />
+          </View>
         </View>
         <View style={styles.friendsContainer}>
           <CustomText size="sm" fontFamily="writer-mono">
@@ -95,6 +98,12 @@ export default function UserStatus({
 
 const styles = StyleSheet.create({
   container: {
+    flex: 0,
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 20,
+  },
+  animationContainer: {
     backgroundColor: theme.colors.white,
     paddingTop: 24,
     gap: 24,
@@ -118,11 +127,15 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   headlineText: {
-    paddingTop: 24,
+    paddingTop: 227,
     position: "absolute",
     color: theme.colors.white,
     textAlign: "center",
     alignSelf: "center",
     minHeight: 189,
+    flexShrink: 1,
+  },
+  textContainer: {
+    maxWidth: 277,
   },
 })
