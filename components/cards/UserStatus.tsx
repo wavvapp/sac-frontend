@@ -1,6 +1,7 @@
 import { StyleSheet, TouchableOpacity, View, ViewStyle } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import { theme } from "@/theme"
+import { User } from "@/types"
 import { useNavigation } from "@react-navigation/native"
 import { HomeScreenProps } from "@/screens/Home"
 import Animated, {
@@ -10,13 +11,12 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated"
 import UserAvailability from "@/components/cards/UserAvailability"
-import { User } from "@/types"
 
 const MAX_VISIBLE_FRIENDS = 3
 
 interface UserStatusProps extends ViewStyle {
   friends: User[] | []
-  user: User | null
+  user: User
   style?: ViewStyle
   isOn: SharedValue<boolean>
 }
@@ -35,7 +35,7 @@ export default function UserStatus({
     .map((friend) => {
       const firstName = friend.name?.split(" ")[0]
       const lastName = friend.name?.split(" ").slice(1).join(" ")
-      return `${firstName} ${lastName?.charAt(0)}.`
+      return `${firstName} ${lastName?.charAt(0)}`
     })
     .join(", ")
 

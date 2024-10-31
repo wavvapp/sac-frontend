@@ -12,6 +12,7 @@ import { ScrollView } from "react-native-gesture-handler"
 import ShareCard from "@/components/Share"
 import CustomText from "@/components/ui/CustomText"
 import { theme } from "@/theme"
+import { useAuth } from "@/contexts/AuthContext"
 
 type EditSignalScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -20,6 +21,7 @@ type EditSignalScreenProps = NativeStackNavigationProp<
 
 export default function EditSignal() {
   const navigation = useNavigation<EditSignalScreenProps>()
+  const { signOut } = useAuth()
 
   return (
     <View style={style.container}>
@@ -54,6 +56,7 @@ export default function EditSignal() {
         fullWidth
         title="Save"
         textSize="sm"
+        onPress={signOut}
       />
     </View>
   )

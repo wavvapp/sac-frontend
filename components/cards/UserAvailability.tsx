@@ -3,7 +3,7 @@ import CustomText from "@/components/ui/CustomText"
 import { theme } from "@/theme"
 
 interface UserAvailabilityProps extends ViewProps {
-  fullName: string | null
+  fullName: string
   time: string
   activity: string
 }

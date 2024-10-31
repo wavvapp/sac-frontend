@@ -48,7 +48,6 @@ api.interceptors.response.use(
       await AsyncStorage.setItem("@Auth:refreshToken", new_refreshToken)
 
       error.response.config.headers["Authorization"] = "Bearer " + accessToken
-      console.log("============Successfully refresh token!=============")
       return axios(error.response.config)
     }
     return Promise.reject(error)

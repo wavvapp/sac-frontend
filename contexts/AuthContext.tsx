@@ -51,10 +51,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
       if (isSuccessResponse(response)) {
         const idToken = response.data.idToken ?? ""
-        const user_from_auth = response.data.user
+        const authenticatedUser = response.data.user
         const user = {
-          id: user_from_auth.id,
-          name: user_from_auth.name,
+          id: authenticatedUser.id,
+          name: authenticatedUser.name || "",
           username: "no_username",
           time: "Now",
           activity: "Hangout",
