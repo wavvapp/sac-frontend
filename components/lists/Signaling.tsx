@@ -24,7 +24,6 @@ type SearchProp = NativeStackNavigationProp<RootStackParamList, "Search">
 
 const Signaling = forwardRef<SignalingRef, SignalingProps>((_, ref) => {
   const navigation = useNavigation<SearchProp>()
-
   return (
     <BottomDrawer ref={ref}>
       <View style={styles.header}>

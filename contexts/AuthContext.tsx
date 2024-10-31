@@ -38,7 +38,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     loadStoredData()
   }, [])
   async function signIn(token: string, userData: User): Promise<void> {
-    await AsyncStorage.setItem("@Auth:token", token)
+    await AsyncStorage.setItem("@Auth:accessToken", token)
     await AsyncStorage.setItem("@Auth:user", JSON.stringify(userData))
 
     setUser(userData)
@@ -69,7 +69,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
           },
         )
 
-        await AsyncStorage.setItem("@Auth:token", data.access_token)
+        await AsyncStorage.setItem("@Auth:accessToken", data.access_token)
         await AsyncStorage.setItem("@Auth:refreshToken", data.access_token)
         await AsyncStorage.setItem("@Auth:user", JSON.stringify(user))
         await signIn(data.access_token, user)
@@ -92,7 +92,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     setIsLoading(true)
 
     const storedUser = await AsyncStorage.getItem("@Auth:user")
-    const storedToken = await AsyncStorage.getItem("@Auth:token")
+    const storedToken = await AsyncStorage.getItem("@Auth:accessToken")
 
     if (storedUser && storedToken) {
       setUser(JSON.parse(storedUser))
@@ -103,7 +103,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   }
 
   async function signOut(): Promise<void> {
-    await AsyncStorage.removeItem("@Auth:token")
+    await AsyncStorage.removeItem("@Auth:accessToken")
     await AsyncStorage.removeItem("@Auth:user")
     await AsyncStorage.removeItem("@Auth:refreshToken")
 

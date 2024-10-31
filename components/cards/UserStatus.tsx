@@ -65,15 +65,15 @@ export default function UserStatus({
       <Animated.View
         style={[styles.animationContainer, style, cardAnimatedStyle]}
         {...rest}>
-        <View style={styles.userContainer}>
-          {user && (
+        {user && (
+          <View style={styles.userContainer}>
             <UserAvailability
               fullName={user.name}
               time={user.time}
               activity={user.activity}
             />
-          )}
-        </View>
+          </View>
+        )}
         <View style={styles.friendsContainer}>
           <CustomText size="sm" fontFamily="writer-mono">
             {friends.length
