@@ -54,8 +54,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         const user_from_auth = response.data.user
         const user = {
           id: user_from_auth.id,
-          firstName: user_from_auth.givenName,
-          lastName: user_from_auth.familyName,
+          name: user_from_auth.name,
           username: "no_username",
           time: "Now",
           activity: "Hangout",

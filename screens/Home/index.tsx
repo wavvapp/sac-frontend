@@ -41,10 +41,10 @@ export default function HomeScreen() {
 
   const getUser = useCallback(async () => {
     const user = await AsyncStorage.getItem("@Auth:user")
-    if (!user) return
+    if (!user || !isOn.value) return
     const userInfo = JSON.parse(user)
     setUserInfo(userInfo)
-  }, [])
+  }, [isOn.value])
 
   useDerivedValue(() => {
     if (isOn.value) {
