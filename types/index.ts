@@ -42,5 +42,5 @@ export interface User {
   time: string
   activity: string
   selected?: boolean
-  imageUrl?: ImageSourcePropType
+  imageUrl: ImageSourcePropType
 }

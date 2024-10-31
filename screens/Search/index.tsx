@@ -28,7 +28,7 @@ const FindFriends = () => {
     try {
       const accessToken = await AsyncStorage.getItem("@Auth:accessToken")
       if (!accessToken) {
-        console.log("Access token not found ")
+        console.error("Access token not found ")
         return
       }
       const response = await axios.get(`${process.env.API_BASE_URL}/users`, {
@@ -40,10 +40,8 @@ const FindFriends = () => {
         id: user.id,
         name: user.name,
         email: user.email,
-        imageUrl: user.profile,
+        imageUrl: user.profile || "",
       }))
-
-      console.log(users, "fetched freind")
       setAllUsers(users)
       setFilteredUsers(users)
     } catch (error) {
@@ -57,7 +55,6 @@ const FindFriends = () => {
       .filter((user) => user.name.toLowerCase().includes(name.toLowerCase()))
       .sort((a, b) => a.name.localeCompare(b.name))
     setFilteredUsers(filtered)
-    console.log(filtered, "filtered")
   }
 
   const handleAddFriend = (user: User) => {
@@ -103,11 +100,7 @@ const FindFriends = () => {
               <View style={styles.userDetails}>
                 <UserAvatar imageUrl={user.imageUrl} />
                 <View style={{ marginLeft: 8 }}>
-                  <UserInfo
-                    firstName={user.username} // Use username as first name
-                    lastName={user.username} // Use username as last name
-                    username={user.username} // Optional: if you want to show username somewhere
-                  />
+                  <UserInfo fullName={user.name} username={user.username} />
                 </View>
               </View>
               {addedUsers.some((addedUsers) => addedUsers.id === user.id) ? (

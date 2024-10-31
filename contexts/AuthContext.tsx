@@ -69,11 +69,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
             },
           },
         )
-        console.log("API Response:", apiResponse.data)
         const { access_token: accessToken, refresh_token: refreshToken } =
           apiResponse.data
-        console.log("Access Token:", accessToken)
-        console.log("Refresh Token:", refreshToken)
         await AsyncStorage.setItem("@Auth:accessToken", accessToken)
         await AsyncStorage.setItem("@Auth:refreshToken", refreshToken)
         await AsyncStorage.setItem("@Auth:token", idToken)
@@ -101,7 +98,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
     const storedUser = await AsyncStorage.getItem("@Auth:user")
     const storedToken = await AsyncStorage.getItem("@Auth:token")
-    console.log(storedToken)
 
     if (storedUser && storedToken) {
       setUser(JSON.parse(storedUser))
