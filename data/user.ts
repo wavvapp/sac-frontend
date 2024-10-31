@@ -1,7 +1,6 @@
 export const userInfo = {
   id: "u4",
-  firstName: "Emil",
-  lastName: "Wagner",
+  name: "Emil Wagner",
   username: "k.leuschke",
   time: "Evening",
   activity: "Jodelkeller",

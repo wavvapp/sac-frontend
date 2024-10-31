@@ -3,15 +3,13 @@ import CustomText from "@/components/ui/CustomText"
 import { theme } from "@/theme"
 
 interface UserAvailabilityProps extends ViewProps {
-  firstName: string | null
-  lastName: string | null
+  fullName: string
   time: string
   activity: string
 }
 
 export default function UserAvailability({
-  firstName,
-  lastName,
+  fullName,
   time,
   activity,
   style,
@@ -21,7 +19,7 @@ export default function UserAvailability({
     <View style={(styles.container, style)} {...rest}>
       <View style={styles.header}>
         <CustomText style={styles.name} fontWeight="semibold">
-          {firstName} {lastName}
+          {fullName}
         </CustomText>
         <View style={styles.dot} />
         <CustomText style={styles.time} fontFamily="marfa">

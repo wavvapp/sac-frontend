@@ -1,7 +1,6 @@
 import { StyleSheet, TouchableOpacity, View, ViewStyle } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import { theme } from "@/theme"
-import { User } from "@/types"
 import { useNavigation } from "@react-navigation/native"
 import { HomeScreenProps } from "@/screens/Home"
 import Animated, {
@@ -11,6 +10,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated"
 import UserAvailability from "@/components/cards/UserAvailability"
+import { User } from "@/types"
 
 const MAX_VISIBLE_FRIENDS = 3
 
@@ -32,7 +32,11 @@ export default function UserStatus({
   const remainingCount = Math.max(friends.length - MAX_VISIBLE_FRIENDS, 0)
 
   const fullFriendsList = visibleFriends
-    .map((friend) => `${friend.firstName} ${friend.lastName?.charAt(0)}`)
+    .map((friend) => {
+      const firstName = friend.name.split(" ")[0]
+      const lastName = friend.name.split(" ").slice(1).join(" ")
+      return `${firstName} ${lastName.charAt(0)}.`
+    })
     .join(", ")
 
   const visibleFriendsList =
@@ -50,20 +54,21 @@ export default function UserStatus({
   })
 
   return (
-    <View>
-      <Animated.View>
-        <CustomText size="base" style={styles.headlineText}>
-          What are you up to, today?
-        </CustomText>
+    <View style={styles.container}>
+      <Animated.View style={styles.textContainer}>
+        {!isOn.value && (
+          <CustomText fontFamily="writer-mono" style={styles.headlineText}>
+            Turn it on to signal your availability
+          </CustomText>
+        )}
       </Animated.View>
       <Animated.View
-        style={[styles.container, style, cardAnimatedStyle]}
+        style={[styles.animationContainer, style, cardAnimatedStyle]}
         {...rest}>
         <View style={styles.userContainer}>
           {user && (
             <UserAvailability
-              firstName={user.firstName}
-              lastName={user.lastName}
+              fullName={user.name}
               time={user.time}
               activity={user.activity}
             />
@@ -97,6 +102,12 @@ export default function UserStatus({
 
 const styles = StyleSheet.create({
   container: {
+    flex: 0,
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 20,
+  },
+  animationContainer: {
     backgroundColor: theme.colors.white,
     paddingTop: 24,
     gap: 24,
@@ -120,11 +131,15 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   headlineText: {
-    paddingTop: 24,
+    paddingTop: 227,
     position: "absolute",
     color: theme.colors.white,
     textAlign: "center",
     alignSelf: "center",
     minHeight: 189,
+    flexShrink: 1,
+  },
+  textContainer: {
+    maxWidth: 277,
   },
 })
