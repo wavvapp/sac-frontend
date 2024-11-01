@@ -56,6 +56,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
       if (isSuccessResponse(response)) {
         const idToken = response.data.idToken ?? ""
+        console.log(idToken, "tokeen")
         const user = response.data.user
         await AsyncStorage.setItem("@Auth:token", idToken)
         await AsyncStorage.setItem("@Auth:user", JSON.stringify(user))
@@ -85,7 +86,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
     const storedUser = await AsyncStorage.getItem("@Auth:user")
     const storedToken = await AsyncStorage.getItem("@Auth:token")
-
     if (storedUser && storedToken) {
       setUser(JSON.parse(storedUser))
     }
