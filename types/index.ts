@@ -37,11 +37,11 @@ export type Theme = {
 }
 export interface User {
   id: string
-  firstName: string
-  lastName: string
   username: string
+  name: string
   time: string
   activity: string
   selected?: boolean
   imageUrl?: ImageSourcePropType
 }
+export type AccountCreationStep = 1 | 2

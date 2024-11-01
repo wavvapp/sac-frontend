@@ -12,6 +12,7 @@ import Signaling from "@/components/lists/Signaling"
 import Search from "@/screens/Search"
 import { theme } from "@/theme"
 import EntryScreen from "@/screens/Authentication"
+import CreateCredentials from "@/screens/Authentication/SignUp/CreateCredentials"
 
 export type RootStackParamList = {
   EntryScreen: undefined
@@ -21,6 +22,7 @@ export type RootStackParamList = {
   SignUp: undefined
   Settings: undefined
   Signaling: undefined
+  CreateCredentials: undefined
   Search: undefined
 }
 
@@ -56,6 +58,11 @@ export default function AppNavigator() {
             name="Signaling"
             options={{ presentation: "modal", headerShown: false }}
             component={Signaling}
+          />
+          <Stack.Screen
+            name="CreateCredentials"
+            options={{ headerShown: false }}
+            component={CreateCredentials}
           />
           <Stack.Screen
             name="Search"

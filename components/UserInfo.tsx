@@ -3,23 +3,19 @@ import CustomText from "@/components/ui/CustomText"
 import { theme } from "@/theme"
 
 interface UserInfoProps extends ViewProps {
-  firstName: string
-  lastName: string
+  fullName: string
   username: string
 }
 
 export default function UserInfo({
-  firstName,
-  lastName,
+  fullName,
   username,
   style,
   ...rest
 }: UserInfoProps) {
   return (
     <View style={(styles.container, style)} {...rest}>
-      <CustomText fontWeight="semibold">
-        {firstName} {lastName}
-      </CustomText>
+      <CustomText fontWeight="semibold">{fullName}</CustomText>
       <CustomText fontFamily="writer-mono" style={styles.username}>
         @{username}
       </CustomText>
