@@ -13,8 +13,8 @@ import {
   isErrorWithCode,
   statusCodes,
 } from "@react-native-google-signin/google-signin"
-import axios from "axios"
 import { Platform } from "react-native"
+import api from "@/service"
 interface User {
   id: string
   name: string | null
@@ -57,18 +57,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       if (isSuccessResponse(response)) {
         const idToken = response.data.idToken ?? ""
         const user = response.data.user
-        const apiResponse = await axios.post(
-          `${process.env.API_BASE_URL}/auth/google-signin`,
-          {
-            token: idToken,
-            platform: Platform.OS === "ios" ? "web" : "android",
-          },
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          },
-        )
+        const apiResponse = await api.post("/api/auth/google-signin", {
+          token: idToken,
+          platform: Platform.OS === "ios" ? "web" : "android",
+        })
+
         const { access_token: accessToken, refresh_token: refreshToken } =
           apiResponse.data
         await AsyncStorage.setItem("@Auth:accessToken", accessToken)

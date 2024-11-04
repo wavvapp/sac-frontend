@@ -12,7 +12,6 @@ import { ScrollView } from "react-native-gesture-handler"
 import ShareCard from "@/components/Share"
 import CustomText from "@/components/ui/CustomText"
 import { theme } from "@/theme"
-import { useAuth } from "@/contexts/AuthContext"
 
 type EditSignalScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -21,22 +20,8 @@ type EditSignalScreenProps = NativeStackNavigationProp<
 
 export default function EditSignal() {
   const navigation = useNavigation<EditSignalScreenProps>()
-  const { signOut } = useAuth()
-  const handleSignOut = async () => {
-    try {
-      await signOut()
-      navigation.navigate("Login") // Navigate to the Login screen after signing out
-    } catch (error) {
-      console.error("Error signing out:", error)
-    }
-  }
   return (
     <View style={style.container}>
-      <CustomButton
-        title="Sign Out"
-        onPress={handleSignOut}
-        textSize={"base"}
-      />
       <View style={style.navBar}>
         <CustomText style={style.headerText} fontWeight="bold">
           Edit status

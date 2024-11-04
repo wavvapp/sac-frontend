@@ -12,8 +12,7 @@ import CustomText from "@/components/ui/CustomText"
 import { User } from "@/types"
 import { theme } from "@/theme"
 import CheckIcon from "@/components/vectors/CheckIcon"
-import AsyncStorage from "@react-native-async-storage/async-storage"
-import axios from "axios"
+import api from "@/service"
 
 const FindFriends = () => {
   const navigation = useNavigation()
@@ -26,16 +25,7 @@ const FindFriends = () => {
   }, [])
   const fetchUsers = async () => {
     try {
-      const accessToken = await AsyncStorage.getItem("@Auth:accessToken")
-      if (!accessToken) {
-        console.error("Access token not found ")
-        return
-      }
-      const response = await axios.get(`${process.env.API_BASE_URL}/users`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
+      const response = await api.get(`/api/users/`)
       const users = response.data.map((user: any) => ({
         id: user.id,
         name: user.name,
@@ -98,7 +88,7 @@ const FindFriends = () => {
               style={styles.friendItem}
               onPress={() => handleAddFriend(user)}>
               <View style={styles.userDetails}>
-                <UserAvatar imageUrl={user.imageUrl} />
+                <UserAvatar imageUrl={user.imageUrl || ""} />
                 <View style={{ marginLeft: 8 }}>
                   <UserInfo fullName={user.name} username={user.username} />
                 </View>
