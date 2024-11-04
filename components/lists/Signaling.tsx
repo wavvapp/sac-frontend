@@ -1,9 +1,8 @@
-import { forwardRef } from "react"
+import { forwardRef, useEffect } from "react"
 import { View, StyleSheet } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import { availableFriends, offlineFriends } from "@/data/users"
 import { User } from "@/types"
-
 import BottomDrawer from "@/components/BottomDrawer"
 import { CustomButton } from "@/components/ui/Button"
 import { BottomSheetSectionList } from "@gorhom/bottom-sheet"
@@ -12,7 +11,8 @@ import SignalingUser from "@/components/SignalingUser"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { RootStackParamList } from "@/navigation"
-import axios from "axios"
+import api from "@/service"
+import AsyncStorage from "@react-native-async-storage/async-storage"
 export interface SignalingRef {
   openBottomSheet: () => void
 }
@@ -25,38 +25,26 @@ type SearchProp = NativeStackNavigationProp<RootStackParamList, "Search">
 
 const Signaling = forwardRef<SignalingRef, SignalingProps>((_, ref) => {
   const navigation = useNavigation<SearchProp>()
-  const url = process.env.API_BASE_URL
-  console.log(url, "url from the env")
-  const fetchAllFreinds = async () => {
-    try {
-      const accessToken =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjViYWNhYWYxLWJhYjYtNGU2Ni1iNTI4LTgyMTMwNTQ0ZjM5MyIsImVtYWlsIjoiaWdvcm50d2FyaTI4QGdtYWlsLmNvbSIsIm5hbWVzIjoiaWdvciIsInBob25lTnVtYmVyIjpudWxsLCJlbWFpbFZlcmlmaWVkIjpmYWxzZSwicHJvdmlkZXIiOiJnb29nbGUiLCJwcm9maWxlUGljdHVyZVVybCI6Imh0dHBzOi8vbGgzLmdvb2dsZXVzZXJjb250ZW50LmNvbS9hL0FDZzhvY0tDTUhGMXFPdktudnpRTlhsaXVuTVl4Q0J6aGZPYkZ3b00tSWRDTGtTckpNVDF2cVp5eFE9czk2LWMiLCJpYXQiOjE3MzAzODQ3OTQsImV4cCI6MTczMDM4NTY5NH0.ro_CGiJkQW5X6NNDJmopbQEzRLcH2asojWtvvlHBh9"
-      // const accessToken = await AsyncStorage.getItem("@Auth:accessToken")
-      // if (!accessToken) {
-      //   console.error("Access token not found ")
-      //   return
-      // }
-      const response = await axios.get(
-        `${process.env.API_BASE_URL}/friend-signals`,
-        {
-          headers: {
-            authorization: `Bearer ${accessToken}`,
-          },
-        },
-      )
-      console.log(response.data, "response from the api")
-      // const users = response.data.map((user: any) => ({
-      //   id: user.id,
-      //   name: user.name,
-      //   email: user.email,
-      //   imageUrl: user.profile || "",
-      // }))
-    } catch (error) {
-      console.error("error fetching friends", error)
-    }
+
+  async function fetchAllFriends() {
+    const accessToken = await AsyncStorage.getItem("@Auth:accessToken")
+    console.log(accessToken, "ACCESSTOKEN")
+    return api.get("/api/friend-signals").then((response) => response.data)
   }
-  fetchAllFreinds()
-  // console.log(fetchAllFreinds, "all freinds")
+
+  useEffect(() => {
+    const loadFriends = async () => {
+      try {
+        const friends = await fetchAllFriends()
+        console.log(friends, "Retrieved friends data")
+      } catch (error) {
+        console.error("Error retrieving friends data:", error)
+      }
+    }
+
+    loadFriends()
+  }, [])
+
   return (
     <BottomDrawer ref={ref}>
       <View style={styles.header}>

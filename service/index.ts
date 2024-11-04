@@ -7,7 +7,7 @@ import axios, {
 
 // Create an Axios instance
 const api = axios.create({
-  baseURL: "https://your-api-url.com",
+  baseURL: process.env.API_BASE_URL,
   timeout: 10000,
   headers: {
     "Content-Type": "application/json",
@@ -17,7 +17,7 @@ const api = axios.create({
 // Request Interceptor
 api.interceptors.request.use(
   async (config: InternalAxiosRequestConfig) => {
-    const token = await AsyncStorage.getItem("@Auth:token") // Dynamically get token
+    const token = await AsyncStorage.getItem("@Auth:accessToken") // Dynamically get token
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
     }
