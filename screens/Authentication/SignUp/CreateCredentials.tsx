@@ -4,7 +4,9 @@ import CustomText from "@/components/ui/CustomText"
 import Input from "@/components/ui/Input"
 import CrossMark from "@/components/vectors/CrossMark"
 import { VALIDATION_PATTERNS } from "@/constants/patterns"
+import { useAuth } from "@/contexts/AuthContext"
 import { RootStackParamList } from "@/navigation"
+import api from "@/service"
 import { theme } from "@/theme"
 import { AccountCreationStep } from "@/types"
 import { useNavigation } from "@react-navigation/native"
@@ -25,10 +27,11 @@ type CredentialsScrenProps = NativeStackNavigationProp<
 
 export default function CreateCredentials() {
   const navigation = useNavigation<CredentialsScrenProps>()
-  const [step, setStep] = useState<AccountCreationStep>(1)
+  const [step, setStep] = useState<AccountCreationStep>(2)
   const [text, setText] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [isError, setIsError] = useState(false)
+  const { user } = useAuth()
 
   const isInputValid = useMemo(() => {
     if (text.trim().length < 5) return false
@@ -68,13 +71,16 @@ export default function CreateCredentials() {
     },
   }
 
+  const validateUsername = async () => {
+    if (!isInputValid) return
+    setIsLoading(true)
+    const  data  = await api.get(`/api/users${text}`)
+    console.log("------username", data)
+  }
   const handleUsernameSubmit = async () => {
     setIsLoading(true)
-    // #TODO Handle logic for checking username from backend
-    await new Promise((resolve) => setTimeout(resolve, 2000))
-    if (text === "Username123") setIsError(true)
+    await validateUsername()
     setIsLoading(false)
-    navigation.navigate("Home")
   }
 
   const handleNameSubmit = () => {

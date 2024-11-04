@@ -15,12 +15,7 @@ import {
 } from "@react-native-google-signin/google-signin"
 import axios from "axios"
 import { Platform } from "react-native"
-interface User {
-  id: string
-  name: string | null
-  email: string
-  photo: string | null
-}
+import { User } from "@/types"
 
 interface AuthContextData {
   user: User | null
@@ -56,17 +51,34 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
       if (isSuccessResponse(response)) {
         const idToken = response.data.idToken ?? ""
-        const user = response.data.user
-        await AsyncStorage.setItem("@Auth:token", idToken)
-        await AsyncStorage.setItem("@Auth:user", JSON.stringify(user))
-        setUser(user)
 
-        await axios.post(`${process.env.API_BASE_URL}/auth/google-signin`, {
-          token: idToken,
-          platform: Platform.OS,
+        const { data: autheeticatedUser } = await axios.post(
+          `${process.env.API_BASE_URL}/api/auth/google-signin`,
+          {
+            token: idToken,
+            platform: Platform.OS === "ios" ? "web" : "android",
+          },
+        )
+        const { id, names, access_token, username } = autheeticatedUser
+        setUser({
+          id,
+          name: names,
+          username,
         })
+
+        console.log("-----", username, "-----", access_token)
+        await AsyncStorage.setItem("@Auth:token", access_token)
+        await AsyncStorage.setItem(
+          "@Auth:user",
+          JSON.stringify({
+            id,
+            name: names,
+            username,
+          }),
+        )
       }
     } catch (error) {
+      console.warn(error)
       if (isErrorWithCode(error)) {
         switch (error.code) {
           case statusCodes.IN_PROGRESS:

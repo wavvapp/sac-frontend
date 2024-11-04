@@ -39,8 +39,8 @@ export interface User {
   id: string
   username: string
   name: string
-  time: string
-  activity: string
+  time?: string
+  activity?: string
   selected?: boolean
   imageUrl?: ImageSourcePropType
 }
