@@ -16,7 +16,7 @@ const MAX_VISIBLE_FRIENDS = 3
 
 interface UserStatusProps extends ViewStyle {
   friends: User[] | []
-  user: User
+  user: User | null
   style?: ViewStyle
   isOn: SharedValue<boolean>
 }
