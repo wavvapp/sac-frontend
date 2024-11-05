@@ -20,9 +20,6 @@ const FindFriends = () => {
   const [addedUsers, setAddedUsers] = useState<User[]>([])
   const [filteredUsers, setFilteredUsers] = useState(availableFriends)
   const [allUsers, setAllUsers] = useState<User[]>([])
-  useEffect(() => {
-    fetchUsers()
-  }, [])
   const fetchUsers = async () => {
     try {
       const response = await api.get(`/api/users/`)
@@ -38,6 +35,9 @@ const FindFriends = () => {
       console.error("error fetching users", error)
     }
   }
+  useEffect(() => {
+    fetchUsers()
+  }, [])
 
   const handleSearch = (name: string) => {
     setSearch(name)
@@ -50,11 +50,9 @@ const FindFriends = () => {
   const handleAddFriend = (user: User) => {
     setAddedUsers((prev) => {
       const isAdded = prev.some((addedFriend) => addedFriend.id === user.id)
-      if (isAdded) {
+      if (isAdded)
         return prev.filter((addedFriend) => addedFriend.id !== user.id)
-      } else {
-        return [...prev, user]
-      }
+      return [...prev, user]
     })
   }
 

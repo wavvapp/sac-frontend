@@ -46,18 +46,14 @@ api.interceptors.response.use(
   async (error: AxiosError) => {
     if (error.response?.status === 401) {
       const refreshToken = await AsyncStorage.getItem("@Auth:refreshToken")
-
       if (refreshToken) {
         try {
-          const newAccessToken = await refreshAccessToken(refreshToken) // Get a new access token
-
-          // Update the original request's Authorization header and retry the request
+          const newAccessToken = await refreshAccessToken(refreshToken)
           error.response.config.headers["Authorization"] =
             `Bearer ${newAccessToken}`
-          return axios(error.response.config) // Retry the request
+          return axios(error.response.config)
         } catch (refreshError) {
           console.error("Error refreshing token:", refreshError)
-          // Handle errors that occur during the refresh token process (optional)
         }
       }
     }
