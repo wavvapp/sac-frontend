@@ -12,7 +12,6 @@ import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { RootStackParamList } from "@/navigation"
 import api from "@/service"
-import AsyncStorage from "@react-native-async-storage/async-storage"
 export interface SignalingRef {
   openBottomSheet: () => void
 }
@@ -27,21 +26,19 @@ const Signaling = forwardRef<SignalingRef, SignalingProps>((_, ref) => {
   const navigation = useNavigation<SearchProp>()
 
   async function fetchAllFriends() {
-    const accessToken = await AsyncStorage.getItem("@Auth:accessToken")
-    console.log(accessToken, "ACCESSTOKEN")
     return api.get("/api/friend-signals").then((response) => response.data)
   }
 
-  useEffect(() => {
-    const loadFriends = async () => {
-      try {
-        const friends = await fetchAllFriends()
-        console.log(friends, "Retrieved friends data")
-      } catch (error) {
-        console.error("Error retrieving friends data:", error)
-      }
+  const loadFriends = async () => {
+    try {
+      const friends = await fetchAllFriends()
+      console.log(friends, "Retrieved friends data")
+    } catch (error) {
+      console.error("Error retrieving friends data:", error)
     }
+  }
 
+  useEffect(() => {
     loadFriends()
   }, [])
 
