@@ -1,6 +1,6 @@
 import UserStatus from "@/components/cards/UserStatus"
 import PerlinNoise from "@/components/PerlinNoise"
-import { offlineFriends } from "@/data/users"
+import { availableFriends, offlineFriends } from "@/data/users"
 import { userInfo } from "@/data/user"
 import { RootStackParamList } from "@/navigation"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
@@ -11,7 +11,7 @@ import {
   useSharedValue,
 } from "react-native-reanimated"
 import { AnimatedSwitch } from "@/components/AnimatedSwitch"
-import { useRef, useState } from "react"
+import { useMemo, useRef, useState } from "react"
 import Signaling, { SignalingRef } from "@/components/lists/Signaling"
 import Settings from "@/components/vectors/Settings"
 import { theme } from "@/theme"
@@ -20,6 +20,7 @@ import ShareIcon from "@/components/vectors/ShareIcon"
 import { CustomButton } from "@/components/ui/Button"
 import { useNavigation } from "@react-navigation/native"
 import { onShare } from "@/utils/share"
+import NoFriends from "@/components/cards/NoFriends"
 
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -32,6 +33,12 @@ export default function HomeScreen() {
   const isOn = useSharedValue(false)
   const signalingRef = useRef<SignalingRef>(null)
   const navigation = useNavigation<HomeScreenProps>()
+
+  const hasFriends = useMemo(() => {
+    // TODO: Use the actual friends list, once BE is integrated */
+    const friends = [...availableFriends, ...offlineFriends]
+    return friends.length !== 0
+  }, [])
 
   const handlePress = () => {
     isOn.value = !isOn.value
@@ -60,11 +67,21 @@ export default function HomeScreen() {
           </CustomButton>
         </View>
       </View>
-      <View style={styles.UserStatus}>
-        <UserStatus isOn={isOn} friends={offlineFriends} user={userInfo} />
-      </View>
-      <AnimatedSwitch isOn={isOn} onPress={handlePress} style={styles.switch} />
-      <Signaling ref={signalingRef} />
+      {!hasFriends ? (
+        <NoFriends />
+      ) : (
+        <>
+          <View style={styles.UserStatus}>
+            <UserStatus isOn={isOn} friends={offlineFriends} user={userInfo} />
+          </View>
+          <AnimatedSwitch
+            isOn={isOn}
+            onPress={handlePress}
+            style={styles.switch}
+          />
+          <Signaling ref={signalingRef} />
+        </>
+      )}
     </View>
   )
 }
