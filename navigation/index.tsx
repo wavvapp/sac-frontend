@@ -39,19 +39,14 @@ export default function AppNavigator() {
             headerTransparent: true,
             headerTitleStyle: { color: theme.colors.white },
           }}
-          // initialRouteName={!user?.username ? "CreateCredentials" : "Home"}>
-          initialRouteName={"CreateCredentials"}>
-          <Stack.Screen
-            name="Home"
-            options={{ headerShown: false }}
-            component={HomeScreen}
-          />
-          <Stack.Screen
-            name="CreateCredentials"
-            options={{ headerShown: false }}
-            component={CreateCredentials}
-          />
+          initialRouteName={!user?.username ? "CreateCredentials" : "Home"}>
           <>
+          {/* TODO: replace this with the entry screen */}
+            <Stack.Screen
+              name="Home"
+              options={{ headerShown: false }}
+              component={HomeScreen}
+            />
             {!user?.username ? (
               <Stack.Screen
                 name="CreateCredentials"

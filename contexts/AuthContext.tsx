@@ -53,7 +53,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         const idToken = response.data.idToken ?? ""
 
         const { data: autheeticatedUser } = await axios.post(
-          `${process.env.API_BASE_URL}/api/auth/google-signin`,
+          `${process.env.API_BASE_URL}/auth/google-signin`,
           {
             token: idToken,
             platform: Platform.OS === "ios" ? "web" : "android",
@@ -65,8 +65,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
           name: names,
           username,
         })
-
-        console.log("-----", username, "-----", access_token)
         await AsyncStorage.setItem("@Auth:token", access_token)
         await AsyncStorage.setItem(
           "@Auth:user",
