@@ -12,7 +12,6 @@ import SignalingUser from "@/components/SignalingUser"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { RootStackParamList } from "@/navigation"
-import { useAuth } from "@/contexts/AuthContext"
 export interface SignalingRef {
   openBottomSheet: () => void
 }
@@ -25,7 +24,6 @@ type SearchProp = NativeStackNavigationProp<RootStackParamList, "Search">
 
 const Signaling = forwardRef<SignalingRef, SignalingProps>((_, ref) => {
   const navigation = useNavigation<SearchProp>()
-  const { signOut } = useAuth()
   return (
     <BottomDrawer ref={ref}>
       <View style={styles.header}>
@@ -37,7 +35,7 @@ const Signaling = forwardRef<SignalingRef, SignalingProps>((_, ref) => {
           textSize="sm"
           title="FIND"
           textStyles={{ fontWeight: 600 }}
-          onPress={signOut}
+          onPress={() => navigation.navigate("Search")}
         />
       </View>
       {!availableFriends.length && (

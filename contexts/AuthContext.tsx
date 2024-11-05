@@ -76,7 +76,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         )
       }
     } catch (error) {
-      console.warn(error)
       if (isErrorWithCode(error)) {
         switch (error.code) {
           case statusCodes.IN_PROGRESS:
