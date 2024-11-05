@@ -36,7 +36,7 @@ api.interceptors.response.use(
   async (error: AxiosError) => {
     const refreshToken = await AsyncStorage.getItem("@Auth:refreshToken")
     if (error.response?.status === 401 && refreshToken) {
-      const url = `${process.env.API_BASE_URL}/api/auth/refresh-token`
+      const url = `${process.env.API_BASE_URL}/auth/refresh-token`
       const body = {
         refresh_token: refreshToken,
       }

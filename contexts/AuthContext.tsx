@@ -62,7 +62,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         setUser(user)
 
         const { data } = await axios.post(
-          `${process.env.API_BASE_URL}/api/auth/google-signin`,
+          `${process.env.API_BASE_URL}/auth/google-signin`,
           {
             token: idToken,
             platform: Platform.OS === "ios" ? "web" : "android",
