@@ -44,3 +44,4 @@ export interface User {
   selected?: boolean
   imageUrl?: ImageSourcePropType
 }
+export type AccountCreationStep = 1 | 2

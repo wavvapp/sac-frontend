@@ -25,7 +25,7 @@ export default function EditSignal() {
   const handleSignOut = async () => {
     try {
       await signOut()
-      navigation.navigate("Login") // Navigate to the Login screen after signing out
+      navigation.navigate("EntryScreen")
     } catch (error) {
       console.error("Error signing out:", error)
     }
@@ -33,7 +33,7 @@ export default function EditSignal() {
   return (
     <View style={style.container}>
       <CustomButton
-        title="Sign Out"
+        title="Entry Screen"
         onPress={handleSignOut}
         textSize={"base"}
       />
