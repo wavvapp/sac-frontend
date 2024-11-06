@@ -16,7 +16,7 @@ const api = axios.create({
 
 // Function to refresh the access token
 const refreshAccessToken = async (refreshToken: string) => {
-  const url = `${process.env.API_BASE_URL}/api/auth/refresh-token`
+  const url = `${process.env.API_BASE_URL}/auth/refresh-token`
   const body = { refresh_token: refreshToken }
   const { data } = await axios.post(url, body)
 
