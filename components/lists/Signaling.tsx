@@ -25,14 +25,20 @@ type SearchProp = NativeStackNavigationProp<RootStackParamList, "Search">
 const Signaling = forwardRef<SignalingRef, SignalingProps>((_, ref) => {
   const navigation = useNavigation<SearchProp>()
 
-  async function fetchAllFriends() {
-    return api.get("/api/friend-signals").then((response) => response.data)
+  const fetchAllFriends = async () => {
+    try {
+      const { data } = await api.get("/api/friend-signals")
+      return data
+    } catch (error) {
+      console.error("Error fetching friends:", error)
+      throw error
+    }
   }
 
   const loadFriends = async () => {
     try {
       const friends = await fetchAllFriends()
-      console.log(friends, "Retrieved friends data")
+      return friends
     } catch (error) {
       console.error("Error retrieving friends data:", error)
     }
