@@ -83,7 +83,7 @@ export default function CreateCredentials() {
       if (!isInputValid) return
       setIsLoading(true)
       const { data } = await api.get(`/users/${text}`)
-      if (data.message === "Username already exist") {
+      if (data.message.toLowerCase() === "username already exist") {
         setIsError(true)
         return
       } else updateUsername()
