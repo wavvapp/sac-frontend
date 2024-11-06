@@ -3,7 +3,7 @@ import Input from "@/components/ui/Input"
 import UserInfo from "@/components/UserInfo"
 import ShareCard from "@/components/Share"
 import { CustomButton } from "@/components/ui/Button"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import CloseIcon from "@/components/vectors/CloseIcon"
 import { availableFriends } from "@/data/users"
 import { useNavigation } from "@react-navigation/native"
@@ -12,33 +12,47 @@ import CustomText from "@/components/ui/CustomText"
 import { User } from "@/types"
 import { theme } from "@/theme"
 import CheckIcon from "@/components/vectors/CheckIcon"
+import api from "@/service"
 
 const FindFriends = () => {
   const navigation = useNavigation()
   const [search, setSearch] = useState("")
-  const [addedFriends, setAddedFriends] = useState<User[]>([])
-  const [filteredFriends, setFilteredFriends] = useState(availableFriends)
+  const [addedUsers, setAddedUsers] = useState<User[]>([])
+  const [filteredUsers, setFilteredUsers] = useState(availableFriends)
+  const [allUsers, setAllUsers] = useState<User[]>([])
+  const fetchUsers = async () => {
+    try {
+      const response = await api.get(`/users/`)
+      const users = response.data.map((user: any) => ({
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        imageUrl: user.profile || "",
+      }))
+      setAllUsers(users)
+      setFilteredUsers(users)
+    } catch (error) {
+      console.error("error fetching users", error)
+    }
+  }
+  useEffect(() => {
+    fetchUsers()
+  }, [])
 
-  const handleSearch = (text: string) => {
-    setSearch(text)
-    const filtered = availableFriends
-      .filter((friend) =>
-        `${friend.firstName} ${friend.lastName} ${friend.username}`
-          .toLowerCase()
-          .includes(text.toLowerCase()),
-      )
-      .sort((a, b) => a.firstName.localeCompare(b.firstName))
-    setFilteredFriends(filtered)
+  const handleSearch = (name: string) => {
+    setSearch(name)
+    const filtered = allUsers
+      .filter((user) => user.name.toLowerCase().includes(name.toLowerCase()))
+      .sort((a, b) => a.name.localeCompare(b.name))
+    setFilteredUsers(filtered)
   }
 
-  const handleAddFriend = (friend: User) => {
-    setAddedFriends((prev) => {
-      const isAdded = prev.some((addedFriend) => addedFriend.id === friend.id)
-      if (isAdded) {
-        return prev.filter((addedFriend) => addedFriend.id !== friend.id)
-      } else {
-        return [...prev, friend]
-      }
+  const handleAddFriend = (user: User) => {
+    setAddedUsers((prev) => {
+      const isAdded = prev.some((addedFriend) => addedFriend.id === user.id)
+      if (isAdded)
+        return prev.filter((addedFriend) => addedFriend.id !== user.id)
+      return [...prev, user]
     })
   }
 
@@ -65,34 +79,28 @@ const FindFriends = () => {
 
       <ScrollView style={styles.friendsList}>
         {search &&
-          filteredFriends.length > 0 &&
-          filteredFriends.map((friend) => (
+          filteredUsers.length > 0 &&
+          filteredUsers.map((user) => (
             <TouchableOpacity
-              key={friend.id}
+              key={user.id}
               style={styles.friendItem}
-              onPress={() => handleAddFriend(friend)}>
+              onPress={() => handleAddFriend(user)}>
               <View style={styles.userDetails}>
-                <UserAvatar imageUrl={friend.imageUrl || 0} />
+                <UserAvatar imageUrl={user.imageUrl || ""} />
                 <View style={{ marginLeft: 8 }}>
-                  <UserInfo
-                    firstName={friend.firstName}
-                    lastName={friend.lastName}
-                    username={friend.username}
-                  />
+                  <UserInfo fullName={user.name} username={user.username} />
                 </View>
               </View>
-              {addedFriends.some(
-                (addedFriend) => addedFriend.id === friend.id,
-              ) ? (
+              {addedUsers.some((addedUsers) => addedUsers.id === user.id) ? (
                 <CheckIcon
                   color={theme.colors.black}
-                  onPress={() => handleAddFriend(friend)}
+                  onPress={() => handleAddFriend(user)}
                 />
               ) : (
                 <CustomButton
                   variant="outline"
                   title="Add"
-                  onPress={() => handleAddFriend(friend)}
+                  onPress={() => handleAddFriend(user)}
                 />
               )}
             </TouchableOpacity>
