@@ -57,7 +57,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       if (isSuccessResponse(response)) {
         const idToken = response.data.idToken ?? ""
         const user = response.data.user
-        const apiResponse = await api.post("/api/auth/google-signin", {
+        const apiResponse = await api.post("/auth/google-signin", {
           token: idToken,
           platform: Platform.OS === "ios" ? "web" : "android",
         })
@@ -78,8 +78,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
           case statusCodes.PLAY_SERVICES_NOT_AVAILABLE:
             break
           default:
+            console.error("Error:", error)
         }
       } else {
+        console.error("Unexpected Error:", error)
       }
     }
   }

@@ -7,7 +7,7 @@ import {
 } from "react-native"
 
 interface UserProfileProps extends ViewProps {
-  imageUrl: ImageSourcePropType
+  imageUrl: ImageSourcePropType | string
   size?: "small" | "large"
 }
 
@@ -25,7 +25,10 @@ export default function UserAvatar({
         size === "small" ? styles.small : styles.large,
         style,
       ]}>
-      <Image source={imageUrl} style={styles.image} />
+      <Image
+        source={typeof imageUrl === "string" ? { uri: imageUrl } : imageUrl}
+        style={styles.image}
+      />
     </View>
   )
 }
