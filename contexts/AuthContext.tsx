@@ -51,7 +51,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
       if (isSuccessResponse(response)) {
         const idToken = response.data.idToken
-        const { data } = await api.post("/api/auth/google-signin", {
+        const { data } = await api.post("/auth/google-signin", {
           token: idToken,
           platform: Platform.OS === "ios" ? "web" : "android",
         })
@@ -62,7 +62,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
           id,
           name,
         } = data
-        const user = {
+        const user: User = {
           id,
           name,
           username: "no_username",
