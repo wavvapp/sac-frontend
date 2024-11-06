@@ -13,9 +13,9 @@ import {
   isErrorWithCode,
   statusCodes,
 } from "@react-native-google-signin/google-signin"
-import axios from "axios"
 import { Platform } from "react-native"
 import { User } from "@/types"
+import api from "@/service"
 
 interface AuthContextData {
   user: User | null
@@ -50,29 +50,31 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       const response = await GoogleSignin.signIn()
 
       if (isSuccessResponse(response)) {
-        const idToken = response.data.idToken ?? ""
-        const authenticatedUser = response.data.user
+        const idToken = response.data.idToken
+        const { data } = await api.post("/api/auth/google-signin", {
+          token: idToken,
+          platform: Platform.OS === "ios" ? "web" : "android",
+        })
+
+        const {
+          access_token: accessToken,
+          refresh_token: refreshToken,
+          id,
+          name,
+        } = data
         const user = {
-          id: authenticatedUser.id,
-          name: authenticatedUser.name || "",
+          id,
+          name,
           username: "no_username",
           time: "Now",
           activity: "Hangout",
         }
         setUser(user)
-
-        const { data } = await axios.post(
-          `${process.env.API_BASE_URL}/auth/google-signin`,
-          {
-            token: idToken,
-            platform: Platform.OS === "ios" ? "web" : "android",
-          },
-        )
-
-        await AsyncStorage.setItem("@Auth:accessToken", data.access_token)
-        await AsyncStorage.setItem("@Auth:refreshToken", data.access_token)
+        await AsyncStorage.setItem("@Auth:accessToken", accessToken)
+        await AsyncStorage.setItem("@Auth:refreshToken", refreshToken)
         await AsyncStorage.setItem("@Auth:user", JSON.stringify(user))
-        await signIn(data.access_token, user)
+        setUser(user)
+        await signIn(accessToken, user)
       }
     } catch (error) {
       if (isErrorWithCode(error)) {
@@ -82,8 +84,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
           case statusCodes.PLAY_SERVICES_NOT_AVAILABLE:
             break
           default:
+            console.error("Error:", error)
         }
       } else {
+        console.error("Unexpected Error:", error)
       }
     }
   }
