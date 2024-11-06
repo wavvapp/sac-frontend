@@ -22,7 +22,7 @@ const FindFriends = () => {
   const [allUsers, setAllUsers] = useState<User[]>([])
   const fetchUsers = async () => {
     try {
-      const response = await api.get(`/api/users/`)
+      const response = await api.get(`/users/`)
       const users = response.data.map((user: any) => ({
         id: user.id,
         name: user.name,
