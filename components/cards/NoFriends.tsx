@@ -2,7 +2,10 @@ import { Image, StyleSheet, View } from "react-native"
 import { CustomButton } from "@/components/ui/Button"
 import CustomText from "@/components/ui/CustomText"
 import { theme } from "@/theme"
+import { useNavigation } from "@react-navigation/native"
+import { HomeScreenProps } from "@/screens/Home"
 export default function NoFriends() {
+  const navigation = useNavigation<HomeScreenProps>()
   return (
     <View style={styles.container}>
       <View style={styles.contentContainer}>
@@ -17,12 +20,12 @@ export default function NoFriends() {
           <CustomText style={styles.descriptionText}>
             Add your friends to signal your availability
           </CustomText>
-          {/* //TODO: Redirect to the search screen once it's ready */}
           <CustomButton
             title="FIND FRIENDS"
             variant="secondary"
             textSize="sm"
             textStyles={styles.button}
+            onPress={() => navigation.push("Search")}
           />
         </View>
       </View>

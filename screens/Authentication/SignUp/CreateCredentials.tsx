@@ -4,6 +4,7 @@ import CustomText from "@/components/ui/CustomText"
 import Input from "@/components/ui/Input"
 import CrossMark from "@/components/vectors/CrossMark"
 import { VALIDATION_PATTERNS } from "@/constants/patterns"
+import { useAuth } from "@/contexts/AuthContext"
 import { RootStackParamList } from "@/navigation"
 import api from "@/service"
 import { theme } from "@/theme"
@@ -30,6 +31,7 @@ export default function CreateCredentials() {
   const [text, setText] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [isError, setIsError] = useState(false)
+  const { fetchCurrentUser } = useAuth()
 
   const isInputValid = useMemo(() => {
     if (text.trim().length < 5) return false
@@ -73,7 +75,7 @@ export default function CreateCredentials() {
     await api.patch("/auth/update-profile", {
       username: text,
     })
-    // TODO: navigate to the noFriends screeen
+    await fetchCurrentUser()
     navigation.navigate("Home")
   }
   const validateUsername = async () => {
@@ -83,6 +85,7 @@ export default function CreateCredentials() {
       const { data } = await api.get(`/users/${text}`)
       if (data.message === "Username already exist") {
         setIsError(true)
+        return
       } else updateUsername()
     } catch (error) {
       console.error("Error fetching user data:", error)
@@ -131,7 +134,6 @@ export default function CreateCredentials() {
           </View>
           <TouchableOpacity
             style={styles.crossMarkContainer}
-            //TODO: It should redirect to the entry screen.
             onPress={() => navigation.push("Home")}>
             <CrossMark color={theme.colors.white} />
           </TouchableOpacity>

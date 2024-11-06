@@ -16,6 +16,7 @@ import {
 import axios from "axios"
 import { Platform } from "react-native"
 import { User } from "@/types"
+import api from "@/service"
 
 interface AuthContextData {
   user: User | null
@@ -24,6 +25,7 @@ interface AuthContextData {
   signInWithGoogle: () => Promise<void>
   signOut: () => Promise<void>
   isAuthenticated: boolean
+  fetchCurrentUser: () => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData)
@@ -110,6 +112,27 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     setUser(null)
   }
 
+  async function fetchCurrentUser(): Promise<void> {
+    try {
+      const { data } = await api.get("/auth/current-user")
+      const { id, names, username } = data
+      setUser({
+        id,
+        name: names,
+        username,
+      })
+      await AsyncStorage.setItem(
+        "@Auth:user",
+        JSON.stringify({
+          id,
+          name: names,
+          username,
+        }),
+      )
+    } catch (error) {
+      console.error("Failed to re-fetch user", error)
+    }
+  }
   return (
     <AuthContext.Provider
       value={{
@@ -119,6 +142,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         signInWithGoogle,
         signOut,
         isAuthenticated: !!user,
+        fetchCurrentUser,
       }}>
       {children}
     </AuthContext.Provider>
