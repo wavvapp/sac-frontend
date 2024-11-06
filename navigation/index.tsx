@@ -11,10 +11,12 @@ import Settings from "@/screens/Settings"
 import Signaling from "@/components/lists/Signaling"
 import Search from "@/screens/Search"
 import { theme } from "@/theme"
+import EntryScreen from "@/screens/Authentication"
 import CreateCredentials from "@/screens/Authentication/SignUp/CreateCredentials"
 
 export type RootStackParamList = {
-  Home: any
+  EntryScreen: undefined
+  Home: undefined
   EditSignal: undefined
   Login: undefined
   SignUp: undefined
@@ -76,7 +78,12 @@ export default function AppNavigator() {
           </>
         </Stack.Navigator>
       ) : (
-        <Stack.Navigator initialRouteName="Login">
+        <Stack.Navigator initialRouteName="EntryScreen">
+          <Stack.Screen
+            name="EntryScreen"
+            component={EntryScreen}
+            options={{ presentation: "modal", headerShown: false }}
+          />
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="SignUp" component={SignUp} />
         </Stack.Navigator>
