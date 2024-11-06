@@ -13,7 +13,6 @@ import {
   isErrorWithCode,
   statusCodes,
 } from "@react-native-google-signin/google-signin"
-import axios from "axios"
 import { Platform } from "react-native"
 import { User } from "@/types"
 import api from "@/service"
@@ -53,29 +52,27 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
       if (isSuccessResponse(response)) {
         const idToken = response.data.idToken ?? ""
-
-        const { data: autheeticatedUser } = await axios.post(
-          `${process.env.API_BASE_URL}/auth/google-signin`,
-          {
-            token: idToken,
-            platform: Platform.OS === "ios" ? "web" : "android",
-          },
-        )
-        const { id, names, access_token, username } = autheeticatedUser
-        setUser({
-          id,
-          name: names,
-          username,
+        const apiResponse = await api.post("/auth/google-signin", {
+          token: idToken,
+          platform: Platform.OS === "ios" ? "web" : "android",
         })
-        await AsyncStorage.setItem("@Auth:token", access_token)
-        await AsyncStorage.setItem(
-          "@Auth:user",
-          JSON.stringify({
-            id,
-            name: names,
-            username,
-          }),
-        )
+
+        const {
+          access_token: accessToken,
+          refresh_token: refreshToken,
+          username,
+          id,
+          names: name,
+        } = apiResponse.data
+        const user: User = {
+          id,
+          name,
+          username,
+        }
+        await AsyncStorage.setItem("@Auth:accessToken", accessToken)
+        await AsyncStorage.setItem("@Auth:refreshToken", refreshToken)
+        await AsyncStorage.setItem("@Auth:user", JSON.stringify(user))
+        setUser(user)
       }
     } catch (error) {
       if (isErrorWithCode(error)) {
@@ -85,8 +82,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
           case statusCodes.PLAY_SERVICES_NOT_AVAILABLE:
             break
           default:
+            console.error("Error:", error)
         }
       } else {
+        console.error("Unexpected Error:", error)
       }
     }
   }
