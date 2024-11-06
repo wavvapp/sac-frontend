@@ -49,7 +49,9 @@ export default function SignUp() {
       />
       <Text style={styles.signupText}>
         Already have an account?{" "}
-        <Text style={styles.link} onPress={() => navigation.navigate("Login")}>
+        <Text
+          style={styles.link}
+          onPress={() => navigation.navigate("EntryScreen")}>
           Login
         </Text>
       </Text>
