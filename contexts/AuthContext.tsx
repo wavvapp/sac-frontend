@@ -14,13 +14,8 @@ import {
   statusCodes,
 } from "@react-native-google-signin/google-signin"
 import { Platform } from "react-native"
+import { User } from "@/types"
 import api from "@/service"
-interface User {
-  id: string
-  name: string | null
-  email: string
-  photo: string | null
-}
 
 interface AuthContextData {
   user: User | null
@@ -28,6 +23,7 @@ interface AuthContextData {
   signIn: (token: string, user: User) => Promise<void>
   signInWithGoogle: () => Promise<void>
   signOut: () => Promise<void>
+  updateUserInfo: (activity: string, time: string) => Promise<void>
   isAuthenticated: boolean
 }
 
@@ -55,19 +51,31 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       const response = await GoogleSignin.signIn()
 
       if (isSuccessResponse(response)) {
-        const idToken = response.data.idToken ?? ""
-        const user = response.data.user
-        const apiResponse = await api.post("/auth/google-signin", {
+        const idToken = response.data.idToken
+        const { data } = await api.post("/auth/google-signin", {
           token: idToken,
           platform: Platform.OS === "ios" ? "web" : "android",
         })
 
-        const { access_token: accessToken, refresh_token: refreshToken } =
-          apiResponse.data
+        const {
+          access_token: accessToken,
+          refresh_token: refreshToken,
+          id,
+          names: name,
+          username,
+          profilePictureUrl,
+        } = data
+        const user: User = {
+          id,
+          name,
+          username,
+          time: "Now",
+          activity: "Hangout",
+          imageUrl: profilePictureUrl,
+        }
         await AsyncStorage.setItem("@Auth:accessToken", accessToken)
         await AsyncStorage.setItem("@Auth:refreshToken", refreshToken)
-        await AsyncStorage.setItem("@Auth:user", JSON.stringify(user))
-        setUser(user)
+        await signIn(accessToken, user)
       }
     } catch (error) {
       if (isErrorWithCode(error)) {
@@ -102,10 +110,17 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   async function signOut(): Promise<void> {
     await AsyncStorage.removeItem("@Auth:accessToken")
     await AsyncStorage.removeItem("@Auth:user")
+    await AsyncStorage.removeItem("@Auth:refreshToken")
 
     setUser(null)
   }
 
+  async function updateUserInfo(activity: string, time: string) {
+    if (!user) return
+    const updatedUserInfo: User = { ...user, time, activity }
+    await AsyncStorage.setItem("@Auth:user", JSON.stringify(updatedUserInfo))
+    setUser(updatedUserInfo)
+  }
   return (
     <AuthContext.Provider
       value={{
@@ -114,6 +129,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         signIn,
         signInWithGoogle,
         signOut,
+        updateUserInfo,
         isAuthenticated: !!user,
       }}>
       {children}

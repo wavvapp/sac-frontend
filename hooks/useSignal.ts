@@ -1,16 +1,21 @@
+import { useAuth } from "@/contexts/AuthContext"
 import api from "@/service"
 import { useCallback, useEffect } from "react"
 import { useSharedValue } from "react-native-reanimated"
 
 export const useSignal = () => {
   const isOn = useSharedValue(false)
+  const { updateUserInfo } = useAuth()
 
   const fetchMySignal = useCallback(async () => {
     try {
       const { data } = await api.get("/my-signal")
       isOn.value = data.status === "active"
-    } catch (error) {}
-  }, [isOn])
+      await updateUserInfo(data.status_message, data.when)
+    } catch (error) {
+      console.log("Error with fetching signal", error)
+    }
+  }, [isOn, updateUserInfo])
 
   const turnOnSignalStatus = async () => {
     try {

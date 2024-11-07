@@ -16,6 +16,7 @@ import { CustomButton } from "@/components/ui/Button"
 import { useNavigation } from "@react-navigation/native"
 import { onShare } from "@/utils/share"
 import NoFriends from "@/components/cards/NoFriends"
+import { useAuth } from "@/contexts/AuthContext"
 import { useSignal } from "@/hooks/useSignal"
 import { useFriends } from "@/hooks/useFriends"
 
