@@ -6,7 +6,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { StyleSheet, View, Dimensions } from "react-native"
 import { runOnJS, useDerivedValue } from "react-native-reanimated"
 import { AnimatedSwitch } from "@/components/AnimatedSwitch"
-import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { useMemo, useRef, useState } from "react"
 import Signaling, { SignalingRef } from "@/components/lists/Signaling"
 import Settings from "@/components/vectors/Settings"
 import { theme } from "@/theme"
@@ -16,8 +16,7 @@ import { CustomButton } from "@/components/ui/Button"
 import { useNavigation } from "@react-navigation/native"
 import { onShare } from "@/utils/share"
 import NoFriends from "@/components/cards/NoFriends"
-import { User } from "@/types"
-import AsyncStorage from "@react-native-async-storage/async-storage"
+import { useAuth } from "@/contexts/AuthContext"
 import { useSignal } from "@/hooks/useSignal"
 
 export type HomeScreenProps = NativeStackNavigationProp<
@@ -31,7 +30,7 @@ export default function HomeScreen() {
   const { isOn, turnOffSignalStatus, turnOnSignalStatus } = useSignal()
   const signalingRef = useRef<SignalingRef>(null)
   const navigation = useNavigation<HomeScreenProps>()
-  const [userInfo, setUserInfo] = useState<User | null>(null)
+  const { user } = useAuth()
 
   const hasFriends = useMemo(() => {
     // TODO: Use the actual friends list, once BE is integrated */
@@ -47,13 +46,6 @@ export default function HomeScreen() {
     await turnOnSignalStatus()
   }
 
-  const getUser = useCallback(async () => {
-    const user = await AsyncStorage.getItem("@Auth:user")
-    if (!user || !isOn.value) return
-    const userInfo = JSON.parse(user)
-    setUserInfo(userInfo)
-  }, [isOn.value])
-
   useDerivedValue(() => {
     if (isOn.value) {
       return runOnJS(setIsVisible)(true)
@@ -61,9 +53,6 @@ export default function HomeScreen() {
     return runOnJS(setIsVisible)(false)
   }, [isOn.value])
 
-  useEffect(() => {
-    getUser()
-  }, [getUser])
   return (
     <View style={styles.container}>
       <PerlinNoise isOn={isOn} color1="#281713" color2="blue" />
@@ -85,7 +74,7 @@ export default function HomeScreen() {
       ) : (
         <>
           <View style={styles.UserStatus}>
-            <UserStatus isOn={isOn} friends={offlineFriends} user={userInfo} />
+            <UserStatus isOn={isOn} friends={offlineFriends} user={user} />
           </View>
           <AnimatedSwitch
             isOn={isOn}

@@ -23,6 +23,7 @@ interface AuthContextData {
   signIn: (token: string, user: User) => Promise<void>
   signInWithGoogle: () => Promise<void>
   signOut: () => Promise<void>
+  updateUserInfo: (activity: string, time: string) => Promise<void>
   isAuthenticated: boolean
 }
 
@@ -60,20 +61,20 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
           access_token: accessToken,
           refresh_token: refreshToken,
           id,
-          name,
+          names: name,
+          username,
+          profilePictureUrl,
         } = data
         const user: User = {
           id,
           name,
-          username: "no_username",
+          username,
           time: "Now",
           activity: "Hangout",
+          imageUrl: profilePictureUrl,
         }
-        setUser(user)
         await AsyncStorage.setItem("@Auth:accessToken", accessToken)
         await AsyncStorage.setItem("@Auth:refreshToken", refreshToken)
-        await AsyncStorage.setItem("@Auth:user", JSON.stringify(user))
-        setUser(user)
         await signIn(accessToken, user)
       }
     } catch (error) {
@@ -114,6 +115,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     setUser(null)
   }
 
+  async function updateUserInfo(activity: string, time: string) {
+    if (!user) return
+    const updatedUserInfo: User = { ...user, time, activity }
+    await AsyncStorage.setItem("@Auth:user", JSON.stringify(updatedUserInfo))
+    setUser(updatedUserInfo)
+  }
   return (
     <AuthContext.Provider
       value={{
@@ -122,6 +129,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         signIn,
         signInWithGoogle,
         signOut,
+        updateUserInfo,
         isAuthenticated: !!user,
       }}>
       {children}
