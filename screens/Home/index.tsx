@@ -39,10 +39,10 @@ export default function HomeScreen() {
 
   const handlePress = async () => {
     if (isOn.value) {
-      await turnOnSignalStatus()
+      await turnOffSignalStatus()
       return
     }
-    await turnOffSignalStatus()
+    await turnOnSignalStatus()
   }
 
   useDerivedValue(() => {
