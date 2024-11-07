@@ -1,12 +1,17 @@
 import api from "@/service"
+import { User } from "@/types"
 import { useEffect, useMemo, useState } from "react"
 
 export const useFriends = () => {
-  const [friends, setFriends] = useState([])
-  const [availableFriends, setAvailableFriends] = useState([])
+  const [friends, setFriends] = useState<User[]>([])
+  const [availableFriends, setAvailableFriends] = useState<User[]>([])
 
   const offlineFriends = useMemo(() => {
-    return friends.filter((friend) => !availableFriends.includes(friend)) || []
+    return (
+      friends.filter(
+        (friend) => !availableFriends.some((user) => user.id === friend.id),
+      ) || []
+    )
   }, [friends, availableFriends])
 
   const hasFriends = useMemo(() => {
@@ -17,16 +22,18 @@ export const useFriends = () => {
     try {
       const { data } = await api.get("/friend-signals")
       if (data) {
-        setAvailableFriends({
-          ...data,
-          id: data?.friendId || "",
-          name: data?.user?.names,
-          username: data?.user?.username || "",
-          email: data?.user?.email,
-          imageUrl: data?.user?.profilePictureUrl || "",
-        })
+        const friendsArray = Array.isArray(data) ? data : [data]
+        const formattedFriends = friendsArray.map((friend) => ({
+          id: friend?.friendId || "",
+          name: friend?.user?.names || "",
+          username: friend?.user?.username || "",
+          email: friend?.user?.email || "",
+          imageUrl: friend?.user?.profilePictureUrl || "",
+          time: "",
+          activity: "",
+        }))
+        setAvailableFriends(formattedFriends)
       }
-      return
     } catch (error) {
       console.error("Error fetching friends:", error)
       throw error
