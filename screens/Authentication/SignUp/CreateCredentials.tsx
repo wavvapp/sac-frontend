@@ -72,13 +72,17 @@ export default function CreateCredentials() {
   }
 
   const updateUsername = async () => {
-    await api.patch("/auth/update-profile", {
-      username: text,
-    })
-    await fetchCurrentUser()
-    navigation.navigate("Home")
+    try {
+      await api.patch("/auth/update-profile", {
+        username: text,
+      })
+      await fetchCurrentUser()
+    } catch (error) {
+      console.error("Error updating profile:", error)
+    }
   }
-  const validateUsername = async () => {
+
+  const handleUsernameSubmit = async () => {
     try {
       if (!isInputValid) return
       setIsLoading(true)
@@ -89,12 +93,9 @@ export default function CreateCredentials() {
       } else updateUsername()
     } catch (error) {
       console.error("Error fetching user data:", error)
+    } finally {
+      setIsLoading(false)
     }
-  }
-  const handleUsernameSubmit = async () => {
-    setIsLoading(true)
-    await validateUsername()
-    setIsLoading(false)
   }
 
   const handleNameSubmit = () => {

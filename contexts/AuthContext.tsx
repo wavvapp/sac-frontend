@@ -51,6 +51,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       const response = await GoogleSignin.signIn()
 
       if (isSuccessResponse(response)) {
+        setIsLoading(true)
         const idToken = response.data.idToken ?? ""
         const apiResponse = await api.post("/auth/google-signin", {
           token: idToken,
@@ -87,6 +88,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       } else {
         console.error("Unexpected Error:", error)
       }
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -113,6 +116,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
   async function fetchCurrentUser(): Promise<void> {
     try {
+      setIsLoading(true)
       const { data } = await api.get("/auth/current-user")
       const { id, names, username } = data
       setUser({
@@ -130,6 +134,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       )
     } catch (error) {
       console.error("Failed to re-fetch user", error)
+    } finally {
+      setIsLoading(false)
     }
   }
   return (

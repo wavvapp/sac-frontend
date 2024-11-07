@@ -41,7 +41,6 @@ export default function AppNavigator() {
           }}
           initialRouteName={!user?.username ? "CreateCredentials" : "Home"}>
           <>
-          {/* TODO: replace this with the entry screen */}
             <Stack.Screen
               name="Home"
               options={{ headerShown: false }}
