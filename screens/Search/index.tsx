@@ -23,10 +23,9 @@ const FindFriends = () => {
   const fetchUsers = useCallback(async () => {
     try {
       const response = await api.get(`/users/`)
-      const users = response.data.map((user: any) => ({
+      const users = response.data.map((user: User & { profile?: string }) => ({
         id: user.id,
         name: user.name,
-        email: user.email,
         username: user.username,
         imageUrl: user.profile || "",
         isFriend: user.isFriend,
