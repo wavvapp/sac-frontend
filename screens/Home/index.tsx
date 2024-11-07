@@ -1,6 +1,5 @@
 import UserStatus from "@/components/cards/UserStatus"
 import PerlinNoise from "@/components/PerlinNoise"
-import { userInfo } from "@/data/user"
 import { RootStackParamList } from "@/navigation"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { StyleSheet, View, Dimensions } from "react-native"
@@ -32,6 +31,7 @@ export default function HomeScreen() {
   const signalingRef = useRef<SignalingRef>(null)
   const navigation = useNavigation<HomeScreenProps>()
   const { hasFriends, availableFriends } = useFriends()
+  const { user } = useAuth()
 
   const handlePress = async () => {
     if (isOn.value) {
@@ -69,11 +69,7 @@ export default function HomeScreen() {
       ) : (
         <>
           <View style={styles.UserStatus}>
-            <UserStatus
-              isOn={isOn}
-              friends={availableFriends}
-              user={userInfo}
-            />
+            <UserStatus isOn={isOn} friends={availableFriends} user={user} />
           </View>
           <AnimatedSwitch
             isOn={isOn}

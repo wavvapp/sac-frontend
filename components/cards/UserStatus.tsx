@@ -113,6 +113,7 @@ const styles = StyleSheet.create({
     gap: 24,
     borderRadius: 12,
     overflow: "hidden",
+    minWidth: "100%",
   },
   userContainer: {
     marginHorizontal: 24,
