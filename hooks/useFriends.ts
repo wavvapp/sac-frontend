@@ -1,17 +1,29 @@
 import api from "@/service"
-import { User } from "@/types"
+import { FriendSignal, User } from "@/types"
 import { useEffect, useMemo, useState } from "react"
 
 export const useFriends = () => {
-  const [friends, setFriends] = useState<User[]>([])
+  const [friends, setFriends] = useState<FriendSignal[]>([])
   const [availableFriends, setAvailableFriends] = useState<User[]>([])
 
   const offlineFriends = useMemo(() => {
-    return (
-      friends.filter(
-        (friend) => !availableFriends.some((user) => user.id === friend.id),
-      ) || []
+    const friendsData = friends.filter(
+      (friend) =>
+        !availableFriends.some(
+          (availableFriend) => availableFriend.id === friend.id,
+        ),
     )
+    const formattedFriends: User[] = friendsData.map(
+      (friend: FriendSignal) => ({
+        id: friend.user.id,
+        name: friend.user.names,
+        username: friend.user.username,
+        imageUrl: friend.user.profilePictureUrl,
+        time: friend?.when,
+        activity: friend.status_message,
+      }),
+    )
+    return formattedFriends
   }, [friends, availableFriends])
 
   const hasFriends = useMemo(() => {
@@ -22,15 +34,13 @@ export const useFriends = () => {
     try {
       const { data } = await api.get("/friend-signals")
       if (data) {
-        const friendsArray = Array.isArray(data) ? data : [data]
-        const formattedFriends = friendsArray.map((friend) => ({
-          id: friend?.friendId || "",
-          name: friend?.user?.names || "",
-          username: friend?.user?.username || "",
-          email: friend?.user?.email || "",
-          imageUrl: friend?.user?.profilePictureUrl || "",
-          time: "",
-          activity: "",
+        const formattedFriends: User[] = data.map((friend: FriendSignal) => ({
+          id: friend.user.id,
+          name: friend.user.names,
+          username: friend.user.username,
+          imageUrl: friend.user.profilePictureUrl,
+          time: friend?.when,
+          activity: friend.status_message,
         }))
         setAvailableFriends(formattedFriends)
       }

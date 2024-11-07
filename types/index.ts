@@ -44,4 +44,31 @@ export interface User {
   selected?: boolean
   imageUrl?: ImageSourcePropType
 }
+
+export type BackendUser = {
+  id: string
+  names: string
+  email: string
+  phoneNumber: string | null
+  location: string | null
+  bio: string | null
+  profilePictureUrl: ImageSourcePropType
+  username: string
+  emailVerified: boolean
+  isActive: boolean
+  lastLogin: string | null
+  provider: string
+  profileStatus: boolean
+  createdAt: string
+  updatedAt: string
+}
+export type FriendSignal = {
+  id: string
+  status: string
+  when: string
+  status_message: string
+  createdAt: string
+  updatedAt: string
+  user: BackendUser
+}
 export type AccountCreationStep = 1 | 2

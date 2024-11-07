@@ -31,7 +31,7 @@ export default function HomeScreen() {
   const { isOn, turnOffSignalStatus, turnOnSignalStatus } = useSignal()
   const signalingRef = useRef<SignalingRef>(null)
   const navigation = useNavigation<HomeScreenProps>()
-  const { hasFriends, availableFriends, offlineFriends } = useFriends()
+  const { hasFriends, availableFriends } = useFriends()
 
   const handlePress = async () => {
     if (isOn.value) {
@@ -80,11 +80,7 @@ export default function HomeScreen() {
             onPress={handlePress}
             style={styles.switch}
           />
-          <Signaling
-            ref={signalingRef}
-            offlineFriends={offlineFriends}
-            availableFriends={availableFriends}
-          />
+          <Signaling ref={signalingRef} />
         </>
       )}
     </View>
