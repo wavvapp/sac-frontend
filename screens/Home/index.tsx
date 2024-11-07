@@ -1,7 +1,6 @@
 import UserStatus from "@/components/cards/UserStatus"
 import PerlinNoise from "@/components/PerlinNoise"
 import { availableFriends, offlineFriends } from "@/data/users"
-import { userInfo } from "@/data/user"
 import { RootStackParamList } from "@/navigation"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { StyleSheet, View, Dimensions } from "react-native"
@@ -17,6 +16,7 @@ import { CustomButton } from "@/components/ui/Button"
 import { useNavigation } from "@react-navigation/native"
 import { onShare } from "@/utils/share"
 import NoFriends from "@/components/cards/NoFriends"
+import { useAuth } from "@/contexts/AuthContext"
 import { useSignal } from "@/hooks/useSignal"
 
 export type HomeScreenProps = NativeStackNavigationProp<
@@ -30,6 +30,7 @@ export default function HomeScreen() {
   const { isOn, turnOffSignalStatus, turnOnSignalStatus } = useSignal()
   const signalingRef = useRef<SignalingRef>(null)
   const navigation = useNavigation<HomeScreenProps>()
+  const { user } = useAuth()
 
   const hasFriends = useMemo(() => {
     // TODO: Use the actual friends list, once BE is integrated */
@@ -73,7 +74,7 @@ export default function HomeScreen() {
       ) : (
         <>
           <View style={styles.UserStatus}>
-            <UserStatus isOn={isOn} friends={offlineFriends} user={userInfo} />
+            <UserStatus isOn={isOn} friends={offlineFriends} user={user} />
           </View>
           <AnimatedSwitch
             isOn={isOn}

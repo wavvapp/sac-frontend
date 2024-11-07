@@ -26,8 +26,8 @@ export default function EditSignal() {
   const handleSaveStatus = () => {
     saveStatus()
   }
-  const { signOut } = useAuth()
 
+  const { signOut, user } = useAuth()
   const handleSignOut = async () => {
     try {
       await signOut()
@@ -58,7 +58,7 @@ export default function EditSignal() {
           paddingBottom: 122,
         }}>
         <UserAvatar
-          imageUrl={require("@/assets/images/user-avatar.png")}
+          imageUrl={user?.imageUrl || ""}
           size="large"
           style={{ alignSelf: "center" }}
         />
