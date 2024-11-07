@@ -13,7 +13,6 @@ import { theme } from "@/theme"
 import EntryScreen from "@/screens/Authentication"
 import CreateCredentials from "@/screens/Authentication/SignUp/CreateCredentials"
 import { StatusProvider } from "@/contexts/StatusContext"
-
 export type RootStackParamList = {
   EntryScreen: undefined
   Home: undefined

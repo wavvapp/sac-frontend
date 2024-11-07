@@ -1,53 +1,64 @@
-import React, { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { View, StyleSheet } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import FriendCard from "@/components/Friend"
 import api from "@/service"
-import { Friend } from "@/types"
+import { User } from "@/types"
 import { useStatus } from "@/contexts/StatusContext"
 
 export default function FriendsList() {
   const { friends, setFriends } = useStatus()
-  const [friendsList, setFriendsList] = useState<Friend[]>([])
+  const [friendsList, setFriendsList] = useState<User[]>([])
 
-  const fetchFriends = async () => {
+  const fetchFriends = useCallback(async () => {
     try {
       const response = await api.get("/friends")
-      const allFriends = response.data.map((friend: any) => ({
-        id: friend.friendId,
-        name: friend.user.names,
-        username: friend.user.username || "",
-        email: friend.user.email,
-        imageUrl: friend.user.profilePictureUrl || "",
-        selected: friends.includes(friend.friendId),
+      const allFriends = response.data.map((friend: User) => ({
+        id: friend.id,
+        names: friend.names,
+        username: friend.username || "",
+        email: friend.email,
+        profilePictureUrl: friend.profilePictureUrl || "",
+        selected: friend.selected,
       }))
       setFriendsList(allFriends)
     } catch (error) {
       console.error("Error fetching friends", error)
     }
-  }
+  }, [])
 
   useEffect(() => {
     fetchFriends()
-  }, [friends])
+  }, [fetchFriends])
 
-  const updateFriendsList = (friendId: string) => {
-    const updatedFriends = friends.includes(friendId)
-      ? friends.filter((id) => id !== friendId)
-      : [...friends, friendId]
-    setFriends(updatedFriends)
-  }
+  const updateFriendsList = useCallback(
+    (friendId: string) => {
+      const updatedUserList = friendsList.map((friend) => {
+        if (!friend.selected && friend.id === friendId) {
+          const updatedFriends = [...friends, friendId]
+          setFriends(updatedFriends)
+          friend.selected = true
+          return friend
+        }
+        return friend
+      })
+      setFriendsList(updatedUserList)
+    },
+    [friends, friendsList, setFriends],
+  )
 
   return (
     <View style={styles.container}>
       <CustomText size="sm">Who can see it</CustomText>
-      {friendsList.map((item) => (
-        <FriendCard
-          key={item.id.toString()}
-          handleChange={() => updateFriendsList(item.id)}
-          user={item}
-        />
-      ))}
+      {[...new Set(friendsList)].map((item, i) => {
+        return (
+          <FriendCard
+            key={i}
+            handleChange={() => updateFriendsList(item.id)}
+            user={item}
+          />
+        )
+      })}
     </View>
   )
 }

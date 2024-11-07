@@ -12,6 +12,7 @@ import SignalingUser from "@/components/SignalingUser"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { RootStackParamList } from "@/navigation"
+import AsyncStorage from "@react-native-async-storage/async-storage"
 export interface SignalingRef {
   openBottomSheet: () => void
 }
@@ -21,7 +22,12 @@ interface SignalingProps {
   offlineFriends?: User[]
 }
 type SearchProp = NativeStackNavigationProp<RootStackParamList, "Search">
-
+const clearLocalStorage = async () => {
+  await AsyncStorage.removeItem("@Auth:accessToken")
+  await AsyncStorage.removeItem("@Auth:idToken")
+  await AsyncStorage.removeItem("@Auth:user")
+  await AsyncStorage.removeItem("@Auth:refreshToken")
+}
 const Signaling = forwardRef<SignalingRef, SignalingProps>((_, ref) => {
   const navigation = useNavigation<SearchProp>()
   return (
@@ -35,7 +41,10 @@ const Signaling = forwardRef<SignalingRef, SignalingProps>((_, ref) => {
           textSize="sm"
           title="FIND"
           textStyles={{ fontWeight: 600 }}
-          onPress={() => navigation.navigate("Search")}
+          onPress={() => {
+            clearLocalStorage()
+            navigation.navigate("Search")
+          }}
         />
       </View>
       {!availableFriends.length && (

@@ -4,7 +4,6 @@ import CustomText from "@/components/ui/CustomText"
 import EditIcon from "@/components/vectors/EditIcon"
 import EditActivity from "@/screens/EditActivity"
 import { useStatus } from "@/contexts/StatusContext"
-
 export default function Activity() {
   const [isModalVisible, setIsModalVisible] = useState(false)
   const { statusMessage } = useStatus()

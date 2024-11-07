@@ -15,9 +15,9 @@ export default function FriendCard({
     <TouchableOpacity
       style={styles.container}
       onPress={() => handleChange(user.id)}>
-      <UserAvatar imageUrl={user.imageUrl || 0} />
+      <UserAvatar imageUrl={user?.profilePictureUrl} />
       <UserInfo
-        fullName={user.name}
+        fullName={user?.names}
         username={user.username}
         style={styles.useInfoStyles}
       />

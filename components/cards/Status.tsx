@@ -3,17 +3,17 @@ import { View, ScrollView, StyleSheet, TouchableOpacity } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import Badge from "@/components/ui/Badge"
 import { theme } from "@/theme"
-import { useStatus } from "@/contexts/StatusContext" // Use the custom hook
+import { useStatus } from "@/contexts/StatusContext"
 
 type StatusProps = {
-  timeSlots: string[] // Array of available time slots
+  timeSlots: string[]
 }
 
 export const Status: React.FC<StatusProps> = ({ timeSlots }) => {
   const { timeSlot, setTimeSlot } = useStatus()
 
   const handleTimeSlotChange = (selectedTime: string) => {
-    setTimeSlot(selectedTime) // Update the selected time slot
+    setTimeSlot(selectedTime)
   }
 
   return (
