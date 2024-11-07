@@ -21,7 +21,7 @@ type EditSignalScreenProps = NativeStackNavigationProp<
 
 export default function EditSignal() {
   const navigation = useNavigation<EditSignalScreenProps>()
-  const { signOut } = useAuth()
+  const { signOut, user } = useAuth()
   const handleSignOut = async () => {
     try {
       await signOut()
@@ -51,7 +51,7 @@ export default function EditSignal() {
           paddingBottom: 122,
         }}>
         <UserAvatar
-          imageUrl={require("@/assets/images/user-avatar.png")}
+          imageUrl={user?.imageUrl || ""}
           size="large"
           style={{ alignSelf: "center" }}
         />
