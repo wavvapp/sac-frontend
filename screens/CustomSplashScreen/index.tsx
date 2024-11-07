@@ -1,12 +1,12 @@
 import PerlinNoise from "@/components/PerlinNoise"
 import CustomText from "@/components/ui/CustomText"
 import WavvLogo from "@/components/vectors/WavvLogo"
+import { useSignal } from "@/hooks/useSignal"
 import { theme } from "@/theme"
 import { StyleSheet, View } from "react-native"
-import { useSharedValue } from "react-native-reanimated"
 
 export default function CustomSplashScreen() {
-  const isOn = useSharedValue(false)
+  const { isOn } = useSignal()
 
   return (
     <View style={styles.container}>
