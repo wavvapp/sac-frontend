@@ -27,6 +27,7 @@ const FindFriends = () => {
         id: user.id,
         name: user.name,
         email: user.email,
+        username: user.username,
         imageUrl: user.profile || "",
         isFriend: user.isFriend,
       }))
