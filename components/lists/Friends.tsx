@@ -32,12 +32,10 @@ export default function FriendsList() {
   }, [friends])
 
   const updateFriendsList = (friendId: string) => {
-    setFriends((prevFriends) => {
-      const updatedFriends = prevFriends.includes(friendId)
-        ? prevFriends.filter((id: string) => id !== friendId)
-        : [...prevFriends, friendId]
-      return updatedFriends
-    })
+    const updatedFriends = friends.includes(friendId)
+      ? friends.filter((id) => id !== friendId)
+      : [...friends, friendId]
+    setFriends(updatedFriends)
   }
 
   return (
