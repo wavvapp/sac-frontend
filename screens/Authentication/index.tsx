@@ -6,6 +6,13 @@ import LogoIcon from "@/components/vectors/LogoIcon"
 import CustomText from "@/components/ui/CustomText"
 import { useSharedValue } from "react-native-reanimated"
 import { useAuth } from "@/contexts/AuthContext"
+import { GoogleSignin } from "@react-native-google-signin/google-signin"
+
+GoogleSignin.configure({
+  webClientId: process.env.WEB_CLIENT_ID,
+  iosClientId: process.env.IOS_CLIENT_ID,
+  offlineAccess: false,
+})
 
 export default function EntryScreen() {
   const { signInWithGoogle } = useAuth()
