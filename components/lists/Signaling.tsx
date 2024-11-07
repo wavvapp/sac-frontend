@@ -1,7 +1,6 @@
-import { forwardRef, useEffect } from "react"
+import { forwardRef } from "react"
 import { View, StyleSheet } from "react-native"
 import CustomText from "@/components/ui/CustomText"
-import { availableFriends, offlineFriends } from "@/data/users"
 import { User } from "@/types"
 import BottomDrawer from "@/components/BottomDrawer"
 import { CustomButton } from "@/components/ui/Button"
@@ -11,11 +10,10 @@ import SignalingUser from "@/components/SignalingUser"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { RootStackParamList } from "@/navigation"
-import api from "@/service"
+import { useFriends } from "@/hooks/useFriends"
 export interface SignalingRef {
   openBottomSheet: () => void
 }
-
 interface SignalingProps {
   availableFriends?: User[]
   offlineFriends?: User[]
@@ -24,29 +22,7 @@ type SearchProp = NativeStackNavigationProp<RootStackParamList, "Search">
 
 const Signaling = forwardRef<SignalingRef, SignalingProps>((_, ref) => {
   const navigation = useNavigation<SearchProp>()
-
-  const fetchAllFriends = async () => {
-    try {
-      const { data } = await api.get("/api/friend-signals")
-      return data
-    } catch (error) {
-      console.error("Error fetching friends:", error)
-      throw error
-    }
-  }
-
-  const loadFriends = async () => {
-    try {
-      const friends = await fetchAllFriends()
-      return friends
-    } catch (error) {
-      console.error("Error retrieving friends data:", error)
-    }
-  }
-
-  useEffect(() => {
-    loadFriends()
-  }, [])
+  const { availableFriends, offlineFriends } = useFriends()
 
   return (
     <BottomDrawer ref={ref}>
