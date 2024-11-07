@@ -13,6 +13,8 @@ import ShareCard from "@/components/Share"
 import CustomText from "@/components/ui/CustomText"
 import { theme } from "@/theme"
 import { useAuth } from "@/contexts/AuthContext"
+// import api from "@/service"
+// import { useEffect } from "react"
 
 type EditSignalScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -30,6 +32,23 @@ export default function EditSignal() {
       console.error("Error signing out:", error)
     }
   }
+  // const updateActivity = async () => {
+  //   try {
+  //     const response = await api.put("/api/my-signal/")
+  //     const { friends, status_message, when } = response.data
+  //     console.log(
+  //       friends,
+  //       status_message,
+  //       when,
+  //       "THIS IS A RESPONSE FROM ACTIVITY",
+  //     )
+  //   } catch (error) {
+  //     console.error("error while fetching activity status", error)
+  //   }
+  // }
+  // useEffect(() => {
+  //   updateActivity()
+  // }, [])
   return (
     <View style={style.container}>
       <CustomButton

@@ -1,18 +1,45 @@
 import { StyleSheet, View } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import FriendCard from "@/components/Friend"
-import { useState } from "react"
-import { availableFriends } from "@/data/users"
+import { useEffect, useState } from "react"
+import api from "@/service"
+import { Friend } from "@/types"
 
 export default function FriendsList() {
-  const [friendsList, setFriendsList] = useState(availableFriends)
-  const updateFriendsList = (userId: string) => {
+  const [, setSelectedFriends] = useState<Friend[]>([])
+  const [friendsList, setFriendsList] = useState<Friend[]>([])
+
+  const fetchFriends = async () => {
+    try {
+      const response = await api.get("/friends")
+      const friends = response.data.map((friend: any) => ({
+        id: friend.id,
+        name: friend.name,
+        email: friend.email,
+        imageUrl: friend.profile || "",
+        selected: false,
+      }))
+      console.log(friends, "MY FRIENDS")
+      setSelectedFriends(friends)
+      setFriendsList(friends)
+    } catch (error) {
+      console.error("error fetching friends", error)
+    }
+  }
+
+  useEffect(() => {
+    fetchFriends()
+  }, [])
+  const updateFriendsList = (friendId: string) => {
     setFriendsList((prevList) =>
-      prevList.map((user) =>
-        user.id === userId ? { ...user, selected: !user.selected } : user,
+      prevList.map((friend) =>
+        friend.id === friendId
+          ? { ...friend, selected: !friend.selected }
+          : friend,
       ),
     )
   }
+
   return (
     <View style={styles.container}>
       <CustomText size="sm">Who can see it</CustomText>

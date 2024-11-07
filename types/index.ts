@@ -44,4 +44,13 @@ export interface User {
   selected?: boolean
   imageUrl?: ImageSourcePropType
 }
+export interface Friend {
+  id: string
+  username: string
+  name: string
+  time: string
+  activity: string
+  selected?: boolean
+  imageUrl?: ImageSourcePropType
+}
 export type AccountCreationStep = 1 | 2
