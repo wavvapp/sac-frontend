@@ -43,5 +43,6 @@ export interface User {
   activity: string
   selected?: boolean
   imageUrl?: ImageSourcePropType
+  isFriend?: boolean
 }
 export type AccountCreationStep = 1 | 2

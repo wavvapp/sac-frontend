@@ -28,6 +28,7 @@ const FindFriends = () => {
         name: user.name,
         email: user.email,
         imageUrl: user.profile || "",
+        isFriend: user.isFriend,
       }))
       setAllUsers(users)
       setFilteredUsers(users)
@@ -47,11 +48,11 @@ const FindFriends = () => {
     setFilteredUsers(filtered)
   }
 
-  const handleAddFriend = async (id: string) => {
-    if (isLoading) return
+  const handleAddFriend = async (user: User) => {
+    if (isLoading || user.isFriend) return
     try {
       setIsLoading(true)
-      await api.post("/friends", { friendId: id })
+      await api.post("/friends", { friendId: user.id })
       await fetchUsers()
     } catch (error) {
       console.warn("Error adding friend:", error.response.data.message)
@@ -89,23 +90,20 @@ const FindFriends = () => {
               key={user.id}
               style={styles.friendItem}
               disabled={isLoading}
-              onPress={() => handleAddFriend(user.id)}>
+              onPress={() => handleAddFriend(user)}>
               <View style={styles.userDetails}>
                 <UserAvatar imageUrl={user.imageUrl || ""} />
                 <View style={{ marginLeft: 8 }}>
                   <UserInfo fullName={user.name} username={user.username} />
                 </View>
               </View>
-              {allUsers.some((addedUser) => addedUser.id === user.id) ? (
-                <CheckIcon
-                  color={theme.colors.black}
-                  onPress={() => handleAddFriend(user.id)}
-                />
+              {user.isFriend ? (
+                <CheckIcon color={theme.colors.black} />
               ) : (
                 <CustomButton
                   variant="outline"
                   title="Add"
-                  onPress={() => handleAddFriend(user.id)}
+                  onPress={() => handleAddFriend(user)}
                 />
               )}
             </TouchableOpacity>
