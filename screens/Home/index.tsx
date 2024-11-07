@@ -5,11 +5,7 @@ import { userInfo } from "@/data/user"
 import { RootStackParamList } from "@/navigation"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { StyleSheet, View, Dimensions } from "react-native"
-import {
-  runOnJS,
-  useDerivedValue,
-  useSharedValue,
-} from "react-native-reanimated"
+import { runOnJS, useDerivedValue } from "react-native-reanimated"
 import { AnimatedSwitch } from "@/components/AnimatedSwitch"
 import { useMemo, useRef, useState } from "react"
 import Signaling, { SignalingRef } from "@/components/lists/Signaling"
@@ -21,6 +17,7 @@ import { CustomButton } from "@/components/ui/Button"
 import { useNavigation } from "@react-navigation/native"
 import { onShare } from "@/utils/share"
 import NoFriends from "@/components/cards/NoFriends"
+import { useSignal } from "@/hooks/useSignal"
 
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -30,7 +27,7 @@ export type HomeScreenProps = NativeStackNavigationProp<
 const { width } = Dimensions.get("window")
 export default function HomeScreen() {
   const [_, setIsVisible] = useState(false)
-  const isOn = useSharedValue(false)
+  const { isOn, turnOffSignalStatus, turnOnSignalStatus } = useSignal()
   const signalingRef = useRef<SignalingRef>(null)
   const navigation = useNavigation<HomeScreenProps>()
 
@@ -40,8 +37,12 @@ export default function HomeScreen() {
     return friends.length !== 0
   }, [])
 
-  const handlePress = () => {
-    isOn.value = !isOn.value
+  const handlePress = async () => {
+    if (isOn.value) {
+      await turnOffSignalStatus()
+      return
+    }
+    await turnOnSignalStatus()
   }
 
   useDerivedValue(() => {

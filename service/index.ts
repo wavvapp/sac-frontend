@@ -29,7 +29,7 @@ const refreshAccessToken = async (refreshToken: string) => {
 // Request Interceptor
 api.interceptors.request.use(
   async (config: InternalAxiosRequestConfig) => {
-    const token = await AsyncStorage.getItem("@Auth:token") // Dynamically get token
+    const token = await AsyncStorage.getItem("@Auth:accessToken") // Dynamically get token
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
     }
