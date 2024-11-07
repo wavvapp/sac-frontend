@@ -3,18 +3,14 @@ import { useState } from "react"
 import CustomText from "@/components/ui/CustomText"
 import EditIcon from "@/components/vectors/EditIcon"
 import EditActivity from "@/screens/EditActivity"
+import { useStatus } from "@/contexts/StatusContext"
 
 export default function Activity() {
   const [isModalVisible, setIsModalVisible] = useState(false)
-  const [activity, setActivity] = useState("Available")
+  const { statusMessage } = useStatus()
 
   const openModal = () => setIsModalVisible(true)
   const closeModal = () => setIsModalVisible(false)
-
-  const updateActivity = (newText: string) => {
-    setActivity(newText)
-    closeModal()
-  }
 
   return (
     <View style={styles.container}>
@@ -23,7 +19,7 @@ export default function Activity() {
       </CustomText>
       <View style={styles.statusContainer}>
         <CustomText size="lg" fontWeight="semibold">
-          {activity}
+          {statusMessage}
         </CustomText>
         <TouchableOpacity onPress={openModal}>
           <EditIcon />
@@ -37,10 +33,7 @@ export default function Activity() {
           animationType="slide"
           presentationStyle="overFullScreen"
           onRequestClose={closeModal}>
-          <EditActivity
-            closeModal={closeModal}
-            updateEditActivity={updateActivity}
-          />
+          <EditActivity closeModal={closeModal} />
         </Modal>
       )}
     </View>
