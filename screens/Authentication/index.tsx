@@ -5,22 +5,22 @@ import { theme } from "@/theme"
 import LogoIcon from "@/components/vectors/LogoIcon"
 import CustomText from "@/components/ui/CustomText"
 import { useSharedValue } from "react-native-reanimated"
-import { useNavigation } from "@react-navigation/native"
-import { RootStackParamList } from "@/navigation"
-import { NativeStackNavigationProp } from "@react-navigation/native-stack"
+import { useAuth } from "@/contexts/AuthContext"
+import { GoogleSignin } from "@react-native-google-signin/google-signin"
 
-type EntryScreenProps = NativeStackNavigationProp<
-  RootStackParamList,
-  "EntryScreen"
->
+GoogleSignin.configure({
+  webClientId: process.env.WEB_CLIENT_ID,
+  iosClientId: process.env.IOS_CLIENT_ID,
+  offlineAccess: false,
+})
+
 export default function EntryScreen() {
-  const navigation = useNavigation<EntryScreenProps>()
-  const handleCreateAccount = () => {
-    // this will navigate to create an account
-    // navigation.navigate("CreateAccount")
+  const { signInWithGoogle } = useAuth()
+
+  const handleGoogleLogin = async () => {
+    await signInWithGoogle()
   }
 
-  const handleSignUp = () => navigation.navigate("Login")
   const noise = useSharedValue(false)
 
   return (
@@ -37,13 +37,13 @@ export default function EntryScreen() {
           <CustomButton
             variant="primary"
             title="Create Account"
-            onPress={handleCreateAccount}
+            onPress={handleGoogleLogin}
             textStyles={styles.buttonText}
           />
           <CustomButton
             variant="destructive"
             title="Sign In"
-            onPress={handleSignUp}
+            onPress={handleGoogleLogin}
             textStyles={styles.buttonText}
           />
           <CustomText

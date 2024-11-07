@@ -5,7 +5,6 @@ import HomeScreen from "@/screens/Home"
 import EditSignal from "@/screens/EditSignal"
 import { useAuth } from "@/contexts/AuthContext"
 import SignUp from "@/screens/Authentication/SignUp"
-import Login from "@/screens/Authentication/Login"
 import CustomSplashScreen from "@/screens/CustomSplashScreen"
 import Settings from "@/screens/Settings"
 import Signaling from "@/components/lists/Signaling"
@@ -19,7 +18,6 @@ export type RootStackParamList = {
   EntryScreen: undefined
   Home: undefined
   EditSignal: undefined
-  Login: undefined
   SignUp: undefined
   Settings: undefined
   Signaling: undefined
@@ -80,7 +78,6 @@ export default function AppNavigator() {
             component={EntryScreen}
             options={{ presentation: "modal", headerShown: false }}
           />
-          <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="SignUp" component={SignUp} />
         </Stack.Navigator>
       )}
