@@ -7,7 +7,7 @@ import { Friend } from "@/types"
 import { useStatus } from "@/contexts/StatusContext"
 
 export default function FriendsList() {
-  const { friends, setFriends } = useStatus() // Access friends and setFriends from context
+  const { friends, setFriends } = useStatus()
   const [friendsList, setFriendsList] = useState<Friend[]>([])
 
   const fetchFriends = async () => {
@@ -18,26 +18,25 @@ export default function FriendsList() {
         name: friend.name,
         email: friend.email,
         imageUrl: friend.profile || "",
-        selected: friends.includes(friend.id), // Check if the friend is selected
+        selected: friends.includes(friend.id),
       }))
 
-      setFriendsList(allFriends) // Update the local state with the list of friends
+      setFriendsList(allFriends)
     } catch (error) {
       console.error("Error fetching friends", error)
     }
   }
 
   useEffect(() => {
-    fetchFriends() // Call the function to fetch friends when the component mounts
-  }, [friends]) // Re-fetch when friends change
+    fetchFriends()
+  }, [friends])
 
   const updateFriendsList = (friendId: string) => {
     setFriends((prevFriends) => {
-      // Ensure that prevFriends is an array of strings
       const updatedFriends = prevFriends.includes(friendId)
-        ? prevFriends.filter((id) => id !== friendId) // Deselect the friend
-        : [...prevFriends, friendId] // Select the friend
-      return updatedFriends // Return the updated array
+        ? prevFriends.filter((id: string) => id !== friendId)
+        : [...prevFriends, friendId]
+      return updatedFriends
     })
   }
 
@@ -47,7 +46,7 @@ export default function FriendsList() {
       {friendsList.map((item) => (
         <FriendCard
           key={item.id.toString()}
-          handleChange={() => updateFriendsList(item.id)} // Update friends list when changed
+          handleChange={() => updateFriendsList(item.id)}
           user={item}
         />
       ))}
