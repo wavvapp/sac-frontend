@@ -14,13 +14,13 @@ export default function FriendsList() {
     try {
       const response = await api.get("/friends")
       const allFriends = response.data.map((friend: any) => ({
-        id: friend.id,
-        name: friend.name,
-        email: friend.email,
-        imageUrl: friend.profile || "",
-        selected: friends.includes(friend.id),
+        id: friend.friendId,
+        name: friend.user.names,
+        username: friend.user.username || "",
+        email: friend.user.email,
+        imageUrl: friend.user.profilePictureUrl || "",
+        selected: friends.includes(friend.friendId),
       }))
-
       setFriendsList(allFriends)
     } catch (error) {
       console.error("Error fetching friends", error)
