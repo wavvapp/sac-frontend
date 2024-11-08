@@ -28,13 +28,12 @@ export default function NoFriends() {
           <CustomText style={styles.descriptionText}>
             Add your friends to signal your availability
           </CustomText>
-          {/* //TODO: Redirect to the search screen once it's ready */}
           <CustomButton
             title="FIND FRIENDS"
             variant="secondary"
             textSize="sm"
             textStyles={styles.button}
-            onPress={() => navigation.navigate("Search")}
+            onPress={() => navigation.push("Search")}
           />
         </View>
       </View>

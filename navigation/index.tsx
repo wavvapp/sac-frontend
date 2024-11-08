@@ -26,12 +26,11 @@ export type RootStackParamList = {
 
 export default function AppNavigator() {
   const Stack = createNativeStackNavigator<RootStackParamList>()
-  const { isAuthenticated, isLoading } = useAuth()
+  const { isAuthenticated, isLoading, user } = useAuth()
 
   if (isLoading) {
     return <CustomSplashScreen />
   }
-
   return (
     <NavigationContainer>
       {isAuthenticated ? (
@@ -40,33 +39,40 @@ export default function AppNavigator() {
             headerTransparent: true,
             headerTitleStyle: { color: theme.colors.white },
           }}
-          initialRouteName="Home">
-          <Stack.Screen
-            name="Home"
-            options={{ headerShown: false }}
-            component={HomeScreen}
-          />
-          <Stack.Screen name="Settings" component={Settings} />
-          <Stack.Screen
-            name="EditSignal"
-            options={{ headerShown: false, presentation: "modal" }}
-            component={EditSignal}
-          />
-          <Stack.Screen
-            name="Signaling"
-            options={{ presentation: "modal", headerShown: false }}
-            component={Signaling}
-          />
-          <Stack.Screen
-            name="CreateCredentials"
-            options={{ headerShown: false }}
-            component={CreateCredentials}
-          />
-          <Stack.Screen
-            name="Search"
-            options={{ headerShown: false }}
-            component={Search}
-          />
+          initialRouteName={!user?.username ? "CreateCredentials" : "Home"}>
+          <>
+            <Stack.Screen
+              name="Home"
+              options={{ headerShown: false }}
+              component={HomeScreen}
+            />
+            {!user?.username ? (
+              <Stack.Screen
+                name="CreateCredentials"
+                options={{ headerShown: false }}
+                component={CreateCredentials}
+              />
+            ) : (
+              <>
+                <Stack.Screen name="Settings" component={Settings} />
+                <Stack.Screen
+                  name="EditSignal"
+                  options={{ headerShown: false, presentation: "modal" }}
+                  component={EditSignal}
+                />
+                <Stack.Screen
+                  name="Signaling"
+                  options={{ presentation: "modal", headerShown: false }}
+                  component={Signaling}
+                />
+                <Stack.Screen
+                  name="Search"
+                  options={{ headerShown: false }}
+                  component={Search}
+                />
+              </>
+            )}
+          </>
         </Stack.Navigator>
       ) : (
         <Stack.Navigator initialRouteName="EntryScreen">
