@@ -25,6 +25,7 @@ export default function EditSignal() {
   const { saveStatus } = useStatus()
   const handleSaveStatus = () => {
     saveStatus()
+    navigation.goBack()
   }
 
   const { signOut, user } = useAuth()
