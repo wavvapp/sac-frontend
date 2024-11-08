@@ -1,5 +1,7 @@
-import React, { createContext, useContext, useState } from "react"
+import { createContext, useContext, useState } from "react"
 import api from "@/service"
+import { useSignal } from "@/hooks/useSignal"
+import { useAuth } from "./AuthContext"
 
 type StatusContextType = {
   statusMessage: string
@@ -17,10 +19,12 @@ const StatusContext = createContext<StatusContextType>({} as StatusContextType)
 export const StatusProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [statusMessage, setStatusMessage] = useState("Available")
+  const { user } = useAuth()
+  const [statusMessage, setStatusMessage] = useState(user?.activity || "")
   const [friends, setFriends] = useState<string[]>([])
   const [timeSlot, setTimeSlot] = useState("NOW")
 
+  const { fetchMySignal } = useSignal()
   const updateActivity = async () => {
     try {
       const response = await api.put("/my-signal", {
@@ -28,6 +32,7 @@ export const StatusProvider: React.FC<{ children: React.ReactNode }> = ({
         status_message: statusMessage,
         when: timeSlot,
       })
+      await fetchMySignal()
 
       const { friends: updatedFriends, status_message, when } = response.data
       setFriends(updatedFriends)

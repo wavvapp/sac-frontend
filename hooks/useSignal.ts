@@ -44,5 +44,6 @@ export const useSignal = () => {
     isOn,
     turnOnSignalStatus,
     turnOffSignalStatus,
+    fetchMySignal,
   }
 }

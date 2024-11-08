@@ -23,28 +23,15 @@ type EditSignalScreenProps = NativeStackNavigationProp<
 export default function EditSignal() {
   const navigation = useNavigation<EditSignalScreenProps>()
   const { saveStatus } = useStatus()
-  const handleSaveStatus = () => {
-    saveStatus()
+  const handleSaveStatus = async () => {
+    await saveStatus()
     navigation.goBack()
   }
 
-  const { signOut, user } = useAuth()
-  const handleSignOut = async () => {
-    try {
-      await signOut()
-      navigation.navigate("EntryScreen")
-    } catch (error) {
-      console.error("Error signing out:", error)
-    }
-  }
+  const { user } = useAuth()
 
   return (
     <View style={style.container}>
-      <CustomButton
-        title="Entry Screen"
-        onPress={handleSignOut}
-        textSize={"base"}
-      />
       <View style={style.navBar}>
         <CustomText style={style.headerText} fontWeight="bold">
           Edit status

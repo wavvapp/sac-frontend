@@ -54,7 +54,13 @@ const Signaling = forwardRef<SignalingRef>((_, ref) => {
                 />
               )
             },
-            renderItem: ({ item: user }) => SignalingUser(user, true),
+            renderItem: ({ item: user, index }) =>
+              SignalingUser({
+                user,
+                online: true,
+                isLast: index === availableFriends.length - 1,
+                isFirst: index === 0,
+              }),
           },
           {
             title: "Other users",
@@ -69,7 +75,13 @@ const Signaling = forwardRef<SignalingRef>((_, ref) => {
                 />
               )
             },
-            renderItem: ({ item, index }) => SignalingUser(item, false, index),
+            renderItem: ({ item, index }) =>
+              SignalingUser({
+                user: item,
+                online: false,
+                isLast: index === availableFriends.length - 1,
+                isFirst: index === 0,
+              }),
           },
         ]}
         keyExtractor={(item) => item.id}
