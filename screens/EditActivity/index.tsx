@@ -1,5 +1,6 @@
 import CustomText from "@/components/ui/CustomText"
 import Input from "@/components/ui/Input"
+import { useStatus } from "@/contexts/StatusContext"
 import { theme } from "@/theme"
 import { useState } from "react"
 import {
@@ -13,22 +14,18 @@ import {
 
 interface EditActivityProps {
   closeModal: () => void
-  updateEditActivity: (newText: string) => void
 }
 
-export default function EditActivity({
-  closeModal,
-  updateEditActivity,
-}: EditActivityProps) {
+export default function EditActivity({ closeModal }: EditActivityProps) {
+  const { setStatusMessage } = useStatus()
   const [text, setText] = useState("")
 
   const handleEdit = () => {
     if (text.trim()) {
-      updateEditActivity(text.trim())
+      setStatusMessage(text.trim())
       Keyboard.dismiss()
-    } else {
-      closeModal()
     }
+    closeModal()
   }
 
   return (

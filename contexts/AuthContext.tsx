@@ -50,7 +50,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     try {
       await GoogleSignin.hasPlayServices()
       const response = await GoogleSignin.signIn()
-
       if (isSuccessResponse(response)) {
         setIsLoading(true)
         const idToken = response.data.idToken
@@ -58,22 +57,23 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
           token: idToken,
           platform: Platform.OS === "ios" ? "web" : "android",
         })
-
         const {
           access_token: accessToken,
           refresh_token: refreshToken,
           id,
-          names: name,
+          email,
+          names: names,
           username,
           profilePictureUrl,
         } = data
         const user: User = {
           id,
-          name,
+          names,
+          email,
           username,
           time: "Now",
           activity: "Hangout",
-          imageUrl: profilePictureUrl,
+          profilePictureUrl: profilePictureUrl,
         }
         await AsyncStorage.setItem("@Auth:accessToken", accessToken)
         await AsyncStorage.setItem("@Auth:refreshToken", refreshToken)

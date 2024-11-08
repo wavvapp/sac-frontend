@@ -4,7 +4,6 @@ import { CustomButton } from "@/components/ui/Button"
 import UserAvatar from "@/components/ui/UserAvatar"
 import CrossMark from "@/components/vectors/CrossMark"
 import { useNavigation } from "@react-navigation/native"
-import { RootStackParamList } from "@/navigation"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import FriendsList from "@/components/lists/Friends"
 import Activity from "@/components/Activity"
@@ -13,6 +12,8 @@ import ShareCard from "@/components/Share"
 import CustomText from "@/components/ui/CustomText"
 import { theme } from "@/theme"
 import { useAuth } from "@/contexts/AuthContext"
+import { useStatus } from "@/contexts/StatusContext"
+import { RootStackParamList } from "@/navigation"
 
 type EditSignalScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -21,6 +22,12 @@ type EditSignalScreenProps = NativeStackNavigationProp<
 
 export default function EditSignal() {
   const navigation = useNavigation<EditSignalScreenProps>()
+  const { saveStatus } = useStatus()
+  const handleSaveStatus = () => {
+    saveStatus()
+    navigation.goBack()
+  }
+
   const { signOut, user } = useAuth()
   const handleSignOut = async () => {
     try {
@@ -30,6 +37,7 @@ export default function EditSignal() {
       console.error("Error signing out:", error)
     }
   }
+
   return (
     <View style={style.container}>
       <CustomButton
@@ -51,13 +59,13 @@ export default function EditSignal() {
           paddingBottom: 122,
         }}>
         <UserAvatar
-          imageUrl={user?.imageUrl || ""}
+          imageUrl={user?.profilePictureUrl || ""}
           size="large"
           style={{ alignSelf: "center" }}
         />
         <Activity />
         <Status
-          timeSlots={["NOW", "MORNING", "Lunch", "AFTERNOON", "EVENING"]}
+          timeSlots={["NOW", "MORNING", "LUNCH", "AFTERNOON", "EVENING"]}
         />
         <FriendsList />
         <ShareCard style={{ marginHorizontal: 20 }} />
@@ -68,6 +76,7 @@ export default function EditSignal() {
         fullWidth
         title="Save"
         textSize="sm"
+        onPress={handleSaveStatus}
       />
     </View>
   )

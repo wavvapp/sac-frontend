@@ -38,6 +38,18 @@ export type Theme = {
 export interface User {
   id: string
   username: string
+  names: string
+  time: string
+  email: string
+  activity: string
+  selected?: boolean
+  profilePictureUrl?: ImageSourcePropType
+}
+export interface Friend {
+  id: string
+  friendId: string
+  username: string
+  user: User
   name: string
   time?: string
   activity?: string

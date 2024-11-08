@@ -3,7 +3,6 @@ import { View, StyleSheet } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import { availableFriends, offlineFriends } from "@/data/users"
 import { User } from "@/types"
-
 import BottomDrawer from "@/components/BottomDrawer"
 import { CustomButton } from "@/components/ui/Button"
 import { BottomSheetSectionList } from "@gorhom/bottom-sheet"
@@ -21,7 +20,6 @@ interface SignalingProps {
   offlineFriends?: User[]
 }
 type SearchProp = NativeStackNavigationProp<RootStackParamList, "Search">
-
 const Signaling = forwardRef<SignalingRef, SignalingProps>((_, ref) => {
   const navigation = useNavigation<SearchProp>()
   return (
@@ -35,7 +33,9 @@ const Signaling = forwardRef<SignalingRef, SignalingProps>((_, ref) => {
           textSize="sm"
           title="FIND"
           textStyles={{ fontWeight: 600 }}
-          onPress={() => navigation.navigate("Search")}
+          onPress={() => {
+            navigation.navigate("Search")
+          }}
         />
       </View>
       {!availableFriends.length && (
