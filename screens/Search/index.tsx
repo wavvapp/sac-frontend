@@ -13,6 +13,7 @@ import { User } from "@/types"
 import { theme } from "@/theme"
 import CheckIcon from "@/components/vectors/CheckIcon"
 import api from "@/service"
+import { useFriends } from "@/hooks/useFriends"
 
 const FindFriends = () => {
   const navigation = useNavigation()
@@ -20,6 +21,7 @@ const FindFriends = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [filteredUsers, setFilteredUsers] = useState(availableFriends)
   const [allUsers, setAllUsers] = useState<User[]>([])
+  const { fetchAllFriends } = useFriends()
   const fetchUsers = useCallback(async () => {
     try {
       const response = await api.get(`/users`)
@@ -54,6 +56,7 @@ const FindFriends = () => {
       setIsLoading(true)
       await api.post("/friends", { friendId: user.id })
       await fetchUsers()
+      await fetchAllFriends()
     } catch (error) {
       console.warn("Error adding friend:", error.response.data.message)
     } finally {
