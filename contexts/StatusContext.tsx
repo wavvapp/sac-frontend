@@ -39,11 +39,6 @@ export const StatusProvider: React.FC<{ children: React.ReactNode }> = ({
   }
 
   const saveStatus = async () => {
-    console.log("Saving status with values:", {
-      statusMessage,
-      friends,
-      timeSlot,
-    })
     try {
       await updateActivity()
     } catch (error) {

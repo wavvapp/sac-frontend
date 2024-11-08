@@ -30,9 +30,10 @@ const refreshAccessToken = async (refreshToken: string) => {
 api.interceptors.request.use(
   async (config: InternalAxiosRequestConfig) => {
     const token = await AsyncStorage.getItem("@Auth:accessToken")
+    const refreshToken = await AsyncStorage.getItem("@Auth:refreshToken")
     const user = await AsyncStorage.getItem("@Auth:user")
-    if (token) {
-      user && (await refreshAccessToken(token))
+    if (token && refreshToken) {
+      user && (await refreshAccessToken(refreshToken))
       config.headers.Authorization = `Bearer ${token}`
     }
     return config

@@ -3,7 +3,6 @@ import { View, StyleSheet } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import { availableFriends, offlineFriends } from "@/data/users"
 import { User } from "@/types"
-
 import BottomDrawer from "@/components/BottomDrawer"
 import { CustomButton } from "@/components/ui/Button"
 import { BottomSheetSectionList } from "@gorhom/bottom-sheet"
@@ -12,7 +11,6 @@ import SignalingUser from "@/components/SignalingUser"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { RootStackParamList } from "@/navigation"
-import AsyncStorage from "@react-native-async-storage/async-storage"
 export interface SignalingRef {
   openBottomSheet: () => void
 }
@@ -22,12 +20,6 @@ interface SignalingProps {
   offlineFriends?: User[]
 }
 type SearchProp = NativeStackNavigationProp<RootStackParamList, "Search">
-const clearLocalStorage = async () => {
-  await AsyncStorage.removeItem("@Auth:accessToken")
-  await AsyncStorage.removeItem("@Auth:idToken")
-  await AsyncStorage.removeItem("@Auth:user")
-  await AsyncStorage.removeItem("@Auth:refreshToken")
-}
 const Signaling = forwardRef<SignalingRef, SignalingProps>((_, ref) => {
   const navigation = useNavigation<SearchProp>()
   return (
@@ -42,7 +34,6 @@ const Signaling = forwardRef<SignalingRef, SignalingProps>((_, ref) => {
           title="FIND"
           textStyles={{ fontWeight: 600 }}
           onPress={() => {
-            clearLocalStorage()
             navigation.navigate("Search")
           }}
         />
