@@ -5,10 +5,12 @@ import FriendCard from "@/components/Friend"
 import api from "@/service"
 import { User } from "@/types"
 import { useStatus } from "@/contexts/StatusContext"
+import { useSignal } from "@/hooks/useSignal"
 
 export default function FriendsList() {
   const { friends, setFriends } = useStatus()
   const [friendsList, setFriendsList] = useState<User[]>([])
+  const { signal } = useSignal()
 
   const fetchFriends = useCallback(async () => {
     try {
@@ -19,13 +21,15 @@ export default function FriendsList() {
         username: friend.username || "",
         email: friend.email,
         profilePictureUrl: friend.profilePictureUrl || "",
-        selected: friend.selected,
+        selected: signal?.friends.some(
+          (signalFriend) => signalFriend.username === friend.username,
+        ),
       }))
       setFriendsList(allFriends)
     } catch (error) {
       console.error("Error fetching friends", error)
     }
-  }, [])
+  }, [signal?.friends])
 
   useEffect(() => {
     fetchFriends()

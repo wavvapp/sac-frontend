@@ -55,8 +55,24 @@ export interface Friend {
   time?: string
   activity?: string
   selected?: boolean
-  imageUrl?: ImageSourcePropType
+  profilePictureUrl?: ImageSourcePropType
   isFriend?: boolean
+}
+
+export interface Signal {
+  id: string
+  status: string
+  when: string
+  status_message: string
+  createdAt: string
+  updatedAt: string
+  friends: {
+    friendId: string
+    id: string
+    profilePictureUrl: string
+    names: string
+    username: string
+  }[]
 }
 
 export type BackendUser = {
