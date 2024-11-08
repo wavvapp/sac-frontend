@@ -44,6 +44,7 @@ export interface User {
   activity: string
   selected?: boolean
   profilePictureUrl?: ImageSourcePropType
+  isFriend?: boolean
 }
 export interface Friend {
   id: string
