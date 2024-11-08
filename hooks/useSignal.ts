@@ -15,7 +15,7 @@ export const useSignal = () => {
     } catch (error) {
       console.log("Error with fetching signal", error)
     }
-  }, [isOn, updateUserInfo])
+  }, [isOn])
 
   const turnOnSignalStatus = async () => {
     try {
