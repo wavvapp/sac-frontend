@@ -33,8 +33,8 @@ export default function UserStatus({
 
   const fullFriendsList = visibleFriends
     .map((friend) => {
-      const firstName = friend.names?.split(" ")[0]
-      const lastName = friend.names?.split(" ").slice(1).join(" ")
+      const firstName = friend.name?.split(" ")[0]
+      const lastName = friend.name?.split(" ").slice(1).join(" ")
       return `${firstName} ${lastName?.charAt(0)}`
     })
     .join(", ")
