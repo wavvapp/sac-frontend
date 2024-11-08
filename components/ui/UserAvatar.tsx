@@ -28,7 +28,11 @@ export default function UserAvatar({
         style,
       ]}>
       <Image
-        source={imageUrl ? { uri: imageUrl } : userImage}
+        source={
+          typeof imageUrl === "string" && imageUrl
+            ? { uri: imageUrl }
+            : userImage
+        }
         style={styles.image}
       />
     </View>
