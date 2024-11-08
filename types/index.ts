@@ -51,9 +51,10 @@ export interface Friend {
   username: string
   user: User
   name: string
-  time: string
-  activity: string
+  time?: string
+  activity?: string
   selected?: boolean
   imageUrl?: ImageSourcePropType
+  isFriend?: boolean
 }
 export type AccountCreationStep = 1 | 2

@@ -4,7 +4,6 @@ import { CustomButton } from "@/components/ui/Button"
 import UserAvatar from "@/components/ui/UserAvatar"
 import CrossMark from "@/components/vectors/CrossMark"
 import { useNavigation } from "@react-navigation/native"
-import { RootStackParamList } from "@/navigation"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import FriendsList from "@/components/lists/Friends"
 import Activity from "@/components/Activity"
@@ -14,6 +13,7 @@ import CustomText from "@/components/ui/CustomText"
 import { theme } from "@/theme"
 import { useAuth } from "@/contexts/AuthContext"
 import { useStatus } from "@/contexts/StatusContext"
+import { RootStackParamList } from "@/navigation"
 
 type EditSignalScreenProps = NativeStackNavigationProp<
   RootStackParamList,

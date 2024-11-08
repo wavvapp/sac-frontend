@@ -25,6 +25,7 @@ interface AuthContextData {
   signOut: () => Promise<void>
   updateUserInfo: (activity: string, time: string) => Promise<void>
   isAuthenticated: boolean
+  fetchCurrentUser: () => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData)
@@ -50,6 +51,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       await GoogleSignin.hasPlayServices()
       const response = await GoogleSignin.signIn()
       if (isSuccessResponse(response)) {
+        setIsLoading(true)
         const idToken = response.data.idToken
         const { data } = await api.post("/auth/google-signin", {
           token: idToken,
@@ -90,6 +92,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       } else {
         console.error("Unexpected Error:", error)
       }
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -115,6 +119,30 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     setUser(null)
   }
 
+  async function fetchCurrentUser(): Promise<void> {
+    try {
+      setIsLoading(true)
+      const { data } = await api.get("/auth/current-user")
+      const { id, names, username } = data
+      setUser({
+        id,
+        name: names,
+        username,
+      })
+      await AsyncStorage.setItem(
+        "@Auth:user",
+        JSON.stringify({
+          id,
+          name: names,
+          username,
+        }),
+      )
+    } catch (error) {
+      console.error("Failed to re-fetch user", error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
   async function updateUserInfo(activity: string, time: string) {
     if (!user) return
     const updatedUserInfo: User = { ...user, time, activity }
@@ -131,6 +159,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         signOut,
         updateUserInfo,
         isAuthenticated: !!user,
+        fetchCurrentUser,
       }}>
       {children}
     </AuthContext.Provider>
