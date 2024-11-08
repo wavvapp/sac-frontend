@@ -1,11 +1,12 @@
 import { StyleSheet, View, ViewProps } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import { theme } from "@/theme"
+import { User } from "@/types"
 
 interface UserAvailabilityProps extends ViewProps {
-  fullName: string
-  time: string
-  activity: string
+  fullName: User["names"]
+  time: User["activity"]
+  activity: User["activity"]
 }
 
 export default function UserAvailability({
