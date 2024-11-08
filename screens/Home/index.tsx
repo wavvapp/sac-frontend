@@ -1,12 +1,11 @@
 import UserStatus from "@/components/cards/UserStatus"
 import PerlinNoise from "@/components/PerlinNoise"
-import { availableFriends, offlineFriends } from "@/data/users"
 import { RootStackParamList } from "@/navigation"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { StyleSheet, View, Dimensions } from "react-native"
 import { runOnJS, useDerivedValue } from "react-native-reanimated"
 import { AnimatedSwitch } from "@/components/AnimatedSwitch"
-import { useMemo, useRef, useState } from "react"
+import { useRef, useState } from "react"
 import Signaling, { SignalingRef } from "@/components/lists/Signaling"
 import Settings from "@/components/vectors/Settings"
 import { theme } from "@/theme"
@@ -18,6 +17,7 @@ import { onShare } from "@/utils/share"
 import NoFriends from "@/components/cards/NoFriends"
 import { useAuth } from "@/contexts/AuthContext"
 import { useSignal } from "@/hooks/useSignal"
+import { useFriends } from "@/hooks/useFriends"
 
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -30,13 +30,8 @@ export default function HomeScreen() {
   const { isOn, turnOffSignalStatus, turnOnSignalStatus } = useSignal()
   const signalingRef = useRef<SignalingRef>(null)
   const navigation = useNavigation<HomeScreenProps>()
+  const { hasFriends, availableFriends } = useFriends()
   const { user } = useAuth()
-
-  const hasFriends = useMemo(() => {
-    // TODO: Use the actual friends list, once BE is integrated */
-    const friends = [...availableFriends, ...offlineFriends]
-    return friends.length !== 0
-  }, [])
 
   const handlePress = async () => {
     if (isOn.value) {
@@ -74,7 +69,7 @@ export default function HomeScreen() {
       ) : (
         <>
           <View style={styles.UserStatus}>
-            <UserStatus isOn={isOn} friends={offlineFriends} user={user} />
+            <UserStatus isOn={isOn} friends={availableFriends} user={user} />
           </View>
           <AnimatedSwitch
             isOn={isOn}

@@ -11,6 +11,7 @@ export default function CustomSplashScreen() {
   return (
     <View style={styles.container}>
       <PerlinNoise isOn={isOn} color1="#281713" color2="blue" />
+
       <View style={styles.content}>
         <WavvLogo width={390} height={80} />
         <CustomText size="sm" fontFamily="marfa" style={styles.subText}>

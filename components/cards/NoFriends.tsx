@@ -3,9 +3,17 @@ import { CustomButton } from "@/components/ui/Button"
 import CustomText from "@/components/ui/CustomText"
 import { theme } from "@/theme"
 import { useNavigation } from "@react-navigation/native"
-import { HomeScreenProps } from "@/screens/Home"
+
+import { RootStackParamList } from "@/navigation"
+import { NativeStackNavigationProp } from "@react-navigation/native-stack"
+
+type NoFriendsScreenProps = NativeStackNavigationProp<
+  RootStackParamList,
+  "Search"
+>
+
 export default function NoFriends() {
-  const navigation = useNavigation<HomeScreenProps>()
+  const navigation = useNavigation<NoFriendsScreenProps>()
   return (
     <View style={styles.container}>
       <View style={styles.contentContainer}>
