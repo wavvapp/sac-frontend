@@ -68,7 +68,7 @@ export default function UserStatus({
         {user && (
           <View style={styles.userContainer}>
             <UserAvailability
-              fullName={user.name}
+              fullName={user.names}
               time={user.time}
               activity={user.activity}
             />

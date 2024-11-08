@@ -1,17 +1,19 @@
-import React, { useState } from "react"
+import React from "react"
 import { View, ScrollView, StyleSheet, TouchableOpacity } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import Badge from "@/components/ui/Badge"
 import { theme } from "@/theme"
+import { useStatus } from "@/contexts/StatusContext"
 
-interface StatusProps {
+type StatusProps = {
   timeSlots: string[]
 }
 
-function Status({ timeSlots }: StatusProps) {
-  const [activeSlot, setActiveSlot] = useState<string>(timeSlots[0])
-  const handlePress = (slot: string) => {
-    setActiveSlot(slot)
+export const Status: React.FC<StatusProps> = ({ timeSlots }) => {
+  const { timeSlot, setTimeSlot } = useStatus()
+
+  const handleTimeSlotChange = (selectedTime: string) => {
+    setTimeSlot(selectedTime)
   }
 
   return (
@@ -26,10 +28,12 @@ function Status({ timeSlots }: StatusProps) {
           contentContainerStyle={styles.scrollContentContainer}>
           <View style={styles.buttonContainer}>
             {timeSlots.map((slot) => (
-              <TouchableOpacity onPress={() => handlePress(slot)} key={slot}>
+              <TouchableOpacity
+                onPress={() => handleTimeSlotChange(slot)}
+                key={slot}>
                 <Badge
                   name={slot}
-                  variant={activeSlot === slot ? "default" : "outline"}
+                  variant={timeSlot === slot ? "default" : "outline"}
                   style={styles.badge}
                 />
               </TouchableOpacity>

@@ -30,7 +30,9 @@ const Signaling = forwardRef<SignalingRef>((_, ref) => {
           textSize="sm"
           title="FIND"
           textStyles={{ fontWeight: 600 }}
-          onPress={() => navigation.navigate("Search")}
+          onPress={() => {
+            navigation.navigate("Search")
+          }}
         />
       </View>
       {!availableFriends.length && (
