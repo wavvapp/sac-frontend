@@ -40,7 +40,7 @@ export default function EditActivity({ closeModal }: EditActivityProps) {
           </CustomText>
           <Input
             textSize="lg"
-            placeholder="Available"
+            placeholder="Status message"
             handleTextChange={setText}
             value={text}
             onSubmitEditing={handleEdit}

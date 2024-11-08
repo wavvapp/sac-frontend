@@ -62,5 +62,5 @@ export const useFriends = () => {
     fetchAllFriends()
     fetchAvailableFriends()
   }, [])
-  return { hasFriends, availableFriends, offlineFriends }
+  return { hasFriends, availableFriends, offlineFriends, fetchAllFriends }
 }

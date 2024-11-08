@@ -5,17 +5,26 @@ import UserAvailability from "@/components/cards/UserAvailability"
 import UserInfo from "@/components/UserInfo"
 import { theme } from "@/theme"
 
-export default function SignalingUser(
-  user: User,
-  online: boolean,
-  index?: number,
-) {
+interface SignalingUserProps {
+  user: User
+  online: boolean
+  isLast: boolean
+  isFirst: boolean
+}
+
+export default function SignalingUser({
+  user,
+  online,
+  isLast,
+  isFirst,
+}: SignalingUserProps) {
   return (
     <View
       style={[
         styles.userCard,
         !online && styles.availableUserCard,
-        index === 0 && styles.firstCardInTheListStyles,
+        isLast && styles.lastCardInTheListStyles,
+        isFirst && styles.firstCardInTheListStyles,
       ]}>
       <UserAvatar imageUrl={user.profilePictureUrl} />
       <View>
@@ -42,8 +51,10 @@ const styles = StyleSheet.create({
   availableUserCard: {
     backgroundColor: theme.colors.black_100,
   },
+  lastCardInTheListStyles: {
+    paddingBottom: 20,
+  },
   firstCardInTheListStyles: {
     paddingTop: 20,
-    marginTop: 20,
   },
 })
