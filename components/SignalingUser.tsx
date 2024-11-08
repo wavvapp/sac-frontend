@@ -17,16 +17,16 @@ export default function SignalingUser(
         !online && styles.availableUserCard,
         index === 0 && styles.firstCardInTheListStyles,
       ]}>
-      <UserAvatar imageUrl={user.imageUrl || 0} />
+      <UserAvatar imageUrl={user.profilePictureUrl} />
       <View>
         {online ? (
           <UserAvailability
-            fullName={user.name}
-            time={user.time}
+            fullName={user.names}
+            time={user?.time}
             activity={user.activity}
           />
         ) : (
-          <UserInfo fullName={user.name} username={user.username} />
+          <UserInfo fullName={user.names} username={user.username} />
         )}
       </View>
     </View>

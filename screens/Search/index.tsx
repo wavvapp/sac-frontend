@@ -22,12 +22,12 @@ const FindFriends = () => {
   const [allUsers, setAllUsers] = useState<User[]>([])
   const fetchUsers = useCallback(async () => {
     try {
-      const response = await api.get(`/users/`)
+      const response = await api.get(`/users`)
       const users = response.data.map((user: User & { profile?: string }) => ({
         id: user.id,
-        name: user.name,
+        names: user.name,
         username: user.username,
-        imageUrl: user.profile || "",
+        profilePictureUrl: user.profile,
         isFriend: user.isFriend,
       }))
       setAllUsers(users)
@@ -43,8 +43,8 @@ const FindFriends = () => {
   const handleSearch = (name: string) => {
     setSearch(name)
     const filtered = allUsers
-      .filter((user) => user.name.toLowerCase().includes(name.toLowerCase()))
-      .sort((a, b) => a.name.localeCompare(b.name))
+      .filter((user) => user.names.toLowerCase().includes(name.toLowerCase()))
+      .sort((a, b) => a.names.localeCompare(b.names))
     setFilteredUsers(filtered)
   }
 
@@ -92,9 +92,9 @@ const FindFriends = () => {
               disabled={isLoading}
               onPress={() => handleAddFriend(user)}>
               <View style={styles.userDetails}>
-                <UserAvatar imageUrl={user.imageUrl || ""} />
+                <UserAvatar imageUrl={user.profilePictureUrl} />
                 <View style={{ marginLeft: 8 }}>
-                  <UserInfo fullName={user.name} username={user.username} />
+                  <UserInfo fullName={user.names} username={user.username} />
                 </View>
               </View>
               {user.isFriend ? (

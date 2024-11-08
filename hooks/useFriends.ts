@@ -3,7 +3,7 @@ import { FriendSignal, User } from "@/types"
 import { useEffect, useMemo, useState } from "react"
 
 export const useFriends = () => {
-  const [friends, setFriends] = useState<FriendSignal[]>([])
+  const [friends, setFriends] = useState<User[]>([])
   const [availableFriends, setAvailableFriends] = useState<User[]>([])
 
   const offlineFriends = useMemo(() => {
@@ -13,16 +13,13 @@ export const useFriends = () => {
           (availableFriend) => availableFriend.id === friend.id,
         ),
     )
-    const formattedFriends: User[] = friendsData.map(
-      (friend: FriendSignal) => ({
-        id: friend.user.id,
-        name: friend.user.names,
-        username: friend.user.username,
-        imageUrl: friend.user.profilePictureUrl,
-        time: friend?.when,
-        activity: friend.status_message,
-      }),
-    )
+    const formattedFriends: User[] = friendsData.map((friend: User) => ({
+      id: friend.id,
+      names: friend.names,
+      username: friend.username,
+      email: friend.email,
+      profilePictureUrl: friend.profilePictureUrl,
+    }))
     return formattedFriends
   }, [friends, availableFriends])
 
@@ -36,9 +33,9 @@ export const useFriends = () => {
       if (data) {
         const formattedFriends: User[] = data.map((friend: FriendSignal) => ({
           id: friend.user.id,
-          name: friend.user.names,
+          names: friend.user.names,
           username: friend.user.username,
-          imageUrl: friend.user.profilePictureUrl,
+          profilePictureUrl: friend.user.profilePictureUrl,
           time: friend?.when,
           activity: friend.status_message,
         }))

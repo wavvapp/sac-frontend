@@ -62,7 +62,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
           refresh_token: refreshToken,
           id,
           email,
-          names: names,
+          names,
           username,
           profilePictureUrl,
         } = data
@@ -71,8 +71,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
           names,
           email,
           username,
-          time: "Now",
-          activity: "Hangout",
           profilePictureUrl: profilePictureUrl,
         }
         await AsyncStorage.setItem("@Auth:accessToken", accessToken)
@@ -123,17 +121,18 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     try {
       setIsLoading(true)
       const { data } = await api.get("/auth/current-user")
-      const { id, names, username } = data
+      const { id, names, username, email } = data
       setUser({
         id,
-        name: names,
+        names,
         username,
+        email,
       })
       await AsyncStorage.setItem(
         "@Auth:user",
         JSON.stringify({
           id,
-          name: names,
+          names,
           username,
         }),
       )
