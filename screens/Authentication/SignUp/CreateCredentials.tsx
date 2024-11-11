@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: theme.colors.black,
     flex: 1,
-    paddingTop: 44,
+    paddingTop: 7,
     paddingHorizontal: 20,
   },
   navigation: {
