@@ -76,30 +76,18 @@ export function CustomButton({
         loading ? styles.loading : disabled && styles.disabled,
         containerStyles,
       ]}
-      disabled={disabled}
+      disabled={disabled || loading}
       {...rest}>
       <View style={children && title ? [styles.childrenContainer] : {}}>
         {children}
       </View>
-      {loading ? (
-        <CustomText
-          size={textSize}
-          fontWeight="semibold"
-          fontFamily="marfa"
-          style={[text, styles.buttonText, textStyles]}>
-          Saving....
-        </CustomText>
-      ) : (
-        title && (
-          <CustomText
-            size={textSize}
-            fontWeight="semibold"
-            fontFamily="marfa"
-            style={[text, styles.buttonText, textStyles]}>
-            {title}
-          </CustomText>
-        )
-      )}
+      <CustomText
+        size={textSize}
+        fontWeight="semibold"
+        fontFamily="marfa"
+        style={[text, styles.buttonText, textStyles]}>
+        {loading ? "Saving..." : title}
+      </CustomText>
     </TouchableOpacity>
   )
 }
