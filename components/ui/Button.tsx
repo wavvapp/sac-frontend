@@ -13,7 +13,7 @@ import { theme } from "@/theme"
 interface ButtonProps extends TouchableOpacityProps {
   variant?: ButtonVariant
   textSize?: TypographySizeVariant
-  title?: string
+  title: string
   active?: boolean
   containerStyles?: ViewStyle
   textStyles?: TextStyle
@@ -21,6 +21,7 @@ interface ButtonProps extends TouchableOpacityProps {
   fullWidth?: boolean
   children?: React.ReactNode
 }
+
 export function CustomButton({
   variant = "default",
   onPress,
@@ -73,6 +74,7 @@ export function CustomButton({
         disabled && styles.disabled,
         containerStyles,
       ]}
+      disabled={disabled}
       {...rest}>
       <View style={children && title ? [styles.childrenContainer] : {}}>
         {children}

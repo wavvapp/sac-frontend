@@ -1,3 +1,4 @@
+import { useState } from "react"
 import { StyleSheet, View } from "react-native"
 import Status from "@/components/cards/Status"
 import { CustomButton } from "@/components/ui/Button"
@@ -23,12 +24,20 @@ type EditSignalScreenProps = NativeStackNavigationProp<
 export default function EditSignal() {
   const navigation = useNavigation<EditSignalScreenProps>()
   const { saveStatus } = useStatus()
-  const handleSaveStatus = async () => {
-    await saveStatus()
-    navigation.goBack()
-  }
-
   const { user } = useAuth()
+  const [loading, setLoading] = useState(false)
+
+  const handleSaveStatus = async () => {
+    setLoading(true)
+    try {
+      await saveStatus()
+      navigation.goBack()
+    } catch (error) {
+      console.error("Failed to save status:", error)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <View style={style.container}>
@@ -61,7 +70,7 @@ export default function EditSignal() {
         containerStyles={style.saveButton}
         variant="secondary"
         fullWidth
-        title="Save"
+        title={loading ? "Saving..." : "Save"}
         textSize="sm"
         onPress={handleSaveStatus}
       />
