@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingTop: 44,
     paddingHorizontal: 21,
-    backgroundColor: theme.colors.black
+    backgroundColor: theme.colors.black_50,
   },
   header: {
     flexDirection: "row",
