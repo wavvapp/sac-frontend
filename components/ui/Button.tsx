@@ -20,7 +20,9 @@ interface ButtonProps extends TouchableOpacityProps {
   disabled?: boolean
   fullWidth?: boolean
   children?: React.ReactNode
+  loading?: boolean
 }
+
 export function CustomButton({
   variant = "default",
   onPress,
@@ -31,6 +33,7 @@ export function CustomButton({
   children,
   fullWidth,
   title,
+  loading = false,
   ...rest
 }: ButtonProps): JSX.Element {
   const variantStyles = {
@@ -70,21 +73,32 @@ export function CustomButton({
       style={[
         styles.buttonContainer,
         container,
-        disabled && styles.disabled,
+        loading ? styles.loading : disabled && styles.disabled,
         containerStyles,
       ]}
+      disabled={disabled}
       {...rest}>
       <View style={children && title ? [styles.childrenContainer] : {}}>
         {children}
       </View>
-      {title && (
+      {loading ? (
         <CustomText
           size={textSize}
           fontWeight="semibold"
           fontFamily="marfa"
           style={[text, styles.buttonText, textStyles]}>
-          {title}
+          Saving....
         </CustomText>
+      ) : (
+        title && (
+          <CustomText
+            size={textSize}
+            fontWeight="semibold"
+            fontFamily="marfa"
+            style={[text, styles.buttonText, textStyles]}>
+            {title}
+          </CustomText>
+        )
       )}
     </TouchableOpacity>
   )
@@ -171,5 +185,8 @@ const styles = StyleSheet.create({
   },
   disabled: {
     opacity: 0.3,
+  },
+  loading: {
+    opacity: 1,
   },
 })
