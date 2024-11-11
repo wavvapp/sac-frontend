@@ -38,14 +38,12 @@ export default function FriendsList() {
   const updateFriendsList = useCallback(
     (friendId: string) => {
       const updatedUserList = friendsList.map((friend) => {
-        if (friend.id === friendId) {
-          if (!friend.selected) {
-            setFriends([...friends, friendId])
-            friend.selected = true
-          } else {
-            setFriends(friends.filter((id) => id !== friendId))
-            friend.selected = false
-          }
+        if (friend.id !== friendId) return friend
+        friend.selected = !friend.selected
+        if (friend.selected) {
+          setFriends([...friends, friendId])
+        } else {
+          setFriends(friends.filter((id) => id !== friendId))
         }
         return friend
       })
