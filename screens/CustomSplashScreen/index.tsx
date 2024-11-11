@@ -1,4 +1,4 @@
-import PerlinNoise from "@/components/PerlinNoise"
+// import PerlinNoise from "@/components/PerlinNoise"
 import CustomText from "@/components/ui/CustomText"
 import WavvLogo from "@/components/vectors/WavvLogo"
 import { useSignal } from "@/hooks/useSignal"
@@ -10,7 +10,7 @@ export default function CustomSplashScreen() {
 
   return (
     <View style={styles.container}>
-      <PerlinNoise isOn={isOn} color1="#281713" color2="blue" />
+      {/* <PerlinNoise isOn={isOn} color1="#281713" color2="blue" /> */}
 
       <View style={styles.content}>
         <WavvLogo width={390} height={80} />
