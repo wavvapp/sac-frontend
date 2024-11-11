@@ -18,8 +18,8 @@ interface EditActivityProps {
 }
 
 export default function EditActivity({ closeModal }: EditActivityProps) {
-  const { setStatusMessage, statusMessage } = useStatus()
-  const [text, setText] = useState(statusMessage)
+  const { setStatusMessage } = useStatus()
+  const [text, setText] = useState("")
 
   const handleEdit = () => {
     if (text.trim()) {
