@@ -1,6 +1,7 @@
 import { CustomButton } from "@/components/ui/Button"
 import CustomText from "@/components/ui/CustomText"
 import Input from "@/components/ui/Input"
+import CheckIcon from "@/components/vectors/CheckIcon"
 import { useStatus } from "@/contexts/StatusContext"
 import { theme } from "@/theme"
 import { useState } from "react"
@@ -49,13 +50,9 @@ export default function EditActivity({ closeModal }: EditActivityProps) {
               variant="ghost"
               containerStyle={styles.inputContainer}
             />
-            <CustomButton
-              variant="default"
-              textSize="sm"
-              title="DONE"
-              textStyles={{ fontWeight: 600 }}
-              onPress={handleEdit}
-            />
+            <CustomButton style={styles.button} onPress={handleEdit}>
+              <CheckIcon color={theme.colors.black} />
+            </CustomButton>
           </View>
         </KeyboardAvoidingView>
       </View>
@@ -84,5 +81,9 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     flex: 1,
+  },
+  button: {
+    borderRadius: 100,
+    padding: 12,
   },
 })
