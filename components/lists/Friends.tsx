@@ -37,19 +37,27 @@ export default function FriendsList() {
 
   const updateFriendsList = useCallback(
     (friendId: string) => {
-      const updatedUserList = friendsList.map((friend) => {
-        if (friend.id !== friendId) return friend
-        friend.selected = !friend.selected
-        if (friend.selected) {
-          setFriends([...friends, friendId])
-        } else {
-          setFriends(friends.filter((id) => id !== friendId))
+      setFriendsList((prevList: User[]) => {
+        const newFriendList = prevList.map((friend) =>
+          friend.id === friendId
+            ? { ...friend, selected: !friend.selected }
+            : friend,
+        )
+        const selectedFriend = newFriendList.find(
+          (friend) => friend.id === friendId,
+        )
+        if (selectedFriend) {
+          if (selectedFriend.selected) {
+            setFriends([...friends, friendId])
+          } else {
+            setFriends(friends.filter((id) => id !== friendId))
+          }
         }
-        return friend
+
+        return newFriendList
       })
-      setFriendsList(updatedUserList)
     },
-    [friends, friendsList, setFriends],
+    [setFriends, friends],
   )
 
   return (

@@ -11,7 +11,7 @@ type StatusContextType = {
   setTimeSlot: (timeSlot: string) => void
   saveStatus: () => void
   updateActivity: () => Promise<void>
-  loading: boolean
+  isLoading: boolean
 }
 
 const StatusContext = createContext<StatusContextType>({} as StatusContextType)
@@ -23,7 +23,7 @@ export const StatusProvider: React.FC<{ children: React.ReactNode }> = ({
   const [statusMessage, setStatusMessage] = useState(user?.activity || "")
   const [friends, setFriends] = useState<string[]>([])
   const [timeSlot, setTimeSlot] = useState("NOW")
-  const [loading, setLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(true)
   const { fetchMySignal } = useSignal()
   const fetchInitialStatus = async () => {
     try {
@@ -34,7 +34,7 @@ export const StatusProvider: React.FC<{ children: React.ReactNode }> = ({
     } catch (error) {
       console.error("Error fetching initial activity status:", error)
     } finally {
-      setLoading(false)
+      setIsLoading(false)
     }
   }
 
@@ -79,7 +79,7 @@ export const StatusProvider: React.FC<{ children: React.ReactNode }> = ({
         setTimeSlot,
         saveStatus,
         updateActivity,
-        loading,
+        isLoading,
       }}>
       {children}
     </StatusContext.Provider>

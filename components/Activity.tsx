@@ -13,11 +13,11 @@ import { useStatus } from "@/contexts/StatusContext"
 import { theme } from "@/theme"
 export default function Activity() {
   const [isModalVisible, setIsModalVisible] = useState(false)
-  const { statusMessage, loading } = useStatus()
+  const { statusMessage, isLoading } = useStatus()
 
   const openModal = () => setIsModalVisible(true)
   const closeModal = () => setIsModalVisible(false)
-  if (loading) {
+  if (isLoading) {
     return <ActivityIndicator size="large" color={theme.colors.black} />
   }
   return (
