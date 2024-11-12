@@ -1,5 +1,6 @@
 import { StyleSheet, View } from "react-native"
 import Status from "@/components/cards/Status"
+import { CustomButton } from "@/components/ui/Button"
 import UserAvatar from "@/components/ui/UserAvatar"
 import CrossMark from "@/components/vectors/CrossMark"
 import { useNavigation } from "@react-navigation/native"
@@ -14,7 +15,6 @@ import { useAuth } from "@/contexts/AuthContext"
 import { useStatus } from "@/contexts/StatusContext"
 import { RootStackParamList } from "@/navigation"
 import { useState } from "react"
-import { CustomButton } from "@/components/ui/Button"
 
 type EditSignalScreenProps = NativeStackNavigationProp<
   RootStackParamList,
