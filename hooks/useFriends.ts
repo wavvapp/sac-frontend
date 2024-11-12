@@ -27,7 +27,7 @@ export const useFriends = () => {
   const hasFriends = useMemo(() => {
     if(isLoading) return true
     return friends.length !== 0
-  }, [friends])
+  }, [friends,isLoading])
 
   const fetchAvailableFriends = async () => {
     try {
