@@ -74,7 +74,6 @@ export default function EditSignal() {
         textSize="sm"
         onPress={handleSaveStatus}
         disabled={isLoading}
-        loading={isLoading}
       />
     </View>
   )
