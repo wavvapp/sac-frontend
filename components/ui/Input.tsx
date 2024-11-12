@@ -1,4 +1,10 @@
-import { StyleSheet, TextInput, TextInputProps, View } from "react-native"
+import {
+  StyleSheet,
+  TextInput,
+  TextInputProps,
+  TextStyle,
+  View,
+} from "react-native"
 import { InputVariant, TypographySizeVariant } from "@/types"
 import { theme } from "@/theme"
 
@@ -11,6 +17,7 @@ const placeHolderColorMap: Record<InputVariant, string> = {
 interface InputProps extends TextInputProps {
   variant?: InputVariant
   textSize?: TypographySizeVariant
+  containerStyle?: TextStyle
   handleTextChange: (text: string) => void
 }
 
@@ -21,6 +28,7 @@ export default function Input({
   placeholder = "",
   handleTextChange,
   keyboardType = "default",
+  containerStyle = {},
   style,
   ...rest
 }: InputProps) {
@@ -40,7 +48,12 @@ export default function Input({
   }
 
   return (
-    <View style={[styles.container, variantStyles?.[variant]?.container]}>
+    <View
+      style={[
+        styles.container,
+        variantStyles?.[variant]?.container,
+        containerStyle,
+      ]}>
       <TextInput
         style={[
           styles.input,
