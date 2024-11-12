@@ -14,6 +14,7 @@ import { theme } from "@/theme"
 import { useAuth } from "@/contexts/AuthContext"
 import { useStatus } from "@/contexts/StatusContext"
 import { RootStackParamList } from "@/navigation"
+import { useState } from "react"
 
 type EditSignalScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -23,12 +24,20 @@ type EditSignalScreenProps = NativeStackNavigationProp<
 export default function EditSignal() {
   const navigation = useNavigation<EditSignalScreenProps>()
   const { saveStatus } = useStatus()
-  const handleSaveStatus = async () => {
-    await saveStatus()
-    navigation.goBack()
-  }
-
+  const [isLoading, setIsLoading] = useState(false)
   const { user } = useAuth()
+
+  const handleSaveStatus = async () => {
+    try {
+      setIsLoading(true)
+      await saveStatus()
+      navigation.goBack()
+    } catch (error) {
+      console.error("Error saving status:", error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   return (
     <View style={style.container}>
@@ -61,9 +70,10 @@ export default function EditSignal() {
         containerStyles={style.saveButton}
         variant="secondary"
         fullWidth
-        title="Save"
+        title={isLoading ? "Saving..." : "Save"}
         textSize="sm"
         onPress={handleSaveStatus}
+        disabled={isLoading}
       />
     </View>
   )
