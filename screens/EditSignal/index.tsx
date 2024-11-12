@@ -70,7 +70,7 @@ export default function EditSignal() {
         containerStyles={style.saveButton}
         variant="secondary"
         fullWidth
-        title="Save"
+        title={isLoading ? "Saving..." : "Save"}
         textSize="sm"
         onPress={handleSaveStatus}
         disabled={isLoading}
