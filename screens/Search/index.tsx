@@ -30,6 +30,7 @@ const FindFriends = () => {
     Record<string, boolean>
   >({})
   const [allUsers, setAllUsers] = useState<User[]>([])
+  const [isAnyFriendLoading, setisAnyFriendLoading] = useState(false)
   const { fetchAllFriends } = useFriends()
   const fetchUsers = useCallback(async () => {
     try {
@@ -62,15 +63,17 @@ const FindFriends = () => {
   }
 
   const handleAddFriend = async (user: User) => {
-    if (isLoadingFriend[user.id] || user.isFriend) return
+    if (isLoadingFriend[user.id] || user.isFriend || isAnyFriendLoading) return
     try {
+      setisAnyFriendLoading(true)
       setIsLoadingFriend((prev) => ({ ...prev, [user.id]: true }))
       await api.post("/friends", { friendId: user.id })
       await fetchUsers()
       await fetchAllFriends()
-    } catch (error) {
+    } catch (error: any) {
       console.warn("Error adding friend:", error.response.data.message)
     } finally {
+      setisAnyFriendLoading(false)
       setIsLoadingFriend((prev) => ({ ...prev, [user.id]: false }))
     }
   }

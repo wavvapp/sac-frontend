@@ -11,7 +11,7 @@ import Animated, {
 
 export const FriendsSkeleton = () => {
   const opacity = useSharedValue(0.5)
-  const createAnimatedLoader = useCallback(() => {
+  const animateLoader = useCallback(() => {
     opacity.value = withRepeat(
       withSequence(
         withTiming(1, { duration: 1000 }),
@@ -21,24 +21,20 @@ export const FriendsSkeleton = () => {
       true,
     )
   }, [opacity])
-  useEffect(() => createAnimatedLoader(), [createAnimatedLoader])
+  useEffect(() => animateLoader(), [animateLoader])
   const animatedStyle = useAnimatedStyle(() => ({
     opacity: opacity.value,
   }))
   return (
-    <View>
-      {[1].map((key) => (
-        <View key={key} style={styles.friendItem}>
-          <View style={styles.userDetails}>
-            <Animated.View style={[styles.avatarSkeleton, animatedStyle]} />
-            <View style={{ marginLeft: 8, flex: 1 }}>
-              <Animated.View style={[styles.nameSkeleton, animatedStyle]} />
-              <Animated.View style={[styles.usernameSkeleton, animatedStyle]} />
-            </View>
-          </View>
-          <Animated.View style={[styles.buttonSkeleton, animatedStyle]} />
+    <View style={styles.friendItem}>
+      <View style={styles.userDetails}>
+        <Animated.View style={[styles.avatarSkeleton, animatedStyle]} />
+        <View style={{ marginLeft: 8, flex: 1 }}>
+          <Animated.View style={[styles.nameSkeleton, animatedStyle]} />
+          <Animated.View style={[styles.usernameSkeleton, animatedStyle]} />
         </View>
-      ))}
+      </View>
+      <Animated.View style={[styles.buttonSkeleton, animatedStyle]} />
     </View>
   )
 }

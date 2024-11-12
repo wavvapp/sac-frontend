@@ -4,7 +4,6 @@ import { CustomButton } from "@/components/ui/Button"
 import { theme } from "@/theme"
 import LogoIcon from "@/components/vectors/LogoIcon"
 import CustomText from "@/components/ui/CustomText"
-import { useSharedValue } from "react-native-reanimated"
 import { useAuth } from "@/contexts/AuthContext"
 import { GoogleSignin } from "@react-native-google-signin/google-signin"
 
@@ -20,8 +19,6 @@ export default function EntryScreen() {
   const handleGoogleLogin = async () => {
     await signInWithGoogle()
   }
-
-  const noise = useSharedValue(false)
 
   return (
     <View style={styles.container}>
