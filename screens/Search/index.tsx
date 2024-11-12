@@ -1,11 +1,16 @@
-import { View, StyleSheet, ScrollView, TouchableOpacity } from "react-native"
+import {
+  View,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native"
 import Input from "@/components/ui/Input"
 import UserInfo from "@/components/UserInfo"
 import ShareCard from "@/components/Share"
 import { CustomButton } from "@/components/ui/Button"
 import { useCallback, useEffect, useState } from "react"
 import CloseIcon from "@/components/vectors/CloseIcon"
-import { availableFriends } from "@/data/users"
 import { useNavigation } from "@react-navigation/native"
 import UserAvatar from "@/components/ui/UserAvatar"
 import CustomText from "@/components/ui/CustomText"
@@ -14,16 +19,22 @@ import { theme } from "@/theme"
 import CheckIcon from "@/components/vectors/CheckIcon"
 import api from "@/service"
 import { useFriends } from "@/hooks/useFriends"
+import { FriendsSkeleton } from "@/components/cards/FriendsSkeleton"
 
 const FindFriends = () => {
   const navigation = useNavigation()
   const [search, setSearch] = useState("")
   const [isLoading, setIsLoading] = useState(false)
-  const [filteredUsers, setFilteredUsers] = useState(availableFriends)
+  const [filteredUsers, setFilteredUsers] = useState<User[]>([])
+  const [isLoadingFriend, setIsLoadingFriend] = useState<
+    Record<string, boolean>
+  >({})
   const [allUsers, setAllUsers] = useState<User[]>([])
+  const [isAnyFriendLoading, setisAnyFriendLoading] = useState(false)
   const { fetchAllFriends } = useFriends()
   const fetchUsers = useCallback(async () => {
     try {
+      setIsLoading(true)
       const response = await api.get(`/users`)
       const users = response.data.map((user: User) => ({
         id: user.id,
@@ -36,6 +47,8 @@ const FindFriends = () => {
       setFilteredUsers(users)
     } catch (error) {
       console.error("error fetching users", error)
+    } finally {
+      setIsLoading(false)
     }
   }, [])
   useEffect(() => {
@@ -51,16 +64,31 @@ const FindFriends = () => {
   }
 
   const handleAddFriend = async (user: User) => {
-    if (isLoading || user.isFriend) return
+    if (isLoadingFriend[user.id] || user.isFriend || isAnyFriendLoading) return
     try {
-      setIsLoading(true)
+      setisAnyFriendLoading(true)
+      setIsLoadingFriend((prev) => ({ ...prev, [user.id]: true }))
       await api.post("/friends", { friendId: user.id })
-      await fetchUsers()
+      setAllUsers((prevUsers) =>
+        prevUsers.map((currentUser) =>
+          currentUser.id === user.id
+            ? { ...currentUser, isFriend: true }
+            : currentUser,
+        ),
+      )
+      setFilteredUsers((prevUsers) =>
+        prevUsers.map((currentUser) =>
+          currentUser.id === user.id
+            ? { ...currentUser, isFriend: true }
+            : currentUser,
+        ),
+      )
       await fetchAllFriends()
-    } catch (error) {
+    } catch (error: any) {
       console.warn("Error adding friend:", error.response.data.message)
     } finally {
-      setIsLoading(false)
+      setisAnyFriendLoading(false)
+      setIsLoadingFriend((prev) => ({ ...prev, [user.id]: false }))
     }
   }
 
@@ -86,13 +114,16 @@ const FindFriends = () => {
       />
 
       <ScrollView style={styles.friendsList}>
-        {search &&
+        {isLoading ? (
+          <FriendsSkeleton />
+        ) : (
+          search &&
           filteredUsers.length > 0 &&
           filteredUsers.map((user) => (
             <TouchableOpacity
               key={user.id}
               style={styles.friendItem}
-              disabled={isLoading}
+              disabled={isLoadingFriend[user.id]}
               onPress={() => handleAddFriend(user)}>
               <View style={styles.userDetails}>
                 <UserAvatar imageUrl={user.profilePictureUrl} />
@@ -100,7 +131,11 @@ const FindFriends = () => {
                   <UserInfo fullName={user.names} username={user.username} />
                 </View>
               </View>
-              {user.isFriend ? (
+              {isLoadingFriend[user.id] ? (
+                <CustomButton variant="outline">
+                  <ActivityIndicator />
+                </CustomButton>
+              ) : user.isFriend ? (
                 <CheckIcon color={theme.colors.black} />
               ) : (
                 <CustomButton
@@ -110,7 +145,19 @@ const FindFriends = () => {
                 />
               )}
             </TouchableOpacity>
-          ))}
+          ))
+        )}
+        {search && !filteredUsers.length && (
+          <View style={styles.notFoundContainer}>
+            <CustomText
+              size="sm"
+              fontWeight="semibold"
+              style={styles.notFoundText}>
+              User not found
+            </CustomText>
+          </View>
+        )}
+
         <View style={styles.share}>
           <ShareCard />
         </View>
@@ -152,6 +199,13 @@ const styles = StyleSheet.create({
   share: {
     paddingTop: 20,
   },
+  notFoundContainer: {
+    justifyContent: "center",
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 10,
+  },
+  notFoundText: { color: theme.colors.black_500 },
 })
 
 export default FindFriends

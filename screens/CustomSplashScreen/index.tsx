@@ -1,13 +1,10 @@
 // import PerlinNoise from "@/components/PerlinNoise"
 import CustomText from "@/components/ui/CustomText"
 import WavvLogo from "@/components/vectors/WavvLogo"
-import { useSignal } from "@/hooks/useSignal"
 import { theme } from "@/theme"
 import { StyleSheet, View } from "react-native"
 
 export default function CustomSplashScreen() {
-  const { isOn } = useSignal()
-
   return (
     <View style={styles.container}>
       {/* <PerlinNoise isOn={isOn} color1="#281713" color2="blue" /> */}
