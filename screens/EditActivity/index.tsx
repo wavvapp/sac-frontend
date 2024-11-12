@@ -50,8 +50,16 @@ export default function EditActivity({ closeModal }: EditActivityProps) {
               variant="ghost"
               containerStyle={styles.inputContainer}
             />
-            <CustomButton style={styles.button} onPress={handleEdit}>
-              <CheckIcon color={theme.colors.black} width={50} height={50} />
+            <CustomButton
+              disabled={!text.trim()}
+              style={styles.button}
+              onPress={handleEdit}>
+              <CheckIcon
+                color={theme.colors.black}
+                width={50}
+                height={50}
+                opacity={!text.trim() ? 0.3 : 1}
+              />
             </CustomButton>
           </View>
         </KeyboardAvoidingView>
