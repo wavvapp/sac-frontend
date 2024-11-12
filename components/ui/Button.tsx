@@ -21,7 +21,6 @@ interface ButtonProps extends TouchableOpacityProps {
   fullWidth?: boolean
   children?: React.ReactNode
 }
-
 export function CustomButton({
   variant = "default",
   onPress,
@@ -74,7 +73,6 @@ export function CustomButton({
         disabled && styles.disabled,
         containerStyles,
       ]}
-      disabled={disabled}
       {...rest}>
       <View style={children && title ? [styles.childrenContainer] : {}}>
         {children}
