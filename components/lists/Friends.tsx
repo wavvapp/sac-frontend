@@ -6,14 +6,17 @@ import api from "@/service"
 import { User } from "@/types"
 import { useStatus } from "@/contexts/StatusContext"
 import { useSignal } from "@/hooks/useSignal"
+import { FriendsSkeleton } from "@/components/cards/FriendsSkeleton"
 
 export default function FriendsList() {
   const { friends, setFriends } = useStatus()
   const [friendsList, setFriendsList] = useState<User[]>([])
   const { signal } = useSignal()
+  const [isLoadingFriendsList, setIsLoadingFriendsList] = useState(false)
 
   const fetchFriends = useCallback(async () => {
     try {
+      setIsLoadingFriendsList(true)
       const response = await api.get("/friends")
       const allFriends = response.data.map((friend: User) => ({
         id: friend.id,
@@ -28,6 +31,8 @@ export default function FriendsList() {
       setFriendsList(allFriends)
     } catch (error) {
       console.error("Error fetching friends", error)
+    } finally {
+      setIsLoadingFriendsList(false)
     }
   }, [signal?.friends])
 
@@ -54,15 +59,19 @@ export default function FriendsList() {
   return (
     <View style={styles.container}>
       <CustomText size="sm">Who can see it</CustomText>
-      {[...new Set(friendsList)].map((item, i) => {
-        return (
-          <FriendCard
-            key={i}
-            handleChange={() => updateFriendsList(item.id)}
-            user={item}
-          />
-        )
-      })}
+      {isLoadingFriendsList ? (
+        <FriendsSkeleton />
+      ) : (
+        [...new Set(friendsList)].map((item, i) => {
+          return (
+            <FriendCard
+              key={i}
+              handleChange={() => updateFriendsList(item.id)}
+              user={item}
+            />
+          )
+        })
+      )}
     </View>
   )
 }
