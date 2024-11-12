@@ -22,8 +22,8 @@ export const useSignal = () => {
 
   const turnOnSignalStatus = async () => {
     try {
-      await api.post("/my-signal/turn-on")
       isOn.value = true
+      await api.post("/my-signal/turn-on")
     } catch (error) {
       console.error("Error turning on my signal:", error)
       isOn.value = false
@@ -32,8 +32,8 @@ export const useSignal = () => {
 
   const turnOffSignalStatus = async () => {
     try {
-      await api.post("/my-signal/turn-off")
       isOn.value = false
+      await api.post("/my-signal/turn-off")
     } catch (error) {
       console.error("Error turning off my signal:", error)
       isOn.value = true
