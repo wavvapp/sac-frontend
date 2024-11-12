@@ -7,6 +7,7 @@ import { StatusBar } from "expo-status-bar"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { useFont } from "@/hooks/useFont"
 import { useEffect } from "react"
+import { SafeAreaProvider } from "react-native-safe-area-context"
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync()
 
@@ -26,12 +27,14 @@ export default function App() {
   }
   return (
     <QueryClientProvider client={queryClient}>
-      <StatusBar style="inverted" />
-      <AuthProvider>
-        <GestureHandlerRootView>
-          <AppNavigator />
-        </GestureHandlerRootView>
-      </AuthProvider>
+      <SafeAreaProvider>
+        <StatusBar style="inverted" />
+        <AuthProvider>
+          <GestureHandlerRootView>
+            <AppNavigator />
+          </GestureHandlerRootView>
+        </AuthProvider>
+      </SafeAreaProvider>
     </QueryClientProvider>
   )
 }
