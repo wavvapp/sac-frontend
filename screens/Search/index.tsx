@@ -54,6 +54,7 @@ const FindFriends = () => {
   useEffect(() => {
     fetchUsers()
   }, [fetchUsers])
+
   const handleSearch = (name: string) => {
     setSearch(name)
     const filtered = allUsers
@@ -68,7 +69,20 @@ const FindFriends = () => {
       setisAnyFriendLoading(true)
       setIsLoadingFriend((prev) => ({ ...prev, [user.id]: true }))
       await api.post("/friends", { friendId: user.id })
-      await fetchUsers()
+      setAllUsers((prevUsers) =>
+        prevUsers.map((currentUser) =>
+          currentUser.id === user.id
+            ? { ...currentUser, isFriend: true }
+            : currentUser,
+        ),
+      )
+      setFilteredUsers((prevUsers) =>
+        prevUsers.map((currentUser) =>
+          currentUser.id === user.id
+            ? { ...currentUser, isFriend: true }
+            : currentUser,
+        ),
+      )
       await fetchAllFriends()
     } catch (error: any) {
       console.warn("Error adding friend:", error.response.data.message)
@@ -133,6 +147,16 @@ const FindFriends = () => {
             </TouchableOpacity>
           ))
         )}
+        {search && !filteredUsers.length && (
+          <View style={styles.notFoundContainer}>
+            <CustomText
+              size="sm"
+              fontWeight="semibold"
+              style={styles.notFoundText}>
+              User not found
+            </CustomText>
+          </View>
+        )}
 
         <View style={styles.share}>
           <ShareCard />
@@ -175,6 +199,13 @@ const styles = StyleSheet.create({
   share: {
     paddingTop: 20,
   },
+  notFoundContainer: {
+    justifyContent: "center",
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 10,
+  },
+  notFoundText: { color: theme.colors.black_500 },
 })
 
 export default FindFriends
