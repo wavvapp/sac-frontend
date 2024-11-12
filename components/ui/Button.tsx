@@ -79,13 +79,15 @@ export function CustomButton({
       <View style={children && title ? [styles.childrenContainer] : {}}>
         {children}
       </View>
-      <CustomText
-        size={textSize}
-        fontWeight="semibold"
-        fontFamily="marfa"
-        style={[text, styles.buttonText, textStyles]}>
-        {title}
-      </CustomText>
+      {title && (
+        <CustomText
+          size={textSize}
+          fontWeight="semibold"
+          fontFamily="marfa"
+          style={[text, styles.buttonText, textStyles]}>
+          {title}
+        </CustomText>
+      )}
     </TouchableOpacity>
   )
 }
