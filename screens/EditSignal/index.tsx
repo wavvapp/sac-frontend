@@ -15,6 +15,7 @@ import { useAuth } from "@/contexts/AuthContext"
 import { useStatus } from "@/contexts/StatusContext"
 import { RootStackParamList } from "@/navigation"
 import { useState } from "react"
+import { usePoints } from "@/hooks/usePoints"
 
 type EditSignalScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -26,12 +27,16 @@ export default function EditSignal() {
   const { saveStatus } = useStatus()
   const [isLoading, setIsLoading] = useState(false)
   const { user } = useAuth()
+  const { fetchPoints } = usePoints()
 
   const handleSaveStatus = async () => {
     try {
       setIsLoading(true)
-      await saveStatus()
+      saveStatus()
+      // await fetchPoints()
       navigation.goBack()
+      fetchPoints()
+      console.log("reached here ")
     } catch (error) {
       console.error("Error saving status:", error)
     } finally {

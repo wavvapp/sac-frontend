@@ -18,6 +18,7 @@ import NoFriends from "@/components/cards/NoFriends"
 import { useAuth } from "@/contexts/AuthContext"
 import { useSignal } from "@/hooks/useSignal"
 import { useFriends } from "@/hooks/useFriends"
+import { usePoints } from "@/hooks/usePoints"
 
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -32,6 +33,7 @@ export default function HomeScreen() {
   const navigation = useNavigation<HomeScreenProps>()
   const { hasFriends, availableFriends } = useFriends()
   const { user } = useAuth()
+  const { points } = usePoints()
 
   const handlePress = async () => {
     if (isOn.value) {
@@ -52,7 +54,7 @@ export default function HomeScreen() {
     <View style={styles.container}>
       {/* <PerlinNoise isOn={isOn} color1="#281713" color2="blue" /> */}
       <View style={styles.header}>
-        <Badge variant="primary" name="100" />
+        <Badge variant="primary" name={points} />
         <View style={styles.buttonContainer}>
           <CustomButton style={styles.iconButton} onPress={onShare}>
             <ShareIcon color={theme.colors.white} />
