@@ -18,6 +18,7 @@ import NoFriends from "@/components/cards/NoFriends"
 import { useAuth } from "@/contexts/AuthContext"
 import { useSignal } from "@/hooks/useSignal"
 import { useFriends } from "@/hooks/useFriends"
+import { SafeAreaView } from "react-native-safe-area-context"
 
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -49,7 +50,7 @@ export default function HomeScreen() {
   }, [isOn.value])
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       {/* <PerlinNoise isOn={isOn} color1="#281713" color2="blue" /> */}
       <View style={styles.header}>
         <Badge variant="primary" name="100" />
@@ -79,7 +80,7 @@ export default function HomeScreen() {
           <Signaling ref={signalingRef} />
         </>
       )}
-    </View>
+    </SafeAreaView>
   )
 }
 
@@ -97,7 +98,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     width: "100%",
-    marginTop: 20,
     marginBottom: 20,
   },
   buttonContainer: {
