@@ -1,10 +1,11 @@
 import api from "@/service"
 import { FriendSignal, User } from "@/types"
-import { useCallback, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 
 export const useFriends = () => {
   const [friends, setFriends] = useState<User[]>([])
   const [availableFriends, setAvailableFriends] = useState<User[]>([])
+  const [isLoading, setIsLoading] = useState(true)
 
   const offlineFriends = useMemo(() => {
     const friendsData = friends.filter(
@@ -13,29 +14,20 @@ export const useFriends = () => {
           (availableFriend) => availableFriend.id === friend.id,
         ),
     )
-    const formattedFriends: User[] = friendsData.map((friend: User) => ({
-      id: friend.id,
-      names: friend.names,
-      username: friend.username,
-      email: friend.email,
-      profilePictureUrl: friend.profilePictureUrl,
-    }))
-    return formattedFriends
+    return friendsData
   }, [friends, availableFriends])
 
   const hasFriends = useMemo(() => {
+    if (isLoading) return true
     return friends.length !== 0
-  }, [friends])
+  }, [friends, isLoading])
 
   const fetchAvailableFriends = useCallback(async () => {
     try {
       const { data } = await api.get("/friend-signals")
       if (data) {
         const formattedFriends: User[] = data.map((friend: FriendSignal) => ({
-          id: friend.user.id,
-          names: friend.user.names,
-          username: friend.user.username,
-          profilePictureUrl: friend.user.profilePictureUrl,
+          ...friend.user,
           time: friend?.when,
           activity: friend.status_message,
         }))
@@ -55,8 +47,14 @@ export const useFriends = () => {
       return
     } catch (error) {
       console.error("Error fetching friends", error)
+    } finally {
+      setIsLoading(false)
     }
   }, [])
+
+  useEffect(() => {
+    fetchAllFriends()
+  }, [fetchAllFriends])
 
   return {
     friends,
@@ -65,5 +63,6 @@ export const useFriends = () => {
     offlineFriends,
     fetchAllFriends,
     fetchAvailableFriends,
+    isLoading,
   }
 }
