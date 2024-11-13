@@ -30,7 +30,7 @@ export default function EditSignal() {
   const handleSaveStatus = async () => {
     try {
       setIsLoading(true)
-      saveStatus()
+      await saveStatus()
       navigation.goBack()
     } catch (error) {
       console.error("Error saving status:", error)
