@@ -1,9 +1,8 @@
 import { forwardRef } from "react"
-import { View, StyleSheet } from "react-native"
+import { View, StyleSheet, FlatList } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import BottomDrawer from "@/components/BottomDrawer"
 import { CustomButton } from "@/components/ui/Button"
-import { BottomSheetSectionList } from "@gorhom/bottom-sheet"
 import { theme } from "@/theme"
 import SignalingUser from "@/components/SignalingUser"
 import { useNavigation } from "@react-navigation/native"
@@ -13,6 +12,7 @@ import { User } from "@/types"
 export interface SignalingRef {
   openBottomSheet: () => void
 }
+
 type SearchProp = NativeStackNavigationProp<RootStackParamList, "Search">
 
 interface SignalingProps {
@@ -45,52 +45,40 @@ const Signaling = forwardRef<SignalingRef, SignalingProps>((props, ref) => {
           None of your friends on Wavv are available today
         </CustomText>
       )}
-      <BottomSheetSectionList
-        sections={[
-          {
-            title: "available users",
-            data: availableFriends,
-            ItemSeparatorComponent: () => {
-              return (
-                <View
-                  style={{
-                    height: 12,
-                  }}
-                />
-              )
-            },
-            renderItem: ({ item: user, index }) =>
-              SignalingUser({
-                user,
-                online: true,
-                isLast: index === availableFriends.length - 1,
-                isFirst: index === 0,
-              }),
-          },
-          {
-            title: "Other users",
-            data: offlineFriends,
-            ItemSeparatorComponent: () => {
-              return (
-                <View
-                  style={{
-                    height: 12,
-                    backgroundColor: theme.colors.black_100,
-                  }}
-                />
-              )
-            },
-            renderItem: ({ item, index }) =>
-              SignalingUser({
-                user: item,
-                online: false,
-                isLast: index === availableFriends.length - 1,
-                isFirst: index === 0,
-              }),
-          },
-        ]}
-        keyExtractor={(item) => item.id}
-      />
+      {!!availableFriends.length && (
+        <View style={styles.onlineSection}>
+          <FlatList
+            data={availableFriends}
+            keyExtractor={(item) => item.id}
+            ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
+            renderItem={({ item, index }) => (
+              <SignalingUser
+                user={item}
+                online
+                isLast={index === availableFriends.length - 1}
+                isFirst={index === 0}
+              />
+            )}
+          />
+        </View>
+      )}
+      {!!offlineFriends.length && (
+        <View style={[styles.offlineSection]}>
+          <FlatList
+            data={offlineFriends}
+            keyExtractor={(item) => item.id}
+            ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
+            renderItem={({ item, index }) => (
+              <SignalingUser
+                user={item}
+                online={false}
+                isLast={index === offlineFriends.length - 1}
+                isFirst={index === 0}
+              />
+            )}
+          />
+        </View>
+      )}
     </BottomDrawer>
   )
 })
@@ -111,6 +99,11 @@ const styles = StyleSheet.create({
   },
   noUsers: {
     padding: 20,
+  },
+  onlineSection: {},
+  offlineSection: {
+    backgroundColor: theme.colors.black_100,
+    flex: 1,
   },
 })
 
