@@ -13,6 +13,7 @@ import { theme } from "@/theme"
 import EntryScreen from "@/screens/Authentication"
 import CreateCredentials from "@/screens/Authentication/SignUp/CreateCredentials"
 import { StatusProvider } from "@/contexts/StatusContext"
+import { useFriends } from "@/hooks/useFriends"
 export type RootStackParamList = {
   EntryScreen: undefined
   Home: undefined
@@ -27,8 +28,9 @@ export type RootStackParamList = {
 export default function AppNavigator() {
   const Stack = createNativeStackNavigator<RootStackParamList>()
   const { isAuthenticated, isLoading, user } = useAuth()
+  const {isLoading: isFriendsLoading}= useFriends()
 
-  if (isLoading) {
+  if (isLoading || isFriendsLoading) {
     return <CustomSplashScreen />
   }
   return (
