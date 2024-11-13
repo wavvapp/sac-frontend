@@ -3,6 +3,7 @@ import { View, StyleSheet } from "react-native"
 import UserAvatar from "@/components/ui/UserAvatar"
 import UserAvailability from "@/components/cards/UserAvailability"
 import UserInfo from "@/components/UserInfo"
+import { theme } from "@/theme"
 interface SignalingUserProps {
   user: User
   online: boolean
@@ -22,6 +23,7 @@ export default function SignalingUser({
         styles.userCard,
         isLast && styles.lastCardInTheListStyles,
         isFirst && styles.firstCardInTheListStyles,
+        online && styles.availableUserContainer,
       ]}>
       <UserAvatar imageUrl={user.profilePictureUrl} />
       <View>
@@ -50,5 +52,8 @@ const styles = StyleSheet.create({
   },
   firstCardInTheListStyles: {
     paddingTop: 20,
+  },
+  availableUserContainer: {
+    backgroundColor: theme.colors.white,
   },
 })
