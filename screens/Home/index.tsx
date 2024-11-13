@@ -5,19 +5,20 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { StyleSheet, View, Dimensions } from "react-native"
 import { runOnJS, useDerivedValue } from "react-native-reanimated"
 import { AnimatedSwitch } from "@/components/AnimatedSwitch"
-import { useRef, useState } from "react"
+import { useCallback, useRef, useState } from "react"
 import Signaling, { SignalingRef } from "@/components/lists/Signaling"
 import Settings from "@/components/vectors/Settings"
 import { theme } from "@/theme"
 import Badge from "@/components/ui/Badge"
 import ShareIcon from "@/components/vectors/ShareIcon"
 import { CustomButton } from "@/components/ui/Button"
-import { useNavigation } from "@react-navigation/native"
+import { useFocusEffect, useNavigation } from "@react-navigation/native"
 import { onShare } from "@/utils/share"
 import NoFriends from "@/components/cards/NoFriends"
 import { useAuth } from "@/contexts/AuthContext"
 import { useSignal } from "@/hooks/useSignal"
 import { useFriends } from "@/hooks/useFriends"
+import { useMutation } from "@tanstack/react-query"
 
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -27,19 +28,41 @@ export type HomeScreenProps = NativeStackNavigationProp<
 const { width } = Dimensions.get("window")
 export default function HomeScreen() {
   const [_, setIsVisible] = useState(false)
-  const { isOn, turnOffSignalStatus, turnOnSignalStatus } = useSignal()
+  const { isOn, turnOffSignalStatus, turnOnSignalStatus, fetchMySignal } =
+    useSignal()
   const signalingRef = useRef<SignalingRef>(null)
   const navigation = useNavigation<HomeScreenProps>()
-  const { hasFriends, availableFriends } = useFriends()
-  const { user } = useAuth()
+  const {
+    hasFriends,
+    availableFriends,
+    offlineFriends,
+    fetchAllFriends,
+    fetchAvailableFriends,
+  } = useFriends()
+  const { user, isAuthenticated } = useAuth()
 
-  const handlePress = async () => {
-    if (isOn.value) {
-      await turnOffSignalStatus()
-      return
-    }
-    await turnOnSignalStatus()
-  }
+  const fetchInitialData = useCallback(async () => {
+    if (!isAuthenticated) return
+    await fetchAllFriends()
+    await fetchAvailableFriends()
+    await fetchMySignal()
+  }, [fetchAllFriends, fetchAvailableFriends, fetchMySignal, isAuthenticated])
+
+  const handlePress = useMutation({
+    mutationFn: isOn.value ? turnOffSignalStatus : turnOnSignalStatus,
+    onMutate: () => {
+      isOn.value = !isOn.value
+    },
+    onError: () => {
+      isOn.value = !isOn.value
+    },
+  })
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchInitialData()
+    }, [fetchInitialData]),
+  )
 
   useDerivedValue(() => {
     if (isOn.value) {
@@ -73,10 +96,14 @@ export default function HomeScreen() {
           </View>
           <AnimatedSwitch
             isOn={isOn}
-            onPress={handlePress}
+            onPress={() => handlePress.mutate()}
             style={styles.switch}
           />
-          <Signaling ref={signalingRef} />
+          <Signaling
+            availableFriends={availableFriends}
+            offlineFriends={offlineFriends}
+            ref={signalingRef}
+          />
         </>
       )}
     </View>

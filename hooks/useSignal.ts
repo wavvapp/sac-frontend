@@ -1,7 +1,7 @@
 import { useAuth } from "@/contexts/AuthContext"
 import api from "@/service"
 import { Signal } from "@/types"
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useState } from "react"
 import { useSharedValue } from "react-native-reanimated"
 
 export const useSignal = () => {
@@ -23,25 +23,22 @@ export const useSignal = () => {
   const turnOnSignalStatus = async () => {
     try {
       await api.post("/my-signal/turn-on")
-      isOn.value = true
+      return true
     } catch (error) {
       console.error("Error turning on my signal:", error)
-      isOn.value = false
+      return false
     }
   }
 
   const turnOffSignalStatus = async () => {
     try {
       await api.post("/my-signal/turn-off")
-      isOn.value = false
+      return false
     } catch (error) {
       console.error("Error turning off my signal:", error)
-      isOn.value = true
+      return true
     }
   }
-  useEffect(() => {
-    fetchMySignal()
-  }, [fetchMySignal])
 
   return {
     isOn,

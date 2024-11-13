@@ -1,6 +1,6 @@
 import api from "@/service"
 import { FriendSignal, User } from "@/types"
-import { useEffect, useMemo, useState } from "react"
+import { useCallback, useMemo, useState } from "react"
 
 export const useFriends = () => {
   const [friends, setFriends] = useState<User[]>([])
@@ -27,7 +27,7 @@ export const useFriends = () => {
     return friends.length !== 0
   }, [friends])
 
-  const fetchAvailableFriends = async () => {
+  const fetchAvailableFriends = useCallback(async () => {
     try {
       const { data } = await api.get("/friend-signals")
       if (data) {
@@ -42,11 +42,11 @@ export const useFriends = () => {
         setAvailableFriends(formattedFriends)
       }
     } catch (error) {
-      console.error("Error fetching friends:", error)
+      console.error("Error fetching available friends:", error)
       throw error
     }
-  }
-  const fetchAllFriends = async () => {
+  }, [])
+  const fetchAllFriends = useCallback(async () => {
     try {
       const { data } = await api.get("/friends")
       if (data) {
@@ -56,11 +56,14 @@ export const useFriends = () => {
     } catch (error) {
       console.error("Error fetching friends", error)
     }
-  }
-
-  useEffect(() => {
-    fetchAllFriends()
-    fetchAvailableFriends()
   }, [])
-  return { hasFriends, availableFriends, offlineFriends, fetchAllFriends }
+
+  return {
+    friends,
+    hasFriends,
+    availableFriends,
+    offlineFriends,
+    fetchAllFriends,
+    fetchAvailableFriends,
+  }
 }

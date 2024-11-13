@@ -2,34 +2,30 @@ import { useState, useEffect, useCallback } from "react"
 import { View, StyleSheet } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import FriendCard from "@/components/Friend"
-import api from "@/service"
 import { User } from "@/types"
 import { useStatus } from "@/contexts/StatusContext"
 import { useSignal } from "@/hooks/useSignal"
+import { useFriends } from "@/hooks/useFriends"
 
 export default function FriendsList() {
   const { friends, setFriends } = useStatus()
+  const { friends: allFriends } = useFriends()
   const [friendsList, setFriendsList] = useState<User[]>([])
   const { signal } = useSignal()
 
   const fetchFriends = useCallback(async () => {
     try {
-      const response = await api.get("/friends")
-      const allFriends = response.data.map((friend: User) => ({
-        id: friend.id,
-        names: friend.names,
-        username: friend.username || "",
-        email: friend.email,
-        profilePictureUrl: friend.profilePictureUrl || "",
+      const friendsList = allFriends.map((friend: User) => ({
+        ...friend,
         selected: signal?.friends.some(
           (signalFriend) => signalFriend.username === friend.username,
         ),
       }))
-      setFriendsList(allFriends)
+      setFriendsList(friendsList)
     } catch (error) {
       console.error("Error fetching friends", error)
     }
-  }, [signal?.friends])
+  }, [allFriends, signal?.friends])
 
   useEffect(() => {
     fetchFriends()
