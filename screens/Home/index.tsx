@@ -98,7 +98,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     width: "100%",
-    marginTop: 20,
     marginBottom: 20,
   },
   buttonContainer: {
