@@ -7,38 +7,38 @@ import { User } from "@/types"
 import { useStatus } from "@/contexts/StatusContext"
 import { useSignal } from "@/hooks/useSignal"
 import { FriendsSkeleton } from "@/components/cards/FriendsSkeleton"
+import { useQuery } from "@tanstack/react-query"
 
 export default function FriendsList() {
   const { friends, setFriends } = useStatus()
   const [friendsList, setFriendsList] = useState<User[]>([])
   const { signal } = useSignal()
-  const [isLoadingFriendsList, setIsLoadingFriendsList] = useState(true)
 
   const fetchFriends = useCallback(async () => {
-    try {
-      setIsLoadingFriendsList(true)
-      const response = await api.get("/friends")
-      const allFriends = response.data.map((friend: User) => ({
-        id: friend.id,
-        names: friend.names,
-        username: friend.username || "",
-        email: friend.email,
-        profilePictureUrl: friend.profilePictureUrl || "",
-        selected: signal?.friends.some(
-          (signalFriend) => signalFriend.username === friend.username,
-        ),
-      }))
-      setFriendsList(allFriends)
-    } catch (error) {
-      console.error("Error fetching friends", error)
-    } finally {
-      setIsLoadingFriendsList(false)
-    }
-  }, [])
+    const response = await api.get("/friends")
+    const allFriends = response.data.map((friend: User) => ({
+      id: friend.id,
+      names: friend.names,
+      username: friend.username || "",
+      email: friend.email,
+      profilePictureUrl: friend.profilePictureUrl || "",
+      selected: signal?.friends.some(
+        (signalFriend) => signalFriend.username === friend.username,
+      ),
+    }))
+    return allFriends
+  }, [signal])
+
+  const { data: friendsListData, isLoading } = useQuery({
+    queryKey: ["friends"],
+    queryFn: fetchFriends,
+  })
 
   useEffect(() => {
-    fetchFriends()
-  }, [fetchFriends])
+    if (friendsListData) {
+      setFriendsList(friendsListData)
+    }
+  }, [friendsListData])
 
   const updateFriendsList = useCallback(
     (friendId: string) => {
@@ -59,7 +59,7 @@ export default function FriendsList() {
   return (
     <View style={styles.container}>
       <CustomText size="sm">Who can see it</CustomText>
-      {isLoadingFriendsList ? (
+      {isLoading ? (
         <FriendsSkeleton />
       ) : (
         [...new Set(friendsList)].map((item, i) => {
