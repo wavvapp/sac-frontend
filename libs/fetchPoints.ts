@@ -6,5 +6,9 @@ export const fetchPoints = async () => {
     return response.data
   } catch (error) {
     console.error("Error fetching Points", error)
+    return {
+      id: "",
+      points: 0,
+    }
   }
 }
