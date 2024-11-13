@@ -12,7 +12,7 @@ export default function FriendsList() {
   const { friends, setFriends } = useStatus()
   const [friendsList, setFriendsList] = useState<User[]>([])
   const { signal } = useSignal()
-  const [isLoadingFriendsList, setIsLoadingFriendsList] = useState(false)
+  const [isLoadingFriendsList, setIsLoadingFriendsList] = useState(true)
 
   const fetchFriends = useCallback(async () => {
     try {
@@ -34,7 +34,7 @@ export default function FriendsList() {
     } finally {
       setIsLoadingFriendsList(false)
     }
-  }, [signal?.friends])
+  }, [])
 
   useEffect(() => {
     fetchFriends()
