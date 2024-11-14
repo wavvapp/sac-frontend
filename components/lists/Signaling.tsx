@@ -45,9 +45,9 @@ const Signaling = forwardRef<SignalingRef>((_, ref) => {
           {
             title: "available users",
             data: availableFriends,
-            ItemSeparatorComponent: () => {
-              return <View style={styles.availableItemSeparator} />
-            },
+            ItemSeparatorComponent: () => (
+              <View style={styles.availableItemSeparator} />
+            ),
             renderItem: ({ item: user, index }) =>
               SignalingUser({
                 user,
@@ -59,15 +59,14 @@ const Signaling = forwardRef<SignalingRef>((_, ref) => {
           {
             title: "Other users",
             data: offlineFriends,
-            ItemSeparatorComponent: () => {
-              return <View style={styles.offlineItemSeparator} />
-            },
-
+            ItemSeparatorComponent: () => (
+              <View style={styles.offlineItemSeparator} />
+            ),
             renderItem: ({ item, index }) =>
               SignalingUser({
                 user: item,
                 online: false,
-                isLast: index === availableFriends.length - 1,
+                isLast: index === offlineFriends.length - 1,
                 isFirst: index === 0,
               }),
           },
@@ -78,8 +77,6 @@ const Signaling = forwardRef<SignalingRef>((_, ref) => {
     </BottomDrawer>
   )
 })
-
-Signaling.displayName = "Signaling"
 
 const styles = StyleSheet.create({
   header: {
