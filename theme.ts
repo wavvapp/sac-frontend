@@ -12,7 +12,7 @@ export const theme: Theme = {
     white_200: "#FFFFFF33",
     white_500: "#FFFFFF80",
     gray: "#E3E3E3",
-    "light-gray": "#898989",
+    light_gray: "#898989",
     red: "#6B2222",
   },
   fontSize: {

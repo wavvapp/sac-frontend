@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from "react"
 export const useFriends = () => {
   const [friends, setFriends] = useState<User[]>([])
   const [availableFriends, setAvailableFriends] = useState<User[]>([])
-  const [isLoading, setIsLoading]= useState(true)
+  const [isLoading, setIsLoading] = useState(true)
 
   const offlineFriends = useMemo(() => {
     const friendsData = friends.filter(
@@ -25,9 +25,9 @@ export const useFriends = () => {
   }, [friends, availableFriends])
 
   const hasFriends = useMemo(() => {
-    if(isLoading) return true
+    if (isLoading) return true
     return friends.length !== 0
-  }, [friends,isLoading])
+  }, [friends, isLoading])
 
   const fetchAvailableFriends = async () => {
     try {
@@ -57,8 +57,7 @@ export const useFriends = () => {
       return
     } catch (error) {
       console.error("Error fetching friends", error)
-    }
-    finally{
+    } finally {
       setIsLoading(false)
     }
   }
@@ -67,5 +66,11 @@ export const useFriends = () => {
     fetchAllFriends()
     fetchAvailableFriends()
   }, [])
-  return { hasFriends, availableFriends, offlineFriends, fetchAllFriends, isLoading }
+  return {
+    hasFriends,
+    availableFriends,
+    offlineFriends,
+    fetchAllFriends,
+    isLoading,
+  }
 }
