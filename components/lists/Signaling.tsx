@@ -72,7 +72,7 @@ const Signaling = forwardRef<SignalingRef>((_, ref) => {
           },
         ]}
         keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.sectionListContainer}
+        style={styles.sectionListContainer}
       />
     </BottomDrawer>
   )
@@ -95,7 +95,6 @@ const styles = StyleSheet.create({
   },
   sectionListContainer: {
     backgroundColor: theme.colors.black_100,
-    flex: 1,
   },
   availableItemSeparator: {
     height: 12,
