@@ -1,5 +1,5 @@
 import UserStatus from "@/components/cards/UserStatus"
-import PerlinNoise from "@/components/PerlinNoise"
+// import PerlinNoise from "@/components/PerlinNoise"
 import { RootStackParamList } from "@/navigation"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { StyleSheet, View, Dimensions } from "react-native"
@@ -18,6 +18,7 @@ import NoFriends from "@/components/cards/NoFriends"
 import { useAuth } from "@/contexts/AuthContext"
 import { useSignal } from "@/hooks/useSignal"
 import { useFriends } from "@/hooks/useFriends"
+import { SafeAreaView } from "react-native-safe-area-context"
 
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -49,8 +50,8 @@ export default function HomeScreen() {
   }, [isOn.value])
 
   return (
-    <View style={styles.container}>
-      <PerlinNoise isOn={isOn} color1="#281713" color2="blue" />
+    <SafeAreaView style={styles.container}>
+      {/* <PerlinNoise isOn={isOn} color1="#281713" color2="blue" /> */}
       <View style={styles.header}>
         <Badge variant="primary" name="100" />
         <View style={styles.buttonContainer}>
@@ -79,7 +80,7 @@ export default function HomeScreen() {
           <Signaling ref={signalingRef} />
         </>
       )}
-    </View>
+    </SafeAreaView>
   )
 }
 
@@ -88,15 +89,15 @@ const styles = StyleSheet.create({
     flex: 1,
     position: "relative",
     alignItems: "center",
-    paddingTop: 44,
+    paddingTop: 7,
     paddingHorizontal: 21,
+    backgroundColor: theme.colors.black_50,
   },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     width: "100%",
-    marginTop: 20,
     marginBottom: 20,
   },
   buttonContainer: {

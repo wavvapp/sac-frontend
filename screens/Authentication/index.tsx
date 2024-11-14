@@ -1,10 +1,9 @@
 import { View, StyleSheet, Text } from "react-native"
-import PerlinNoise from "@/components/PerlinNoise"
+// import PerlinNoise from "@/components/PerlinNoise"
 import { CustomButton } from "@/components/ui/Button"
 import { theme } from "@/theme"
 import LogoIcon from "@/components/vectors/LogoIcon"
 import CustomText from "@/components/ui/CustomText"
-import { useSharedValue } from "react-native-reanimated"
 import { useAuth } from "@/contexts/AuthContext"
 import { GoogleSignin } from "@react-native-google-signin/google-signin"
 
@@ -21,11 +20,9 @@ export default function EntryScreen() {
     await signInWithGoogle()
   }
 
-  const noise = useSharedValue(false)
-
   return (
     <View style={styles.container}>
-      <PerlinNoise isOn={noise} color1="#281713" color2="blue" />
+      {/* <PerlinNoise isOn={noise} color1="#281713" color2="blue" /> */}
       <View style={styles.content}>
         <View style={styles.logoContainer}>
           <LogoIcon />
@@ -66,7 +63,7 @@ export default function EntryScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.white,
+    backgroundColor: theme.colors.black,
   },
   content: {
     flex: 1,

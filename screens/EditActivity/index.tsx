@@ -1,5 +1,7 @@
+import { CustomButton } from "@/components/ui/Button"
 import CustomText from "@/components/ui/CustomText"
 import Input from "@/components/ui/Input"
+import CheckIcon from "@/components/vectors/CheckIcon"
 import { useStatus } from "@/contexts/StatusContext"
 import { theme } from "@/theme"
 import { useState } from "react"
@@ -38,14 +40,28 @@ export default function EditActivity({ closeModal }: EditActivityProps) {
           <CustomText fontWeight="normal" fontFamily="suisse" size="lg">
             Status
           </CustomText>
-          <Input
-            textSize="lg"
-            placeholder="Status message"
-            handleTextChange={setText}
-            value={text}
-            onSubmitEditing={handleEdit}
-            variant="ghost"
-          />
+          <View style={styles.formContainer}>
+            <Input
+              textSize="lg"
+              placeholder="Status message"
+              handleTextChange={setText}
+              value={text}
+              onSubmitEditing={handleEdit}
+              variant="ghost"
+              containerStyle={styles.inputContainer}
+            />
+            <CustomButton
+              disabled={!text.trim()}
+              style={styles.button}
+              onPress={handleEdit}>
+              <CheckIcon
+                color={theme.colors.black}
+                width={50}
+                height={50}
+                opacity={!text.trim() ? 0.3 : 1}
+              />
+            </CustomButton>
+          </View>
         </KeyboardAvoidingView>
       </View>
     </TouchableWithoutFeedback>
@@ -64,5 +80,18 @@ const styles = StyleSheet.create({
     padding: 16,
     borderTopLeftRadius: 12,
     borderTopRightRadius: 12,
+  },
+  formContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    gap: 4,
+  },
+  inputContainer: {
+    flex: 1,
+  },
+  button: {
+    borderRadius: 100,
+    padding: 12,
   },
 })

@@ -19,6 +19,7 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from "react-native"
+import { SafeAreaView } from "react-native-safe-area-context"
 
 type CredentialsScrenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -117,7 +118,7 @@ export default function CreateCredentials() {
   }, [text])
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={[styles.modalContainer]}
@@ -162,7 +163,7 @@ export default function CreateCredentials() {
           handleSubmit={handleSubmit}
         />
       </KeyboardAvoidingView>
-    </View>
+    </SafeAreaView>
   )
 }
 
@@ -170,7 +171,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: theme.colors.black,
     flex: 1,
-    paddingTop: 44,
+    paddingTop: 7,
     paddingHorizontal: 20,
   },
   navigation: {

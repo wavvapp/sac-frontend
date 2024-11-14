@@ -39,9 +39,9 @@ export interface User {
   id: string
   username: string
   names: string
-  time: string
+  time?: string
   email: string
-  activity: string
+  activity?: string
   selected?: boolean
   profilePictureUrl?: ImageSourcePropType
   isFriend?: boolean
