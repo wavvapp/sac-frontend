@@ -15,6 +15,7 @@ export const useSignal = () => {
       setSignal(data)
       isOn.value = data.status === "active"
       await updateUserInfo(data.status_message, data.when)
+      return data
     } catch (error) {
       console.log("Error with fetching signal", error)
     }
