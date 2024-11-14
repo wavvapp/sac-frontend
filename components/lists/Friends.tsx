@@ -8,7 +8,7 @@ import { useFriends } from "@/hooks/useFriends"
 import { useStatus } from "@/contexts/StatusContext"
 
 export default function FriendsList() {
-  const { friends, setFriends } = useStatus()
+  const { friendIds, setFriendIds } = useStatus()
   const { friends: allFriends } = useFriends()
   const { signal } = useSignal()
   const [friendsList, setFriendsList] = useState<User[]>([])
@@ -33,21 +33,21 @@ export default function FriendsList() {
 
   const handleFriendSelection = useCallback(
     (friendId: string) => {
-      const newFriends = friends.includes(friendId)
-        ? friends.filter((id) => id !== friendId)
-        : [...friends, friendId]
+      const newFriends = friendIds.includes(friendId)
+        ? friendIds.filter((id) => id !== friendId)
+        : [...friendIds, friendId]
 
-      setFriends(newFriends)
+      setFriendIds(newFriends)
     },
-    [friends, setFriends],
+    [friendIds, setFriendIds],
   )
 
   const friendCardsData = useMemo(() => {
     return friendsList.map((friend) => ({
       ...friend,
-      selected: friends.includes(friend.id),
+      selected: friendIds.includes(friend.id),
     }))
-  }, [friendsList, friends])
+  }, [friendsList, friendIds])
 
   return (
     <View style={styles.container}>

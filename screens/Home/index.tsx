@@ -32,8 +32,13 @@ export type HomeScreenProps = NativeStackNavigationProp<
 const { width } = Dimensions.get("window")
 export default function HomeScreen() {
   const [_, setIsVisible] = useState(false)
-  const { isOn, turnOffSignalStatus, turnOnSignalStatus, fetchMySignal } =
-    useSignal()
+  const {
+    isOn,
+    turnOffSignalStatus,
+    turnOnSignalStatus,
+    fetchMySignal,
+    signalFriends,
+  } = useSignal()
   const signalingRef = useRef<SignalingRef>(null)
   const navigation = useNavigation<HomeScreenProps>()
   const {
@@ -44,7 +49,7 @@ export default function HomeScreen() {
     fetchAvailableFriends,
   } = useFriends()
   const { user, isAuthenticated } = useAuth()
-  const { statusMessage, friends, timeSlot } = useStatus()
+  const { statusMessage, friendIds, timeSlot } = useStatus()
 
   const fetchInitialData = useCallback(async () => {
     if (!isAuthenticated) return
@@ -83,7 +88,7 @@ export default function HomeScreen() {
 
   useEffect(() => {
     refetch()
-  }, [timeSlot, statusMessage, friends, refetch])
+  }, [timeSlot, statusMessage, friendIds, refetch])
 
   return (
     <SafeAreaView style={styles.container}>
@@ -110,7 +115,7 @@ export default function HomeScreen() {
       ) : (
         <>
           <View style={styles.UserStatus}>
-            <UserStatus isOn={isOn} friends={availableFriends} user={user} />
+            <UserStatus isOn={isOn} friends={signalFriends} user={user} />
           </View>
           <AnimatedSwitch
             isOn={isOn}

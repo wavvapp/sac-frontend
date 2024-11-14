@@ -6,10 +6,10 @@ import { useSignal } from "@/hooks/useSignal"
 
 type StatusContextType = {
   statusMessage: string
-  friends: string[]
+  friendIds: string[]
   timeSlot: string
   setStatusMessage: (message: string) => void
-  setFriends: (friends: string[]) => void
+  setFriendIds: (friends: string[]) => void
   setTimeSlot: (timeSlot: string) => void
   updateActivity: () => Promise<void>
   isLoading: boolean
@@ -22,16 +22,16 @@ export const StatusProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const { user } = useAuth()
   const [statusMessage, setStatusMessage] = useState(user?.activity || "")
-  const [friends, setFriends] = useState<string[]>([])
+  const [friendIds, setFriendIds] = useState<string[]>([])
   const [timeSlot, setTimeSlot] = useState("NOW")
   const [isLoading, setIsLoading] = useState(true)
   const { fetchMySignal } = useSignal()
   const fetchInitialStatus = async () => {
     try {
       const data = await fetchMySignal()
-      setStatusMessage(data.status_message)
-      setFriends(data.friends)
-      setTimeSlot(data.when)
+      setStatusMessage(data?.status_message)
+      setFriendIds(data?.friends.map((friend: Friend) => friend.friendId))
+      setTimeSlot(data?.when)
     } catch (error) {
       console.error("Error fetching initial activity status:", error)
     } finally {
@@ -45,17 +45,19 @@ export const StatusProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const updateActivity = async () => {
     try {
-      const response = await api.put("/my-signal", {
-        friends,
+      const { data } = await api.put("/my-signal", {
+        friends: friendIds,
         status_message: statusMessage,
         when: timeSlot,
       })
-      const { friends: updatedFriends, status_message, when } = response.data
-      const friendsId = updatedFriends.map((friend: Friend) => friend.id)
-      setFriends(friendsId)
-      setStatusMessage(status_message)
-      setTimeSlot(when)
-      return response.data
+      const signalFriendsId: string[] = data?.friends.map(
+        (friend: Friend) => friend.friendId,
+      )
+
+      setFriendIds(signalFriendsId)
+      setStatusMessage(data?.status_message)
+      setTimeSlot(data?.when)
+      return data
     } catch (error) {
       console.error("Error updating activity status:", error)
     }
@@ -65,10 +67,10 @@ export const StatusProvider: React.FC<{ children: React.ReactNode }> = ({
     <StatusContext.Provider
       value={{
         statusMessage,
-        friends,
+        friendIds,
         timeSlot,
         setStatusMessage,
-        setFriends,
+        setFriendIds,
         setTimeSlot,
         updateActivity,
         isLoading,

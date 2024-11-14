@@ -27,9 +27,9 @@ export const useFriends = () => {
       const { data } = await api.get("/friend-signals")
       if (data) {
         const formattedFriends: User[] = data.map((friend: FriendSignal) => ({
-          ...friend.user,
-          time: friend?.when,
-          activity: friend.status_message,
+          ...friend,
+          time: friend.signal.when,
+          activity: friend.signal.status_message,
         }))
         setAvailableFriends(formattedFriends)
       }
