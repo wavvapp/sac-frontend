@@ -5,7 +5,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { StyleSheet, View, Dimensions } from "react-native"
 import { runOnJS, useDerivedValue } from "react-native-reanimated"
 import { AnimatedSwitch } from "@/components/AnimatedSwitch"
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import Signaling, { SignalingRef } from "@/components/lists/Signaling"
 import Settings from "@/components/vectors/Settings"
 import { theme } from "@/theme"
@@ -18,6 +18,10 @@ import NoFriends from "@/components/cards/NoFriends"
 import { useAuth } from "@/contexts/AuthContext"
 import { useSignal } from "@/hooks/useSignal"
 import { useFriends } from "@/hooks/useFriends"
+import { useQuery } from "@tanstack/react-query"
+import { BadgeSkeleton } from "@/components/cards/BadgeSkeleton"
+import { useStatus } from "@/contexts/StatusContext"
+import { fetchPoints } from "@/libs/fetchPoints"
 import { SafeAreaView } from "react-native-safe-area-context"
 
 export type HomeScreenProps = NativeStackNavigationProp<
@@ -33,6 +37,7 @@ export default function HomeScreen() {
   const navigation = useNavigation<HomeScreenProps>()
   const { hasFriends, availableFriends } = useFriends()
   const { user } = useAuth()
+  const { statusMessage, friends, timeSlot } = useStatus()
 
   const handlePress = async () => {
     if (isOn.value) {
@@ -49,11 +54,24 @@ export default function HomeScreen() {
     return runOnJS(setIsVisible)(false)
   }, [isOn.value])
 
+  const { data, isLoading, refetch, isRefetching } = useQuery({
+    queryKey: ["points"],
+    queryFn: fetchPoints,
+  })
+
+  useEffect(() => {
+    refetch()
+  }, [timeSlot, statusMessage, friends, refetch])
+
   return (
     <SafeAreaView style={styles.container}>
       {/* <PerlinNoise isOn={isOn} color1="#281713" color2="blue" /> */}
       <View style={styles.header}>
-        <Badge variant="primary" name="100" />
+        {isLoading || isRefetching ? (
+          <BadgeSkeleton />
+        ) : (
+          <Badge variant="primary" name={data?.points} />
+        )}
         <View style={styles.buttonContainer}>
           <CustomButton style={styles.iconButton} onPress={onShare}>
             <ShareIcon color={theme.colors.white} />
