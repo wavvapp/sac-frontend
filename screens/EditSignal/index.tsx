@@ -45,7 +45,7 @@ export default function EditSignal() {
         <CustomText style={style.headerText} fontWeight="bold">
           Edit status
         </CustomText>
-        <CrossMark onPress={() => navigation.push("Home")} />
+        <CrossMark onPress={() => navigation.goBack()} />
       </View>
       <ScrollView
         contentContainerStyle={{
