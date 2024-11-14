@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react"
+import { useState, useCallback, useMemo } from "react"
 import { View, StyleSheet } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import FriendCard from "@/components/Friend"
@@ -11,8 +11,8 @@ import { useQuery } from "@tanstack/react-query"
 
 export default function FriendsList() {
   const { friends, setFriends } = useStatus()
-  const { signal } = useSignal()
   const [selectedFriends, setSelectedFriends] = useState<string[]>(friends)
+  const { signal } = useSignal()
 
   const fetchFriends = useCallback(async () => {
     const response = await api.get("/friends")
@@ -28,7 +28,7 @@ export default function FriendsList() {
     }))
   }, [signal])
 
-  const { data: friendsListData, isLoading } = useQuery({
+  const { data: friendsListData, isLoading } = useQuery<User[]>({
     queryKey: ["friends"],
     queryFn: fetchFriends,
   })
@@ -48,17 +48,26 @@ export default function FriendsList() {
     [setFriends],
   )
 
+  const friendCardsData = useMemo(() => {
+    return (
+      friendsListData?.map((friend) => ({
+        ...friend,
+        selected: selectedFriends.includes(friend.id),
+      })) || []
+    )
+  }, [friendsListData, selectedFriends])
+
   return (
     <View style={styles.container}>
       <CustomText size="sm">Who can see it</CustomText>
       {isLoading ? (
         <FriendsSkeleton />
       ) : (
-        friendsListData?.map((item: User) => (
+        friendCardsData.map((friend) => (
           <FriendCard
-            key={item.id}
-            handleChange={() => updateFriendsList(item.id)}
-            user={{ ...item, selected: selectedFriends.includes(item.id) }}
+            key={friend.id}
+            handleChange={() => updateFriendsList(friend.id)}
+            user={friend}
           />
         ))
       )}
