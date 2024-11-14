@@ -1,7 +1,9 @@
 import { createContext, useContext, useEffect, useState } from "react"
 import api from "@/service"
-import { useSignal } from "@/hooks/useSignal"
 import { useAuth } from "./AuthContext"
+import { Friend } from "@/types"
+import { useSignal } from "@/hooks/useSignal"
+
 type StatusContextType = {
   statusMessage: string
   friends: string[]
@@ -9,7 +11,6 @@ type StatusContextType = {
   setStatusMessage: (message: string) => void
   setFriends: (friends: string[]) => void
   setTimeSlot: (timeSlot: string) => void
-  saveStatus: () => void
   updateActivity: () => Promise<void>
   isLoading: boolean
 }
@@ -49,22 +50,14 @@ export const StatusProvider: React.FC<{ children: React.ReactNode }> = ({
         status_message: statusMessage,
         when: timeSlot,
       })
-      await fetchMySignal()
-
       const { friends: updatedFriends, status_message, when } = response.data
-      setFriends(updatedFriends)
+      const friendsId = updatedFriends.map((friend: Friend) => friend.id)
+      setFriends(friendsId)
       setStatusMessage(status_message)
       setTimeSlot(when)
+      return response.data
     } catch (error) {
-      console.error("Error fetching activity status:", error)
-    }
-  }
-
-  const saveStatus = async () => {
-    try {
-      await updateActivity()
-    } catch (error) {
-      console.error("Error saving status:", error)
+      console.error("Error updating activity status:", error)
     }
   }
 
@@ -77,7 +70,6 @@ export const StatusProvider: React.FC<{ children: React.ReactNode }> = ({
         setStatusMessage,
         setFriends,
         setTimeSlot,
-        saveStatus,
         updateActivity,
         isLoading,
       }}>

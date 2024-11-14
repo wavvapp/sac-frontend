@@ -1,6 +1,6 @@
 import api from "@/service"
 import { FriendSignal, User } from "@/types"
-import { useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 
 export const useFriends = () => {
   const [friends, setFriends] = useState<User[]>([])
@@ -14,14 +14,7 @@ export const useFriends = () => {
           (availableFriend) => availableFriend.id === friend.id,
         ),
     )
-    const formattedFriends: User[] = friendsData.map((friend: User) => ({
-      id: friend.id,
-      names: friend.names,
-      username: friend.username,
-      email: friend.email,
-      profilePictureUrl: friend.profilePictureUrl,
-    }))
-    return formattedFriends
+    return friendsData
   }, [friends, availableFriends])
 
   const hasFriends = useMemo(() => {
@@ -29,26 +22,23 @@ export const useFriends = () => {
     return friends.length !== 0
   }, [friends, isLoading])
 
-  const fetchAvailableFriends = async () => {
+  const fetchAvailableFriends = useCallback(async () => {
     try {
       const { data } = await api.get("/friend-signals")
       if (data) {
         const formattedFriends: User[] = data.map((friend: FriendSignal) => ({
-          id: friend.user.id,
-          names: friend.user.names,
-          username: friend.user.username,
-          profilePictureUrl: friend.user.profilePictureUrl,
+          ...friend.user,
           time: friend?.when,
           activity: friend.status_message,
         }))
         setAvailableFriends(formattedFriends)
       }
     } catch (error) {
-      console.error("Error fetching friends:", error)
+      console.error("Error fetching available friends:", error)
       throw error
     }
-  }
-  const fetchAllFriends = async () => {
+  }, [])
+  const fetchAllFriends = useCallback(async () => {
     try {
       const { data } = await api.get("/friends")
       if (data) {
@@ -60,17 +50,19 @@ export const useFriends = () => {
     } finally {
       setIsLoading(false)
     }
-  }
+  }, [])
 
   useEffect(() => {
     fetchAllFriends()
-    fetchAvailableFriends()
-  }, [])
+  }, [fetchAllFriends])
+
   return {
+    friends,
     hasFriends,
     availableFriends,
     offlineFriends,
     fetchAllFriends,
+    fetchAvailableFriends,
     isLoading,
   }
 }
