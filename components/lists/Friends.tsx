@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react"
+import { useCallback, useState } from "react"
 import { View, StyleSheet } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import FriendCard from "@/components/Friend"
@@ -11,12 +11,12 @@ import { useQuery } from "@tanstack/react-query"
 
 export default function FriendsList() {
   const { friends, setFriends } = useStatus()
-  const [friendsList, setFriendsList] = useState<User[]>([])
   const { signal } = useSignal()
+  const [selectedFriends, setSelectedFriends] = useState<string[]>(friends)
 
   const fetchFriends = useCallback(async () => {
     const response = await api.get("/friends")
-    const allFriends = response.data.map((friend: User) => ({
+    return response.data.map((friend: User) => ({
       id: friend.id,
       names: friend.names,
       username: friend.username || "",
@@ -26,7 +26,6 @@ export default function FriendsList() {
         (signalFriend) => signalFriend.username === friend.username,
       ),
     }))
-    return allFriends
   }, [signal])
 
   const { data: friendsListData, isLoading } = useQuery({
@@ -34,26 +33,19 @@ export default function FriendsList() {
     queryFn: fetchFriends,
   })
 
-  useEffect(() => {
-    if (friendsListData) {
-      setFriendsList(friendsListData)
-    }
-  }, [friendsListData])
-
   const updateFriendsList = useCallback(
     (friendId: string) => {
-      const updatedUserList = friendsList.map((friend) => {
-        if (!friend.selected && friend.id === friendId) {
-          const updatedFriends = [...friends, friendId]
-          setFriends(updatedFriends)
-          friend.selected = true
-          return friend
-        }
-        return friend
+      setSelectedFriends((prevSelected) => {
+        const isSelected = prevSelected.includes(friendId)
+        const updatedSelected = isSelected
+          ? prevSelected.filter((id) => id !== friendId)
+          : [...prevSelected, friendId]
+
+        setFriends(updatedSelected)
+        return updatedSelected
       })
-      setFriendsList(updatedUserList)
     },
-    [friends, friendsList, setFriends],
+    [setFriends],
   )
 
   return (
@@ -62,15 +54,13 @@ export default function FriendsList() {
       {isLoading ? (
         <FriendsSkeleton />
       ) : (
-        [...new Set(friendsList)].map((item, i) => {
-          return (
-            <FriendCard
-              key={i}
-              handleChange={() => updateFriendsList(item.id)}
-              user={item}
-            />
-          )
-        })
+        friendsListData?.map((item: User) => (
+          <FriendCard
+            key={item.id}
+            handleChange={() => updateFriendsList(item.id)}
+            user={{ ...item, selected: selectedFriends.includes(item.id) }}
+          />
+        ))
       )}
     </View>
   )
