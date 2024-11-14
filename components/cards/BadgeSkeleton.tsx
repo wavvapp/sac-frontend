@@ -41,12 +41,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 4,
     borderRadius: 12,
-    backgroundColor: theme.colors.grayLight,
+    backgroundColor: theme.colors.gray,
   },
   badgeSkeleton: {
     width: 40,
     height: 20,
     borderRadius: 10,
-    backgroundColor: theme.colors.gray,
+    backgroundColor: theme.colors.white,
   },
 })
