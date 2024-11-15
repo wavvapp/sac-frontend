@@ -52,13 +52,13 @@ const styles = StyleSheet.create({
     gap: 18,
   },
   title: {
-    paddingHorizontal: 15,
+    paddingHorizontal: 20,
   },
   scrollContainer: {
     flexDirection: "row",
   },
   scrollContentContainer: {
-    paddingHorizontal: 15,
+    paddingHorizontal: 20,
   },
   buttonContainer: {
     flexDirection: "row",

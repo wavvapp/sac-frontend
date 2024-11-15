@@ -52,8 +52,7 @@ const styles = StyleSheet.create({
   container: {
     gap: 15,
     width: "100%",
-    paddingLeft: 12,
-    paddingRight: 21,
+    paddingHorizontal: 20,
     paddingVertical: 5,
   },
   statusContainer: {

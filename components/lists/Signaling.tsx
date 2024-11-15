@@ -1,8 +1,9 @@
 import { forwardRef } from "react"
-import { View, StyleSheet, FlatList, Dimensions } from "react-native"
+import { View, StyleSheet, Dimensions } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import BottomDrawer from "@/components/BottomDrawer"
 import { CustomButton } from "@/components/ui/Button"
+import { BottomSheetSectionList } from "@gorhom/bottom-sheet"
 import { theme } from "@/theme"
 import SignalingUser from "@/components/SignalingUser"
 import { useNavigation } from "@react-navigation/native"
@@ -12,7 +13,6 @@ import { User } from "@/types"
 export interface SignalingRef {
   openBottomSheet: () => void
 }
-
 type SearchProp = NativeStackNavigationProp<RootStackParamList, "Search">
 
 const { width } = Dimensions.get("window")
@@ -46,45 +46,43 @@ const Signaling = forwardRef<SignalingRef, SignalingProps>((props, ref) => {
           None of your friends on Wavv are available today
         </CustomText>
       )}
-      {!!availableFriends.length && (
-        <View style={styles.onlineSection}>
-          <FlatList
-            data={availableFriends}
-            keyExtractor={(item) => item.id}
-            ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
-            renderItem={({ item, index }) => (
-              <SignalingUser
-                user={item}
-                online
-                isLast={index === availableFriends.length - 1}
-                isFirst={index === 0}
-              />
-            )}
-          />
-        </View>
-      )}
-      {!!offlineFriends.length && (
-        <View style={[styles.offlineSection]}>
-          <FlatList
-            data={offlineFriends}
-            keyExtractor={(item) => item.id}
-            ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
-            renderItem={({ item, index }) => (
-              <SignalingUser
-                user={item}
-                online={false}
-                isLast={index === offlineFriends.length - 1}
-                isFirst={index === 0}
-              />
-            )}
-          />
-        </View>
-      )}
+      <BottomSheetSectionList
+        sections={[
+          {
+            title: "available users",
+            data: availableFriends,
+            ItemSeparatorComponent: () => (
+              <View style={styles.availableItemSeparator} />
+            ),
+            renderItem: ({ item: user, index }) =>
+              SignalingUser({
+                user,
+                online: true,
+                isLast: index === availableFriends.length - 1,
+                isFirst: index === 0,
+              }),
+          },
+          {
+            title: "Other users",
+            data: offlineFriends,
+            ItemSeparatorComponent: () => (
+              <View style={styles.offlineItemSeparator} />
+            ),
+            renderItem: ({ item, index }) =>
+              SignalingUser({
+                user: item,
+                online: false,
+                isLast: index === offlineFriends.length - 1,
+                isFirst: index === 0,
+              }),
+          },
+        ]}
+        keyExtractor={(item) => item.id}
+        style={styles.sectionListContainer}
+      />
     </BottomDrawer>
   )
 })
-
-Signaling.displayName = "Signaling"
 
 const styles = StyleSheet.create({
   header: {
@@ -99,12 +97,18 @@ const styles = StyleSheet.create({
   },
   noUsers: {
     paddingHorizontal: 20,
+    marginBottom: 20,
     width: width * 0.6,
   },
-  onlineSection: {},
-  offlineSection: {
+  sectionListContainer: {
     backgroundColor: theme.colors.black_100,
-    flex: 1,
+  },
+  availableItemSeparator: {
+    height: 12,
+    backgroundColor: theme.colors.white,
+  },
+  offlineItemSeparator: {
+    height: 12,
   },
 })
 

@@ -101,7 +101,7 @@ export default function HomeScreen() {
         {isLoading || isRefetching ? (
           <BadgeSkeleton />
         ) : (
-          <Badge variant="primary" name={data?.points} />
+          <Badge variant="primary" name={(data?.points).toFixed(1)} />
         )}
         <View style={styles.buttonContainer}>
           <CustomButton style={styles.iconButton} onPress={onShare}>
