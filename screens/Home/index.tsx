@@ -5,7 +5,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { StyleSheet, View, Dimensions } from "react-native"
 import { runOnJS, useDerivedValue } from "react-native-reanimated"
 import { AnimatedSwitch } from "@/components/AnimatedSwitch"
-import { useCallback, useEffect, useRef, useState } from "react"
+import { useCallback, useRef, useState } from "react"
 import Signaling, { SignalingRef } from "@/components/lists/Signaling"
 import Settings from "@/components/vectors/Settings"
 import { theme } from "@/theme"
@@ -20,7 +20,6 @@ import { useSignal } from "@/hooks/useSignal"
 import { useFriends } from "@/hooks/useFriends"
 import { useQuery, useMutation } from "@tanstack/react-query"
 import { BadgeSkeleton } from "@/components/cards/BadgeSkeleton"
-import { useStatus } from "@/contexts/StatusContext"
 import { fetchPoints } from "@/libs/fetchPoints"
 import { SafeAreaView } from "react-native-safe-area-context"
 
@@ -49,15 +48,29 @@ export default function HomeScreen() {
     fetchAvailableFriends,
   } = useFriends()
   const { user, isAuthenticated } = useAuth()
-  const { statusMessage, friendIds, timeSlot } = useStatus()
+  const {
+    data,
+    isLoading,
+    refetch: refetchPoints,
+    isRefetching,
+  } = useQuery({
+    queryKey: ["points"],
+    queryFn: fetchPoints,
+  })
 
   const fetchInitialData = useCallback(async () => {
     if (!isAuthenticated) return
     await fetchAllFriends()
     await fetchAvailableFriends()
     await fetchMySignal()
-  }, [fetchAllFriends, fetchAvailableFriends, fetchMySignal, isAuthenticated])
-
+    await refetchPoints()
+  }, [
+    fetchAllFriends,
+    fetchAvailableFriends,
+    fetchMySignal,
+    isAuthenticated,
+    refetchPoints,
+  ])
   const handlePress = useMutation({
     mutationFn: isOn.value ? turnOffSignalStatus : turnOnSignalStatus,
     onMutate: () => {
@@ -80,15 +93,6 @@ export default function HomeScreen() {
     }
     return runOnJS(setIsVisible)(false)
   }, [isOn.value])
-
-  const { data, isLoading, refetch, isRefetching } = useQuery({
-    queryKey: ["points"],
-    queryFn: fetchPoints,
-  })
-
-  useEffect(() => {
-    refetch()
-  }, [timeSlot, statusMessage, friendIds, refetch])
 
   return (
     <SafeAreaView style={styles.container}>
