@@ -48,6 +48,11 @@ export default function AppNavigator() {
                 options={{ headerShown: false }}
                 component={HomeScreen}
               />
+              <Stack.Screen
+                name="Settings"
+                options={{ headerShown: false }}
+                component={Settings}
+              />
               {!user?.username ? (
                 <Stack.Screen
                   name="CreateCredentials"
@@ -56,11 +61,6 @@ export default function AppNavigator() {
                 />
               ) : (
                 <>
-                  <Stack.Screen
-                    name="Settings"
-                    options={{ headerShown: false }}
-                    component={Settings}
-                  />
                   <Stack.Screen
                     name="EditSignal"
                     options={{ headerShown: false, presentation: "modal" }}
