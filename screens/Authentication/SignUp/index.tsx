@@ -14,7 +14,7 @@ export default function SignUp() {
   const [confirmPassword, setConfirmPassword] = useState("")
 
   const handleSignUp = () => {
-    // Handle sign-up logic here
+    //TODO:Handle sign-up logic here
   }
 
   return (

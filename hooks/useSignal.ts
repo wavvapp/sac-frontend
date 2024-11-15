@@ -19,7 +19,7 @@ export const useSignal = () => {
       await updateUserInfo(data.status_message, data.when)
       return data
     } catch (error) {
-      console.log("Error with fetching signal", error)
+      console.error("Error with fetching signal", error)
     }
   }, [isOn])
 
