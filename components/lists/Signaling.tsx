@@ -88,7 +88,6 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 20,
     justifyContent: "space-between",
     paddingHorizontal: 20,
   },
@@ -98,6 +97,7 @@ const styles = StyleSheet.create({
   },
   noUsers: {
     paddingHorizontal: 20,
+    marginBottom: 20,
     width: width * 0.6,
   },
   sectionListContainer: {
