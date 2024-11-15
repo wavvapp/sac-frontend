@@ -44,7 +44,7 @@ export const useFriends = () => {
       if (data) {
         setFriends(data)
       }
-      return
+      return data
     } catch (error) {
       console.error("Error fetching friends", error)
     } finally {

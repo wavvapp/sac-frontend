@@ -1,37 +1,23 @@
-import { useState, useEffect, useCallback, useMemo } from "react"
+import { useCallback } from "react"
 import { View, StyleSheet } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import FriendCard from "@/components/Friend"
 import { User } from "@/types"
-import { useSignal } from "@/hooks/useSignal"
 import { useFriends } from "@/hooks/useFriends"
 import { useStatus } from "@/contexts/StatusContext"
+import { FriendsSkeleton } from "@/components/cards/FriendsSkeleton"
+import { useQuery } from "@tanstack/react-query"
 
 export default function FriendsList() {
   const { friendIds, setFriendIds } = useStatus()
-  const { friends: allFriends } = useFriends()
-  const { signal } = useSignal()
-  const [friendsList, setFriendsList] = useState<User[]>([])
+  const { fetchAllFriends } = useFriends()
 
-  const fetchFriends = useCallback(async () => {
-    try {
-      const friendsList = allFriends.map((friend: User) => ({
-        ...friend,
-        selected: signal?.friends.some(
-          (signalFriend) => signalFriend.username === friend.username,
-        ),
-      }))
-      setFriendsList(friendsList)
-    } catch (error) {
-      console.error("Error fetching friends", error)
-    }
-  }, [allFriends, signal?.friends])
+  const { data: friendsListData, isLoading } = useQuery<User[]>({
+    queryKey: ["friends"],
+    queryFn: fetchAllFriends,
+  })
 
-  useEffect(() => {
-    fetchFriends()
-  }, [fetchFriends])
-
-  const handleFriendSelection = useCallback(
+  const updateFriendsList = useCallback(
     (friendId: string) => {
       const newFriends = friendIds.includes(friendId)
         ? friendIds.filter((id) => id !== friendId)
@@ -41,24 +27,21 @@ export default function FriendsList() {
     },
     [friendIds, setFriendIds],
   )
-
-  const friendCardsData = useMemo(() => {
-    return friendsList.map((friend) => ({
-      ...friend,
-      selected: friendIds.includes(friend.id),
-    }))
-  }, [friendsList, friendIds])
-
   return (
     <View style={styles.container}>
       <CustomText size="sm">Who can see it</CustomText>
-      {friendCardsData.map((friend) => (
-        <FriendCard
-          key={friend.id}
-          handleChange={() => handleFriendSelection(friend.id)}
-          user={friend}
-        />
-      ))}
+      {isLoading ? (
+        <FriendsSkeleton />
+      ) : (
+        friendsListData?.map((friend) => (
+          <FriendCard
+            selected={friendIds?.includes(friend.id)}
+            key={friend.id}
+            handleChange={() => updateFriendsList(friend.id)}
+            user={friend}
+          />
+        ))
+      )}
     </View>
   )
 }
