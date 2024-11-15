@@ -1,5 +1,5 @@
 import { forwardRef } from "react"
-import { View, StyleSheet, FlatList } from "react-native"
+import { View, StyleSheet, FlatList, Dimensions } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import BottomDrawer from "@/components/BottomDrawer"
 import { CustomButton } from "@/components/ui/Button"
@@ -15,6 +15,7 @@ export interface SignalingRef {
 
 type SearchProp = NativeStackNavigationProp<RootStackParamList, "Search">
 
+const { width } = Dimensions.get("window")
 interface SignalingProps {
   availableFriends: User[]
   offlineFriends: User[]
@@ -27,7 +28,7 @@ const Signaling = forwardRef<SignalingRef, SignalingProps>((props, ref) => {
   return (
     <BottomDrawer ref={ref}>
       <View style={styles.header}>
-        <CustomText size="lg" fontWeight="bold" style={styles.headerText}>
+        <CustomText size="lg" fontWeight="semibold" style={styles.headerText}>
           Friends
         </CustomText>
         <CustomButton
@@ -98,7 +99,8 @@ const styles = StyleSheet.create({
     lineHeight: 28,
   },
   noUsers: {
-    padding: 20,
+    paddingHorizontal: 20,
+    width: width * 0.6,
   },
   onlineSection: {},
   offlineSection: {
