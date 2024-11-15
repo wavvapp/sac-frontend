@@ -1,70 +1,58 @@
-import { useState, useCallback, useMemo } from "react"
+import { useCallback } from "react"
 import { View, StyleSheet } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import FriendCard from "@/components/Friend"
-import api from "@/service"
 import { User } from "@/types"
+import { useFriends } from "@/hooks/useFriends"
 import { useStatus } from "@/contexts/StatusContext"
-import { useSignal } from "@/hooks/useSignal"
+// import { useSignal } from "@/hooks/useSignal"
 import { FriendsSkeleton } from "@/components/cards/FriendsSkeleton"
 import { useQuery } from "@tanstack/react-query"
 
 export default function FriendsList() {
-  const { friends, setFriends } = useStatus()
-  const [selectedFriends, setSelectedFriends] = useState<string[]>(friends)
-  const { signal } = useSignal()
+  const { friendIds, setFriendIds } = useStatus()
+  const { fetchAllFriends } = useFriends()
+  // const [friendList, setFriendList] = useState<User>([])
+  // const { signal } = useSignal()
 
-  const fetchFriends = useCallback(async () => {
-    const response = await api.get("/friends")
-    return response.data.map((friend: User) => ({
-      id: friend.id,
-      names: friend.names,
-      username: friend.username || "",
-      email: friend.email,
-      profilePictureUrl: friend.profilePictureUrl || "",
-      selected: signal?.friends.some(
-        (signalFriend) => signalFriend.username === friend.username,
-      ),
-    }))
-  }, [signal])
+  // const fetchFriends = useCallback(async () => {
+  //   try {
+  //     return allFriends.map((friend: User) => ({
+  //       ...friend,
+  //       selected: signal?.friends.some(
+  //         (signalFriend) => signalFriend.username === friend.username,
+  //       ),
+  //     }))
+  //   } catch (error) {
+  //     console.error("Error fetching friends", error)
+  //   }
+  // }, [allFriends, signal?.friends])
 
   const { data: friendsListData, isLoading } = useQuery<User[]>({
     queryKey: ["friends"],
-    queryFn: fetchFriends,
+    queryFn: fetchAllFriends,
   })
+  // console.log(JSON.stringify(friendsListData, null, 2))
 
   const updateFriendsList = useCallback(
     (friendId: string) => {
-      setSelectedFriends((prevSelected) => {
-        const isSelected = prevSelected.includes(friendId)
-        const updatedSelected = isSelected
-          ? prevSelected.filter((id) => id !== friendId)
-          : [...prevSelected, friendId]
+      const newFriends = friendIds.includes(friendId)
+        ? friendIds.filter((id) => id !== friendId)
+        : [...friendIds, friendId]
 
-        setFriends(updatedSelected)
-        return updatedSelected
-      })
+      setFriendIds(newFriends)
     },
-    [setFriends],
+    [friendIds, setFriendIds],
   )
-
-  const friendCardsData = useMemo(() => {
-    return (
-      friendsListData?.map((friend) => ({
-        ...friend,
-        selected: selectedFriends.includes(friend.id),
-      })) || []
-    )
-  }, [friendsListData, selectedFriends])
-
   return (
     <View style={styles.container}>
       <CustomText size="sm">Who can see it</CustomText>
       {isLoading ? (
         <FriendsSkeleton />
       ) : (
-        friendCardsData.map((friend) => (
+        friendsListData?.map((friend) => (
           <FriendCard
+            selected={friendIds?.includes(friend.id)}
             key={friend.id}
             handleChange={() => updateFriendsList(friend.id)}
             user={friend}

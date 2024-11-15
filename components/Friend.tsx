@@ -7,9 +7,11 @@ import CheckBox from "@/components/ui/CheckBox"
 export default function FriendCard({
   user,
   handleChange,
+  selected = false,
 }: {
   user: User
   handleChange: (arg1: string) => void
+  selected: boolean
 }) {
   return (
     <TouchableOpacity
@@ -21,7 +23,7 @@ export default function FriendCard({
         username={user.username}
         style={styles.useInfoStyles}
       />
-      <CheckBox isChecked={!!user.selected} />
+      <CheckBox isChecked={selected} />
     </TouchableOpacity>
   )
 }
