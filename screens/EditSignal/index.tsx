@@ -15,6 +15,8 @@ import { useAuth } from "@/contexts/AuthContext"
 import { useStatus } from "@/contexts/StatusContext"
 import { RootStackParamList } from "@/navigation"
 import { useState } from "react"
+import { useMutation } from "@tanstack/react-query"
+import { useSignal } from "@/hooks/useSignal"
 
 type EditSignalScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -23,20 +25,29 @@ type EditSignalScreenProps = NativeStackNavigationProp<
 
 export default function EditSignal() {
   const navigation = useNavigation<EditSignalScreenProps>()
-  const { saveStatus } = useStatus()
-  const [isLoading, setIsLoading] = useState(false)
+  const { updateActivity } = useStatus()
+  const { fetchMySignal } = useSignal()
   const { user } = useAuth()
+  const [isLoading, setIsLoading] = useState(false)
+
+  const mutation = useMutation({
+    mutationFn: updateActivity,
+    onMutate: () => {
+      setIsLoading(true)
+      navigation.goBack()
+    },
+    onError: (error) => {
+      // TODO: add toaster
+      console.error(error.message)
+    },
+    onSuccess: () => {
+      fetchMySignal()
+      setIsLoading(false)
+    },
+  })
 
   const handleSaveStatus = async () => {
-    try {
-      setIsLoading(true)
-      await saveStatus()
-      navigation.goBack()
-    } catch (error) {
-      console.error("Error saving status:", error)
-    } finally {
-      setIsLoading(false)
-    }
+    mutation.mutate()
   }
 
   return (

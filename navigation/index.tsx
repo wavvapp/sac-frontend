@@ -7,7 +7,6 @@ import { useAuth } from "@/contexts/AuthContext"
 import SignUp from "@/screens/Authentication/SignUp"
 import CustomSplashScreen from "@/screens/CustomSplashScreen"
 import Settings from "@/screens/Settings"
-import Signaling from "@/components/lists/Signaling"
 import Search from "@/screens/Search"
 import { theme } from "@/theme"
 import EntryScreen from "@/screens/Authentication"
@@ -28,7 +27,7 @@ export type RootStackParamList = {
 export default function AppNavigator() {
   const Stack = createNativeStackNavigator<RootStackParamList>()
   const { isAuthenticated, isLoading, user } = useAuth()
-  const {isLoading: isFriendsLoading}= useFriends()
+  const { isLoading: isFriendsLoading } = useFriends()
 
   if (isLoading || isFriendsLoading) {
     return <CustomSplashScreen />
@@ -66,11 +65,6 @@ export default function AppNavigator() {
                     name="EditSignal"
                     options={{ headerShown: false, presentation: "modal" }}
                     component={EditSignal}
-                  />
-                  <Stack.Screen
-                    name="Signaling"
-                    options={{ presentation: "modal", headerShown: false }}
-                    component={Signaling}
                   />
                   <Stack.Screen
                     name="Search"
