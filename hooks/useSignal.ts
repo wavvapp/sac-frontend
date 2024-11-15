@@ -1,20 +1,23 @@
 import { useAuth } from "@/contexts/AuthContext"
 import api from "@/service"
-import { Signal } from "@/types"
-import { useCallback, useEffect, useState } from "react"
+import { Signal, User } from "@/types"
+import { useCallback, useState } from "react"
 import { useSharedValue } from "react-native-reanimated"
 
 export const useSignal = () => {
   const isOn = useSharedValue(false)
   const { updateUserInfo } = useAuth()
   const [signal, setSignal] = useState<Signal | null>(null)
+  const [signalFriends, setSignalFriends] = useState<User[]>([])
 
   const fetchMySignal = useCallback(async () => {
     try {
       const { data } = await api.get("/my-signal")
       setSignal(data)
       isOn.value = data.status === "active"
+      setSignalFriends(data.friends)
       await updateUserInfo(data.status_message, data.when)
+      return data
     } catch (error) {
       console.log("Error with fetching signal", error)
     }
@@ -23,25 +26,22 @@ export const useSignal = () => {
   const turnOnSignalStatus = async () => {
     try {
       await api.post("/my-signal/turn-on")
-      isOn.value = true
+      return true
     } catch (error) {
       console.error("Error turning on my signal:", error)
-      isOn.value = false
+      return false
     }
   }
 
   const turnOffSignalStatus = async () => {
     try {
       await api.post("/my-signal/turn-off")
-      isOn.value = false
+      return false
     } catch (error) {
       console.error("Error turning off my signal:", error)
-      isOn.value = true
+      return true
     }
   }
-  useEffect(() => {
-    fetchMySignal()
-  }, [fetchMySignal])
 
   return {
     isOn,
@@ -49,5 +49,6 @@ export const useSignal = () => {
     turnOffSignalStatus,
     fetchMySignal,
     signal,
+    signalFriends,
   }
 }

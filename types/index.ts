@@ -94,11 +94,10 @@ export type BackendUser = {
 }
 export type FriendSignal = {
   id: string
-  status: string
-  when: string
-  status_message: string
-  createdAt: string
-  updatedAt: string
-  user: BackendUser
+  username: string
+  email: string
+  profilePictureUrl: string
+  names: string
+  signal: Signal
 }
 export type AccountCreationStep = 1 | 2

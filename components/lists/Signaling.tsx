@@ -1,5 +1,5 @@
 import { forwardRef } from "react"
-import { View, StyleSheet } from "react-native"
+import { View, StyleSheet, Dimensions } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import BottomDrawer from "@/components/BottomDrawer"
 import { CustomButton } from "@/components/ui/Button"
@@ -9,20 +9,26 @@ import SignalingUser from "@/components/SignalingUser"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { RootStackParamList } from "@/navigation"
-import { useFriends } from "@/hooks/useFriends"
+import { User } from "@/types"
 export interface SignalingRef {
   openBottomSheet: () => void
 }
 type SearchProp = NativeStackNavigationProp<RootStackParamList, "Search">
 
-const Signaling = forwardRef<SignalingRef>((_, ref) => {
+const { width } = Dimensions.get("window")
+interface SignalingProps {
+  availableFriends: User[]
+  offlineFriends: User[]
+  ref: React.RefObject<SignalingRef>
+}
+const Signaling = forwardRef<SignalingRef, SignalingProps>((props, ref) => {
   const navigation = useNavigation<SearchProp>()
-  const { availableFriends, offlineFriends } = useFriends()
+  const { availableFriends, offlineFriends } = props
 
   return (
     <BottomDrawer ref={ref}>
       <View style={styles.header}>
-        <CustomText size="lg" fontWeight="bold" style={styles.headerText}>
+        <CustomText size="lg" fontWeight="semibold" style={styles.headerText}>
           Friends
         </CustomText>
         <CustomButton
@@ -91,7 +97,8 @@ const styles = StyleSheet.create({
     lineHeight: 28,
   },
   noUsers: {
-    padding: 20,
+    paddingHorizontal: 20,
+    width: width * 0.6,
   },
   sectionListContainer: {
     backgroundColor: theme.colors.black_100,
