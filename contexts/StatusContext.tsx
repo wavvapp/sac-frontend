@@ -30,7 +30,7 @@ export const StatusProvider: React.FC<{ children: React.ReactNode }> = ({
     try {
       const data = await fetchMySignal()
       setStatusMessage(data?.status_message)
-      setFriendIds(data?.friends.map((friend: Friend) => friend.friendId))
+      setFriendIds(data?.friends.map((friend: Friend) => friend.friendId) || [])
       setTimeSlot(data?.when)
     } catch (error) {
       console.error("Error fetching initial activity status:", error)

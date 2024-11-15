@@ -19,7 +19,7 @@ export default function FriendsList() {
 
   const updateFriendsList = useCallback(
     (friendId: string) => {
-      const newFriends = friendIds.includes(friendId)
+      const newFriends = friendIds?.includes(friendId)
         ? friendIds.filter((id) => id !== friendId)
         : [...friendIds, friendId]
 
