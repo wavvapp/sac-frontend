@@ -172,6 +172,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   disabled: {
-    opacity: 0.9,
+    opacity: 0.3,
   },
 })
