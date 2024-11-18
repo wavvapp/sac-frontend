@@ -19,8 +19,8 @@ interface EditActivityProps {
 }
 
 export default function EditActivity({ closeModal }: EditActivityProps) {
-  const { setStatusMessage } = useStatus()
-  const [text, setText] = useState("")
+  const { setStatusMessage, statusMessage } = useStatus()
+  const [text, setText] = useState(statusMessage)
 
   const handleEdit = () => {
     if (text.trim()) {
@@ -36,7 +36,7 @@ export default function EditActivity({ closeModal }: EditActivityProps) {
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
           style={styles.modalContainer}
-          onTouchStart={(e) => e.stopPropagation()}>
+          onStartShouldSetResponder={() => true}>
           <CustomText fontWeight="normal" fontFamily="suisse" size="lg">
             Status
           </CustomText>
@@ -49,6 +49,7 @@ export default function EditActivity({ closeModal }: EditActivityProps) {
               onSubmitEditing={handleEdit}
               variant="ghost"
               containerStyle={styles.inputContainer}
+              multiline
             />
             <CustomButton
               disabled={!text.trim()}
@@ -84,7 +85,6 @@ const styles = StyleSheet.create({
   formContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
     gap: 4,
   },
   inputContainer: {

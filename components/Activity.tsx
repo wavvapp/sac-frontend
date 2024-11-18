@@ -25,14 +25,12 @@ export default function Activity() {
       <CustomText size="base" fontWeight="medium">
         Status
       </CustomText>
-      <View style={styles.statusContainer}>
-        <CustomText size="lg" fontWeight="semibold">
+      <TouchableOpacity onPress={openModal} style={styles.statusContainer}>
+        <CustomText size="lg" fontWeight="semibold" style={styles.editText}>
           {statusMessage}
         </CustomText>
-        <TouchableOpacity onPress={openModal}>
-          <EditIcon />
-        </TouchableOpacity>
-      </View>
+        <EditIcon />
+      </TouchableOpacity>
 
       {isModalVisible && (
         <Modal
@@ -58,6 +56,8 @@ const styles = StyleSheet.create({
   statusContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
+  },
+  editText: {
+    flex: 1,
   },
 })
