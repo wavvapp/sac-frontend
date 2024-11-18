@@ -112,7 +112,6 @@ const styles = StyleSheet.create({
     paddingTop: 24,
     gap: 24,
     borderRadius: 12,
-    overflow: "hidden",
     minWidth: "100%",
   },
   userContainer: {
@@ -126,6 +125,9 @@ const styles = StyleSheet.create({
   editButton: {
     padding: 10,
     backgroundColor: theme.colors.black,
+    borderBottomLeftRadius: 12,
+    borderBottomRightRadius: 12,
+    marginBottom: -1,
   },
   editButtonText: {
     color: theme.colors.white,
