@@ -21,9 +21,9 @@ export default function FriendCard({
       <UserInfo
         fullName={user?.names}
         username={user.username}
-        style={styles.useInfoStyles}
+        style={styles.userInfoStyles}
       />
-      <CheckBox isChecked={selected} />
+      <CheckBox isChecked={selected} onPress={() => handleChange(user.id)} />
     </TouchableOpacity>
   )
 }
@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 8,
   },
-  useInfoStyles: {
+  userInfoStyles: {
     flexGrow: 1,
   },
 })
