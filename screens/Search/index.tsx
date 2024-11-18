@@ -132,9 +132,7 @@ const FindFriends = () => {
                 </View>
               </View>
               {isLoadingFriend[user.id] ? (
-                <CustomButton variant="outline">
-                  <ActivityIndicator />
-                </CustomButton>
+                <ActivityIndicator color={theme.colors.black} size="small" />
               ) : user.isFriend ? (
                 <CheckIcon color={theme.colors.black} />
               ) : (
