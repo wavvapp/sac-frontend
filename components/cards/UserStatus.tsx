@@ -124,12 +124,12 @@ const styles = StyleSheet.create({
     marginHorizontal: 24,
   },
   editButton: {
-    padding: 10,
     backgroundColor: theme.colors.black,
   },
   editButtonText: {
     color: theme.colors.white,
     textAlign: "center",
+    padding: 10,
   },
   headlineText: {
     paddingTop: 227,
