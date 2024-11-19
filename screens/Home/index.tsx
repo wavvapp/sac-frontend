@@ -19,7 +19,6 @@ import { useAuth } from "@/contexts/AuthContext"
 import { useSignal } from "@/hooks/useSignal"
 import { useFriends } from "@/hooks/useFriends"
 import { useQuery, useMutation } from "@tanstack/react-query"
-import { BadgeSkeleton } from "@/components/cards/BadgeSkeleton"
 import { fetchPoints } from "@/libs/fetchPoints"
 import { SafeAreaView } from "react-native-safe-area-context"
 
@@ -48,12 +47,7 @@ export default function HomeScreen() {
     fetchAvailableFriends,
   } = useFriends()
   const { user, isAuthenticated } = useAuth()
-  const {
-    data,
-    isLoading,
-    refetch: refetchPoints,
-    isRefetching,
-  } = useQuery({
+  const { data, refetch: refetchPoints } = useQuery({
     queryKey: ["points"],
     queryFn: fetchPoints,
   })
@@ -98,11 +92,8 @@ export default function HomeScreen() {
     <SafeAreaView style={styles.container}>
       {/* <PerlinNoise isOn={isOn} color1="#281713" color2="blue" /> */}
       <View style={styles.header}>
-        {isLoading || isRefetching ? (
-          <BadgeSkeleton />
-        ) : (
-          <Badge variant="primary" name={(data?.points).toFixed(1)} />
-        )}
+        <Badge variant="primary" name={data?.points?.toFixed(1)} />
+
         <View style={styles.buttonContainer}>
           <CustomButton style={styles.iconButton} onPress={onShare}>
             <ShareIcon color={theme.colors.white} />
