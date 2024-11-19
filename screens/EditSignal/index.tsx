@@ -1,4 +1,4 @@
-import { StyleSheet, View } from "react-native"
+import { SafeAreaView, StyleSheet, View } from "react-native"
 import Status from "@/components/cards/Status"
 import { CustomButton } from "@/components/ui/Button"
 import UserAvatar from "@/components/ui/UserAvatar"
@@ -17,6 +17,7 @@ import { RootStackParamList } from "@/navigation"
 import { useState } from "react"
 import { useMutation } from "@tanstack/react-query"
 import { useSignal } from "@/hooks/useSignal"
+import { StatusBar } from "expo-status-bar"
 
 type EditSignalScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -51,7 +52,8 @@ export default function EditSignal() {
   }
 
   return (
-    <View style={style.container}>
+    <SafeAreaView style={style.container}>
+      <StatusBar style="dark" />
       <View style={style.navBar}>
         <CustomText style={style.headerText} fontWeight="bold">
           Edit status
@@ -86,7 +88,7 @@ export default function EditSignal() {
         onPress={handleSaveStatus}
         disabled={isLoading}
       />
-    </View>
+    </SafeAreaView>
   )
 }
 
