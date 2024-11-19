@@ -23,7 +23,7 @@ export default function FriendCard({
         username={user.username}
         style={styles.userInfoStyles}
       />
-      <CheckBox isChecked={selected} onPress={() => handleChange(user.id)} />
+      <CheckBox isChecked={selected} />
     </TouchableOpacity>
   )
 }
