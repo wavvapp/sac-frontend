@@ -1,5 +1,3 @@
-import UserStatus from "@/components/cards/UserStatus"
-// import PerlinNoise from "@/components/PerlinNoise"
 import { RootStackParamList } from "@/navigation"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { StyleSheet, View, Dimensions } from "react-native"
@@ -22,6 +20,7 @@ import { useQuery, useMutation } from "@tanstack/react-query"
 import { BadgeSkeleton } from "@/components/cards/BadgeSkeleton"
 import { fetchPoints } from "@/libs/fetchPoints"
 import { SafeAreaView } from "react-native-safe-area-context"
+import UserStatus from "@/components/cards/UserStatus"
 
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -96,7 +95,6 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* <PerlinNoise isOn={isOn} color1="#281713" color2="blue" /> */}
       <View style={styles.header}>
         {isLoading || isRefetching ? (
           <BadgeSkeleton />
@@ -123,6 +121,7 @@ export default function HomeScreen() {
           </View>
           <AnimatedSwitch
             isOn={isOn}
+            isLoading={isLoading}
             onPress={() => handlePress.mutate()}
             style={styles.switch}
           />

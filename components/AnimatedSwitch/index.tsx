@@ -16,6 +16,7 @@ interface AnimatedSwitchProps {
   onPress: () => void // Callback for when the switch is pressed
   style?: ViewStyle // Optional style for the switch container
   duration?: number // Optional animation duration, defaults to 400
+  isLoading: boolean // Loading state to show the thumb in the middle
 }
 
 export const AnimatedSwitch = ({
@@ -23,6 +24,7 @@ export const AnimatedSwitch = ({
   onPress,
   style,
   duration = 400,
+  isLoading,
 }: AnimatedSwitchProps) => {
   const [text, setText] = useState(isOn.value ? "ON" : "OFF")
   const height = useSharedValue(0)
@@ -36,17 +38,20 @@ export const AnimatedSwitch = ({
 
   // This will listen for changes in the shared value and update the text accordingly with a delay
   useDerivedValue(() => {
-    if (isOn.value) {
-      return runOnJS(updateTextWithDelay)("ON")
+    if (!isLoading) {
+      if (isOn.value) {
+        return runOnJS(updateTextWithDelay)("ON")
+      } else {
+        return runOnJS(updateTextWithDelay)("OFF")
+      }
     }
-    return runOnJS(updateTextWithDelay)("OFF")
-  }, [isOn.value])
+  }, [isOn.value, isLoading])
 
   const thumbAnimatedStyle = useAnimatedStyle(() => {
     const moveValue = interpolate(
-      Number(isOn.value),
-      [0, 1],
-      [0, height.value - width.value],
+      Number(isLoading ? 0.5 : isOn.value),
+      [0, 1, 0.5],
+      [0, height.value - width.value, height.value / 2],
     )
     const translateValue = withTiming(moveValue, { duration })
 
@@ -58,9 +63,9 @@ export const AnimatedSwitch = ({
 
   const textAnimatedStyle = useAnimatedStyle(() => {
     const moveValue = interpolate(
-      Number(isOn.value),
-      [0, 1],
-      [height.value * 0.65, height.value * 0.25],
+      Number(isLoading ? 0.5 : isOn.value),
+      [0, 1, 0.5],
+      [height.value * 0.65, height.value * 0.25, height.value * 0.5],
     )
     const translateValue = withTiming(moveValue, { duration })
 
@@ -78,7 +83,7 @@ export const AnimatedSwitch = ({
         }}
         style={[switchStyles.track, style]}>
         <Animated.Text style={[switchStyles.text, textAnimatedStyle]}>
-          {text}
+          {!isLoading && text}
         </Animated.Text>
         <Animated.View
           style={[switchStyles.thumb, thumbAnimatedStyle]}></Animated.View>
