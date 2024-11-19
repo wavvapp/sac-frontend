@@ -26,7 +26,7 @@ export default function Activity() {
         Status
       </CustomText>
       <TouchableOpacity onPress={openModal} style={styles.statusContainer}>
-        <CustomText size="lg" fontWeight="semibold" style={styles.editText}>
+        <CustomText size="lg" fontWeight="semibold" style={styles.statusText}>
           {statusMessage}
         </CustomText>
         <EditIcon />
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
   },
-  editText: {
+  statusText: {
     flex: 1,
   },
 })
