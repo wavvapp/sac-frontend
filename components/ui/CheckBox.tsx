@@ -1,15 +1,22 @@
-import { StyleSheet, View } from "react-native"
+import { StyleSheet, View, StyleProp, ViewStyle } from "react-native"
 import CheckIcon from "@/components/vectors/CheckIcon"
 import PlusIcon from "@/components/vectors/PlusIcon"
 import { theme } from "@/theme"
 
 interface CheckBoxProps {
   isChecked: boolean
+  style?: StyleProp<ViewStyle>
 }
 
-export default function CheckBox({ isChecked }: CheckBoxProps): JSX.Element {
+export default function CheckBox({
+  isChecked = false,
+  style = {},
+  ...rest
+}: CheckBoxProps): JSX.Element {
   return (
-    <View style={[styles.container, isChecked && styles.checkedContainer]}>
+    <View
+      style={[styles.container, isChecked && styles.checkedContainer, style]}
+      {...rest}>
       {isChecked ? <CheckIcon /> : <PlusIcon />}
     </View>
   )
