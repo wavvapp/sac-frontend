@@ -30,7 +30,7 @@ const FindFriends = () => {
     Record<string, boolean>
   >({})
   const [allUsers, setAllUsers] = useState<User[]>([])
-  const [isAnyFriendLoading, setisAnyFriendLoading] = useState(false)
+  const [isAnyFriendLoading, setIsAnyFriendLoading] = useState(false)
   const { fetchAllFriends } = useFriends()
   const fetchUsers = useCallback(async () => {
     try {
@@ -66,7 +66,7 @@ const FindFriends = () => {
   const handleAddFriend = async (user: User) => {
     if (isLoadingFriend[user.id] || user.isFriend || isAnyFriendLoading) return
     try {
-      setisAnyFriendLoading(true)
+      setIsAnyFriendLoading(true)
       setIsLoadingFriend((prev) => ({ ...prev, [user.id]: true }))
       await api.post("/friends", { friendId: user.id })
       setAllUsers((prevUsers) =>
@@ -87,7 +87,7 @@ const FindFriends = () => {
     } catch (error: any) {
       console.warn("Error adding friend:", error.response.data.message)
     } finally {
-      setisAnyFriendLoading(false)
+      setIsAnyFriendLoading(false)
       setIsLoadingFriend((prev) => ({ ...prev, [user.id]: false }))
     }
   }
@@ -123,7 +123,9 @@ const FindFriends = () => {
             <TouchableOpacity
               key={user.id}
               style={styles.friendItem}
-              disabled={isLoadingFriend[user.id]}
+              disabled={
+                isLoadingFriend[user.id] || user.isFriend || isAnyFriendLoading
+              }
               onPress={() => handleAddFriend(user)}>
               <View style={styles.userDetails}>
                 <UserAvatar imageUrl={user.profilePictureUrl} />
@@ -140,6 +142,11 @@ const FindFriends = () => {
                   variant="outline"
                   title="Add"
                   onPress={() => handleAddFriend(user)}
+                  disabled={
+                    user.isFriend ||
+                    isLoadingFriend[user.id] ||
+                    isAnyFriendLoading
+                  }
                 />
               )}
             </TouchableOpacity>
