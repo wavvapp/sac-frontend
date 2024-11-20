@@ -154,12 +154,12 @@ const styles = StyleSheet.create({
   UserStatus: {
     marginHorizontal: 20,
     height: 220,
+    marginBottom: 52,
   },
   switch: {
     width: width * 0.18,
     height: width * 0.35,
     padding: 10,
-    marginTop: 52,
     marginHorizontal: "auto",
   },
 })
