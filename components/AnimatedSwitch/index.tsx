@@ -38,13 +38,9 @@ export const AnimatedSwitch = ({
 
   // This will listen for changes in the shared value and update the text accordingly with a delay
   useDerivedValue(() => {
-    if (!isLoading) {
-      if (isOn.value) {
-        return runOnJS(updateTextWithDelay)("ON")
-      } else {
-        return runOnJS(updateTextWithDelay)("OFF")
-      }
-    }
+    if (isLoading) return
+    const text = isOn.value ? "ON" : "OFF"
+    runOnJS(updateTextWithDelay)(text)
   }, [isOn.value, isLoading])
 
   const thumbAnimatedStyle = useAnimatedStyle(() => {
