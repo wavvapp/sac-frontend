@@ -50,6 +50,7 @@ export default function UserStatus({
 
     return {
       opacity,
+      pointerEvents: isOn.value ? "auto" : "none",
     }
   })
 
