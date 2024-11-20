@@ -79,7 +79,7 @@ export const AnimatedSwitch = ({
         }}
         style={[switchStyles.track, style]}>
         <Animated.Text style={[switchStyles.text, textAnimatedStyle]}>
-          {!isLoading && text}
+          {!isLoading ? text : " "}
         </Animated.Text>
         <Animated.View
           style={[switchStyles.thumb, thumbAnimatedStyle]}></Animated.View>
