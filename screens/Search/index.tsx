@@ -20,6 +20,8 @@ import CheckIcon from "@/components/vectors/CheckIcon"
 import api from "@/service"
 import { useFriends } from "@/hooks/useFriends"
 import { FriendsSkeleton } from "@/components/cards/FriendsSkeleton"
+import { SafeAreaView } from "react-native-safe-area-context"
+import { StatusBar } from "expo-status-bar"
 
 const FindFriends = () => {
   const navigation = useNavigation()
@@ -30,7 +32,7 @@ const FindFriends = () => {
     Record<string, boolean>
   >({})
   const [allUsers, setAllUsers] = useState<User[]>([])
-  const [isAnyFriendLoading, setisAnyFriendLoading] = useState(false)
+  const [isAnyFriendLoading, setIsAnyFriendLoading] = useState(false)
   const { fetchAllFriends } = useFriends()
   const fetchUsers = useCallback(async () => {
     try {
@@ -66,7 +68,7 @@ const FindFriends = () => {
   const handleAddFriend = async (user: User) => {
     if (isLoadingFriend[user.id] || user.isFriend || isAnyFriendLoading) return
     try {
-      setisAnyFriendLoading(true)
+      setIsAnyFriendLoading(true)
       setIsLoadingFriend((prev) => ({ ...prev, [user.id]: true }))
       await api.post("/friends", { friendId: user.id })
       setAllUsers((prevUsers) =>
@@ -87,7 +89,7 @@ const FindFriends = () => {
     } catch (error: any) {
       console.warn("Error adding friend:", error.response.data.message)
     } finally {
-      setisAnyFriendLoading(false)
+      setIsAnyFriendLoading(false)
       setIsLoadingFriend((prev) => ({ ...prev, [user.id]: false }))
     }
   }
@@ -97,7 +99,8 @@ const FindFriends = () => {
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      <StatusBar style="dark" />
       <View style={styles.header}>
         <View style={styles.spacer} />
         <CustomText size="lg" fontWeight="semibold">
@@ -111,6 +114,7 @@ const FindFriends = () => {
         value={search}
         placeholder="Search by name or username"
         handleTextChange={handleSearch}
+        containerStyle={styles.input}
       />
 
       <ScrollView style={styles.friendsList}>
@@ -123,7 +127,9 @@ const FindFriends = () => {
             <TouchableOpacity
               key={user.id}
               style={styles.friendItem}
-              disabled={isLoadingFriend[user.id]}
+              disabled={
+                isLoadingFriend[user.id] || user.isFriend || isAnyFriendLoading
+              }
               onPress={() => handleAddFriend(user)}>
               <View style={styles.userDetails}>
                 <UserAvatar imageUrl={user.profilePictureUrl} />
@@ -132,9 +138,7 @@ const FindFriends = () => {
                 </View>
               </View>
               {isLoadingFriend[user.id] ? (
-                <CustomButton variant="outline">
-                  <ActivityIndicator />
-                </CustomButton>
+                <ActivityIndicator color={theme.colors.black} size="small" />
               ) : user.isFriend ? (
                 <CheckIcon color={theme.colors.black} />
               ) : (
@@ -142,6 +146,11 @@ const FindFriends = () => {
                   variant="outline"
                   title="Add"
                   onPress={() => handleAddFriend(user)}
+                  disabled={
+                    user.isFriend ||
+                    isLoadingFriend[user.id] ||
+                    isAnyFriendLoading
+                  }
                 />
               )}
             </TouchableOpacity>
@@ -162,15 +171,14 @@ const FindFriends = () => {
           <ShareCard />
         </View>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 20,
-    paddingVertical: 70,
+    paddingTop: 20,
     backgroundColor: theme.colors.white,
   },
   header: {
@@ -178,12 +186,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     paddingBottom: 22,
+    paddingHorizontal: 20,
+  },
+  input: {
+    marginHorizontal: 20,
   },
   spacer: {
     width: 24,
   },
   friendsList: {
     marginTop: 10,
+    paddingHorizontal: 20,
   },
   friendItem: {
     flexDirection: "row",
@@ -197,7 +210,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   share: {
-    paddingTop: 20,
+    paddingVertical: 20,
   },
   notFoundContainer: {
     justifyContent: "center",
