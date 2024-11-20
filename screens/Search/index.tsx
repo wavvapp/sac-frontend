@@ -20,6 +20,8 @@ import CheckIcon from "@/components/vectors/CheckIcon"
 import api from "@/service"
 import { useFriends } from "@/hooks/useFriends"
 import { FriendsSkeleton } from "@/components/cards/FriendsSkeleton"
+import { SafeAreaView } from "react-native-safe-area-context"
+import { StatusBar } from "expo-status-bar"
 
 const FindFriends = () => {
   const navigation = useNavigation()
@@ -97,7 +99,8 @@ const FindFriends = () => {
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      <StatusBar style="dark" />
       <View style={styles.header}>
         <View style={styles.spacer} />
         <CustomText size="lg" fontWeight="semibold">
@@ -111,6 +114,7 @@ const FindFriends = () => {
         value={search}
         placeholder="Search by name or username"
         handleTextChange={handleSearch}
+        containerStyle={styles.input}
       />
 
       <ScrollView style={styles.friendsList}>
@@ -167,15 +171,14 @@ const FindFriends = () => {
           <ShareCard />
         </View>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 20,
-    paddingVertical: 70,
+    paddingTop: 20,
     backgroundColor: theme.colors.white,
   },
   header: {
@@ -183,12 +186,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     paddingBottom: 22,
+    paddingHorizontal: 20,
+  },
+  input: {
+    marginHorizontal: 20,
   },
   spacer: {
     width: 24,
   },
   friendsList: {
     marginTop: 10,
+    paddingHorizontal: 20,
   },
   friendItem: {
     flexDirection: "row",
@@ -202,7 +210,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   share: {
-    paddingTop: 20,
+    paddingVertical: 20,
   },
   notFoundContainer: {
     justifyContent: "center",
