@@ -39,13 +39,7 @@ export default function HomeScreen() {
   } = useSignal()
   const signalingRef = useRef<SignalingRef>(null)
   const navigation = useNavigation<HomeScreenProps>()
-  const {
-    hasFriends,
-    availableFriends,
-    offlineFriends,
-    fetchAllFriends,
-    fetchAvailableFriends,
-  } = useFriends()
+  const { hasFriends, fetchAllFriends, fetchAvailableFriends } = useFriends()
   const { user, isAuthenticated } = useAuth()
   const { data, refetch: refetchPoints } = useQuery({
     queryKey: ["points"],
@@ -117,11 +111,7 @@ export default function HomeScreen() {
             onPress={() => handlePress.mutate()}
             style={styles.switch}
           />
-          <Signaling
-            availableFriends={availableFriends}
-            offlineFriends={offlineFriends}
-            ref={signalingRef}
-          />
+          <Signaling ref={signalingRef} />
         </>
       )}
     </SafeAreaView>

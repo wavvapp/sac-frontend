@@ -5,9 +5,10 @@ import { useCallback, useEffect, useMemo, useState } from "react"
 export const useFriends = () => {
   const [friends, setFriends] = useState<User[]>([])
   const [availableFriends, setAvailableFriends] = useState<User[]>([])
+  const [offlineFriends, setOfflineFriends] = useState<User[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
-  const offlineFriends = useMemo(() => {
+  const filterOfflinefriends = (friends: User[], availableFriends: User[]) => {
     const friendsData = friends.filter(
       (friend) =>
         !availableFriends.some(
@@ -15,7 +16,7 @@ export const useFriends = () => {
         ),
     )
     return friendsData
-  }, [friends, availableFriends])
+  }
 
   const hasFriends = useMemo(() => {
     if (isLoading) return true
@@ -32,7 +33,8 @@ export const useFriends = () => {
           activity: friend.signal.status_message,
         }))
         setAvailableFriends(formattedFriends)
-      }
+        return formattedFriends
+      } else return []
     } catch (error) {
       console.error("Error fetching available friends:", error)
       throw error
@@ -52,6 +54,17 @@ export const useFriends = () => {
     }
   }, [])
 
+  const fetchSignalingFriends = async () => {
+    const [allFriends, onlineFriends] = await Promise.all([
+      fetchAllFriends(),
+      fetchAvailableFriends(),
+    ])
+    setAvailableFriends(onlineFriends)
+    const offlineFriends = filterOfflinefriends(allFriends, onlineFriends)
+    setOfflineFriends(offlineFriends)
+    return { onlineFriends, offlineFriends }
+  }
+
   useEffect(() => {
     fetchAllFriends()
   }, [fetchAllFriends])
@@ -63,6 +76,7 @@ export const useFriends = () => {
     offlineFriends,
     fetchAllFriends,
     fetchAvailableFriends,
+    fetchSignalingFriends,
     isLoading,
   }
 }
