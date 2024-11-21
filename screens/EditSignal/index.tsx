@@ -1,4 +1,4 @@
-import { SafeAreaView, StyleSheet, View } from "react-native"
+import { SafeAreaView, StyleSheet, TouchableOpacity, View } from "react-native"
 import Status from "@/components/cards/Status"
 import { CustomButton } from "@/components/ui/Button"
 import UserAvatar from "@/components/ui/UserAvatar"
@@ -58,7 +58,11 @@ export default function EditSignal() {
         <CustomText style={style.headerText} fontWeight="bold">
           Edit status
         </CustomText>
-        <CrossMark onPress={() => navigation.goBack()} />
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          style={style.CrossMarkButton}>
+          <CrossMark />
+        </TouchableOpacity>
       </View>
       <ScrollView
         contentContainerStyle={{
@@ -122,5 +126,10 @@ const style = StyleSheet.create({
     zIndex: 10,
     width: "90%",
     marginHorizontal: 20,
+  },
+  CrossMarkButton: {
+    padding: 5,
+    position: "absolute",
+    right: 20,
   },
 })
