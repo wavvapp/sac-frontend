@@ -44,10 +44,15 @@ export const AnimatedSwitch = ({
   }, [isOn.value, isLoading])
 
   const thumbAnimatedStyle = useAnimatedStyle(() => {
+    if (isLoading)
+      return {
+        transform: [{ translateY: height.value * 0.25 }],
+        borderRadius: 4,
+      }
     const moveValue = interpolate(
-      Number(isLoading ? 0.5 : isOn.value),
-      [0, 1, 0.5],
-      [0, height.value - width.value, height.value / 2],
+      Number(isOn.value),
+      [0, 1],
+      [0, height.value - width.value],
     )
     const translateValue = withTiming(moveValue, { duration })
 
@@ -58,10 +63,14 @@ export const AnimatedSwitch = ({
   })
 
   const textAnimatedStyle = useAnimatedStyle(() => {
+    if (isLoading)
+      return {
+        transform: [{ translateY: height.value * 0.4 }],
+      }
     const moveValue = interpolate(
-      Number(isLoading ? 0.5 : isOn.value),
-      [0, 1, 0.5],
-      [height.value * 0.65, height.value * 0.25, height.value * 0.5],
+      Number(isOn.value),
+      [0, 1],
+      [height.value * 0.65, height.value * 0.25],
     )
     const translateValue = withTiming(moveValue, { duration })
 
