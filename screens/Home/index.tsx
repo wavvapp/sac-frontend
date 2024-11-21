@@ -49,8 +49,8 @@ export default function HomeScreen() {
   const { user, isAuthenticated } = useAuth()
   const {
     data,
-    isLoading,
     refetch: refetchPoints,
+    isLoading,
   } = useQuery({
     queryKey: ["points"],
     queryFn: fetchPoints,
@@ -139,7 +139,6 @@ const styles = StyleSheet.create({
     position: "relative",
     alignItems: "center",
     paddingTop: 7,
-    paddingHorizontal: 21,
     backgroundColor: theme.colors.black_50,
   },
   header: {
@@ -147,23 +146,25 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     width: "100%",
-    marginBottom: 20,
+    paddingHorizontal: 20,
+    paddingVertical: 25,
   },
   buttonContainer: {
     flexDirection: "row",
+    gap: 12,
   },
   iconButton: {
     borderRadius: 100,
-    padding: 12,
   },
   UserStatus: {
-    marginVertical: 4,
-    width: "100%",
+    marginHorizontal: 20,
+    height: 220,
+    marginBottom: 52,
   },
   switch: {
     width: width * 0.18,
     height: width * 0.35,
     padding: 10,
-    marginVertical: 94,
+    marginHorizontal: "auto",
   },
 })
