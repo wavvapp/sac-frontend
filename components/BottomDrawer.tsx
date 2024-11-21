@@ -33,12 +33,7 @@ const BottomDrawer = forwardRef<BottomDrawerRef, DrawerProps>((props, ref) => {
   }))
 
   const renderBackdrop = (props: BottomSheetBackdropProps) => (
-    <BottomSheetBackdrop
-      {...props}
-      disappearsOnIndex={1}
-      appearsOnIndex={0}
-      pressBehavior="close"
-    />
+    <BottomSheetBackdrop {...props} pressBehavior="close" />
   )
 
   const { refetch } = useQuery({

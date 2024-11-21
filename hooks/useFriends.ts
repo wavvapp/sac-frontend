@@ -59,7 +59,6 @@ export const useFriends = () => {
       fetchAllFriends(),
       fetchAvailableFriends(),
     ])
-    setAvailableFriends(onlineFriends)
     const offlineFriends = filterOfflinefriends(allFriends, onlineFriends)
     setOfflineFriends(offlineFriends)
     return { onlineFriends, offlineFriends }

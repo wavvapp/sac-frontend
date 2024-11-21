@@ -138,7 +138,11 @@ const FindFriends = () => {
                 </View>
               </View>
               {isLoadingFriend[user.id] ? (
-                <ActivityIndicator color={theme.colors.black} size="small" />
+                <ActivityIndicator
+                  color={theme.colors.black}
+                  size="small"
+                  style={styles.loaderIcon}
+                />
               ) : user.isFriend ? (
                 <CheckIcon color={theme.colors.black} />
               ) : (
@@ -219,6 +223,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   notFoundText: { color: theme.colors.black_500 },
+  loaderIcon: { paddingRight: 4 },
 })
 
 export default FindFriends
