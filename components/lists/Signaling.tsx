@@ -46,7 +46,7 @@ const Signaling = forwardRef<SignalingRef>((_, ref) => {
         />
       </View>
       {isLoading ? (
-        <View style={{ paddingHorizontal: 20, gap: 8 }}>
+        <View style={{ paddingHorizontal: 20 }}>
           <UserSkeleton />
           <UserSkeleton />
           <UserSkeleton />
