@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   button: {
-    borderRadius: 100,
-    padding: 12,
+    marginRight: -12,
+    alignSelf: "flex-start",
   },
 })
