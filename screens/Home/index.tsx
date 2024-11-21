@@ -39,13 +39,7 @@ export default function HomeScreen() {
   } = useSignal()
   const signalingRef = useRef<SignalingRef>(null)
   const navigation = useNavigation<HomeScreenProps>()
-  const {
-    hasFriends,
-    availableFriends,
-    offlineFriends,
-    fetchAllFriends,
-    fetchAvailableFriends,
-  } = useFriends()
+  const { hasFriends } = useFriends()
   const { user, isAuthenticated } = useAuth()
   const {
     data,
@@ -58,17 +52,9 @@ export default function HomeScreen() {
 
   const fetchInitialData = useCallback(async () => {
     if (!isAuthenticated) return
-    await fetchAllFriends()
-    await fetchAvailableFriends()
     await fetchMySignal()
     await refetchPoints()
-  }, [
-    fetchAllFriends,
-    fetchAvailableFriends,
-    fetchMySignal,
-    isAuthenticated,
-    refetchPoints,
-  ])
+  }, [fetchMySignal, isAuthenticated, refetchPoints])
   const handlePress = useMutation({
     mutationFn: isOn.value ? turnOffSignalStatus : turnOnSignalStatus,
     onMutate: () => {
@@ -122,11 +108,7 @@ export default function HomeScreen() {
             onPress={() => handlePress.mutate()}
             style={styles.switch}
           />
-          <Signaling
-            availableFriends={availableFriends}
-            offlineFriends={offlineFriends}
-            ref={signalingRef}
-          />
+          <Signaling ref={signalingRef} />
         </>
       )}
     </SafeAreaView>
