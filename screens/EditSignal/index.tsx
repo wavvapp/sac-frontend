@@ -17,6 +17,7 @@ import { RootStackParamList } from "@/navigation"
 import { useState } from "react"
 import { useMutation } from "@tanstack/react-query"
 import { useSignal } from "@/hooks/useSignal"
+import { StatusBar } from "expo-status-bar"
 
 type EditSignalScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -52,6 +53,7 @@ export default function EditSignal() {
 
   return (
     <View style={style.container}>
+      <StatusBar style="dark" />
       <View style={style.navBar}>
         <CustomText style={style.headerText} fontWeight="bold">
           Edit status
