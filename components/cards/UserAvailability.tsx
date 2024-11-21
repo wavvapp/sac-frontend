@@ -27,7 +27,11 @@ export default function UserAvailability({
           {time}
         </CustomText>
       </View>
-      <CustomText style={styles.activity} fontFamily="writer-mono">
+      <CustomText
+        style={styles.activity}
+        fontFamily="writer-mono"
+        numberOfLines={2}
+        ellipsizeMode="tail">
         {activity}
       </CustomText>
     </View>

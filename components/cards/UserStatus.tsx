@@ -50,41 +50,40 @@ export default function UserStatus({
 
     return {
       opacity,
+      pointerEvents: isOn.value ? "auto" : "none",
     }
   })
 
   return (
     <View style={styles.container}>
-      <Animated.View style={styles.textContainer}>
-        {!isOn.value && (
-          <CustomText fontFamily="writer-mono" style={styles.headlineText}>
-            Turn it on to signal your availability
-          </CustomText>
-        )}
-      </Animated.View>
+      {!isOn.value && (
+        <CustomText fontFamily="writer-mono" style={styles.headlineText}>
+          Turn it on to signal your availability
+        </CustomText>
+      )}
       <Animated.View
         style={[styles.animationContainer, style, cardAnimatedStyle]}
         {...rest}>
-        {user && (
-          <View style={styles.userContainer}>
+        <View style={styles.userContainer}>
+          {user && (
             <UserAvailability
               fullName={user.names}
               time={user.time}
               activity={user.activity}
             />
+          )}
+          <View>
+            <CustomText size="sm" fontFamily="writer-mono">
+              {friends.length
+                ? `Visible to ${friends.length} friends`
+                : "This status is not visible to anyone"}
+            </CustomText>
+            <CustomText size="sm" fontFamily="writer-mono">
+              {visibleFriendsList
+                ? `${visibleFriendsList}.`
+                : "Tap to edit your preferences."}
+            </CustomText>
           </View>
-        )}
-        <View style={styles.friendsContainer}>
-          <CustomText size="sm" fontFamily="writer-mono">
-            {friends.length
-              ? `Visible to ${friends.length} friends`
-              : "This status is not visible to anyone"}
-          </CustomText>
-          <CustomText size="sm" fontFamily="writer-mono">
-            {visibleFriendsList
-              ? `${visibleFriendsList}.`
-              : "Tap to edit your preferences."}
-          </CustomText>
         </View>
         <TouchableOpacity style={styles.editButton}>
           <CustomText
@@ -102,25 +101,18 @@ export default function UserStatus({
 
 const styles = StyleSheet.create({
   container: {
-    flex: 0,
-    justifyContent: "center",
     alignItems: "center",
-    gap: 20,
   },
   animationContainer: {
     backgroundColor: theme.colors.white,
-    paddingTop: 24,
-    gap: 24,
     borderRadius: 12,
     minWidth: "100%",
   },
   userContainer: {
-    marginHorizontal: 24,
-    flexDirection: "row",
+    gap: 24,
+    padding: 20,
     justifyContent: "space-between",
-  },
-  friendsContainer: {
-    marginHorizontal: 24,
+    flexGrow: 1,
   },
   editButton: {
     backgroundColor: theme.colors.black,
@@ -134,15 +126,10 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   headlineText: {
-    paddingTop: 227,
-    position: "absolute",
     color: theme.colors.white,
     textAlign: "center",
-    alignSelf: "center",
-    minHeight: 189,
-    flexShrink: 1,
-  },
-  textContainer: {
     maxWidth: 277,
+    position: "absolute",
+    bottom: 0,
   },
 })
