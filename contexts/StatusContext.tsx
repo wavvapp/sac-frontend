@@ -20,7 +20,7 @@ const StatusContext = createContext<StatusContextType>({} as StatusContextType)
 export const StatusProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const { user } = useAuth()
+  const { user, updateUserInfo } = useAuth()
   const [statusMessage, setStatusMessage] = useState(user?.activity || "")
   const [friendIds, setFriendIds] = useState<string[]>([])
   const [timeSlot, setTimeSlot] = useState("NOW")
@@ -45,6 +45,7 @@ export const StatusProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const updateActivity = async () => {
     try {
+      await updateUserInfo(statusMessage, timeSlot)
       const { data } = await api.put("/my-signal", {
         friends: friendIds,
         status_message: statusMessage,
@@ -60,6 +61,7 @@ export const StatusProvider: React.FC<{ children: React.ReactNode }> = ({
       return data
     } catch (error) {
       console.error("Error updating activity status:", error)
+      throw error
     }
   }
 
