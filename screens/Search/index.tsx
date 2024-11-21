@@ -133,7 +133,7 @@ const FindFriends = () => {
               onPress={() => handleAddFriend(user)}>
               <View style={styles.userDetails}>
                 <UserAvatar imageUrl={user.profilePictureUrl} />
-                <View style={{ marginLeft: 8 }}>
+                <View style={{ marginLeft: 8, flex: 1 }}>
                   <UserInfo fullName={user.names} username={user.username} />
                 </View>
               </View>
@@ -205,12 +205,11 @@ const styles = StyleSheet.create({
   friendItem: {
     flexDirection: "row",
     gap: 8,
-    alignItems: "center",
+    alignItems: "flex-start",
     paddingVertical: 10,
   },
   userDetails: {
     flexDirection: "row",
-    alignItems: "center",
     flex: 1,
   },
   share: {
