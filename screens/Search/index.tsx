@@ -19,7 +19,7 @@ import { theme } from "@/theme"
 import CheckIcon from "@/components/vectors/CheckIcon"
 import api from "@/service"
 import { useFriends } from "@/hooks/useFriends"
-import { FriendsSkeleton } from "@/components/cards/FriendsSkeleton"
+import { FriendsSkeleton } from "@/components/skeletons/FriendsSkeleton"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { StatusBar } from "expo-status-bar"
 
