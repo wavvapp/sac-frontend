@@ -4,6 +4,7 @@ import BottomSheet, {
 } from "@gorhom/bottom-sheet"
 import {
   forwardRef,
+  useEffect,
   useImperativeHandle,
   useMemo,
   useRef,
@@ -40,13 +41,17 @@ const BottomDrawer = forwardRef<BottomDrawerRef, DrawerProps>((props, ref) => {
     />
   )
 
-  useQuery({
+  const { refetch } = useQuery({
     queryKey: ["fetch-signaling-friends"],
     queryFn: () => fetchFriends(),
     refetchInterval: isbottomSheetOpen ? 5000 : false,
     refetchIntervalInBackground: false,
   })
 
+  useEffect(() => {
+    if (!isbottomSheetOpen) return
+    refetch()
+  }, [isbottomSheetOpen, refetch])
   return (
     <BottomSheet
       ref={bottomSheetRef}

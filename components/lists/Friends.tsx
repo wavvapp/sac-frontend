@@ -5,7 +5,7 @@ import FriendCard from "@/components/Friend"
 import { User } from "@/types"
 import { useFriends } from "@/hooks/useFriends"
 import { useStatus } from "@/contexts/StatusContext"
-import { FriendsSkeleton } from "@/components/skeletons/FriendsSkeleton"
+import { FriendsSkeleton } from "@/components/cards/FriendsSkeleton"
 import { useQuery } from "@tanstack/react-query"
 
 export default function FriendsList() {

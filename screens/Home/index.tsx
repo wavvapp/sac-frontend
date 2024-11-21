@@ -39,26 +39,22 @@ export default function HomeScreen() {
   } = useSignal()
   const signalingRef = useRef<SignalingRef>(null)
   const navigation = useNavigation<HomeScreenProps>()
-  const { hasFriends, fetchAllFriends, fetchAvailableFriends } = useFriends()
+  const { hasFriends } = useFriends()
   const { user, isAuthenticated } = useAuth()
-  const { data, refetch: refetchPoints } = useQuery({
+  const {
+    data,
+    isLoading,
+    refetch: refetchPoints,
+  } = useQuery({
     queryKey: ["points"],
     queryFn: fetchPoints,
   })
 
   const fetchInitialData = useCallback(async () => {
     if (!isAuthenticated) return
-    await fetchAllFriends()
-    await fetchAvailableFriends()
     await fetchMySignal()
     await refetchPoints()
-  }, [
-    fetchAllFriends,
-    fetchAvailableFriends,
-    fetchMySignal,
-    isAuthenticated,
-    refetchPoints,
-  ])
+  }, [fetchMySignal, isAuthenticated, refetchPoints])
   const handlePress = useMutation({
     mutationFn: isOn.value ? turnOffSignalStatus : turnOnSignalStatus,
     onMutate: () => {
