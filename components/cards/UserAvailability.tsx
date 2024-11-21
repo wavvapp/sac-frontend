@@ -43,11 +43,11 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: "row",
-    alignItems: "center",
     gap: 4,
   },
   name: {
     textTransform: "capitalize",
+    maxWidth: "70%",
   },
   time: {
     opacity: 0.5,
@@ -59,6 +59,7 @@ const styles = StyleSheet.create({
     height: 2,
     width: 2,
     borderRadius: 2,
+    marginTop: 12,
   },
   activity: {
     textTransform: "capitalize",
