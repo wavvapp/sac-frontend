@@ -1,4 +1,4 @@
-import { SafeAreaView, StyleSheet, TouchableOpacity, View } from "react-native"
+import { StyleSheet, TouchableOpacity, View } from "react-native"
 import Status from "@/components/cards/Status"
 import { CustomButton } from "@/components/ui/Button"
 import UserAvatar from "@/components/ui/UserAvatar"
@@ -52,7 +52,7 @@ export default function EditSignal() {
   }
 
   return (
-    <SafeAreaView style={style.container}>
+    <View style={style.container}>
       <StatusBar style="dark" />
       <View style={style.navBar}>
         <CustomText style={style.headerText} fontWeight="bold">
@@ -92,7 +92,7 @@ export default function EditSignal() {
         onPress={handleSaveStatus}
         disabled={isLoading}
       />
-    </SafeAreaView>
+    </View>
   )
 }
 
