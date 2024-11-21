@@ -27,8 +27,8 @@ export const AnimatedSwitch = ({
   isLoading,
 }: AnimatedSwitchProps) => {
   const [text, setText] = useState(isOn.value ? "ON" : "OFF")
-  const height = useSharedValue(0)
-  const width = useSharedValue(0)
+  const height = useSharedValue(130)
+  const width = useSharedValue(65)
 
   const updateTextWithDelay = (newText: string) => {
     setTimeout(() => {
