@@ -108,6 +108,7 @@ export default function HomeScreen() {
           </View>
           <AnimatedSwitch
             isOn={isOn}
+            isLoading={isLoading}
             onPress={() => handlePress.mutate()}
             style={styles.switch}
           />
