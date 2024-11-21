@@ -47,7 +47,11 @@ export default function HomeScreen() {
     fetchAvailableFriends,
   } = useFriends()
   const { user, isAuthenticated } = useAuth()
-  const { data, refetch: refetchPoints } = useQuery({
+  const {
+    data,
+    isLoading,
+    refetch: refetchPoints,
+  } = useQuery({
     queryKey: ["points"],
     queryFn: fetchPoints,
   })

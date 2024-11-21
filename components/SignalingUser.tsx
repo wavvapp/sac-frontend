@@ -26,7 +26,7 @@ export default function SignalingUser({
         online && styles.availableUserContainer,
       ]}>
       <UserAvatar imageUrl={user.profilePictureUrl} />
-      <View>
+      <View style={{ flex: 1 }}>
         {online ? (
           <UserAvailability
             fullName={user.names}
@@ -43,7 +43,6 @@ export default function SignalingUser({
 const styles = StyleSheet.create({
   userCard: {
     flexDirection: "row",
-    alignItems: "center",
     gap: 10,
     paddingHorizontal: 20,
   },

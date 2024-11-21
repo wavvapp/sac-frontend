@@ -31,10 +31,10 @@ export default function FriendCard({
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    alignItems: "center",
     gap: 8,
   },
   userInfoStyles: {
     flexGrow: 1,
+    flex: 1,
   },
 })
