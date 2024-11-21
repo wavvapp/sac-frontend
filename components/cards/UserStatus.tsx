@@ -57,9 +57,11 @@ export default function UserStatus({
   return (
     <View style={styles.container}>
       {!isOn.value && (
-        <CustomText fontFamily="writer-mono" style={styles.headlineText}>
-          Turn it on to signal your availability
-        </CustomText>
+        <View style={styles.headlineTextContainer}>
+          <CustomText fontFamily="writer-mono" style={styles.headlineText}>
+            Turn it on to signal your availability
+          </CustomText>
+        </View>
       )}
       <Animated.View
         style={[styles.animationContainer, style, cardAnimatedStyle]}
@@ -125,11 +127,13 @@ const styles = StyleSheet.create({
     textAlign: "center",
     padding: 10,
   },
-  headlineText: {
-    color: theme.colors.white,
-    textAlign: "center",
+  headlineTextContainer: {
     maxWidth: 277,
     position: "absolute",
     bottom: 0,
+  },
+  headlineText: {
+    color: theme.colors.white,
+    textAlign: "center",
   },
 })

@@ -2,7 +2,7 @@ import UserStatus from "@/components/cards/UserStatus"
 // import PerlinNoise from "@/components/PerlinNoise"
 import { RootStackParamList } from "@/navigation"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
-import { StyleSheet, View, Dimensions } from "react-native"
+import { StyleSheet, View, Dimensions, StatusBar } from "react-native"
 import { runOnJS, useDerivedValue } from "react-native-reanimated"
 import { AnimatedSwitch } from "@/components/AnimatedSwitch"
 import { useCallback, useRef, useState } from "react"
@@ -20,7 +20,6 @@ import { useSignal } from "@/hooks/useSignal"
 import { useFriends } from "@/hooks/useFriends"
 import { useQuery, useMutation } from "@tanstack/react-query"
 import { fetchPoints } from "@/libs/fetchPoints"
-import { SafeAreaView } from "react-native-safe-area-context"
 
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -79,7 +78,7 @@ export default function HomeScreen() {
   }, [isOn.value])
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       {/* <PerlinNoise isOn={isOn} color1="#281713" color2="blue" /> */}
       <View style={styles.header}>
         <Badge variant="primary" name={data?.points?.toFixed(1)} />
@@ -111,7 +110,7 @@ export default function HomeScreen() {
           <Signaling ref={signalingRef} />
         </>
       )}
-    </SafeAreaView>
+    </View>
   )
 }
 
@@ -120,7 +119,7 @@ const styles = StyleSheet.create({
     flex: 1,
     position: "relative",
     alignItems: "center",
-    paddingTop: 7,
+    paddingTop: StatusBar.currentHeight,
     backgroundColor: theme.colors.black_50,
   },
   header: {
