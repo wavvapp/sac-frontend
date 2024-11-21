@@ -16,6 +16,7 @@ interface AnimatedSwitchProps {
   onPress: () => void // Callback for when the switch is pressed
   style?: ViewStyle // Optional style for the switch container
   duration?: number // Optional animation duration, defaults to 400
+  isLoading: boolean // Loading state to show the thumb in the middle
 }
 
 export const AnimatedSwitch = ({
@@ -23,6 +24,7 @@ export const AnimatedSwitch = ({
   onPress,
   style,
   duration = 400,
+  isLoading,
 }: AnimatedSwitchProps) => {
   const [text, setText] = useState(isOn.value ? "ON" : "OFF")
   const height = useSharedValue(0)
@@ -36,13 +38,17 @@ export const AnimatedSwitch = ({
 
   // This will listen for changes in the shared value and update the text accordingly with a delay
   useDerivedValue(() => {
-    if (isOn.value) {
-      return runOnJS(updateTextWithDelay)("ON")
-    }
-    return runOnJS(updateTextWithDelay)("OFF")
-  }, [isOn.value])
+    if (isLoading) return
+    const text = isOn.value ? "ON" : "OFF"
+    runOnJS(updateTextWithDelay)(text)
+  }, [isOn.value, isLoading])
 
   const thumbAnimatedStyle = useAnimatedStyle(() => {
+    if (isLoading)
+      return {
+        transform: [{ translateY: height.value * 0.25 }],
+        borderRadius: 4,
+      }
     const moveValue = interpolate(
       Number(isOn.value),
       [0, 1],
@@ -57,6 +63,10 @@ export const AnimatedSwitch = ({
   })
 
   const textAnimatedStyle = useAnimatedStyle(() => {
+    if (isLoading)
+      return {
+        transform: [{ translateY: height.value * 0.4 }],
+      }
     const moveValue = interpolate(
       Number(isOn.value),
       [0, 1],
@@ -78,7 +88,7 @@ export const AnimatedSwitch = ({
         }}
         style={[switchStyles.track, style]}>
         <Animated.Text style={[switchStyles.text, textAnimatedStyle]}>
-          {text}
+          {!isLoading ? text : " "}
         </Animated.Text>
         <Animated.View
           style={[switchStyles.thumb, thumbAnimatedStyle]}></Animated.View>
