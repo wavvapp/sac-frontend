@@ -10,8 +10,8 @@ import {
   StyleSheet,
   KeyboardAvoidingView,
   Platform,
-  Keyboard,
   TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native"
 
 interface EditActivityProps {
@@ -31,7 +31,7 @@ export default function EditActivity({ closeModal }: EditActivityProps) {
   }
 
   return (
-    <TouchableWithoutFeedback onPress={closeModal}>
+    <TouchableWithoutFeedback>
       <View style={styles.overlay}>
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}

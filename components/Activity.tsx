@@ -34,11 +34,9 @@ export default function Activity() {
 
       {isModalVisible && (
         <Modal
-          visible={isModalVisible}
           transparent={true}
           animationType="slide"
           presentationStyle="overFullScreen"
-          statusBarTranslucent={true}
           onRequestClose={closeModal}>
           <EditActivity closeModal={closeModal} />
         </Modal>
