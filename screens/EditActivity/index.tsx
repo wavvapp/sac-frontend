@@ -31,7 +31,7 @@ export default function EditActivity({ closeModal }: EditActivityProps) {
   }
 
   return (
-    <TouchableWithoutFeedback>
+    <TouchableWithoutFeedback onPress={closeModal}>
       <View style={styles.overlay}>
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
