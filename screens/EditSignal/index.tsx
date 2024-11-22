@@ -84,7 +84,8 @@ export default function EditSignal() {
         <ShareCard style={{ marginHorizontal: 20 }} />
       </ScrollView>
       <CustomButton
-        containerStyles={style.saveButton}
+        activeOpacity={0.8}
+        containerStyles={{ ...style.saveButton, opacity: isLoading ? 0.8 : 1 }}
         variant="secondary"
         fullWidth
         title={isLoading ? "Saving..." : "Save"}
