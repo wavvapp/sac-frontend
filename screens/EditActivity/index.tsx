@@ -10,8 +10,8 @@ import {
   StyleSheet,
   KeyboardAvoidingView,
   Platform,
-  Keyboard,
   TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native"
 
 interface EditActivityProps {
