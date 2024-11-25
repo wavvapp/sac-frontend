@@ -2,7 +2,7 @@ import UserStatus from "@/components/cards/UserStatus"
 // import PerlinNoise from "@/components/PerlinNoise"
 import { RootStackParamList } from "@/navigation"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
-import { StyleSheet, View, Dimensions, StatusBar } from "react-native"
+import { StyleSheet, View, Dimensions, StatusBar, Platform } from "react-native"
 import { runOnJS, useDerivedValue } from "react-native-reanimated"
 import { AnimatedSwitch } from "@/components/AnimatedSwitch"
 import { useCallback, useRef, useState } from "react"
@@ -20,6 +20,8 @@ import { useSignal } from "@/hooks/useSignal"
 import { useFriends } from "@/hooks/useFriends"
 import { useQuery, useMutation } from "@tanstack/react-query"
 import { fetchPoints } from "@/libs/fetchPoints"
+import * as WebBrowser from "expo-web-browser"
+import { TouchableOpacity } from "react-native-gesture-handler"
 
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -70,6 +72,11 @@ export default function HomeScreen() {
     }, [fetchInitialData]),
   )
 
+  const handleWebsiteOpen = async () => {
+    await WebBrowser.openBrowserAsync(
+      "https://7axab-zyaaa-aaaao-qjv7a-cai.icp0.io/",
+    )
+  }
   useDerivedValue(() => {
     if (isOn.value) {
       return runOnJS(setIsVisible)(true)
@@ -81,8 +88,9 @@ export default function HomeScreen() {
     <View style={styles.container}>
       {/* <PerlinNoise isOn={isOn} color1="#281713" color2="blue" /> */}
       <View style={styles.header}>
-        <Badge variant="primary" name={data?.points?.toFixed(1)} />
-
+        <TouchableOpacity onPress={handleWebsiteOpen}>
+          <Badge variant="primary" name={data?.points?.toFixed(1)} />
+        </TouchableOpacity>
         <View style={styles.buttonContainer}>
           <CustomButton style={styles.iconButton} onPress={onShare}>
             <ShareIcon color={theme.colors.white} />
@@ -119,7 +127,12 @@ const styles = StyleSheet.create({
     flex: 1,
     position: "relative",
     alignItems: "center",
-    paddingTop: StatusBar.currentHeight,
+    paddingTop:
+      Platform.OS === "ios"
+        ? Dimensions.get("window").height >= 812
+          ? 47
+          : 27
+        : StatusBar.currentHeight || 0,
     backgroundColor: theme.colors.black_50,
   },
   header: {
