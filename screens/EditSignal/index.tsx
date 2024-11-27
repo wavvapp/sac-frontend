@@ -65,7 +65,7 @@ export default function EditSignal() {
         </TouchableOpacity>
       </View>
       <ScrollView
-        keyboardShouldPersistTaps
+        keyboardShouldPersistTaps="always"
         contentContainerStyle={{
           flexGrow: 1,
           gap: 20,
