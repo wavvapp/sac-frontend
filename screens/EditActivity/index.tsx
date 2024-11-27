@@ -50,6 +50,7 @@ export default function EditActivity({ closeModal }: EditActivityProps) {
               variant="ghost"
               containerStyle={styles.inputContainer}
               multiline
+              autoFocus
             />
             <CustomButton
               disabled={!text.trim()}
