@@ -45,19 +45,15 @@ export const StatusProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const updateActivity = async () => {
     try {
+      setFriendIds(friendIds)
+      setStatusMessage(statusMessage)
+      setTimeSlot(timeSlot)
       await updateUserInfo(statusMessage, timeSlot)
       const { data } = await api.put("/my-signal", {
         friends: friendIds,
         status_message: statusMessage,
         when: timeSlot,
       })
-      const signalFriendsId: string[] = data?.friends.map(
-        (friend: Friend) => friend.friendId,
-      )
-
-      setFriendIds(signalFriendsId)
-      setStatusMessage(data?.status_message)
-      setTimeSlot(data?.when)
       return data
     } catch (error) {
       console.error("Error updating activity status:", error)

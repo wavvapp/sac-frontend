@@ -35,6 +35,7 @@ export default function EditSignal() {
     mutationFn: updateActivity,
     onMutate: () => {
       setIsLoading(true)
+      navigation.goBack()
     },
     onError: (error) => {
       // TODO: add toaster
@@ -42,7 +43,6 @@ export default function EditSignal() {
     },
     onSuccess: async () => {
       await fetchMySignal()
-      navigation.goBack()
       setIsLoading(false)
     },
   })
