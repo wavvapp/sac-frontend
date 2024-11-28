@@ -5,6 +5,7 @@ import React, {
   useContext,
   ReactNode,
 } from "react"
+import * as SplashScreen from "expo-splash-screen"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import {
   GoogleSignin,
@@ -104,7 +105,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       setUser(JSON.parse(storedUser))
     }
 
-    // SplashScreen.hideAsync()
+    await SplashScreen.hideAsync()
     setIsLoading(false)
   }
 
