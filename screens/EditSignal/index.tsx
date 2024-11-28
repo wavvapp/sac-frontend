@@ -41,7 +41,7 @@ export default function EditSignal() {
       // TODO: add toaster
       console.error(error.message)
     },
-    onSuccess: async () => {
+    onSettled: async () => {
       await fetchMySignal()
       setIsLoading(false)
     },

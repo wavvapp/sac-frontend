@@ -60,19 +60,13 @@ export interface Friend {
 }
 
 export interface Signal {
-  id: string
-  status: string
+  id?: string
+  status?: string
   when: string
   status_message: string
-  createdAt: string
-  updatedAt: string
-  friends: {
-    friendId: string
-    id: string
-    profilePictureUrl: string
-    names: string
-    username: string
-  }[]
+  createdAt?: string
+  updatedAt?: string
+  friends: string[]
 }
 
 export type BackendUser = {
