@@ -2,7 +2,7 @@ import { useStatus } from "@/contexts/StatusContext"
 import api from "@/service"
 import { useCallback, useEffect } from "react"
 import { useSharedValue } from "react-native-reanimated"
-import { Signal } from "@/types"
+import { Friend, Signal } from "@/types"
 
 export const useSignal = () => {
   const isOn = useSharedValue(false)
@@ -12,7 +12,7 @@ export const useSignal = () => {
     try {
       const { data: signal } = await api.get("/my-signal")
       isOn.value = signal.status === "active"
-      const friendIds = signal.friends.map((friend: Signal) => friend.id)
+      const friendIds = signal.friends.map((friend: Friend) => friend.friendId)
       const mySignal: Signal = { ...signal, friends: friendIds }
       await updateSignal(mySignal)
       return mySignal
