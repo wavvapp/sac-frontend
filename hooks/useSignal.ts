@@ -1,18 +1,15 @@
 import { useAuth } from "@/contexts/AuthContext"
 import api from "@/service"
-import { Signal } from "@/types"
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect } from "react"
 import { useSharedValue } from "react-native-reanimated"
 
 export const useSignal = () => {
   const isOn = useSharedValue(false)
   const { updateUserInfo } = useAuth()
-  const [signal, setSignal] = useState<Signal | null>(null)
 
   const fetchMySignal = useCallback(async () => {
     try {
       const { data } = await api.get("/my-signal")
-      setSignal(data)
       isOn.value = data.status === "active"
       await updateUserInfo(data.status_message, data.when)
       return data
@@ -42,14 +39,13 @@ export const useSignal = () => {
   }
 
   useEffect(() => {
-    console.log("fetching my signal -------")
     fetchMySignal()
   }, [fetchMySignal])
+
   return {
     isOn,
     turnOnSignalStatus,
     turnOffSignalStatus,
     fetchMySignal,
-    signal,
   }
 }
