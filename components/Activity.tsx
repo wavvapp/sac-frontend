@@ -11,25 +11,35 @@ import EditIcon from "@/components/vectors/EditIcon"
 import EditActivity from "@/screens/EditActivity"
 import { useStatus } from "@/contexts/StatusContext"
 import { theme } from "@/theme"
-export default function Activity() {
+export default function Activity({ isLoading }: { isLoading: boolean }) {
   const [isModalVisible, setIsModalVisible] = useState(false)
-  const { statusMessage, isLoading } = useStatus()
+  const { statusMessage } = useStatus()
 
   const openModal = () => setIsModalVisible(true)
   const closeModal = () => setIsModalVisible(false)
-  if (isLoading) {
-    return <ActivityIndicator size="large" color={theme.colors.black} />
-  }
   return (
     <View style={styles.container}>
       <CustomText size="base" fontWeight="medium">
         Status
       </CustomText>
       <TouchableOpacity onPress={openModal} style={styles.statusContainer}>
-        <CustomText size="lg" fontWeight="semibold" style={styles.statusText}>
-          {statusMessage}
-        </CustomText>
-        <EditIcon />
+        {isLoading ? (
+          <ActivityIndicator
+            style={styles.loaderIcon}
+            size="small"
+            color={theme.colors.black}
+          />
+        ) : (
+          <>
+            <CustomText
+              size="lg"
+              fontWeight="semibold"
+              style={styles.statusText}>
+              {statusMessage}
+            </CustomText>
+            <EditIcon />
+          </>
+        )}
       </TouchableOpacity>
 
       {isModalVisible && (
@@ -58,5 +68,9 @@ const styles = StyleSheet.create({
   },
   statusText: {
     flex: 1,
+  },
+  loaderIcon: {
+    marginVertical: 4,
+    marginHorizontal: "auto",
   },
 })

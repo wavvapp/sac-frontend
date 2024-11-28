@@ -77,7 +77,7 @@ export default function EditSignal() {
           size="large"
           style={{ alignSelf: "center" }}
         />
-        <Activity />
+        <Activity isLoading={isLoading} />
         <Status
           timeSlots={["NOW", "MORNING", "LUNCH", "AFTERNOON", "EVENING"]}
         />

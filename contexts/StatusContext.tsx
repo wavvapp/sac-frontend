@@ -19,11 +19,10 @@ const StatusContext = createContext<StatusContextType>({} as StatusContextType)
 export const StatusProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const { user } = useAuth()
+  const { user, updateUserInfo } = useAuth()
   const [statusMessage, setStatusMessage] = useState(user?.activity || "")
   const [friendIds, setFriendIds] = useState<string[]>([])
   const [timeSlot, setTimeSlot] = useState("NOW")
-  const { updateUserInfo } = useAuth()
 
   const updateSignal = useCallback(async (signal: Signal) => {
     const { friends, status_message, when } = signal
