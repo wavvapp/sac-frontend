@@ -34,8 +34,8 @@ export default function UserStatus({
   const friends = signalFriends.filter((friend) =>
     friendIds.includes(friend.id),
   )
-  const remainingCount = Math.max(friends.length - MAX_VISIBLE_FRIENDS, 0)
   const visibleFriends = friends.slice(0, MAX_VISIBLE_FRIENDS)
+  const remainingCount = Math.max(friends.length - MAX_VISIBLE_FRIENDS, 0)
   const fullFriendsList = visibleFriends
     .map((friend) => {
       const firstName = friend.names?.split(" ")[0]

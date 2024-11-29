@@ -1,12 +1,10 @@
-import { useStatus } from "@/contexts/StatusContext"
 import api from "@/service"
-import { useCallback, useEffect } from "react"
+import { useCallback } from "react"
 import { useSharedValue } from "react-native-reanimated"
 import { Friend, Signal } from "@/types"
 
 export const useSignal = () => {
   const isOn = useSharedValue(false)
-  const { updateSignal } = useStatus()
 
   const fetchMySignal = useCallback(async () => {
     try {
@@ -14,7 +12,6 @@ export const useSignal = () => {
       isOn.value = signal.status === "active"
       const friendIds = signal.friends.map((friend: Friend) => friend.friendId)
       const mySignal: Signal = { ...signal, friends: friendIds }
-      await updateSignal(mySignal)
       return mySignal
     } catch (error) {
       console.error("Error with fetching signal", error)
@@ -40,10 +37,6 @@ export const useSignal = () => {
       return true
     }
   }
-
-  useEffect(() => {
-    fetchMySignal()
-  }, [fetchMySignal])
 
   return {
     isOn,

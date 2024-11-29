@@ -1,7 +1,14 @@
-import { createContext, useContext, useCallback, useState } from "react"
+import {
+  createContext,
+  useContext,
+  useCallback,
+  useState,
+  useEffect,
+} from "react"
 import api from "@/service"
 import { useAuth } from "./AuthContext"
 import { Signal } from "@/types"
+import { useSignal } from "@/hooks/useSignal"
 
 type StatusContextType = {
   statusMessage: string
@@ -23,7 +30,7 @@ export const StatusProvider: React.FC<{ children: React.ReactNode }> = ({
   const [statusMessage, setStatusMessage] = useState(user?.activity || "")
   const [friendIds, setFriendIds] = useState<string[]>([])
   const [timeSlot, setTimeSlot] = useState("NOW")
-
+  const { fetchMySignal } = useSignal()
   const updateSignal = useCallback(async (signal: Signal) => {
     const { friends, status_message, when } = signal
     setFriendIds(friends)
@@ -32,6 +39,20 @@ export const StatusProvider: React.FC<{ children: React.ReactNode }> = ({
     await updateUserInfo(status_message, when)
     return
   }, [])
+
+  const fetchInitialStatus = useCallback(async () => {
+    try {
+      const data = await fetchMySignal()
+      if (!data) return
+      await updateSignal(data)
+    } catch (error) {
+      console.error("Error fetching initial activity status:", error)
+    }
+  }, [fetchMySignal, updateSignal])
+
+  useEffect(() => {
+    fetchInitialStatus()
+  }, [fetchInitialStatus])
 
   const updateActivity = async () => {
     try {
