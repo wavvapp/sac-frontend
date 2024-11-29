@@ -35,13 +35,11 @@ export const StatusProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const updateActivity = async () => {
     try {
-      const signal: Signal = {
+      const { data } = await api.put("/my-signal", {
         friends: friendIds,
         status_message: statusMessage,
         when: timeSlot,
-      }
-      await updateSignal(signal)
-      const { data } = await api.put("/my-signal", signal)
+      })
       return data
     } catch (error) {
       console.error("Error updating activity status:", error)

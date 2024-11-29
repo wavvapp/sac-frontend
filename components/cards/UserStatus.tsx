@@ -27,16 +27,15 @@ export default function UserStatus({
   isOn,
   ...rest
 }: UserStatusProps) {
+  const { friendIds } = useStatus()
+  const { friends: signalFriends } = useFriends()
   const navigation = useNavigation<HomeScreenProps>()
 
-  const { friendIds } = useStatus()
-  const { friends } = useFriends()
-
-  const signalFriends = friends.filter((friend) =>
+  const friends = signalFriends.filter((friend) =>
     friendIds.includes(friend.id),
   )
-  const remainingCount = Math.max(signalFriends.length - MAX_VISIBLE_FRIENDS, 0)
-  const visibleFriends = signalFriends.slice(0, MAX_VISIBLE_FRIENDS)
+  const remainingCount = Math.max(friends.length - MAX_VISIBLE_FRIENDS, 0)
+  const visibleFriends = friends.slice(0, MAX_VISIBLE_FRIENDS)
   const fullFriendsList = visibleFriends
     .map((friend) => {
       const firstName = friend.names?.split(" ")[0]
@@ -82,8 +81,8 @@ export default function UserStatus({
           )}
           <View>
             <CustomText size="sm" fontFamily="writer-mono">
-              {signalFriends.length
-                ? `Visible to ${signalFriends.length} friends`
+              {friends.length
+                ? `Visible to ${friends.length} friends`
                 : "This status is not visible to anyone"}
             </CustomText>
             <CustomText size="sm" fontFamily="writer-mono">
