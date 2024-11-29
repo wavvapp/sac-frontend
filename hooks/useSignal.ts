@@ -1,7 +1,7 @@
 import api from "@/service"
+import { Friend, Signal } from "@/types"
 import { useCallback } from "react"
 import { useSharedValue } from "react-native-reanimated"
-import { Friend, Signal } from "@/types"
 
 export const useSignal = () => {
   const isOn = useSharedValue(false)
