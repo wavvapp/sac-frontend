@@ -20,15 +20,17 @@ import api from "@/service"
 interface AuthContextData {
   user: User | null
   isLoading: boolean
-  signIn: (token: string, user: User) => Promise<void>
   signInWithGoogle: () => Promise<void>
-  signUp: (username: string) => Promise<void>
+  signOut: () => Promise<void>
   updateUserInfo: (activity: string, time: string) => Promise<void>
   isAuthenticated: boolean
-  signOut: () => Promise<void>
   isAccountComplete: boolean
+  signUp: (username: string) => Promise<void>
 }
-
+interface ExtendedUser extends User {
+  access_token: string
+  refresh_token: string
+}
 const AuthContext = createContext<AuthContextData>({} as AuthContextData)
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({
@@ -41,14 +43,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   useEffect(() => {
     loadStoredData()
   }, [])
-  async function signIn(token: string, userData: User): Promise<void> {
-    await AsyncStorage.setItem("@Auth:accessToken", token)
-    await AsyncStorage.setItem("@Auth:user", JSON.stringify(userData))
-
-    setUser(userData)
-  }
-
-  const login = async (userData: any) => {
+  async function signIn(userData: ExtendedUser): Promise<void> {
     try {
       const {
         access_token: accessToken,
@@ -68,7 +63,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       }
       await AsyncStorage.setItem("@Auth:accessToken", accessToken)
       await AsyncStorage.setItem("@Auth:refreshToken", refreshToken)
-      await signIn(accessToken, user)
+      await AsyncStorage.setItem("@Auth:user", JSON.stringify(user))
+      setUser(userData)
     } catch (err) {
       console.log("error with saving user info")
     }
@@ -76,14 +72,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
   const signUp = async (username: string) => {
     if (!username || !googleToken) return
-    const { data, status } = await api.post("/auth/google-signin", {
+    const { data } = await api.post("/auth/google-signin", {
       token: googleToken,
       username,
       platform: Platform.OS === "ios" ? "web" : "android",
     })
     setIsAccountComplete(true)
-    await login(data)
-    console.log("account created---------", data, status)
+    await signIn(data)
   }
 
   const signInWithGoogle = async () => {
@@ -93,16 +88,17 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       if (isSuccessResponse(response)) {
         setIsLoading(true)
         const idToken = response.data.idToken
-        setGoogleToken(idToken)
         const { data, status } = await api.post("/auth/google-signin", {
           token: idToken,
           platform: Platform.OS === "ios" ? "web" : "android",
         })
+        setGoogleToken(idToken)
+        // 202 means that the new user data has been accepted for processing.
         if (status === 202) {
           setIsAccountComplete(false)
           return
         }
-        await login(data)
+        await signIn(data)
       }
     } catch (error) {
       if (isErrorWithCode(error)) {
@@ -155,13 +151,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       value={{
         user,
         isLoading,
-        signIn,
         signInWithGoogle,
         signOut,
         updateUserInfo,
         isAuthenticated: !!user,
-        signUp,
         isAccountComplete,
+        signUp,
       }}>
       {children}
     </AuthContext.Provider>
