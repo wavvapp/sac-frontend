@@ -5,7 +5,6 @@ import HomeScreen from "@/screens/Home"
 import EditSignal from "@/screens/EditSignal"
 import { useAuth } from "@/contexts/AuthContext"
 import SignUp from "@/screens/Authentication/SignUp"
-import CustomSplashScreen from "@/screens/CustomSplashScreen"
 import Settings from "@/screens/Settings"
 import Search from "@/screens/Search"
 import { theme } from "@/theme"
@@ -13,6 +12,8 @@ import EntryScreen from "@/screens/Authentication"
 import CreateCredentials from "@/screens/Authentication/SignUp/CreateCredentials"
 import { StatusProvider } from "@/contexts/StatusContext"
 import { useFriends } from "@/hooks/useFriends"
+import * as SplashScreen from "expo-splash-screen"
+import { useEffect } from "react"
 export type RootStackParamList = {
   EntryScreen: undefined
   Home: undefined
@@ -29,9 +30,12 @@ export default function AppNavigator() {
   const { isAuthenticated, isLoading, user } = useAuth()
   const { isLoading: isFriendsLoading } = useFriends()
 
-  if (isLoading || isFriendsLoading) {
-    return <CustomSplashScreen />
-  }
+  useEffect(() => {
+    if (!isLoading && !isFriendsLoading) {
+      SplashScreen.hideAsync()
+    }
+  }, [isFriendsLoading, isLoading])
+
   return (
     <NavigationContainer>
       {isAuthenticated ? (
