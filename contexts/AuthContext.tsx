@@ -26,6 +26,7 @@ interface AuthContextData {
   updateUserInfo: (activity: string, time: string) => Promise<void>
   isAuthenticated: boolean
   fetchCurrentUser: () => Promise<void>
+  isAccountComplete: boolean
 }
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData)
@@ -35,7 +36,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const [user, setUser] = useState<User | null>(null)
   const [isLoading, setIsLoading] = useState(true)
-
+  const [googleToken, setGoogleToken] = useState<string | null>(null)
+  const [isAccountComplete, setIsAccountComplete] = useState<boolean>(true)
   useEffect(() => {
     loadStoredData()
   }, [])
@@ -46,17 +48,29 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     setUser(userData)
   }
 
-  const signInWithGoogle = async () => {
-    try {
-      await GoogleSignin.hasPlayServices()
-      const response = await GoogleSignin.signIn()
-      if (isSuccessResponse(response)) {
-        setIsLoading(true)
-        const idToken = response.data.idToken
-        const { data } = await api.post("/auth/google-signin", {
-          token: idToken,
-          platform: Platform.OS === "ios" ? "web" : "android",
-        })
+  async function openGooglePopup() {
+    await GoogleSignin.hasPlayServices()
+    const response = await GoogleSignin.signIn()
+    if (isSuccessResponse(response)) {
+      setIsLoading(true)
+      const idToken = response.data.idToken
+      setGoogleToken(idToken)
+      const { data, status } = await api.post("/auth/google-signin", {
+        token: idToken,
+        platform: Platform.OS === "ios" ? "web" : "android",
+      })
+      return { data, status }
+    }
+
+
+    const signInWithGoogle = async () => {
+      try {
+        const { data, status } = await openGooglePopup()
+        if (status === 202) {
+          setIsAccountComplete(true)
+          return
+        }
+        return
         const {
           access_token: accessToken,
           refresh_token: refreshToken,
@@ -159,6 +173,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         updateUserInfo,
         isAuthenticated: !!user,
         fetchCurrentUser,
+        isAccountComplete: googleToken === null,
       }}>
       {children}
     </AuthContext.Provider>
