@@ -22,10 +22,10 @@ interface AuthContextData {
   isLoading: boolean
   signIn: (token: string, user: User) => Promise<void>
   signInWithGoogle: () => Promise<void>
-  signOut: () => Promise<void>
+  signUp: (username: string) => Promise<void>
   updateUserInfo: (activity: string, time: string) => Promise<void>
   isAuthenticated: boolean
-  fetchCurrentUser: () => Promise<void>
+  signOut: () => Promise<void>
   isAccountComplete: boolean
 }
 
@@ -48,48 +48,61 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     setUser(userData)
   }
 
-  async function openGooglePopup() {
-    await GoogleSignin.hasPlayServices()
-    const response = await GoogleSignin.signIn()
-    if (isSuccessResponse(response)) {
-      setIsLoading(true)
-      const idToken = response.data.idToken
-      setGoogleToken(idToken)
-      const { data, status } = await api.post("/auth/google-signin", {
-        token: idToken,
-        platform: Platform.OS === "ios" ? "web" : "android",
-      })
-      return { data, status }
+  const login = async (userData: any) => {
+    try {
+      const {
+        access_token: accessToken,
+        refresh_token: refreshToken,
+        id,
+        email,
+        names,
+        username,
+        profilePictureUrl,
+      } = userData
+      const user: User = {
+        id,
+        names,
+        email,
+        username,
+        profilePictureUrl: profilePictureUrl,
+      }
+      await AsyncStorage.setItem("@Auth:accessToken", accessToken)
+      await AsyncStorage.setItem("@Auth:refreshToken", refreshToken)
+      await signIn(accessToken, user)
+    } catch (err) {
+      console.log("error with saving user info")
     }
+  }
 
+  const signUp = async (username: string) => {
+    if (!username || !googleToken) return
+    const { data, status } = await api.post("/auth/google-signin", {
+      token: googleToken,
+      username,
+      platform: Platform.OS === "ios" ? "web" : "android",
+    })
+    setIsAccountComplete(true)
+    await login(data)
+    console.log("account created---------", data, status)
+  }
 
-    const signInWithGoogle = async () => {
-      try {
-        const { data, status } = await openGooglePopup()
+  const signInWithGoogle = async () => {
+    try {
+      await GoogleSignin.hasPlayServices()
+      const response = await GoogleSignin.signIn()
+      if (isSuccessResponse(response)) {
+        setIsLoading(true)
+        const idToken = response.data.idToken
+        setGoogleToken(idToken)
+        const { data, status } = await api.post("/auth/google-signin", {
+          token: idToken,
+          platform: Platform.OS === "ios" ? "web" : "android",
+        })
         if (status === 202) {
-          setIsAccountComplete(true)
+          setIsAccountComplete(false)
           return
         }
-        return
-        const {
-          access_token: accessToken,
-          refresh_token: refreshToken,
-          id,
-          email,
-          names,
-          username,
-          profilePictureUrl,
-        } = data
-        const user: User = {
-          id,
-          names,
-          email,
-          username,
-          profilePictureUrl: profilePictureUrl,
-        }
-        await AsyncStorage.setItem("@Auth:accessToken", accessToken)
-        await AsyncStorage.setItem("@Auth:refreshToken", refreshToken)
-        await signIn(accessToken, user)
+        await login(data)
       }
     } catch (error) {
       if (isErrorWithCode(error)) {
@@ -131,31 +144,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     setUser(null)
   }
 
-  async function fetchCurrentUser(): Promise<void> {
-    try {
-      setIsLoading(true)
-      const { data } = await api.get("/auth/current-user")
-      const { id, names, username, email } = data
-      setUser({
-        id,
-        names,
-        username,
-        email,
-      })
-      await AsyncStorage.setItem(
-        "@Auth:user",
-        JSON.stringify({
-          id,
-          names,
-          username,
-        }),
-      )
-    } catch (error) {
-      console.error("Failed to re-fetch user", error)
-    } finally {
-      setIsLoading(false)
-    }
-  }
   async function updateUserInfo(activity: string, time: string) {
     if (!user) return
     const updatedUserInfo: User = { ...user, time, activity }
@@ -172,8 +160,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         signOut,
         updateUserInfo,
         isAuthenticated: !!user,
-        fetchCurrentUser,
-        isAccountComplete: googleToken === null,
+        signUp,
+        isAccountComplete,
       }}>
       {children}
     </AuthContext.Provider>

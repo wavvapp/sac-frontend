@@ -32,7 +32,7 @@ export default function CreateCredentials() {
   const [text, setText] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [isError, setIsError] = useState(false)
-  const { fetchCurrentUser } = useAuth()
+  const { signUp } = useAuth()
 
   const isInputValid = useMemo(() => {
     if (text.trim().length < 5) return false
@@ -72,17 +72,6 @@ export default function CreateCredentials() {
     },
   }
 
-  const updateUsername = async () => {
-    try {
-      await api.patch("/auth/update-profile", {
-        username: text,
-      })
-      await fetchCurrentUser()
-    } catch (error) {
-      console.error("Error updating profile:", error)
-    }
-  }
-
   const handleUsernameSubmit = async () => {
     try {
       if (!isInputValid) return
@@ -91,7 +80,7 @@ export default function CreateCredentials() {
       if (data.message.toLowerCase() === "username already exist") {
         setIsError(true)
         return
-      } else updateUsername()
+      } else signUp(text)
     } catch (error) {
       console.error("Error fetching user data:", error)
     } finally {
