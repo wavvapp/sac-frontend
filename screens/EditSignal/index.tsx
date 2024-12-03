@@ -35,14 +35,14 @@ export default function EditSignal() {
     mutationFn: updateActivity,
     onMutate: () => {
       setIsLoading(true)
+      navigation.goBack()
     },
     onError: (error) => {
       // TODO: add toaster
       console.error(error.message)
     },
-    onSuccess: async () => {
+    onSettled: async () => {
       await fetchMySignal()
-      navigation.goBack()
       setIsLoading(false)
     },
   })
@@ -77,7 +77,7 @@ export default function EditSignal() {
           size="large"
           style={{ alignSelf: "center" }}
         />
-        <Activity />
+        <Activity isLoading={isLoading} />
         <Status
           timeSlots={["NOW", "MORNING", "LUNCH", "AFTERNOON", "EVENING"]}
         />

@@ -11,26 +11,31 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated"
 import UserAvailability from "@/components/cards/UserAvailability"
+import { useStatus } from "@/contexts/StatusContext"
+import { useFriends } from "@/hooks/useFriends"
 
 const MAX_VISIBLE_FRIENDS = 3
 
 interface UserStatusProps extends ViewStyle {
-  friends: User[] | []
   user: User | null
   style?: ViewStyle
   isOn: SharedValue<boolean>
 }
 export default function UserStatus({
-  friends = [],
   user,
   style,
   isOn,
   ...rest
 }: UserStatusProps) {
+  const { friendIds, statusMessage, timeSlot } = useStatus()
+  const { friends: signalFriends } = useFriends()
   const navigation = useNavigation<HomeScreenProps>()
+
+  const friends = signalFriends.filter((friend) =>
+    friendIds.includes(friend.id),
+  )
   const visibleFriends = friends.slice(0, MAX_VISIBLE_FRIENDS)
   const remainingCount = Math.max(friends.length - MAX_VISIBLE_FRIENDS, 0)
-
   const fullFriendsList = visibleFriends
     .map((friend) => {
       const firstName = friend.names?.split(" ")[0]
@@ -70,8 +75,8 @@ export default function UserStatus({
           {user && (
             <UserAvailability
               fullName={user.names}
-              time={user.time}
-              activity={user.activity}
+              time={timeSlot}
+              activity={statusMessage}
             />
           )}
           <View>

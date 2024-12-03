@@ -31,13 +31,7 @@ export type HomeScreenProps = NativeStackNavigationProp<
 const { width } = Dimensions.get("window")
 export default function HomeScreen() {
   const [_, setIsVisible] = useState(false)
-  const {
-    isOn,
-    turnOffSignalStatus,
-    turnOnSignalStatus,
-    fetchMySignal,
-    signalFriends,
-  } = useSignal()
+  const { isOn, turnOffSignalStatus, turnOnSignalStatus } = useSignal()
   const signalingRef = useRef<SignalingRef>(null)
   const navigation = useNavigation<HomeScreenProps>()
   const { hasFriends } = useFriends()
@@ -51,11 +45,6 @@ export default function HomeScreen() {
     queryFn: fetchPoints,
   })
 
-  const fetchInitialData = useCallback(async () => {
-    if (!isAuthenticated) return
-    await fetchMySignal()
-    await refetchPoints()
-  }, [fetchMySignal, isAuthenticated, refetchPoints])
   const handlePress = useMutation({
     mutationFn: isOn.value ? turnOffSignalStatus : turnOnSignalStatus,
     onMutate: () => {
@@ -68,8 +57,9 @@ export default function HomeScreen() {
 
   useFocusEffect(
     useCallback(() => {
-      fetchInitialData()
-    }, [fetchInitialData]),
+      if (!isAuthenticated) return
+      refetchPoints()
+    }, [refetchPoints, isAuthenticated]),
   )
 
   const handleWebsiteOpen = async () => {
@@ -107,7 +97,7 @@ export default function HomeScreen() {
       ) : (
         <>
           <View style={styles.UserStatus}>
-            <UserStatus isOn={isOn} friends={signalFriends} user={user} />
+            <UserStatus isOn={isOn} user={user} />
           </View>
           <AnimatedSwitch
             isOn={isOn}

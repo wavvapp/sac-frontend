@@ -1,23 +1,18 @@
-import { useAuth } from "@/contexts/AuthContext"
 import api from "@/service"
-import { Signal, User } from "@/types"
-import { useCallback, useState } from "react"
+import { Friend, Signal } from "@/types"
+import { useCallback } from "react"
 import { useSharedValue } from "react-native-reanimated"
 
 export const useSignal = () => {
   const isOn = useSharedValue(false)
-  const { updateUserInfo } = useAuth()
-  const [signal, setSignal] = useState<Signal | null>(null)
-  const [signalFriends, setSignalFriends] = useState<User[]>([])
 
   const fetchMySignal = useCallback(async () => {
     try {
-      const { data } = await api.get("/my-signal")
-      setSignal(data)
-      isOn.value = data.status === "active"
-      setSignalFriends(data.friends)
-      await updateUserInfo(data.status_message, data.when)
-      return data
+      const { data: signal } = await api.get("/my-signal")
+      isOn.value = signal.status === "active"
+      const friendIds = signal.friends.map((friend: Friend) => friend.friendId)
+      const mySignal: Signal = { ...signal, friends: friendIds }
+      return mySignal
     } catch (error) {
       console.error("Error with fetching signal", error)
     }
@@ -48,7 +43,5 @@ export const useSignal = () => {
     turnOnSignalStatus,
     turnOffSignalStatus,
     fetchMySignal,
-    signal,
-    signalFriends,
   }
 }
