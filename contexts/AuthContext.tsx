@@ -20,14 +20,17 @@ import api from "@/service"
 interface AuthContextData {
   user: User | null
   isLoading: boolean
-  signIn: (token: string, user: User) => Promise<void>
   signInWithGoogle: () => Promise<void>
   signOut: () => Promise<void>
   updateUserInfo: (activity: string, time: string) => Promise<void>
   isAuthenticated: boolean
-  fetchCurrentUser: () => Promise<void>
+  isAccountComplete: boolean
+  signUp: (username: string) => Promise<void>
 }
-
+interface ExtendedUser extends User {
+  access_token: string
+  refresh_token: string
+}
 const AuthContext = createContext<AuthContextData>({} as AuthContextData)
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({
@@ -35,15 +38,47 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const [user, setUser] = useState<User | null>(null)
   const [isLoading, setIsLoading] = useState(true)
-
+  const [googleToken, setGoogleToken] = useState<string | null>(null)
+  const [isAccountComplete, setIsAccountComplete] = useState<boolean>(true)
   useEffect(() => {
     loadStoredData()
   }, [])
-  async function signIn(token: string, userData: User): Promise<void> {
-    await AsyncStorage.setItem("@Auth:accessToken", token)
-    await AsyncStorage.setItem("@Auth:user", JSON.stringify(userData))
+  async function signIn(userData: ExtendedUser): Promise<void> {
+    try {
+      const {
+        access_token: accessToken,
+        refresh_token: refreshToken,
+        id,
+        email,
+        names,
+        username,
+        profilePictureUrl,
+      } = userData
+      const user: User = {
+        id,
+        names,
+        email,
+        username,
+        profilePictureUrl: profilePictureUrl,
+      }
+      await AsyncStorage.setItem("@Auth:accessToken", accessToken)
+      await AsyncStorage.setItem("@Auth:refreshToken", refreshToken)
+      await AsyncStorage.setItem("@Auth:user", JSON.stringify(user))
+      setUser(userData)
+    } catch (err) {
+      console.log("error with saving user info")
+    }
+  }
 
-    setUser(userData)
+  const signUp = async (username: string) => {
+    if (!username || !googleToken) return
+    const { data } = await api.post("/auth/google-signin", {
+      token: googleToken,
+      username,
+      platform: Platform.OS === "ios" ? "web" : "android",
+    })
+    setIsAccountComplete(true)
+    await signIn(data)
   }
 
   const signInWithGoogle = async () => {
@@ -53,29 +88,16 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       if (isSuccessResponse(response)) {
         setIsLoading(true)
         const idToken = response.data.idToken
-        const { data } = await api.post("/auth/google-signin", {
+        const { data, status } = await api.post("/auth/google-signin", {
           token: idToken,
           platform: Platform.OS === "ios" ? "web" : "android",
         })
-        const {
-          access_token: accessToken,
-          refresh_token: refreshToken,
-          id,
-          email,
-          names,
-          username,
-          profilePictureUrl,
-        } = data
-        const user: User = {
-          id,
-          names,
-          email,
-          username,
-          profilePictureUrl: profilePictureUrl,
+        setGoogleToken(idToken)
+        if (status === 202) {
+          setIsAccountComplete(false)
+          return
         }
-        await AsyncStorage.setItem("@Auth:accessToken", accessToken)
-        await AsyncStorage.setItem("@Auth:refreshToken", refreshToken)
-        await signIn(accessToken, user)
+        await signIn(data)
       }
     } catch (error) {
       if (isErrorWithCode(error)) {
@@ -117,31 +139,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     setUser(null)
   }
 
-  async function fetchCurrentUser(): Promise<void> {
-    try {
-      setIsLoading(true)
-      const { data } = await api.get("/auth/current-user")
-      const { id, names, username, email } = data
-      setUser({
-        id,
-        names,
-        username,
-        email,
-      })
-      await AsyncStorage.setItem(
-        "@Auth:user",
-        JSON.stringify({
-          id,
-          names,
-          username,
-        }),
-      )
-    } catch (error) {
-      console.error("Failed to re-fetch user", error)
-    } finally {
-      setIsLoading(false)
-    }
-  }
   async function updateUserInfo(activity: string, time: string) {
     if (!user) return
     const updatedUserInfo: User = { ...user, time, activity }
@@ -153,12 +150,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       value={{
         user,
         isLoading,
-        signIn,
         signInWithGoogle,
         signOut,
         updateUserInfo,
         isAuthenticated: !!user,
-        fetchCurrentUser,
+        isAccountComplete,
+        signUp,
       }}>
       {children}
     </AuthContext.Provider>

@@ -27,7 +27,7 @@ export type RootStackParamList = {
 
 export default function AppNavigator() {
   const Stack = createNativeStackNavigator<RootStackParamList>()
-  const { isAuthenticated, isLoading, user } = useAuth()
+  const { isAuthenticated, isLoading, isAccountComplete } = useAuth()
   const { isLoading: isFriendsLoading } = useFriends()
 
   useEffect(() => {
@@ -45,7 +45,7 @@ export default function AppNavigator() {
               headerTransparent: true,
               headerTitleStyle: { color: theme.colors.white },
             }}
-            initialRouteName={!user?.username ? "CreateCredentials" : "Home"}>
+            initialRouteName={"Home"}>
             <>
               <Stack.Screen
                 name="Home"
@@ -57,31 +57,29 @@ export default function AppNavigator() {
                 options={{ headerShown: false }}
                 component={Settings}
               />
-              {!user?.username ? (
-                <Stack.Screen
-                  name="CreateCredentials"
-                  options={{ headerShown: false }}
-                  component={CreateCredentials}
-                />
-              ) : (
-                <>
-                  <Stack.Screen
-                    name="EditSignal"
-                    options={{ headerShown: false, presentation: "modal" }}
-                    component={EditSignal}
-                  />
-                  <Stack.Screen
-                    name="Search"
-                    options={{ headerShown: false }}
-                    component={Search}
-                  />
-                </>
-              )}
+              <Stack.Screen
+                name="EditSignal"
+                options={{ headerShown: false, presentation: "modal" }}
+                component={EditSignal}
+              />
+              <Stack.Screen
+                name="Search"
+                options={{ headerShown: false }}
+                component={Search}
+              />
             </>
           </Stack.Navigator>
         </StatusProvider>
       ) : (
-        <Stack.Navigator initialRouteName="EntryScreen">
+        <Stack.Navigator
+          initialRouteName={
+            !isAccountComplete ? "CreateCredentials" : "EntryScreen"
+          }>
+          <Stack.Screen
+            name="CreateCredentials"
+            options={{ headerShown: false }}
+            component={CreateCredentials}
+          />
           <Stack.Screen
             name="EntryScreen"
             component={EntryScreen}
