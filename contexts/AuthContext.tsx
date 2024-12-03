@@ -93,7 +93,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
           platform: Platform.OS === "ios" ? "web" : "android",
         })
         setGoogleToken(idToken)
-        // 202 means that the new user data has been accepted for processing.
         if (status === 202) {
           setIsAccountComplete(false)
           return
