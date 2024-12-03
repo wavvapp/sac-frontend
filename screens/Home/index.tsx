@@ -92,7 +92,9 @@ export default function HomeScreen() {
           <Badge variant="primary" name={data?.points?.toFixed(1)} />
         </TouchableOpacity>
         <View style={styles.buttonContainer}>
-          <CustomButton style={styles.iconButton} onPress={onShare}>
+          <CustomButton
+            style={styles.iconButton}
+            onPress={() => onShare(user?.username || "me")}>
             <ShareIcon color={theme.colors.white} />
           </CustomButton>
           <CustomButton
