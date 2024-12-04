@@ -12,8 +12,7 @@ import EntryScreen from "@/screens/Authentication"
 import CreateCredentials from "@/screens/Authentication/SignUp/CreateCredentials"
 import { StatusProvider } from "@/contexts/StatusContext"
 import { useFriends } from "@/hooks/useFriends"
-import * as SplashScreen from "expo-splash-screen"
-import { useEffect } from "react"
+import CustomSplashScreen from "@/screens/CustomSplashScreen"
 export type RootStackParamList = {
   EntryScreen: undefined
   Home: undefined
@@ -29,12 +28,7 @@ export default function AppNavigator() {
   const Stack = createNativeStackNavigator<RootStackParamList>()
   const { isAuthenticated, isLoading, isAccountComplete } = useAuth()
   const { isLoading: isFriendsLoading } = useFriends()
-
-  useEffect(() => {
-    if (!isLoading && !isFriendsLoading) {
-      SplashScreen.hideAsync()
-    }
-  }, [isFriendsLoading, isLoading])
+  if (isLoading || isFriendsLoading) return <CustomSplashScreen />
 
   return (
     <NavigationContainer>
