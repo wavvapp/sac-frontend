@@ -10,7 +10,13 @@ import {
   withRepeat,
   withTiming,
 } from "react-native-reanimated"
-import { Canvas, Fill, Shader, Skia, vec } from "@shopify/react-native-skia"
+import {
+  Canvas,
+  Fill,
+  Shader,
+  Skia,
+  vec,
+} from "@shopify/react-native-skia"
 
 // Get device width and height
 const { width, height } = Dimensions.get("window")
@@ -22,9 +28,7 @@ interface PerlinNoiseProps {
   color2: string // Second color to be used
 }
 
-const PerlinNoise: React.FC<PerlinNoiseProps> = ({ isOn }) => {
-  // Create a Skia Runtime Effect for the noise shader
-  const noiseShader = Skia.RuntimeEffect.Make(`uniform float2 u_resolution;
+const noiseShader = Skia.RuntimeEffect.Make(`uniform float2 u_resolution;
 uniform float u_time;
 uniform float u_brightness;
 uniform float u_flashness;
@@ -50,7 +54,7 @@ half4 main(float2 fragCoord) {
     float spacing = 0.5;
     float amplitude = 3.0;
     float intensity = 2.0;
-    float speed = 0.009;
+    float speed = 0.05;
     float brightness = u_brightness + u_flashness * sin(u_time); // New brightness control (1.0 is original, larger values increase brightness)
 
     // Apply transformations
@@ -58,7 +62,7 @@ half4 main(float2 fragCoord) {
     p = p * zoom + offset;
 
     float3 col = float3(0.0);
-    const int iterations = 200; // Fixed number of iterations
+    const int iterations = 100; // Fixed number of iterations
 
     for (int i = 0; i < iterations; i++) {
         float r = float(i) * 0.01 * spacing;
@@ -81,8 +85,55 @@ half4 main(float2 fragCoord) {
     return half4(col, 1.9);
 }
 
-`)! // Assert non-null with `!`
+`)! 
 
+const shaderCode = Skia.RuntimeEffect.Make(`
+uniform float u_time;
+uniform vec2 u_resolution;
+
+// Perlin Noise Function
+float noise(vec2 p) {
+    vec2 i = floor(p);
+    vec2 f = fract(p);
+    vec2 u = f * f * (3.0 - 2.0 * f);
+
+    float a = dot(i, vec2(127.1, 311.7));
+    float b = dot(i + vec2(1.0, 0.0), vec2(127.1, 311.7));
+    float c = dot(i + vec2(0.0, 1.0), vec2(127.1, 311.7));
+    float d = dot(i + vec2(1.0, 1.0), vec2(127.1, 311.7));
+
+    return mix(mix(fract(sin(a) * 43758.5453123), fract(sin(b) * 43758.5453123), u.x),
+               mix(fract(sin(c) * 43758.5453123), fract(sin(d) * 43758.5453123), u.x), u.y);
+}
+
+// Smooth Perlin Noise
+float perlinNoise(vec2 p) {
+    return noise(p) * 0.5 + noise(p * 2.0) * 0.25 + noise(p * 4.0) * 0.125;
+}
+
+half4 main(vec2 fragCoord) {
+    vec2 uv = fragCoord / u_resolution.xy; // Normalize coordinates
+    uv.x -= u_time * 0.1;                  // Animate right to left
+
+    // Scale and translate the noise pattern
+    vec2 scaledUV = uv * 5.0 - vec2(2.5, 2.5); // Increase scaling factor to reduce blurriness
+    float n = perlinNoise(scaledUV);
+
+    // Create soft bubble-like shapes
+    float bubbles = smoothstep(0.4, 0.6, n) - smoothstep(0.6, 0.8, n); // Adjust thresholds to sharpen edges
+
+    // Add translucency and glowing effect
+    vec3 color = vec3(1.0) * bubbles * (0.8 + 0.2 * sin(u_time)); // Pulsing luminance
+    float alpha = bubbles * 0.9; // Increase opacity for sharper edges
+
+    return half4(color, alpha); // Return final color with alpha
+}`)!;
+
+
+
+
+const PerlinNoise: React.FC<PerlinNoiseProps> = ({ isOn }) => {
+  
   // Time variable for animation using Reanimated's shared value
   const time = useSharedValue(1)
   const u_brightness = useSharedValue(0)
@@ -92,12 +143,12 @@ half4 main(float2 fragCoord) {
   useEffect(() => {
     runOnUI(() => {
       time.value = withRepeat(
-        withTiming(50, {
+        withTiming(60, {
           duration: 80000,
-          easing: Easing.elastic(), // Removed any easing effect
+          easing: Easing.linear, // Removed any easing effect
         }),
         -1,
-        true,
+        false,
       )
     })()
   }, [isOn])
@@ -128,7 +179,7 @@ half4 main(float2 fragCoord) {
   return (
     <Canvas style={styles.canvas}>
       <Fill>
-        <Shader source={noiseShader} uniforms={uniforms} />
+        <Shader source={shaderCode} uniforms={uniforms} />
       </Fill>
     </Canvas>
   )
