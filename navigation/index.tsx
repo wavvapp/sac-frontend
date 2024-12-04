@@ -26,7 +26,7 @@ export type RootStackParamList = {
 
 export default function AppNavigator() {
   const Stack = createNativeStackNavigator<RootStackParamList>()
-  const { isAuthenticated, isLoading, isAccountComplete } = useAuth()
+  const { isAuthenticated, isLoading, isNewUser } = useAuth()
   const { isLoading: isFriendsLoading } = useFriends()
   if (isLoading || isFriendsLoading) return <CustomSplashScreen />
 
@@ -66,9 +66,7 @@ export default function AppNavigator() {
         </StatusProvider>
       ) : (
         <Stack.Navigator
-          initialRouteName={
-            !isAccountComplete ? "CreateCredentials" : "EntryScreen"
-          }>
+          initialRouteName={isNewUser ? "CreateCredentials" : "EntryScreen"}>
           <Stack.Screen
             name="CreateCredentials"
             options={{ headerShown: false }}

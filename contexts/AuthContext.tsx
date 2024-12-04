@@ -24,7 +24,7 @@ interface AuthContextData {
   signOut: () => Promise<void>
   updateUserInfo: (activity: string, time: string) => Promise<void>
   isAuthenticated: boolean
-  isAccountComplete: boolean
+  isNewUser: boolean
   signUp: (username: string) => Promise<void>
 }
 interface ExtendedUser extends User {
@@ -39,7 +39,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const [user, setUser] = useState<User | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [googleToken, setGoogleToken] = useState<string | null>(null)
-  const [isAccountComplete, setIsAccountComplete] = useState<boolean>(true)
+  const [isNewUser, setIsNewUser] = useState<boolean>(true)
   useEffect(() => {
     loadStoredData()
   }, [])
@@ -77,7 +77,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       username,
       platform: Platform.OS === "ios" ? "web" : "android",
     })
-    setIsAccountComplete(true)
+    setIsNewUser(false)
     await signIn(data)
   }
 
@@ -94,7 +94,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         })
         setGoogleToken(idToken)
         if (status === 202) {
-          setIsAccountComplete(false)
+          setIsNewUser(true)
           return
         }
         await signIn(data)
@@ -145,6 +145,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     await AsyncStorage.setItem("@Auth:user", JSON.stringify(updatedUserInfo))
     setUser(updatedUserInfo)
   }
+
   return (
     <AuthContext.Provider
       value={{
@@ -153,8 +154,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         signInWithGoogle,
         signOut,
         updateUserInfo,
-        isAuthenticated: !!user,
-        isAccountComplete,
+        isAuthenticated: !!user && !isLoading,
+        isNewUser,
         signUp,
       }}>
       {children}
