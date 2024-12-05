@@ -16,11 +16,12 @@ import {
 import { Platform } from "react-native"
 import { User } from "@/types"
 import api from "@/service"
+import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 
 interface AuthContextData {
   user: User | null
   isLoading: boolean
-  signInWithGoogle: () => Promise<void>
+  signInWithGoogle: (navigation:any) => Promise<void>
   signOut: () => Promise<void>
   updateUserInfo: (activity: string, time: string) => Promise<void>
   isAuthenticated: boolean
@@ -39,7 +40,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const [user, setUser] = useState<User | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [googleToken, setGoogleToken] = useState<string | null>(null)
-  const [isNewUser, setIsNewUser] = useState<boolean>(true)
+  const [isNewUser, setIsNewUser] = useState<boolean>(false)
   useEffect(() => {
     loadStoredData()
   }, [])
@@ -81,13 +82,14 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     await signIn(data)
   }
 
-  const signInWithGoogle = async () => {
+  const signInWithGoogle = async (navigation:any) => {
     try {
       await GoogleSignin.hasPlayServices()
       const response = await GoogleSignin.signIn()
       if (isSuccessResponse(response)) {
         setIsLoading(true)
         const idToken = response.data.idToken
+        console.log({idToken})
         const { data, status } = await api.post("/auth/google-signin", {
           token: idToken,
           platform: Platform.OS === "ios" ? "web" : "android",
@@ -95,6 +97,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         setGoogleToken(idToken)
         if (status === 202) {
           setIsNewUser(true)
+          navigation.navigate('CreateCredentials')
           return
         }
         await signIn(data)
