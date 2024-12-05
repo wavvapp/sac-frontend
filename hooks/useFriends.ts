@@ -1,6 +1,6 @@
 import api from "@/service"
 import { FriendSignal, User } from "@/types"
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 
 export const useFriends = () => {
   const [friends, setFriends] = useState<User[]>([])
@@ -17,11 +17,6 @@ export const useFriends = () => {
     )
     return friendsData
   }
-
-  const hasFriends = useMemo(() => {
-    if (isLoading) return true
-    return friends.length !== 0
-  }, [friends, isLoading])
 
   const fetchAvailableFriends = useCallback(async () => {
     try {
@@ -70,7 +65,6 @@ export const useFriends = () => {
 
   return {
     friends,
-    hasFriends,
     availableFriends,
     offlineFriends,
     fetchAllFriends,

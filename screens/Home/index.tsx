@@ -34,7 +34,7 @@ export default function HomeScreen() {
   const { isOn, turnOffSignalStatus, turnOnSignalStatus } = useSignal()
   const signalingRef = useRef<SignalingRef>(null)
   const navigation = useNavigation<HomeScreenProps>()
-  const { hasFriends } = useFriends()
+  const { fetchAllFriends, friends, isLoading: friendsLoading } = useFriends()
   const { user, isAuthenticated } = useAuth()
   const {
     data,
@@ -54,12 +54,12 @@ export default function HomeScreen() {
       isOn.value = !isOn.value
     },
   })
-
   useFocusEffect(
     useCallback(() => {
       if (!isAuthenticated) return
       refetchPoints()
-    }, [refetchPoints, isAuthenticated]),
+      fetchAllFriends()
+    }, [isAuthenticated, refetchPoints, fetchAllFriends]),
   )
 
   const handleWebsiteOpen = async () => {
@@ -94,7 +94,7 @@ export default function HomeScreen() {
           </CustomButton>
         </View>
       </View>
-      {!hasFriends ? (
+      {!friends.length && !friendsLoading ? (
         <NoFriends />
       ) : (
         <>
