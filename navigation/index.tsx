@@ -35,7 +35,7 @@ export default function AppNavigator() {
     if (!isLoading && !isFriendsLoading) {
       SplashScreen.hideAsync()
     }
-  }, [isFriendsLoading, isLoading, isNewUser])
+  }, [isFriendsLoading, isLoading])
 
   return (
     <NavigationContainer>
