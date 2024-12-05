@@ -39,7 +39,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const [user, setUser] = useState<User | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [googleToken, setGoogleToken] = useState<string | null>(null)
-  const [isNewUser, setIsNewUser] = useState<boolean>(true)
+  const [isNewUser, setIsNewUser] = useState<boolean>(false)
   useEffect(() => {
     loadStoredData()
   }, [])
