@@ -16,12 +16,12 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native"
 import { onShare } from "@/utils/share"
 import NoFriends from "@/components/cards/NoFriends"
 import { useAuth } from "@/contexts/AuthContext"
-import { useSignal } from "@/hooks/useSignal"
 import { useFriends } from "@/hooks/useFriends"
 import { useQuery, useMutation } from "@tanstack/react-query"
 import { fetchPoints } from "@/libs/fetchPoints"
 import * as WebBrowser from "expo-web-browser"
 import { TouchableOpacity } from "react-native-gesture-handler"
+import { useStatus } from "@/contexts/StatusContext"
 
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -31,7 +31,6 @@ export type HomeScreenProps = NativeStackNavigationProp<
 const { width } = Dimensions.get("window")
 export default function HomeScreen() {
   const [_, setIsVisible] = useState(false)
-  const { isOn, turnOffSignalStatus, turnOnSignalStatus } = useSignal()
   const signalingRef = useRef<SignalingRef>(null)
   const navigation = useNavigation<HomeScreenProps>()
   const { fetchAllFriends, friends, isLoading: friendsLoading } = useFriends()
@@ -44,14 +43,13 @@ export default function HomeScreen() {
     queryKey: ["points"],
     queryFn: fetchPoints,
   })
-
+  const { toggleSignal, isOn } = useStatus()
   const handlePress = useMutation({
-    mutationFn: isOn.value ? turnOffSignalStatus : turnOnSignalStatus,
-    onMutate: () => {
-      isOn.value = !isOn.value
+    mutationFn: async () => {
+      await toggleSignal()
     },
     onError: () => {
-      isOn.value = !isOn.value
+      console.error("Error toggling signal. Reverting state.")
     },
   })
   useFocusEffect(
@@ -68,11 +66,11 @@ export default function HomeScreen() {
     )
   }
   useDerivedValue(() => {
-    if (isOn.value) {
+    if (isOn) {
       return runOnJS(setIsVisible)(true)
     }
     return runOnJS(setIsVisible)(false)
-  }, [isOn.value])
+  }, [isOn])
 
   return (
     <View style={styles.container}>
@@ -107,6 +105,7 @@ export default function HomeScreen() {
             onPress={() => handlePress.mutate()}
             style={styles.switch}
           />
+
           <Signaling ref={signalingRef} />
         </>
       )}
