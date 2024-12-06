@@ -6,7 +6,8 @@
         {
           "iosUrlScheme": "com.googleusercontent.apps.351310982043-28dk2k254o76heo1d4pr3uftmgsjmihh"
         }
-      ]
+      ],
+       "expo-apple-authentication"
     ],
     "name": "Wavv",
     "slug": "Wavv",
@@ -21,8 +22,9 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
+      "usesAppleSignIn": true,
       "supportsTablet": true,
-      "bundleIdentifier": "com.apeunit.social.app",
+      "bundleIdentifier": "com.apeunit.social.wavv",
       "buildNumber": "1.0.0",
       "infoPlist": {
         "NSCameraUsageDescription": "This app uses the camera to scan barcodes on event tickets.",

@@ -6,6 +6,7 @@ import LogoIcon from "@/components/vectors/LogoIcon"
 import CustomText from "@/components/ui/CustomText"
 import { useAuth } from "@/contexts/AuthContext"
 import { GoogleSignin } from "@react-native-google-signin/google-signin"
+import AppleSignIn from "@/components/AppleSignIn"
 
 GoogleSignin.configure({
   webClientId: process.env.WEB_CLIENT_ID,
@@ -43,6 +44,7 @@ export default function EntryScreen() {
             onPress={handleGoogleLogin}
             textStyles={styles.buttonText}
           />
+          <AppleSignIn />
           <CustomText
             fontFamily="writer-mono"
             size="sm"
