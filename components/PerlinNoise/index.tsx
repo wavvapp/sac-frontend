@@ -2,12 +2,9 @@ import React, { useEffect } from "react"
 import { Dimensions, StyleSheet } from "react-native"
 import {
   Easing,
-  interpolate,
-  runOnUI,
   SharedValue,
   useDerivedValue,
   useSharedValue,
-  withRepeat,
   withTiming,
 } from "react-native-reanimated"
 import { Canvas, Fill, Shader, Skia, vec } from "@shopify/react-native-skia"
@@ -18,8 +15,8 @@ const { width, height } = Dimensions.get("window")
 // Props for the PerlinNoise component
 interface PerlinNoiseProps {
   isOn: SharedValue<boolean>
-  color1: string // First color to be used
-  color2: string // Second color to be used
+  color1: string // First color (not directly used here but part of props)
+  color2: string // Second color (not directly used here but part of props)
 }
 
 const PerlinNoise: React.FC<PerlinNoiseProps> = ({ isOn }) => {
@@ -29,7 +26,6 @@ uniform float u_time;
 uniform float u_brightness;
 uniform float u_flashness;
 
-// Rotation function
 float2 rotate(float2 v, float a) {
     float s = sin(a);
     float c = cos(a);
@@ -41,90 +37,73 @@ half4 main(float2 fragCoord) {
     float2 uv = fragCoord / u_resolution;
     float2 p = (uv * 2.0 - 1.0) * float2(u_resolution.x / u_resolution.y, 1.0);
 
-    // New control variables
-    float zoom = 0.1;     // Zoom level (1.0 is original, larger values zoom out)
-    float2 offset = float2(0.0, 0.0); // X and Y offset
-    float rotation = 135.06; // Rotation angle in radians
-
-    // Existing control variables
+    float zoom = 0.1;     
+    float2 offset = float2(0.0, 0.0); 
+    float rotation = 135.06; 
     float spacing = 0.5;
     float amplitude = 3.0;
     float intensity = 2.0;
     float speed = 0.009;
-    float brightness = u_brightness + u_flashness * sin(u_time); // New brightness control (1.0 is original, larger values increase brightness)
+    float brightness = u_brightness + u_flashness * sin(u_time);
 
-    // Apply transformations
     p = rotate(p, rotation);
     p = p * zoom + offset;
 
     float3 col = float3(0.0);
-    const int iterations = 200; // Fixed number of iterations
+    const int iterations = 100; // Reduced iterations for performance
 
     for (int i = 0; i < iterations; i++) {
         float r = float(i) * 0.01 * spacing;
-
         float2 waveOffset = float2(0, sin(-u_time * speed + float(i) * 0.03 / spacing) * float(i) * 0.008 / spacing * amplitude);
-
         col += float3(1.0) / (3.0 + 3000.0 * intensity * (abs(length(
             sin(p.x * 3237.0 + p.y * 100.888) * 0.020 * amplitude + p - waveOffset
         ) - r)));
     }
 
     col *= spacing * intensity;
-
-    // Apply brightness
     col *= brightness;
-
-    // Clamp the final color to prevent over-saturation
     col = clamp(col, float3(0.0), float3(1.0));
 
-    return half4(col, 1.9);
-}
-
-`)! // Assert non-null with `!`
+    return half4(col, 1.0);
+}`)! // Assert non-null with `!`
 
   // Time variable for animation using Reanimated's shared value
-  const time = useSharedValue(1)
+  const time = useSharedValue(0)
   const u_brightness = useSharedValue(0)
   const u_flashness = useSharedValue(0)
 
-  // Start a repeating animation for the time variable
+  // Manage animation updates at 30 FPS
+  const frameRate = 30
   useEffect(() => {
-    runOnUI(() => {
-      time.value = withRepeat(
-        withTiming(50, {
-          duration: 80000,
-          easing: Easing.elastic(), // Removed any easing effect
-        }),
-        -1,
-        true,
-      )
-    })()
-  }, [isOn])
+    const interval = setInterval(() => {
+      time.value = (time.value + 0.1) % 10 // Limit time range for efficiency
+    }, 1000 / frameRate) // Update at 30 FPS
+    return () => clearInterval(interval)
+  }, [])
 
+  // Update brightness and flashness values when `isOn` changes
   useDerivedValue(() => {
-    const brightness = interpolate(Number(isOn.value), [0, 1], [0.4, 1.0])
-    const flasshness = interpolate(Number(isOn.value), [0, 1], [0.0, 0.5])
+    const brightness = isOn.value ? 1.0 : 0.4
+    const flashness = isOn.value ? 0.5 : 0.0
     u_brightness.value = withTiming(brightness, {
       duration: 400,
-      easing: Easing.elastic(), // Removed any easing effect
+      easing: Easing.linear, // Simplified easing for performance
     })
-    u_flashness.value = withTiming(flasshness, {
+    u_flashness.value = withTiming(flashness, {
       duration: 400,
-      easing: Easing.elastic(), // Removed any easing effect
+      easing: Easing.linear, // Simplified easing for performance
     })
-  }, [isOn.value]) // Track correct dependencies
+  })
 
-  const uniforms = useDerivedValue(() => {
-    return {
-      u_time: time.value, // Time value for animation
-      u_resolution: vec(width, height), // Screen resolution
-      u_brightness: u_brightness.value, // Directly using the interpolated value
-      u_flashness: u_flashness.value, // Directly using the interpolated value
-    }
-  }, [time.value, width, height, isOn.value]) // Track correct dependencies
+  // Define uniforms for the shader
+  const uniforms = useDerivedValue(() => ({
+    u_time: time.value,
+    u_resolution: vec(width * 0.5, height * 0.5), // Reduced resolution for better performance
+    u_brightness: u_brightness.value,
+    u_flashness: u_flashness.value,
+  }))
 
-  // Render the canvas with the noise shader applied
+  // Render the canvas with the noise shader
   return (
     <Canvas style={styles.canvas}>
       <Fill>
