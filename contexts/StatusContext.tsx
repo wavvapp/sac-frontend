@@ -4,19 +4,31 @@ import {
   useEffect,
   useState,
   useCallback,
+  Dispatch,
+  SetStateAction,
 } from "react"
 import api from "@/service"
 import { useAuth } from "./AuthContext"
 import { Signal } from "@/types"
 import { useSignal } from "@/hooks/useSignal"
 
-type StatusContextType = {
-  statusMessage: string
-  friendIds: string[]
+export type TemporaryStatusType = {
   timeSlot: string
-  setStatusMessage: (message: string) => void
-  setFriendIds: (friends: string[]) => void
-  setTimeSlot: (timeSlot: string) => void
+  activity: string
+  friendIds: string[]
+}
+
+export type SavedStatusType = {
+  timeSlot: string
+  activity: string
+  friendIds: string[]
+}
+
+type StatusContextType = {
+  temporaryStatus: TemporaryStatusType
+  savedStatus: SavedStatusType
+  saveStatus: () => void
+  setTemporaryStatus: Dispatch<SetStateAction<TemporaryStatusType>>
   updateActivity: () => Promise<void>
   updateSignal: (signal: Signal) => Promise<void>
 }
@@ -27,15 +39,29 @@ export const StatusProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const { user, updateUserInfo } = useAuth()
-  const [statusMessage, setStatusMessage] = useState(user?.activity || "")
-  const [friendIds, setFriendIds] = useState<string[]>([])
-  const [timeSlot, setTimeSlot] = useState("NOW")
+  const [temporaryStatus, setTemporaryStatus] = useState<TemporaryStatusType>({
+    timeSlot: "NOW",
+    activity: user?.activity || "",
+    friendIds: [],
+  })
+  const [savedStatus, setSavedStatus] = useState<SavedStatusType>({
+    timeSlot: temporaryStatus.timeSlot,
+    activity: temporaryStatus.activity,
+    friendIds: temporaryStatus.friendIds,
+  })
   const { fetchMySignal } = useSignal()
   const updateSignal = useCallback(async (signal: Signal) => {
     const { friends, status_message, when } = signal
-    setFriendIds(friends)
-    setStatusMessage(status_message)
-    setTimeSlot(when)
+    setTemporaryStatus({
+      friendIds: friends,
+      activity: status_message,
+      timeSlot: when,
+    })
+    setSavedStatus({
+      friendIds: friends,
+      activity: status_message,
+      timeSlot: when,
+    })
     await updateUserInfo(status_message, when)
     return
   }, [])
@@ -57,9 +83,9 @@ export const StatusProvider: React.FC<{ children: React.ReactNode }> = ({
   const updateActivity = async () => {
     try {
       const { data } = await api.put("/my-signal", {
-        friends: friendIds,
-        status_message: statusMessage,
-        when: timeSlot,
+        friends: savedStatus.friendIds,
+        status_message: savedStatus.activity,
+        when: savedStatus.timeSlot,
       })
       return data
     } catch (error) {
@@ -68,15 +94,17 @@ export const StatusProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }
 
+  const saveStatus = () => {
+    setSavedStatus(temporaryStatus)
+  }
+
   return (
     <StatusContext.Provider
       value={{
-        statusMessage,
-        friendIds,
-        timeSlot,
-        setStatusMessage,
-        setFriendIds,
-        setTimeSlot,
+        savedStatus,
+        temporaryStatus,
+        setTemporaryStatus,
+        saveStatus,
         updateActivity,
         updateSignal,
       }}>

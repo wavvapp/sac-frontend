@@ -27,7 +27,9 @@ export default function UserStatus({
   isOn,
   ...rest
 }: UserStatusProps) {
-  const { friendIds, statusMessage, timeSlot } = useStatus()
+  const { savedStatus } = useStatus()
+  const { friendIds, activity, timeSlot } = savedStatus
+
   const { friends: signalFriends } = useFriends()
   const navigation = useNavigation<HomeScreenProps>()
 
@@ -76,7 +78,7 @@ export default function UserStatus({
             <UserAvailability
               fullName={user.names}
               time={timeSlot}
-              activity={statusMessage}
+              activity={activity}
             />
           )}
           <View>

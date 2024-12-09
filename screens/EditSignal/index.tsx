@@ -26,7 +26,7 @@ type EditSignalScreenProps = NativeStackNavigationProp<
 
 export default function EditSignal() {
   const navigation = useNavigation<EditSignalScreenProps>()
-  const { updateActivity } = useStatus()
+  const { updateActivity, saveStatus } = useStatus()
   const { fetchMySignal } = useSignal()
   const { user } = useAuth()
   const [isLoading, setIsLoading] = useState(false)
@@ -49,6 +49,7 @@ export default function EditSignal() {
 
   const handleSaveStatus = async () => {
     mutation.mutate()
+    saveStatus()
   }
 
   return (
