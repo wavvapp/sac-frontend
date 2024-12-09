@@ -5,14 +5,14 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { StyleSheet, View, Dimensions, StatusBar, Platform } from "react-native"
 import { runOnJS, useDerivedValue } from "react-native-reanimated"
 import { AnimatedSwitch } from "@/components/AnimatedSwitch"
-import { useCallback, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import Signaling, { SignalingRef } from "@/components/lists/Signaling"
 import Settings from "@/components/vectors/Settings"
 import { theme } from "@/theme"
 import Badge from "@/components/ui/Badge"
 import ShareIcon from "@/components/vectors/ShareIcon"
 import { CustomButton } from "@/components/ui/Button"
-import { useFocusEffect, useNavigation } from "@react-navigation/native"
+import { useNavigation } from "@react-navigation/native"
 import { onShare } from "@/utils/share"
 import NoFriends from "@/components/cards/NoFriends"
 import { useAuth } from "@/contexts/AuthContext"
@@ -22,20 +22,23 @@ import { useQuery, useMutation } from "@tanstack/react-query"
 import { fetchPoints } from "@/libs/fetchPoints"
 import * as WebBrowser from "expo-web-browser"
 import { TouchableOpacity } from "react-native-gesture-handler"
-import CustomSplashScreen from "@/screens/CustomSplashScreen"
+import * as SplashScreen from "expo-splash-screen"
 
+SplashScreen.preventAutoHideAsync()
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
   "Home"
 >
 
 const { width } = Dimensions.get("window")
+
 export default function HomeScreen() {
+  const [appIsReady, setAppIsReady] = useState(false)
   const [_, setIsVisible] = useState(false)
   const { isOn, turnOffSignalStatus, turnOnSignalStatus } = useSignal()
   const signalingRef = useRef<SignalingRef>(null)
   const navigation = useNavigation<HomeScreenProps>()
-  const { fetchAllFriends, friends, isLoading: isFriendsLoading } = useFriends()
+  const { fetchAllFriends, friends } = useFriends()
   const { user, isAuthenticated } = useAuth()
   const {
     data,
@@ -55,13 +58,23 @@ export default function HomeScreen() {
       isOn.value = !isOn.value
     },
   })
-  useFocusEffect(
-    useCallback(() => {
-      if (!isAuthenticated) return
-      refetchPoints()
-      fetchAllFriends()
-    }, [isAuthenticated, refetchPoints, fetchAllFriends]),
-  )
+  const initializeApp = useCallback(async () => {
+    try {
+      if (isAuthenticated) {
+        await refetchPoints()
+        await fetchAllFriends()
+      }
+    } catch (error) {
+      console.error("App initialization error:", error)
+    } finally {
+      setAppIsReady(true)
+      SplashScreen.hideAsync()
+    }
+  }, [fetchAllFriends, isAuthenticated, refetchPoints])
+
+  useEffect(() => {
+    initializeApp()
+  }, [initializeApp])
 
   const handleWebsiteOpen = async () => {
     await WebBrowser.openBrowserAsync(
@@ -74,10 +87,7 @@ export default function HomeScreen() {
     }
     return runOnJS(setIsVisible)(false)
   }, [isOn.value])
-
-  if (isFriendsLoading && !friends.length)
-    return <CustomSplashScreen></CustomSplashScreen>
-
+  if (!appIsReady) return
   return (
     <View style={styles.container}>
       {/* <PerlinNoise isOn={isOn} color1="#281713" color2="blue" /> */}
