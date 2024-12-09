@@ -8,11 +8,10 @@ import Animated, {
   withTiming,
   useDerivedValue,
   runOnJS,
-  SharedValue,
 } from "react-native-reanimated"
 
 interface AnimatedSwitchProps {
-  isOn: SharedValue<boolean> // The shared value (0 or 1) for the switch state
+  isOn: boolean // The shared value (0 or 1) for the switch state
   onPress: () => void // Callback for when the switch is pressed
   style?: ViewStyle // Optional style for the switch container
   duration?: number // Optional animation duration, defaults to 400
@@ -26,7 +25,7 @@ export const AnimatedSwitch = ({
   duration = 400,
   isLoading,
 }: AnimatedSwitchProps) => {
-  const [text, setText] = useState(isOn.value ? "ON" : "OFF")
+  const [text, setText] = useState(isOn ? "ON" : "OFF")
   const height = useSharedValue(130)
   const width = useSharedValue(65)
 
@@ -39,9 +38,9 @@ export const AnimatedSwitch = ({
   // This will listen for changes in the shared value and update the text accordingly with a delay
   useDerivedValue(() => {
     if (isLoading) return
-    const text = isOn.value ? "ON" : "OFF"
+    const text = isOn ? "ON" : "OFF"
     runOnJS(updateTextWithDelay)(text)
-  }, [isOn.value, isLoading])
+  }, [isOn, isLoading])
 
   const thumbAnimatedStyle = useAnimatedStyle(() => {
     if (isLoading)
@@ -50,7 +49,7 @@ export const AnimatedSwitch = ({
         borderRadius: 4,
       }
     const moveValue = interpolate(
-      Number(isOn.value),
+      Number(isOn),
       [0, 1],
       [0, height.value - width.value],
     )
@@ -68,7 +67,7 @@ export const AnimatedSwitch = ({
         transform: [{ translateY: height.value * 0.4 }],
       }
     const moveValue = interpolate(
-      Number(isOn.value),
+      Number(isOn),
       [0, 1],
       [height.value * 0.65, height.value * 0.25],
     )

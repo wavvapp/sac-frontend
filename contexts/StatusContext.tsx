@@ -8,9 +8,9 @@ import {
 import api from "@/service"
 import { useAuth } from "./AuthContext"
 import { Signal } from "@/types"
-import { useSignal } from "@/hooks/useSignal"
-
 type StatusContextType = {
+  isOn: boolean
+  toggleSignal: () => Promise<void>
   statusMessage: string
   friendIds: string[]
   timeSlot: string
@@ -30,7 +30,30 @@ export const StatusProvider: React.FC<{ children: React.ReactNode }> = ({
   const [statusMessage, setStatusMessage] = useState(user?.activity || "")
   const [friendIds, setFriendIds] = useState<string[]>([])
   const [timeSlot, setTimeSlot] = useState("NOW")
-  const { fetchMySignal } = useSignal()
+  const [isOn, setIsOn] = useState(false)
+
+  const fetchMySignal = useCallback(async () => {
+    try {
+      const { data: signal } = await api.get("/my-signal")
+      setIsOn(signal.status === "active")
+      const friendIds = signal.friends.map((friend: any) => friend.friendId)
+      const mySignal: Signal = { ...signal, friends: friendIds }
+      return mySignal
+    } catch (error) {
+      console.error("Error fetching signal:", error)
+    }
+  }, [])
+
+  const toggleSignal = async () => {
+    try {
+      setIsOn((prevState) => !prevState)
+      await api.post(`/my-signal/turn-${isOn ? "off" : "on"}`)
+    } catch (error) {
+      console.error("Error toggling signal:", error)
+      setIsOn((prevState) => !prevState)
+    }
+  }
+
   const updateSignal = useCallback(async (signal: Signal) => {
     const { friends, status_message, when } = signal
     setFriendIds(friends)
@@ -71,6 +94,8 @@ export const StatusProvider: React.FC<{ children: React.ReactNode }> = ({
   return (
     <StatusContext.Provider
       value={{
+        isOn,
+        toggleSignal,
         statusMessage,
         friendIds,
         timeSlot,

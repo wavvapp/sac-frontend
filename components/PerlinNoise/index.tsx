@@ -4,7 +4,6 @@ import {
   Easing,
   interpolate,
   runOnUI,
-  SharedValue,
   useDerivedValue,
   useSharedValue,
   withRepeat,
@@ -17,7 +16,7 @@ const { width, height } = Dimensions.get("window")
 
 // Props for the PerlinNoise component
 interface PerlinNoiseProps {
-  isOn: SharedValue<boolean>
+  isOn: boolean
   color1: string // First color to be used
   color2: string // Second color to be used
 }
@@ -103,8 +102,8 @@ half4 main(float2 fragCoord) {
   }, [isOn])
 
   useDerivedValue(() => {
-    const brightness = interpolate(Number(isOn.value), [0, 1], [0.4, 1.0])
-    const flasshness = interpolate(Number(isOn.value), [0, 1], [0.0, 0.5])
+    const brightness = interpolate(Number(isOn), [0, 1], [0.4, 1.0])
+    const flasshness = interpolate(Number(isOn), [0, 1], [0.0, 0.5])
     u_brightness.value = withTiming(brightness, {
       duration: 400,
       easing: Easing.elastic(), // Removed any easing effect
@@ -113,7 +112,7 @@ half4 main(float2 fragCoord) {
       duration: 400,
       easing: Easing.elastic(), // Removed any easing effect
     })
-  }, [isOn.value]) // Track correct dependencies
+  }, [isOn]) // Track correct dependencies
 
   const uniforms = useDerivedValue(() => {
     return {
@@ -122,7 +121,7 @@ half4 main(float2 fragCoord) {
       u_brightness: u_brightness.value, // Directly using the interpolated value
       u_flashness: u_flashness.value, // Directly using the interpolated value
     }
-  }, [time.value, width, height, isOn.value]) // Track correct dependencies
+  }, [time.value, width, height, isOn]) // Track correct dependencies
 
   // Render the canvas with the noise shader applied
   return (

@@ -6,7 +6,6 @@ import { useNavigation } from "@react-navigation/native"
 import { HomeScreenProps } from "@/screens/Home"
 import Animated, {
   interpolate,
-  SharedValue,
   useAnimatedStyle,
   withTiming,
 } from "react-native-reanimated"
@@ -19,7 +18,7 @@ const MAX_VISIBLE_FRIENDS = 3
 interface UserStatusProps extends ViewStyle {
   user: User | null
   style?: ViewStyle
-  isOn: SharedValue<boolean>
+  isOn: boolean
 }
 export default function UserStatus({
   user,
@@ -50,18 +49,18 @@ export default function UserStatus({
       : fullFriendsList
 
   const cardAnimatedStyle = useAnimatedStyle(() => {
-    const moveValue = interpolate(Number(isOn.value), [0, 1], [0, 1])
+    const moveValue = interpolate(Number(isOn), [0, 1], [0, 1])
     const opacity = withTiming(moveValue, { duration: 400 })
 
     return {
       opacity,
-      pointerEvents: isOn.value ? "auto" : "none",
+      pointerEvents: isOn ? "auto" : "none",
     }
   })
 
   return (
     <View style={styles.container}>
-      {!isOn.value && (
+      {!isOn && (
         <View style={styles.headlineTextContainer}>
           <CustomText fontFamily="writer-mono" style={styles.headlineText}>
             Turn it on to signal your availability
