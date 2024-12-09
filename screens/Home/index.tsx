@@ -34,7 +34,7 @@ export default function HomeScreen() {
   const { isOn, turnOffSignalStatus, turnOnSignalStatus } = useSignal()
   const signalingRef = useRef<SignalingRef>(null)
   const navigation = useNavigation<HomeScreenProps>()
-  const { fetchAllFriends, friends, isLoading: friendsLoading } = useFriends()
+  const { fetchAllFriends, friends } = useFriends()
   const { user, isAuthenticated } = useAuth()
   const {
     data,
@@ -94,7 +94,7 @@ export default function HomeScreen() {
           </CustomButton>
         </View>
       </View>
-      {!friends.length && !friendsLoading ? (
+      {!friends.length ? (
         <NoFriends />
       ) : (
         <>
