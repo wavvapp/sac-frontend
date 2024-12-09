@@ -21,13 +21,13 @@ import {
 } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 
-type CredentialsScrenProps = NativeStackNavigationProp<
+export type CredentialsScreenProps = NativeStackNavigationProp<
   RootStackParamList,
   "EditSignal"
 >
 
 export default function CreateCredentials() {
-  const navigation = useNavigation<CredentialsScrenProps>()
+  const navigation = useNavigation<CredentialsScreenProps>()
   const [step, setStep] = useState<AccountCreationStep>(2)
   const [text, setText] = useState("")
   const [isLoading, setIsLoading] = useState(false)

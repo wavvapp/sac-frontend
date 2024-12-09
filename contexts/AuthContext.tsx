@@ -5,7 +5,6 @@ import React, {
   useContext,
   ReactNode,
 } from "react"
-import * as SplashScreen from "expo-splash-screen"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import {
   GoogleSignin,
@@ -16,11 +15,12 @@ import {
 import { Platform } from "react-native"
 import { User } from "@/types"
 import api from "@/service"
+import { CredentialsScreenProps } from "@/screens/Authentication/SignUp/CreateCredentials"
 
 interface AuthContextData {
   user: User | null
   isLoading: boolean
-  signInWithGoogle: () => Promise<void>
+  signInWithGoogle: (navigation: CredentialsScreenProps) => Promise<void>
   signOut: () => Promise<void>
   updateUserInfo: (activity: string, time: string) => Promise<void>
   isAuthenticated: boolean
@@ -40,6 +40,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const [isLoading, setIsLoading] = useState(true)
   const [googleToken, setGoogleToken] = useState<string | null>(null)
   const [isNewUser, setIsNewUser] = useState<boolean>(false)
+
   useEffect(() => {
     loadStoredData()
   }, [])
@@ -81,7 +82,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     await signIn(data)
   }
 
-  const signInWithGoogle = async () => {
+  const signInWithGoogle = async (navigation: CredentialsScreenProps) => {
     try {
       await GoogleSignin.hasPlayServices()
       const response = await GoogleSignin.signIn()
@@ -95,6 +96,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         setGoogleToken(idToken)
         if (status === 202) {
           setIsNewUser(true)
+          navigation.navigate("CreateCredentials")
           return
         }
         await signIn(data)
@@ -126,8 +128,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     if (storedUser && storedToken) {
       setUser(JSON.parse(storedUser))
     }
-
-    await SplashScreen.hideAsync()
     setIsLoading(false)
   }
 
