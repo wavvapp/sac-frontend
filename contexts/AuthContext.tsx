@@ -126,8 +126,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     if (storedUser && storedToken) {
       setUser(JSON.parse(storedUser))
     }
-
-    await SplashScreen.hideAsync()
     setIsLoading(false)
   }
 

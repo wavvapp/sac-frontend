@@ -6,7 +6,8 @@
         {
           "iosUrlScheme": "com.googleusercontent.apps.351310982043-28dk2k254o76heo1d4pr3uftmgsjmihh"
         }
-      ]
+      ],
+      "expo-splash-screen"
     ],
     "name": "Wavv",
     "slug": "Wavv",
