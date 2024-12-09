@@ -105,7 +105,6 @@ export default function HomeScreen() {
             onPress={() => handlePress.mutate()}
             style={styles.switch}
           />
-
           <Signaling ref={signalingRef} />
         </>
       )}
