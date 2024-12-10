@@ -7,6 +7,8 @@ import CustomText from "@/components/ui/CustomText"
 import { useAuth } from "@/contexts/AuthContext"
 import { GoogleSignin } from "@react-native-google-signin/google-signin"
 import AppleSignIn from "@/components/AppleSignIn"
+import { useNavigation } from "@react-navigation/native"
+import { CredentialsScreenProps } from "./SignUp/CreateCredentials"
 
 GoogleSignin.configure({
   webClientId: process.env.WEB_CLIENT_ID,
@@ -16,9 +18,10 @@ GoogleSignin.configure({
 
 export default function EntryScreen() {
   const { signInWithGoogle } = useAuth()
+  const navigation = useNavigation<CredentialsScreenProps>()
 
   const handleGoogleLogin = async () => {
-    await signInWithGoogle()
+    await signInWithGoogle(navigation)
   }
 
   return (
