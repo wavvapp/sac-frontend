@@ -56,8 +56,8 @@ const styles = StyleSheet.create({
   dot: {
     backgroundColor: theme.colors.black,
     opacity: 0.5,
-    height: 4,
-    width: 4,
+    height: 2,
+    width: 2,
     borderRadius: 2,
     marginTop: 12,
   },
