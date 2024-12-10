@@ -16,6 +16,7 @@ import { Platform } from "react-native"
 import { User } from "@/types"
 import api from "@/service"
 import { CredentialsScreenProps } from "@/screens/Authentication/SignUp/CreateCredentials"
+import * as AppleAuthentication from "expo-apple-authentication"
 
 interface AuthContextData {
   user: User | null
@@ -26,6 +27,7 @@ interface AuthContextData {
   isAuthenticated: boolean
   isNewUser: boolean
   signUp: (username: string) => Promise<void>
+  signInWithApple: () => Promise<void>
 }
 interface ExtendedUser extends User {
   access_token: string
@@ -119,6 +121,37 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     }
   }
 
+  const signInWithApple = async () => {
+    try {
+      const credential = await AppleAuthentication.signInAsync({
+        requestedScopes: [
+          AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+          AppleAuthentication.AppleAuthenticationScope.EMAIL,
+        ],
+      })
+      console.log("Apple Sign-In Success:", credential)
+
+      if (credential.identityToken) {
+        const payload = {
+          token: credential.identityToken,
+          platform: Platform.OS === "ios" ? "web" : "android",
+          name: `${credential.fullName?.givenName ?? ""} ${
+            credential.fullName?.familyName ?? ""
+          }`.trim(),
+        }
+        const { data, status } = await api.post("/auth/google-signin", payload)
+        console.log(data, "data")
+        console.log(status, "status")
+      }
+    } catch (error) {
+      if (error.code === "ERR_CANCELED") {
+        console.error("User canceled the sign-in.")
+      } else {
+        console.error("error from apple:", error)
+      }
+    }
+  }
+
   async function loadStoredData(): Promise<void> {
     setIsLoading(true)
 
@@ -157,6 +190,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         isAuthenticated: !!user && !isLoading,
         isNewUser,
         signUp,
+        signInWithApple,
       }}>
       {children}
     </AuthContext.Provider>
