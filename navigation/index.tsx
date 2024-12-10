@@ -12,7 +12,6 @@ import EntryScreen from "@/screens/Authentication"
 import CreateCredentials from "@/screens/Authentication/SignUp/CreateCredentials"
 import { StatusProvider } from "@/contexts/StatusContext"
 import { useFriends } from "@/hooks/useFriends"
-// import CustomSplashScreen from "@/screens/CustomSplashScreen"
 import * as SplashScreen from "expo-splash-screen"
 import { useEffect } from "react"
 export type RootStackParamList = {
