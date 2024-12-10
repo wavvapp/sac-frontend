@@ -14,7 +14,7 @@ import { theme } from "@/theme"
 import { useAuth } from "@/contexts/AuthContext"
 import { useStatus } from "@/contexts/StatusContext"
 import { RootStackParamList } from "@/navigation"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useMutation } from "@tanstack/react-query"
 import { useSignal } from "@/hooks/useSignal"
 import { StatusBar } from "expo-status-bar"
@@ -26,7 +26,7 @@ type EditSignalScreenProps = NativeStackNavigationProp<
 
 export default function EditSignal() {
   const navigation = useNavigation<EditSignalScreenProps>()
-  const { updateActivity, saveStatus } = useStatus()
+  const { updateActivity, saveStatus, clearStatus } = useStatus()
   const { fetchMySignal } = useSignal()
   const { user } = useAuth()
   const [isLoading, setIsLoading] = useState(false)
@@ -51,6 +51,12 @@ export default function EditSignal() {
     mutation.mutate()
     saveStatus()
   }
+  useEffect(() => {
+    const removeListener = navigation.addListener("beforeRemove", () =>
+      clearStatus(),
+    )
+    return () => removeListener()
+  }, [navigation, clearStatus])
 
   return (
     <View style={style.container}>
@@ -60,7 +66,9 @@ export default function EditSignal() {
           Edit status
         </CustomText>
         <TouchableOpacity
-          onPress={() => navigation.goBack()}
+          onPress={() => {
+            navigation.goBack()
+          }}
           style={style.CrossMarkButton}>
           <CrossMark />
         </TouchableOpacity>

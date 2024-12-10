@@ -31,6 +31,7 @@ type StatusContextType = {
   setTemporaryStatus: Dispatch<SetStateAction<TemporaryStatusType>>
   updateActivity: () => Promise<void>
   updateSignal: (signal: Signal) => Promise<void>
+  clearStatus: () => void
 }
 
 const StatusContext = createContext<StatusContextType>({} as StatusContextType)
@@ -39,11 +40,14 @@ export const StatusProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const { user, updateUserInfo } = useAuth()
-  const [temporaryStatus, setTemporaryStatus] = useState<TemporaryStatusType>({
+
+  const initialStatus = {
     timeSlot: "NOW",
     activity: user?.activity || "",
     friendIds: [],
-  })
+  }
+  const [temporaryStatus, setTemporaryStatus] =
+    useState<TemporaryStatusType>(initialStatus)
   const [savedStatus, setSavedStatus] = useState<SavedStatusType>({
     timeSlot: temporaryStatus.timeSlot,
     activity: temporaryStatus.activity,
@@ -98,10 +102,15 @@ export const StatusProvider: React.FC<{ children: React.ReactNode }> = ({
     setSavedStatus(temporaryStatus)
   }
 
+  const clearStatus = () => {
+    setTemporaryStatus(savedStatus)
+  }
+
   return (
     <StatusContext.Provider
       value={{
         savedStatus,
+        clearStatus,
         temporaryStatus,
         setTemporaryStatus,
         saveStatus,
