@@ -79,7 +79,7 @@ export default function UserStatus({
               activity={statusMessage}
             />
           )}
-          <View>
+          <View style={{ opacity: 0.5 }}>
             <CustomText size="sm" fontFamily="writer-mono">
               {friends.length
                 ? `Visible to ${friends.length} friends`
@@ -131,6 +131,7 @@ const styles = StyleSheet.create({
     color: theme.colors.white,
     textAlign: "center",
     padding: 10,
+    textTransform: "uppercase",
   },
   headlineTextContainer: {
     maxWidth: 277,

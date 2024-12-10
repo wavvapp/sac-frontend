@@ -5,11 +5,8 @@ import {
   View,
   ViewProps,
 } from "react-native"
-
-const userImage = require("@/assets/images/users/user2.png")
-
 interface UserProfileProps extends ViewProps {
-  imageUrl?: ImageSourcePropType | string
+  imageUrl?: ImageSourcePropType
   size?: "small" | "large"
 }
 
@@ -19,6 +16,9 @@ export default function UserAvatar({
   style,
   ...rest
 }: UserProfileProps) {
+  const source: ImageSourcePropType = imageUrl
+    ? { uri: imageUrl }
+    : require("@/assets/images/users/default-image.png")
   return (
     <View
       {...rest}
@@ -27,14 +27,7 @@ export default function UserAvatar({
         size === "small" ? styles.small : styles.large,
         style,
       ]}>
-      <Image
-        source={
-          typeof imageUrl === "string" && imageUrl
-            ? { uri: imageUrl }
-            : userImage
-        }
-        style={styles.image}
-      />
+      <Image source={source} style={styles.image} />
     </View>
   )
 }

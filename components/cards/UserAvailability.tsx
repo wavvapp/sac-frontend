@@ -23,7 +23,7 @@ export default function UserAvailability({
           {fullName}
         </CustomText>
         <View style={styles.dot} />
-        <CustomText style={styles.time} fontFamily="marfa">
+        <CustomText style={styles.time} fontFamily="writer-mono">
           {time}
         </CustomText>
       </View>
@@ -56,8 +56,8 @@ const styles = StyleSheet.create({
   dot: {
     backgroundColor: theme.colors.black,
     opacity: 0.5,
-    height: 2,
-    width: 2,
+    height: 4,
+    width: 4,
     borderRadius: 2,
     marginTop: 12,
   },

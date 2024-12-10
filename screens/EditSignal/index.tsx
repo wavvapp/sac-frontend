@@ -73,7 +73,7 @@ export default function EditSignal() {
           paddingBottom: 122,
         }}>
         <UserAvatar
-          imageUrl={user?.profilePictureUrl || ""}
+          imageUrl={user?.profilePictureUrl}
           size="large"
           style={{ alignSelf: "center" }}
         />
