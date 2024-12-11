@@ -144,11 +144,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         console.log(status, "status")
       }
     } catch (error) {
-      if (error.code === "ERR_CANCELED") {
-        console.error("User canceled the sign-in.")
-      } else {
-        console.error("error from apple:", error)
-      }
+      console.error("Error while signing in: ", error)
     }
   }
 
