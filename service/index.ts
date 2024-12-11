@@ -23,7 +23,7 @@ const refreshAccessToken = async (refreshToken: string) => {
   await AsyncStorage.setItem("@Auth:accessToken", data.access_token)
   await AsyncStorage.setItem("@Auth:refreshToken", data.refresh_token)
 
-  return data.access_token // Return the new access token
+  return data.access_token
 }
 
 // Request Interceptor

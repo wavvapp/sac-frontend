@@ -23,7 +23,7 @@ export default function UserAvailability({
           {fullName}
         </CustomText>
         <View style={styles.dot} />
-        <CustomText style={styles.time} fontFamily="marfa">
+        <CustomText style={styles.time} fontFamily="writer-mono">
           {time}
         </CustomText>
       </View>
