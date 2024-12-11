@@ -13,7 +13,7 @@ import { useStatus } from "@/contexts/StatusContext"
 import { theme } from "@/theme"
 export default function Activity({ isLoading }: { isLoading: boolean }) {
   const [isModalVisible, setIsModalVisible] = useState(false)
-  const { statusMessage } = useStatus()
+  const { temporaryStatus } = useStatus()
 
   const openModal = () => setIsModalVisible(true)
   const closeModal = () => setIsModalVisible(false)
@@ -35,7 +35,7 @@ export default function Activity({ isLoading }: { isLoading: boolean }) {
               size="lg"
               fontWeight="semibold"
               style={styles.statusText}>
-              {statusMessage}
+              {temporaryStatus.activity}
             </CustomText>
             <EditIcon />
           </>
