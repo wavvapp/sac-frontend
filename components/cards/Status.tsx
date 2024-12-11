@@ -1,4 +1,3 @@
-import React from "react"
 import { View, ScrollView, StyleSheet, TouchableOpacity } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import Badge from "@/components/ui/Badge"
@@ -37,7 +36,10 @@ export const Status: React.FC<StatusProps> = ({ timeSlots }) => {
                 <Badge
                   name={slot}
                   variant={
-                    temporaryStatus.timeSlot === slot ? "default" : "outline"
+                    temporaryStatus.timeSlot.toLowerCase() ===
+                    slot.toLowerCase()
+                      ? "default"
+                      : "outline"
                   }
                   style={styles.badge}
                 />
