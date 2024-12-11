@@ -16,13 +16,16 @@ GoogleSignin.configure({
   iosClientId: process.env.IOS_CLIENT_ID,
   offlineAccess: false,
 })
-
 export default function EntryScreen() {
   const { signInWithGoogle, signInWithApple } = useAuth()
   const navigation = useNavigation<CredentialsScreenProps>()
 
   const handleGoogleLogin = async () => {
     await signInWithGoogle(navigation)
+  }
+
+  const handleAppleSignIn = async () => {
+    await signInWithApple(navigation)
   }
 
   return (
@@ -47,7 +50,7 @@ export default function EntryScreen() {
           <CustomButton
             variant="primary"
             title="Sign in with Apple"
-            onPress={signInWithApple}
+            onPress={handleAppleSignIn}
             textStyles={styles.buttonText}
             isSignInWithIcon>
             <AppleIcon />
