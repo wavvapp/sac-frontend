@@ -89,9 +89,7 @@ const FindFriends = () => {
     }
   }
 
-  const handleClose = () => {
-    navigation.goBack()
-  }
+  const handleClose = () => navigation.goBack()
 
   return (
     <SafeAreaView style={styles.container}>
@@ -101,7 +99,9 @@ const FindFriends = () => {
         <CustomText size="lg" fontWeight="semibold">
           Find Friends
         </CustomText>
-        <CloseIcon color={theme.colors.black} onPress={handleClose} />
+        <TouchableOpacity onPress={handleClose}>
+          <CloseIcon color={theme.colors.black} />
+        </TouchableOpacity>
       </View>
       <Input
         variant="primary"
