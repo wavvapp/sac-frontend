@@ -8,6 +8,7 @@ import { useAuth } from "@/contexts/AuthContext"
 import { GoogleSignin } from "@react-native-google-signin/google-signin"
 import { useNavigation } from "@react-navigation/native"
 import { CredentialsScreenProps } from "./SignUp/CreateCredentials"
+import PrivacyPolicy from "../PrivacyPolicy"
 
 GoogleSignin.configure({
   webClientId: process.env.WEB_CLIENT_ID,
@@ -16,12 +17,14 @@ GoogleSignin.configure({
 })
 
 export default function EntryScreen() {
-  const { signInWithGoogle } = useAuth()
+  const { signInWithGoogle, isPolicyAccepted } = useAuth()
   const navigation = useNavigation<CredentialsScreenProps>()
 
   const handleGoogleLogin = async () => {
     await signInWithGoogle(navigation)
   }
+
+  if (!isPolicyAccepted) return <PrivacyPolicy />
 
   return (
     <View style={styles.container}>
@@ -53,8 +56,13 @@ export default function EntryScreen() {
             By clicking on
             <Text> Sign In / Create an account </Text>
             you agree to our{" "}
-            <Text style={styles.underline}>Terms of Services</Text>. Learn more
-            about our <Text style={styles.underline}>Privacy Policy</Text> and{" "}
+            <Text
+              onPress={() => navigation.navigate("PrivacyPolicy")}
+              style={styles.underline}>
+              Terms of Services
+            </Text>
+            . Learn more about our
+            <Text style={styles.underline}>Privacy Policy</Text> and{" "}
             <Text style={styles.underline}>Cookies Policy</Text>.
           </CustomText>
         </View>
