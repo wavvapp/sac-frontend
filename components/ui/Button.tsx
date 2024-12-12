@@ -20,6 +20,7 @@ interface ButtonProps extends TouchableOpacityProps {
   disabled?: boolean
   fullWidth?: boolean
   children?: React.ReactNode
+  isSignInWithIcon?: boolean
 }
 
 export function CustomButton({
@@ -32,6 +33,7 @@ export function CustomButton({
   children,
   fullWidth,
   title,
+  isSignInWithIcon = false,
   ...rest
 }: ButtonProps): JSX.Element {
   const variantStyles = {
@@ -76,7 +78,13 @@ export function CustomButton({
       ]}
       disabled={disabled}
       {...rest}>
-      <View style={children && title ? [styles.childrenContainer] : {}}>
+      <View
+        style={[
+          children && title && !isSignInWithIcon
+            ? [styles.childrenContainer]
+            : {},
+          isSignInWithIcon && [styles.signInIcon] ,
+        ]}>
         {children}
       </View>
       {title && (
@@ -115,11 +123,11 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.white,
     borderColor: theme.colors.white,
     borderWidth: 1,
-    height: 56,
     width: 350,
     justifyContent: "center",
     alignContent: "center",
     alignItems: "center",
+    paddingVertical: 21,
   },
   primaryText: {
     color: theme.colors.black,
@@ -174,4 +182,7 @@ const styles = StyleSheet.create({
   disabled: {
     opacity: 0.3,
   },
+  signInIcon:{
+   paddingRight: 8 
+  }
 })
