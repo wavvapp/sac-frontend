@@ -1,5 +1,5 @@
 import { theme } from "@/theme"
-import React, { useState } from "react"
+import { useState } from "react"
 import { Pressable, StyleSheet, ViewStyle } from "react-native"
 import Animated, {
   interpolate,
@@ -90,8 +90,7 @@ export const AnimatedSwitch = ({
         <Animated.Text style={[switchStyles.text, textAnimatedStyle]}>
           {!isLoading ? text : " "}
         </Animated.Text>
-        <Animated.View
-          style={[switchStyles.thumb, thumbAnimatedStyle]}></Animated.View>
+        <Animated.View style={[switchStyles.thumb, thumbAnimatedStyle]} />
       </Animated.View>
     </Pressable>
   )

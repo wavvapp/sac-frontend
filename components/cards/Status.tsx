@@ -1,19 +1,21 @@
-import React from "react"
 import { View, ScrollView, StyleSheet, TouchableOpacity } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import Badge from "@/components/ui/Badge"
 import { theme } from "@/theme"
-import { useStatus } from "@/contexts/StatusContext"
+import { TemporaryStatusType, useStatus } from "@/contexts/StatusContext"
 
 type StatusProps = {
   timeSlots: string[]
 }
 
 export const Status: React.FC<StatusProps> = ({ timeSlots }) => {
-  const { timeSlot, setTimeSlot } = useStatus()
+  const { temporaryStatus, setTemporaryStatus } = useStatus()
 
   const handleTimeSlotChange = (selectedTime: string) => {
-    setTimeSlot(selectedTime)
+    setTemporaryStatus((prev: TemporaryStatusType) => ({
+      ...prev,
+      timeSlot: selectedTime,
+    }))
   }
 
   return (
@@ -33,7 +35,12 @@ export const Status: React.FC<StatusProps> = ({ timeSlots }) => {
                 key={slot}>
                 <Badge
                   name={slot}
-                  variant={timeSlot === slot ? "default" : "outline"}
+                  variant={
+                    temporaryStatus.timeSlot.toLowerCase() ===
+                    slot.toLowerCase()
+                      ? "default"
+                      : "outline"
+                  }
                   style={styles.badge}
                 />
               </TouchableOpacity>

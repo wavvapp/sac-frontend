@@ -19,14 +19,12 @@ import { theme } from "@/theme"
 import CheckIcon from "@/components/vectors/CheckIcon"
 import api from "@/service"
 import { useFriends } from "@/hooks/useFriends"
-import { FriendsSkeleton } from "@/components/cards/FriendsSkeleton"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { StatusBar } from "expo-status-bar"
 
 const FindFriends = () => {
   const navigation = useNavigation()
   const [search, setSearch] = useState("")
-  const [isLoading, setIsLoading] = useState(false)
   const [filteredUsers, setFilteredUsers] = useState<User[]>([])
   const [isLoadingFriend, setIsLoadingFriend] = useState<
     Record<string, boolean>
@@ -36,7 +34,6 @@ const FindFriends = () => {
   const { fetchAllFriends } = useFriends()
   const fetchUsers = useCallback(async () => {
     try {
-      setIsLoading(true)
       const response = await api.get(`/users`)
       const users = response.data.map((user: User) => ({
         id: user.id,
@@ -49,8 +46,6 @@ const FindFriends = () => {
       setFilteredUsers(users)
     } catch (error) {
       console.error("error fetching users", error)
-    } finally {
-      setIsLoading(false)
     }
   }, [])
   useEffect(() => {
@@ -94,9 +89,7 @@ const FindFriends = () => {
     }
   }
 
-  const handleClose = () => {
-    navigation.goBack()
-  }
+  const handleClose = () => navigation.goBack()
 
   return (
     <SafeAreaView style={styles.container}>
@@ -106,7 +99,9 @@ const FindFriends = () => {
         <CustomText size="lg" fontWeight="semibold">
           Find Friends
         </CustomText>
-        <CloseIcon color={theme.colors.black} onPress={handleClose} />
+        <TouchableOpacity onPress={handleClose}>
+          <CloseIcon color={theme.colors.black} />
+        </TouchableOpacity>
       </View>
       <Input
         variant="primary"
@@ -118,10 +113,7 @@ const FindFriends = () => {
       />
 
       <ScrollView style={styles.friendsList}>
-        {isLoading ? (
-          <FriendsSkeleton />
-        ) : (
-          search &&
+        {search &&
           filteredUsers.length > 0 &&
           filteredUsers.map((user) => (
             <TouchableOpacity
@@ -158,8 +150,7 @@ const FindFriends = () => {
                 />
               )}
             </TouchableOpacity>
-          ))
-        )}
+          ))}
         {search && !filteredUsers.length && (
           <View style={styles.notFoundContainer}>
             <CustomText

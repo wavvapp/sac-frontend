@@ -2,7 +2,7 @@ import { CustomButton } from "@/components/ui/Button"
 import CustomText from "@/components/ui/CustomText"
 import Input from "@/components/ui/Input"
 import CheckIcon from "@/components/vectors/CheckIcon"
-import { useStatus } from "@/contexts/StatusContext"
+import { TemporaryStatusType, useStatus } from "@/contexts/StatusContext"
 import { theme } from "@/theme"
 import { useState } from "react"
 import {
@@ -19,12 +19,15 @@ interface EditActivityProps {
 }
 
 export default function EditActivity({ closeModal }: EditActivityProps) {
-  const { setStatusMessage, statusMessage } = useStatus()
-  const [text, setText] = useState(statusMessage)
+  const { temporaryStatus, setTemporaryStatus } = useStatus()
+  const [text, setText] = useState(temporaryStatus.activity)
 
   const handleEdit = () => {
     if (text.trim()) {
-      setStatusMessage(text.trim())
+      setTemporaryStatus((prev: TemporaryStatusType) => ({
+        ...prev,
+        activity: text.trim(),
+      }))
       Keyboard.dismiss()
     }
     closeModal()

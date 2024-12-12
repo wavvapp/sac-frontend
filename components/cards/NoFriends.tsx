@@ -19,7 +19,7 @@ export default function NoFriends() {
       <View style={styles.contentContainer}>
         <Image
           style={styles.image}
-          source={require("../../assets/images/noise-sm.png")}
+          source={require("@/assets/images/noise-sm.png")}
         />
         <View style={styles.content}>
           <CustomText size="lg" fontWeight="semibold">

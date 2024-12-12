@@ -27,7 +27,9 @@ export default function UserStatus({
   isOn,
   ...rest
 }: UserStatusProps) {
-  const { friendIds, statusMessage, timeSlot } = useStatus()
+  const { savedStatus } = useStatus()
+  const { friendIds, activity, timeSlot } = savedStatus
+
   const { friends: signalFriends } = useFriends()
   const navigation = useNavigation<HomeScreenProps>()
 
@@ -76,10 +78,10 @@ export default function UserStatus({
             <UserAvailability
               fullName={user.names}
               time={timeSlot}
-              activity={statusMessage}
+              activity={activity}
             />
           )}
-          <View>
+          <View style={{ opacity: 0.5 }}>
             <CustomText size="sm" fontFamily="writer-mono">
               {friends.length
                 ? `Visible to ${friends.length} friends`
@@ -131,6 +133,7 @@ const styles = StyleSheet.create({
     color: theme.colors.white,
     textAlign: "center",
     padding: 10,
+    textTransform: "uppercase",
   },
   headlineTextContainer: {
     maxWidth: 277,
