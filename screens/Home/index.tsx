@@ -22,6 +22,8 @@ import { useQuery, useMutation } from "@tanstack/react-query"
 import { fetchPoints } from "@/libs/fetchPoints"
 import * as WebBrowser from "expo-web-browser"
 import { TouchableOpacity } from "react-native-gesture-handler"
+import { useNavigationHistory } from "@/contexts/NavigationHistoryContext"
+import CustomSplashScreen from "../CustomSplashScreen"
 
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -36,6 +38,7 @@ export default function HomeScreen() {
   const navigation = useNavigation<HomeScreenProps>()
   const { fetchAllFriends, friends, isLoading: friendsLoading } = useFriends()
   const { user, isAuthenticated } = useAuth()
+  const { previousRoute } = useNavigationHistory()
   const {
     data,
     refetch: refetchPoints,
@@ -73,6 +76,13 @@ export default function HomeScreen() {
     }
     return runOnJS(setIsVisible)(false)
   }, [isOn.value])
+
+  if (
+    friendsLoading &&
+    !friends.length &&
+    (previousRoute === "EntryScreen" || previousRoute === "CreateCredentials")
+  )
+    return <CustomSplashScreen />
 
   return (
     <View style={styles.container}>
