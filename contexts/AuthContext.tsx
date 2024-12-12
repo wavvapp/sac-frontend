@@ -14,7 +14,6 @@ import {
 } from "@react-native-google-signin/google-signin"
 import { Platform } from "react-native"
 import { User } from "@/types"
-import api from "@/service"
 import { CredentialsScreenProps } from "@/screens/Authentication/SignUp/CreateCredentials"
 import * as AppleAuthentication from "expo-apple-authentication"
 import { handleApiSignIn } from "@/libs/handleApiSignIn"
@@ -27,7 +26,7 @@ interface AuthContextData {
   updateUserInfo: (activity: string, time: string) => Promise<void>
   isAuthenticated: boolean
   isNewUser: boolean
-  signUp: (username: string) => Promise<void>
+  registerUser: (username: string) => Promise<void>
   signInWithApple: (navigation: CredentialsScreenProps) => Promise<void>
 }
 
@@ -52,7 +51,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   useEffect(() => {
     loadStoredData()
   }, [])
-  async function signIn(userData: ExtendedUser): Promise<void> {
+  async function completeSignIn(userData: ExtendedUser): Promise<void> {
     try {
       const {
         access_token: accessToken,
@@ -79,13 +78,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     }
   }
 
-  const signUp = async (username: string) => {
+  const registerUser = async (username: string) => {
     try {
       if (!username || !currentToken) return
       const provider = await AsyncStorage.getItem("@Auth:provider")
       const names = await AsyncStorage.getItem("@Auth:names")
-      console.log({ names, provider })
-      const { data } = await api.post("auth/signin", {
+      if (!provider) return
+      const { data } = await handleApiSignIn({
         token: currentToken,
         username,
         provider,
@@ -93,7 +92,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         platform: Platform.OS === "ios" ? "web" : "android",
       })
       setIsNewUser(false)
-      await signIn(data)
+      await completeSignIn(data)
     } catch (error) {
       console.error("Error when signing up: ", error)
     }
@@ -111,6 +110,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
           platform: Platform.OS === "ios" ? "web" : "android",
           provider: Provider.GOOGLE,
         }
+        await AsyncStorage.setItem("@Auth:provider", payload.provider)
         const { data, status } = await handleApiSignIn(payload)
         setCurrentToken(idToken)
         if (status === 202) {
@@ -118,7 +118,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
           navigation.navigate("CreateCredentials")
           return
         }
-        await signIn(data)
+        await completeSignIn(data)
       }
     } catch (error) {
       if (isErrorWithCode(error)) {
@@ -156,16 +156,15 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
           names:
             `${credential.fullName?.familyName ?? ""} ${credential.fullName?.middleName ?? ""} ${credential.fullName?.givenName ?? ""}`.trim(),
         }
+        await AsyncStorage.setItem("@Auth:provider", payload.provider)
         const { data, status } = await handleApiSignIn(payload)
         setCurrentToken(payload.token)
-        console.log(data, "data")
-        console.log(status, "status")
         if (status === 202) {
           setIsNewUser(true)
           navigation.navigate("CreateCredentials")
           return
         }
-        await signIn(data)
+        await completeSignIn(data)
       }
     } catch (error) {
       console.error("Error while signing in: ", error)
@@ -208,7 +207,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         updateUserInfo,
         isAuthenticated: !!user && !isLoading,
         isNewUser,
-        signUp,
+        registerUser,
         signInWithApple,
       }}>
       {children}

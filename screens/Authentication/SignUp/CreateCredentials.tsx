@@ -32,7 +32,7 @@ export default function CreateCredentials() {
   const [text, setText] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [isError, setIsError] = useState(false)
-  const { signUp } = useAuth()
+  const { registerUser } = useAuth()
 
   const isInputValid = useMemo(() => {
     if (text.trim().length < 5) return false
@@ -80,7 +80,7 @@ export default function CreateCredentials() {
       if (data.message.toLowerCase() === "username already exist") {
         setIsError(true)
         return
-      } else signUp(text)
+      } else registerUser(text)
     } catch (error) {
       console.error("Error fetching user data:", error)
     } finally {
