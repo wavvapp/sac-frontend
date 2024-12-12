@@ -14,6 +14,7 @@ import { StatusProvider } from "@/contexts/StatusContext"
 import { useFriends } from "@/hooks/useFriends"
 import * as SplashScreen from "expo-splash-screen"
 import { useEffect } from "react"
+import PrivacyPolicy from "@/screens/PrivacyPolicy"
 export type RootStackParamList = {
   EntryScreen: undefined
   Home: undefined
@@ -23,6 +24,7 @@ export type RootStackParamList = {
   Signaling: undefined
   CreateCredentials: undefined
   Search: undefined
+  PrivacyPolicy: undefined
 }
 
 export default function AppNavigator() {
@@ -73,6 +75,11 @@ export default function AppNavigator() {
       ) : (
         <Stack.Navigator
           initialRouteName={isNewUser ? "CreateCredentials" : "EntryScreen"}>
+          <Stack.Screen
+            name="PrivacyPolicy"
+            options={{ presentation: "modal", headerShown: false }}
+            component={PrivacyPolicy}
+          />
           <Stack.Screen
             name="CreateCredentials"
             options={{ headerShown: false }}
