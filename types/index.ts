@@ -83,3 +83,5 @@ export enum Provider {
   GOOGLE = "google",
   APPLE = "apple",
 }
+
+export type StaticPageType = "privacy" | "terms"
