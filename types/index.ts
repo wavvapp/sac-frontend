@@ -78,3 +78,8 @@ export type FriendSignal = {
   signal: Signal
 }
 export type AccountCreationStep = 1 | 2
+
+export enum Provider {
+  GOOGLE = "google",
+  APPLE = "apple",
+}

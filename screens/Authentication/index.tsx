@@ -44,7 +44,7 @@ export default function EntryScreen() {
             title="Sign In with Google"
             onPress={handleGoogleLogin}
             textStyles={styles.buttonText}
-            isSignInWithIcon>
+            hasCenteredIcon>
             <GoogleIcon />
           </CustomButton>
           <CustomButton
@@ -52,7 +52,7 @@ export default function EntryScreen() {
             title="Sign in with Apple"
             onPress={handleAppleSignIn}
             textStyles={styles.buttonText}
-            isSignInWithIcon>
+            hasCenteredIcon>
             <AppleIcon />
           </CustomButton>
           <CustomText

@@ -13,7 +13,7 @@ import {
   statusCodes,
 } from "@react-native-google-signin/google-signin"
 import { Platform } from "react-native"
-import { User } from "@/types"
+import { Provider, User } from "@/types"
 import { CredentialsScreenProps } from "@/screens/Authentication/SignUp/CreateCredentials"
 import * as AppleAuthentication from "expo-apple-authentication"
 import { handleApiSignIn } from "@/libs/handleApiSignIn"
@@ -28,11 +28,6 @@ interface AuthContextData {
   isNewUser: boolean
   registerUser: (username: string) => Promise<void>
   signInWithApple: (navigation: CredentialsScreenProps) => Promise<void>
-}
-
-export enum Provider {
-  GOOGLE = "google",
-  APPLE = "apple",
 }
 interface ExtendedUser extends User {
   access_token: string
