@@ -14,7 +14,7 @@ import { StatusProvider } from "@/contexts/StatusContext"
 import { useFriends } from "@/hooks/useFriends"
 import * as SplashScreen from "expo-splash-screen"
 import { useEffect } from "react"
-import { StaticPageType } from "@/types"
+import { StaticScreenType } from "@/types"
 import StaticContentScreen from "@/screens/StaticContentScreen"
 export type RootStackParamList = {
   EntryScreen: undefined
@@ -25,7 +25,7 @@ export type RootStackParamList = {
   Signaling: undefined
   CreateCredentials: undefined
   Search: undefined
-  StaticContentScreen: { page: StaticPageType }
+  StaticContentScreen: { page: StaticScreenType }
 }
 
 export default function AppNavigator() {

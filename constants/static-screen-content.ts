@@ -1,4 +1,4 @@
-import { StaticPageType } from "@/types"
+import { StaticScreenType } from "@/types"
 
 type Page = {
   pageTitle: string
@@ -8,7 +8,7 @@ type Page = {
   }[]
 }
 
-export const STATIC_PAGE_CONTENTS: Record<StaticPageType, Page> = {
+export const STATIC_SCREEN_CONTENTS: Record<StaticScreenType, Page> = {
   privacy: {
     pageTitle: "Privacy policy",
     pageContent: [

@@ -84,4 +84,4 @@ export enum Provider {
   APPLE = "apple",
 }
 
-export type StaticPageType = "privacy" | "terms"
+export type StaticScreenType = "privacy" | "terms"

@@ -6,7 +6,7 @@ import { StyleSheet, TouchableOpacity, View } from "react-native"
 import { ScrollView } from "react-native-gesture-handler"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { RootStackParamList } from "@/navigation"
-import { STATIC_PAGE_CONTENTS } from "@/constants/static-page-content"
+import { STATIC_SCREEN_CONTENTS } from "@/constants/static-screen-content"
 
 type StaticPageScreenProps = NativeStackScreenProps<
   RootStackParamList,
@@ -20,7 +20,7 @@ function StaticContentScreen({ route, navigation }: StaticPageScreenProps) {
       <StatusBar style="dark" />
       <View style={styles.navBar}>
         <CustomText style={styles.headerText} fontStyle="italic">
-          {STATIC_PAGE_CONTENTS[page].pageTitle}
+          {STATIC_SCREEN_CONTENTS[page].pageTitle}
         </CustomText>
         <TouchableOpacity
           onPress={async () => {
@@ -34,7 +34,7 @@ function StaticContentScreen({ route, navigation }: StaticPageScreenProps) {
         style={{ flexGrow: 1, paddingBottom: 40 }}
         scrollEventThrottle={16}
         contentContainerStyle={styles.contentText}>
-        {STATIC_PAGE_CONTENTS[page].pageContent.map((section, index) => {
+        {STATIC_SCREEN_CONTENTS[page].pageContent.map((section, index) => {
           return (
             <View key={index} style={styles.sectionContainer}>
               <CustomText size="base" style={styles.sectionTitle}>

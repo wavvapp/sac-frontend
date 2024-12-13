@@ -10,7 +10,7 @@ import { useNavigation } from "@react-navigation/native"
 import { CredentialsScreenProps } from "./SignUp/CreateCredentials"
 import AppleIcon from "@/components/vectors/AppleIcon"
 import GoogleIcon from "@/components/vectors/GoogleIcon"
-import { StaticPageType } from "@/types"
+import { StaticScreenType } from "@/types"
 
 GoogleSignin.configure({
   webClientId: process.env.WEB_CLIENT_ID,
@@ -29,7 +29,7 @@ export default function EntryScreen() {
     await signInWithApple(navigation)
   }
 
-  const navigateToSaticScreen = (screen: StaticPageType) => {
+  const navigateToSaticScreen = (screen: StaticScreenType) => {
     navigation.navigate("StaticContentScreen", { page: screen })
   }
 
