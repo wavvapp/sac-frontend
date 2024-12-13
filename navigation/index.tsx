@@ -14,8 +14,8 @@ import { StatusProvider } from "@/contexts/StatusContext"
 import { useFriends } from "@/hooks/useFriends"
 import * as SplashScreen from "expo-splash-screen"
 import { useEffect } from "react"
-import StaticPage from "@/screens/StaticPage"
 import { StaticPageType } from "@/types"
+import StaticContentScreen from "@/screens/StaticContentScreen"
 export type RootStackParamList = {
   EntryScreen: undefined
   Home: undefined
@@ -25,7 +25,7 @@ export type RootStackParamList = {
   Signaling: undefined
   CreateCredentials: undefined
   Search: undefined
-  StaticPage: { page: StaticPageType }
+  StaticContentScreen: { page: StaticPageType }
 }
 
 export default function AppNavigator() {
@@ -75,9 +75,9 @@ export default function AppNavigator() {
         <Stack.Navigator
           initialRouteName={isNewUser ? "CreateCredentials" : "EntryScreen"}>
           <Stack.Screen
-            name="StaticPage"
+            name="StaticContentScreen"
             options={{ presentation: "modal", headerShown: false }}
-            component={StaticPage}
+            component={StaticContentScreen}
             initialParams={{ page: "privacy" }}
           />
           <Stack.Screen

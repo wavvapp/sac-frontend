@@ -1,16 +1,8 @@
-import { CustomButton } from "@/components/ui/Button"
 import CustomText from "@/components/ui/CustomText"
 import CrossMark from "@/components/vectors/CrossMark"
 import { theme } from "@/theme"
 import { StatusBar } from "expo-status-bar"
-import { useState } from "react"
-import {
-  NativeScrollEvent,
-  NativeSyntheticEvent,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from "react-native"
+import { StyleSheet, TouchableOpacity, View } from "react-native"
 import { ScrollView } from "react-native-gesture-handler"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { RootStackParamList } from "@/navigation"
@@ -18,21 +10,10 @@ import { STATIC_PAGE_CONTENTS } from "@/constants/static-page-content"
 
 type StaticPageScreenProps = NativeStackScreenProps<
   RootStackParamList,
-  "StaticPage"
+  "StaticContentScreen"
 >
 
-function StaticPage({ route, navigation }: StaticPageScreenProps) {
-  const [hasScrolledToEnd, setHasScrolledToEnd] = useState(false)
-
-  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent
-    const isEndReached =
-      layoutMeasurement.height + contentOffset.y >= contentSize.height - 20
-    setHasScrolledToEnd(isEndReached)
-  }
-  const acceptTerms = async () => {
-    navigation.navigate("EntryScreen")
-  }
+function StaticContentScreen({ route, navigation }: StaticPageScreenProps) {
   const { page } = route.params
   return (
     <View style={styles.container}>
@@ -50,8 +31,7 @@ function StaticPage({ route, navigation }: StaticPageScreenProps) {
         </TouchableOpacity>
       </View>
       <ScrollView
-        style={{ flexGrow: 1 }}
-        onScroll={handleScroll}
+        style={{ flexGrow: 1, paddingBottom: 40 }}
         scrollEventThrottle={16}
         contentContainerStyle={styles.contentText}>
         {STATIC_PAGE_CONTENTS[page].pageContent.map((section, index) => {
@@ -65,21 +45,11 @@ function StaticPage({ route, navigation }: StaticPageScreenProps) {
           )
         })}
       </ScrollView>
-      <View style={styles.footer}>
-        <CustomButton
-          variant="default"
-          textSize="sm"
-          title="Accept"
-          disabled={!hasScrolledToEnd}
-          textStyles={{ fontWeight: 600 }}
-          onPress={acceptTerms}
-        />
-      </View>
     </View>
   )
 }
 
-export default StaticPage
+export default StaticContentScreen
 
 const styles = StyleSheet.create({
   container: {
@@ -116,13 +86,5 @@ const styles = StyleSheet.create({
   sectionTitle: {
     marginBottom: 8,
     textTransform: "uppercase",
-  },
-  footer: {
-    flexDirection: "row",
-    justifyContent: "flex-end",
-    padding: 20,
-    borderTopColor: theme.colors.gray,
-    backgroundColor: theme.colors.white,
-    borderTopWidth: 2,
   },
 })
