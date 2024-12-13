@@ -10,7 +10,6 @@ import { useNavigation } from "@react-navigation/native"
 import { CredentialsScreenProps } from "./SignUp/CreateCredentials"
 import AppleIcon from "@/components/vectors/AppleIcon"
 import GoogleIcon from "@/components/vectors/GoogleIcon"
-import { useNavigationHistory } from "@/contexts/NavigationHistoryContext"
 
 GoogleSignin.configure({
   webClientId: process.env.WEB_CLIENT_ID,
@@ -20,7 +19,6 @@ GoogleSignin.configure({
 export default function EntryScreen() {
   const { signInWithGoogle, signInWithApple } = useAuth()
   const navigation = useNavigation<CredentialsScreenProps>()
-  useNavigationHistory()
 
   const handleGoogleLogin = async () => {
     await signInWithGoogle(navigation)
