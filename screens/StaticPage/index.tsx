@@ -2,7 +2,6 @@ import { CustomButton } from "@/components/ui/Button"
 import CustomText from "@/components/ui/CustomText"
 import CrossMark from "@/components/vectors/CrossMark"
 import { theme } from "@/theme"
-import AsyncStorage from "@react-native-async-storage/async-storage"
 import { StatusBar } from "expo-status-bar"
 import { useState } from "react"
 import {
@@ -13,18 +12,17 @@ import {
   View,
 } from "react-native"
 import { ScrollView } from "react-native-gesture-handler"
-import { NativeStackNavigationProp } from "@react-navigation/native-stack"
+import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { RootStackParamList } from "@/navigation"
-import { useNavigation } from "@react-navigation/native"
-import { PRIVACY_POLICY_SECTIONS } from "@/constants/privacyPolicyContent"
+import { STATIC_PAGE_CONTENTS } from "@/constants/static-page-content"
 
-type PrivacyPolicyScreenProps = NativeStackNavigationProp<
+type StaticPageScreenProps = NativeStackScreenProps<
   RootStackParamList,
-  "EditSignal"
+  "StaticPage"
 >
-function PrivacyPolicy() {
+
+function StaticPage({ route, navigation }: StaticPageScreenProps) {
   const [hasScrolledToEnd, setHasScrolledToEnd] = useState(false)
-  const navigation = useNavigation<PrivacyPolicyScreenProps>()
 
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent
@@ -33,19 +31,19 @@ function PrivacyPolicy() {
     setHasScrolledToEnd(isEndReached)
   }
   const acceptTerms = async () => {
-    await AsyncStorage.setItem("@privacy_accepted", "true")
     navigation.navigate("EntryScreen")
   }
+  const { page } = route.params
   return (
     <View style={styles.container}>
       <StatusBar style="dark" />
       <View style={styles.navBar}>
         <CustomText style={styles.headerText} fontStyle="italic">
-          Privacy policy
+          {STATIC_PAGE_CONTENTS[page].pageTitle}
         </CustomText>
         <TouchableOpacity
           onPress={async () => {
-            await AsyncStorage.setItem("@privacy_accepted", "false")
+            navigation.navigate("EntryScreen")
           }}
           style={styles.CrossMarkButton}>
           <CrossMark color="#ffffff" width="20" height="20" />
@@ -56,7 +54,7 @@ function PrivacyPolicy() {
         onScroll={handleScroll}
         scrollEventThrottle={16}
         contentContainerStyle={styles.contentText}>
-        {PRIVACY_POLICY_SECTIONS.map((section, index) => {
+        {STATIC_PAGE_CONTENTS[page].pageContent.map((section, index) => {
           return (
             <View key={index} style={styles.sectionContainer}>
               <CustomText size="base" style={styles.sectionTitle}>
@@ -81,7 +79,7 @@ function PrivacyPolicy() {
   )
 }
 
-export default PrivacyPolicy
+export default StaticPage
 
 const styles = StyleSheet.create({
   container: {

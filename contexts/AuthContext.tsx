@@ -28,7 +28,6 @@ interface AuthContextData {
   isNewUser: boolean
   registerUser: (username: string) => Promise<void>
   signInWithApple: (navigation: CredentialsScreenProps) => Promise<void>
-  isPolicyAccepted: boolean
 }
 interface ExtendedUser extends User {
   access_token: string
@@ -43,7 +42,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const [isLoading, setIsLoading] = useState(true)
   const [currentToken, setCurrentToken] = useState<string | null>(null)
   const [isNewUser, setIsNewUser] = useState<boolean>(false)
-  const [isPolicyAccepted, setIsPolicyAccepted] = useState(false)
 
   useEffect(() => {
     loadStoredData()
@@ -173,8 +171,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
     const storedUser = await AsyncStorage.getItem("@Auth:user")
     const storedToken = await AsyncStorage.getItem("@Auth:accessToken")
-    const privacyAccepted = await AsyncStorage.getItem("@privacy_accepted")
-    setIsPolicyAccepted(privacyAccepted === "true")
     if (storedUser && storedToken) {
       setUser(JSON.parse(storedUser))
     }
@@ -207,7 +203,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         isNewUser,
         registerUser,
         signInWithApple,
-        isPolicyAccepted,
       }}>
       {children}
     </AuthContext.Provider>

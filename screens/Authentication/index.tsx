@@ -8,7 +8,6 @@ import { useAuth } from "@/contexts/AuthContext"
 import { GoogleSignin } from "@react-native-google-signin/google-signin"
 import { useNavigation } from "@react-navigation/native"
 import { CredentialsScreenProps } from "./SignUp/CreateCredentials"
-import PrivacyPolicy from "../PrivacyPolicy"
 import AppleIcon from "@/components/vectors/AppleIcon"
 import GoogleIcon from "@/components/vectors/GoogleIcon"
 
@@ -18,14 +17,13 @@ GoogleSignin.configure({
   offlineAccess: false,
 })
 export default function EntryScreen() {
-  const { signInWithGoogle, signInWithApple, isPolicyAccepted } = useAuth()
+  const { signInWithGoogle, signInWithApple } = useAuth()
   const navigation = useNavigation<CredentialsScreenProps>()
 
   const handleGoogleLogin = async () => {
     await signInWithGoogle(navigation)
   }
 
-  if (!isPolicyAccepted) return <PrivacyPolicy />
   const handleAppleSignIn = async () => {
     await signInWithApple(navigation)
   }
@@ -65,12 +63,20 @@ export default function EntryScreen() {
             <Text> Sign In / Create an account </Text>
             you agree to our{" "}
             <Text
-              onPress={() => navigation.navigate("PrivacyPolicy")}
+              onPress={() =>
+                navigation.navigate("StaticPage", { page: "terms" })
+              }
               style={styles.underline}>
               Terms of Services
             </Text>
-            . Learn more about our
-            <Text style={styles.underline}>Privacy Policy</Text> and{" "}
+            . Learn more about our{" "}
+            <Text
+              onPress={() =>
+                navigation.navigate("StaticPage", { page: "privacy" })
+              }
+              style={styles.underline}>
+              Privacy Policy
+            </Text>{" "}
             <Text style={styles.underline}>Cookies Policy</Text>.
           </CustomText>
         </View>
