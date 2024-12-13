@@ -104,7 +104,7 @@ export default function HomeScreen() {
           </CustomButton>
         </View>
       </View>
-      {!friends.length && !friendsLoading ? (
+      {!friends.length ? (
         <NoFriends />
       ) : (
         <>
