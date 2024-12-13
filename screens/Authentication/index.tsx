@@ -9,15 +9,16 @@ import { GoogleSignin } from "@react-native-google-signin/google-signin"
 import { useNavigation } from "@react-navigation/native"
 import { CredentialsScreenProps } from "./SignUp/CreateCredentials"
 import PrivacyPolicy from "../PrivacyPolicy"
+import AppleIcon from "@/components/vectors/AppleIcon"
+import GoogleIcon from "@/components/vectors/GoogleIcon"
 
 GoogleSignin.configure({
   webClientId: process.env.WEB_CLIENT_ID,
   iosClientId: process.env.IOS_CLIENT_ID,
   offlineAccess: false,
 })
-
 export default function EntryScreen() {
-  const { signInWithGoogle, isPolicyAccepted } = useAuth()
+  const { signInWithGoogle, signInWithApple, isPolicyAccepted } = useAuth()
   const navigation = useNavigation<CredentialsScreenProps>()
 
   const handleGoogleLogin = async () => {
@@ -25,6 +26,9 @@ export default function EntryScreen() {
   }
 
   if (!isPolicyAccepted) return <PrivacyPolicy />
+  const handleAppleSignIn = async () => {
+    await signInWithApple(navigation)
+  }
 
   return (
     <View style={styles.container}>
@@ -38,17 +42,21 @@ export default function EntryScreen() {
         </View>
         <View style={styles.subContainer}>
           <CustomButton
-            variant="primary"
-            title="Create Account"
-            onPress={handleGoogleLogin}
-            textStyles={styles.buttonText}
-          />
-          <CustomButton
             variant="destructive"
-            title="Sign In"
+            title="Sign In with Google"
             onPress={handleGoogleLogin}
             textStyles={styles.buttonText}
-          />
+            hasCenteredIcon>
+            <GoogleIcon />
+          </CustomButton>
+          <CustomButton
+            variant="primary"
+            title="Sign in with Apple"
+            onPress={handleAppleSignIn}
+            textStyles={styles.buttonText}
+            hasCenteredIcon>
+            <AppleIcon />
+          </CustomButton>
           <CustomText
             fontFamily="writer-mono"
             size="sm"
