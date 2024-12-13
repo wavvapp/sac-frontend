@@ -23,7 +23,7 @@ import { fetchPoints } from "@/libs/fetchPoints"
 import * as WebBrowser from "expo-web-browser"
 import { TouchableOpacity } from "react-native-gesture-handler"
 import { useNavigationHistory } from "@/contexts/NavigationHistoryContext"
-import CustomSplashScreen from "../CustomSplashScreen"
+import CustomSplashScreen from "@/screens/CustomSplashScreen"
 
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
