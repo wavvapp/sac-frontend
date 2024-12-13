@@ -84,7 +84,7 @@ export default function HomeScreen() {
         <View style={styles.buttonContainer}>
           <CustomButton
             style={styles.iconButton}
-            onPress={() => onShare(user?.username || "me")}>
+            onPress={() => onShare(user?.username)}>
             <ShareIcon color={theme.colors.white} />
           </CustomButton>
           <CustomButton

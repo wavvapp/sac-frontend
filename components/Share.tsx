@@ -3,10 +3,12 @@ import CustomText from "@/components/ui/CustomText"
 import { theme } from "@/theme"
 import ShareIcon from "@/components/vectors/ShareIcon"
 import { onShare } from "@/utils/share"
+import { useAuth } from "@/contexts/AuthContext"
 
 export default function ShareCard({ style }: { style?: ViewStyle }) {
+  const { user } = useAuth()
   return (
-    <TouchableOpacity onPress={onShare}>
+    <TouchableOpacity onPress={() => onShare(user?.username)}>
       <View style={[styles.container, style]}>
         <View style={styles.iconContainer}>
           <ShareIcon />
