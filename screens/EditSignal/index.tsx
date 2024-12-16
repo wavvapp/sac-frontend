@@ -14,12 +14,12 @@ import { theme } from "@/theme"
 import { useAuth } from "@/contexts/AuthContext"
 import { useStatus } from "@/contexts/StatusContext"
 import { RootStackParamList } from "@/navigation"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-// import { useSignal } from "@/hooks/useSignal"
 import { StatusBar } from "expo-status-bar"
 import api from "@/service"
 import { Signal } from "@/types"
+import { useFetchMySignal } from "@/hooks/useSignal"
 
 type EditSignalScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -28,11 +28,11 @@ type EditSignalScreenProps = NativeStackNavigationProp<
 
 export default function EditSignal() {
   const navigation = useNavigation<EditSignalScreenProps>()
-  const { temporaryStatus } = useStatus()
-  // const { fetchMySignal } = useSignal()
+  const { temporaryStatus, setTemporaryStatus } = useStatus()
   const { user } = useAuth()
   const [isLoading, setIsLoading] = useState(false)
   const queryclient = useQueryClient()
+  const { data: signal } = useFetchMySignal()
 
   const mutation = useMutation({
     mutationFn: () => {
@@ -48,7 +48,7 @@ export default function EditSignal() {
         when: temporaryStatus.timeSlot,
         status_message: temporaryStatus.activity,
         friends: [],
-        friendIds: [],
+        friendIds: temporaryStatus.friendIds,
         status: "active",
       }
       queryclient.setQueryData(["fetch-my-signal"], optimisticStatus)
@@ -66,14 +66,18 @@ export default function EditSignal() {
 
   const handleSaveStatus = async () => {
     mutation.mutate()
-    // saveStatus()
   }
-  // useEffect(() => {
-  //   const removeListener = navigation.addListener("beforeRemove", () =>
-  //     clearStatus(),
-  //   )
-  //   return () => removeListener()
-  // }, [navigation, clearStatus])
+  useEffect(() => {
+    const removeListener = navigation.addListener("beforeRemove", () =>
+      setTemporaryStatus((prev) => ({
+        ...prev,
+        timeSlot: signal.when,
+        activity: signal.status_message,
+        friendIds: signal.friendIds,
+      })),
+    )
+    return () => removeListener()
+  }, [navigation, setTemporaryStatus, signal])
 
   return (
     <View style={style.container}>

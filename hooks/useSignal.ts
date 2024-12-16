@@ -9,8 +9,11 @@ export const useFetchMySignal = () => {
     queryKey: ["fetch-my-signal"],
     queryFn: async () => {
       const { data } = await api.get("/my-signal")
-      console.log("----fetching my signal--------------")
-      return data
+      const signal = {
+        ...data,
+        friendIds: data.friends.map((friend: any) => friend?.friendId),
+      }
+      return signal
     },
     initialData: {
       when: "NOW",

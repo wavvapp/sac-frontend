@@ -1,38 +1,36 @@
-// import { useCallback } from "react"
+import { useCallback } from "react"
 import { View, StyleSheet } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import FriendCard from "@/components/Friend"
 import { User } from "@/types"
 import { useFriends } from "@/hooks/useFriends"
-// import { TemporaryStatusType, useStatus } from "@/contexts/StatusContext"
+import { TemporaryStatusType, useStatus } from "@/contexts/StatusContext"
 import { FriendsSkeleton } from "@/components/cards/FriendsSkeleton"
 import { useQuery } from "@tanstack/react-query"
-import { useFetchMySignal } from "@/hooks/useSignal"
 
 export default function FriendsList() {
-  // const { temporaryStatus, setTemporaryStatus } = useStatus()
+  const { setTemporaryStatus, temporaryStatus } = useStatus()
   const { fetchAllFriends } = useFriends()
 
   const { data: friendsListData, isLoading } = useQuery<User[]>({
     queryKey: ["friends"],
     queryFn: fetchAllFriends,
   })
-  const { data: signalData } = useFetchMySignal()
 
-  // const updateFriendsList = useCallback(
-  // (friendId: string) => {
-  // const newFriends = friendIds?.includes(friendId)
-  //   ? friendIds.filter((id) => id !== friendId)
-  //   : [...friendIds, friendId]
+  const updateFriendsList = useCallback(
+    (friendId: string) => {
+      const friendIds = temporaryStatus.friendIds
+      const newFriends = friendIds?.includes(friendId)
+        ? friendIds?.filter((id) => id !== friendId)
+        : [...friendIds, friendId]
 
-  // setTemporaryStatus((prev: TemporaryStatusType) => ({
-  //   ...prev,
-  //   friendIds: newFriends,
-  // }))
-  // },
-  // [friendIds, setTemporaryStatus],
-  //   [],
-  // )
+      setTemporaryStatus((prev: TemporaryStatusType) => ({
+        ...prev,
+        friendIds: newFriends,
+      }))
+    },
+    [setTemporaryStatus, temporaryStatus.friendIds],
+  )
   return (
     <View style={styles.container}>
       <CustomText size="sm">Who can see it</CustomText>
@@ -41,9 +39,9 @@ export default function FriendsList() {
       ) : (
         friendsListData?.map((friend) => (
           <FriendCard
-            selected={signalData.friendIds?.includes(friend.id)}
+            selected={temporaryStatus.friendIds?.includes(friend.id)}
             key={friend.id}
-            handleChange={() => console.log(friend.id)}
+            handleChange={() => updateFriendsList(friend.id)}
             user={friend}
           />
         ))
