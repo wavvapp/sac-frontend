@@ -16,13 +16,14 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native"
 import { onShare } from "@/utils/share"
 import NoFriends from "@/components/cards/NoFriends"
 import { useAuth } from "@/contexts/AuthContext"
-import { useSignal } from "@/hooks/useSignal"
 import { useFriends } from "@/hooks/useFriends"
 import { useQuery, useMutation } from "@tanstack/react-query"
 import { fetchPoints } from "@/libs/fetchPoints"
 import * as WebBrowser from "expo-web-browser"
 import { TouchableOpacity } from "react-native-gesture-handler"
 import { useFetchMySignal } from "@/hooks/useSignal_"
+import { useStatus } from "@/contexts/StatusContext"
+import api from "@/service"
 
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -32,7 +33,7 @@ export type HomeScreenProps = NativeStackNavigationProp<
 const { width } = Dimensions.get("window")
 export default function HomeScreen() {
   const [_, setIsVisible] = useState(false)
-  const { isOn, turnOffSignalStatus, turnOnSignalStatus } = useSignal()
+  const { isOn } = useStatus()
   const signalingRef = useRef<SignalingRef>(null)
   const navigation = useNavigation<HomeScreenProps>()
   const { fetchAllFriends, friends, isLoading: friendsLoading } = useFriends()
@@ -43,7 +44,10 @@ export default function HomeScreen() {
   })
 
   const handlePress = useMutation({
-    mutationFn: isOn.value ? turnOffSignalStatus : turnOnSignalStatus,
+    mutationKey: ["toggle-signal-change"],
+    mutationFn: isOn.value
+      ? () => api.post("/my-signal/turn-off")
+      : () => api.post("/my-signal/turn-on"),
     onMutate: () => {
       isOn.value = !isOn.value
     },

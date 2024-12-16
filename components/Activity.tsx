@@ -9,11 +9,12 @@ import { useState } from "react"
 import CustomText from "@/components/ui/CustomText"
 import EditIcon from "@/components/vectors/EditIcon"
 import EditActivity from "@/screens/EditActivity"
-import { useStatus } from "@/contexts/StatusContext"
+// import { useStatus } from "@/contexts/StatusContext"
 import { theme } from "@/theme"
+import { useFetchMySignal } from "@/hooks/useSignal_"
 export default function Activity({ isLoading }: { isLoading: boolean }) {
   const [isModalVisible, setIsModalVisible] = useState(false)
-  const { temporaryStatus } = useStatus()
+  const { data: signalData } = useFetchMySignal()
 
   const openModal = () => setIsModalVisible(true)
   const closeModal = () => setIsModalVisible(false)
@@ -35,7 +36,7 @@ export default function Activity({ isLoading }: { isLoading: boolean }) {
               size="lg"
               fontWeight="semibold"
               style={styles.statusText}>
-              {temporaryStatus.activity}
+              {signalData.status_message}
             </CustomText>
             <EditIcon />
           </>

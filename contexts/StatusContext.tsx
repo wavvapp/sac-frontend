@@ -1,14 +1,17 @@
 import {
   createContext,
   useContext,
-  useState,
+  // useState,
   useCallback,
-  Dispatch,
-  SetStateAction,
+  // Dispatch,
+  // SetStateAction,
+  useEffect,
 } from "react"
-import api from "@/service"
+// import api from "@/service"
 import { useAuth } from "./AuthContext"
 import { Signal } from "@/types"
+import { SharedValue, useSharedValue } from "react-native-reanimated"
+import { useFetchMySignal } from "@/hooks/useSignal_"
 // import { useSignal } from "@/hooks/useSignal"
 
 export type TemporaryStatusType = {
@@ -24,13 +27,13 @@ export type SavedStatusType = {
 }
 
 type StatusContextType = {
-  temporaryStatus: TemporaryStatusType
-  savedStatus: SavedStatusType
-  saveStatus: () => void
-  setTemporaryStatus: Dispatch<SetStateAction<TemporaryStatusType>>
-  updateActivity: () => Promise<void>
-  updateSignal: (signal: Signal) => Promise<void>
-  clearStatus: () => void
+  // temporaryStatus: TemporaryStatusType
+  // savedStatus: SavedStatusType
+  // saveStatus: () => void
+  // setTemporaryStatus: Dispatch<SetStateAction<TemporaryStatusType>>
+  // updateActivity: () => Promise<void>
+  // clearStatus: () => void
+  isOn: SharedValue<boolean>
 }
 
 const StatusContext = createContext<StatusContextType>({} as StatusContextType)
@@ -38,83 +41,88 @@ const StatusContext = createContext<StatusContextType>({} as StatusContextType)
 export const StatusProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const { user, updateUserInfo } = useAuth()
+  const { updateUserInfo } = useAuth()
+  const isOn = useSharedValue(false)
 
-  const initialStatus = {
-    timeSlot: "NOW",
-    activity: user?.activity || "",
-    friendIds: [],
-  }
-  const [temporaryStatus, setTemporaryStatus] =
-    useState<TemporaryStatusType>(initialStatus)
-  const [savedStatus, setSavedStatus] = useState<SavedStatusType>({
-    timeSlot: temporaryStatus.timeSlot,
-    activity: temporaryStatus.activity,
-    friendIds: temporaryStatus.friendIds,
-  })
-  // const { fetchMySignal } = useSignal()
+  // const initialStatus = {
+  //   timeSlot: "NOW",
+  //   activity: user?.activity || "",
+  //   friendIds: [],
+  // }
+
+  // const [savedStatus, setSavedStatus] = useState<SavedStatusType>({
+  //   timeSlot: temporaryStatus.timeSlot,
+  //   activity: temporaryStatus.activity,
+  //   friendIds: temporaryStatus.friendIds,
+  // })
+
+  const { data: signalData } = useFetchMySignal()
+  // const [temporaryStatus, setTemporaryStatus] = useState<TemporaryStatusType >()
   const updateSignal = useCallback(async (signal: Signal) => {
-    const { friends, status_message, when } = signal
-    setTemporaryStatus({
-      friendIds: friends,
-      activity: status_message,
-      timeSlot: when,
-    })
-    setSavedStatus({
-      friendIds: friends,
-      activity: status_message,
-      timeSlot: when,
-    })
+    const { status_message, when } = signal
+    // setTemporaryStatus({
+    //   friendIds,
+    //   activity: status_message,
+    //   timeSlot: when,
+    // })
+    // setSavedStatus({
+    //   friendIds,
+    //   activity: status_message,
+    //   timeSlot: when,
+    // })
     await updateUserInfo(status_message, when)
     return
   }, [])
 
-  // const fetchInitialStatus = useCallback(async () => {
-  //   try {
-  //     const data = await fetchMySignal()
-  //     if (!data) return
-  //     await updateSignal(data)
-  //   } catch (error) {
-  //     console.error("Error fetching initial activity status:", error)
-  //   }
-  // }, [fetchMySignal, updateSignal])
-
-  // useEffect(() => {
-  //   fetchInitialStatus()
-  // }, [fetchInitialStatus])
-
-  const updateActivity = async () => {
-    try {
-      const { data } = await api.put("/my-signal", {
-        friends: savedStatus.friendIds,
-        status_message: savedStatus.activity,
-        when: savedStatus.timeSlot,
-      })
-      return data
-    } catch (error) {
-      console.error("Error updating activity status:", error)
-      throw error
+  useEffect(() => {
+    if (!signalData) return
+    const signal = {
+      ...signalData,
+      friendIds: signalData.friends.map((friend) => friend.friendId),
     }
-  }
 
-  const saveStatus = () => {
-    setSavedStatus(temporaryStatus)
-  }
+    console.log("use-effect optimistically being updated.")
+    updateSignal(signal)
+  }, [updateSignal, signalData])
 
-  const clearStatus = () => {
-    setTemporaryStatus(savedStatus)
-  }
+  // const updateActivity = async () => {
+  //   try {
+  //     console.log(JSON.stringify(temporaryStatus, null, 2))
+  //     const { data } = await api.put("/my-signal", {
+  //       friends: temporaryStatus.friendIds,
+  //       status_message: temporaryStatus.activity,
+  //       when: temporaryStatus.timeSlot,
+  //     })
+  //     return "data"
+  //   } catch (error) {
+  //     console.error("Error updating activity status:", error)
+  //     throw error
+  //   }
+  // }
+
+  // const saveStatus = () => {
+  //   setSavedStatus(temporaryStatus)
+  // }
+
+  // const clearStatus = () => {
+  //   setTemporaryStatus(savedStatus)
+  // }
+
+  useEffect(() => {
+    isOn.value = signalData?.status === "active"
+    // setTemporaryStatus()
+  }, [isOn, signalData])
 
   return (
     <StatusContext.Provider
       value={{
-        savedStatus,
-        clearStatus,
-        temporaryStatus,
-        setTemporaryStatus,
-        saveStatus,
-        updateActivity,
-        updateSignal,
+        // savedStatus,
+        // clearStatus,
+        // temporaryStatus,
+        // setTemporaryStatus,
+        // saveStatus,
+        // updateActivity,
+        isOn,
       }}>
       {children}
     </StatusContext.Provider>

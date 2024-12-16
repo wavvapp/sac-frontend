@@ -11,8 +11,10 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated"
 import UserAvailability from "@/components/cards/UserAvailability"
-import { useStatus } from "@/contexts/StatusContext"
+// import { useStatus } from "@/contexts/StatusContext"
 import { useFriends } from "@/hooks/useFriends"
+import { useFetchMySignal } from "@/hooks/useSignal_"
+import { useMemo } from "react"
 
 const MAX_VISIBLE_FRIENDS = 3
 
@@ -27,15 +29,19 @@ export default function UserStatus({
   isOn,
   ...rest
 }: UserStatusProps) {
-  const { savedStatus } = useStatus()
-  const { friendIds, activity, timeSlot } = savedStatus
+  // const { savedStatus } = useStatus()
+  const { data: signalData } = useFetchMySignal()
 
+  // const friendsIds = useMemo(() => signalData?.friendIds, [signalData])
   const { friends: signalFriends } = useFriends()
   const navigation = useNavigation<HomeScreenProps>()
 
-  const friends = signalFriends.filter((friend) =>
-    friendIds.includes(friend.id),
-  )
+  const friends = useMemo(() => {
+    return signalFriends.filter((friend) =>
+      signalData.friendIds?.includes(friend.id),
+    )
+  }, [signalData, signalFriends])
+
   const visibleFriends = friends.slice(0, MAX_VISIBLE_FRIENDS)
   const remainingCount = Math.max(friends.length - MAX_VISIBLE_FRIENDS, 0)
   const fullFriendsList = visibleFriends
@@ -77,8 +83,8 @@ export default function UserStatus({
           {user && (
             <UserAvailability
               fullName={user.names}
-              time={timeSlot}
-              activity={activity}
+              time={signalData.when}
+              activity={signalData.status_message}
             />
           )}
           <View style={{ opacity: 0.5 }}>

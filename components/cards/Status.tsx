@@ -2,21 +2,22 @@ import { View, ScrollView, StyleSheet, TouchableOpacity } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import Badge from "@/components/ui/Badge"
 import { theme } from "@/theme"
-import { TemporaryStatusType, useStatus } from "@/contexts/StatusContext"
+// import { TemporaryStatusType, useStatus } from "@/contexts/StatusContext"
+import { useFetchMySignal } from "@/hooks/useSignal_"
 
 type StatusProps = {
   timeSlots: string[]
 }
 
 export const Status: React.FC<StatusProps> = ({ timeSlots }) => {
-  const { temporaryStatus, setTemporaryStatus } = useStatus()
-
-  const handleTimeSlotChange = (selectedTime: string) => {
-    setTemporaryStatus((prev: TemporaryStatusType) => ({
-      ...prev,
-      timeSlot: selectedTime,
-    }))
-  }
+  // const { temporaryStatus, setTemporaryStatus } = useStatus()
+  const { data: signalData } = useFetchMySignal()
+  // const handleTimeSlotChange = (selectedTime: string) => {
+  //   setTemporaryStatus((prev: TemporaryStatusType) => ({
+  //     ...prev,
+  //     timeSlot: selectedTime,
+  //   }))
+  // }
 
   return (
     <View style={styles.container}>
@@ -31,13 +32,12 @@ export const Status: React.FC<StatusProps> = ({ timeSlots }) => {
           <View style={styles.buttonContainer}>
             {timeSlots.map((slot) => (
               <TouchableOpacity
-                onPress={() => handleTimeSlotChange(slot)}
+                // onPress={() => handleTimeSlotChange(slot)}
                 key={slot}>
                 <Badge
                   name={slot}
                   variant={
-                    temporaryStatus.timeSlot.toLowerCase() ===
-                    slot.toLowerCase()
+                    signalData.when.toLowerCase() === slot.toLowerCase()
                       ? "default"
                       : "outline"
                   }
