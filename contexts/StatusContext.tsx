@@ -1,7 +1,6 @@
 import {
   createContext,
   useContext,
-  useEffect,
   useState,
   useCallback,
   Dispatch,
@@ -10,7 +9,7 @@ import {
 import api from "@/service"
 import { useAuth } from "./AuthContext"
 import { Signal } from "@/types"
-import { useSignal } from "@/hooks/useSignal"
+// import { useSignal } from "@/hooks/useSignal"
 
 export type TemporaryStatusType = {
   timeSlot: string
@@ -53,7 +52,7 @@ export const StatusProvider: React.FC<{ children: React.ReactNode }> = ({
     activity: temporaryStatus.activity,
     friendIds: temporaryStatus.friendIds,
   })
-  const { fetchMySignal } = useSignal()
+  // const { fetchMySignal } = useSignal()
   const updateSignal = useCallback(async (signal: Signal) => {
     const { friends, status_message, when } = signal
     setTemporaryStatus({
@@ -70,19 +69,19 @@ export const StatusProvider: React.FC<{ children: React.ReactNode }> = ({
     return
   }, [])
 
-  const fetchInitialStatus = useCallback(async () => {
-    try {
-      const data = await fetchMySignal()
-      if (!data) return
-      await updateSignal(data)
-    } catch (error) {
-      console.error("Error fetching initial activity status:", error)
-    }
-  }, [fetchMySignal, updateSignal])
+  // const fetchInitialStatus = useCallback(async () => {
+  //   try {
+  //     const data = await fetchMySignal()
+  //     if (!data) return
+  //     await updateSignal(data)
+  //   } catch (error) {
+  //     console.error("Error fetching initial activity status:", error)
+  //   }
+  // }, [fetchMySignal, updateSignal])
 
-  useEffect(() => {
-    fetchInitialStatus()
-  }, [fetchInitialStatus])
+  // useEffect(() => {
+  //   fetchInitialStatus()
+  // }, [fetchInitialStatus])
 
   const updateActivity = async () => {
     try {

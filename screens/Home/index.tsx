@@ -22,6 +22,7 @@ import { useQuery, useMutation } from "@tanstack/react-query"
 import { fetchPoints } from "@/libs/fetchPoints"
 import * as WebBrowser from "expo-web-browser"
 import { TouchableOpacity } from "react-native-gesture-handler"
+import { useFetchMySignal } from "@/hooks/useSignal_"
 
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -36,11 +37,7 @@ export default function HomeScreen() {
   const navigation = useNavigation<HomeScreenProps>()
   const { fetchAllFriends, friends, isLoading: friendsLoading } = useFriends()
   const { user, isAuthenticated } = useAuth()
-  const {
-    data,
-    refetch: refetchPoints,
-    isLoading,
-  } = useQuery({
+  const { data, refetch: refetchPoints } = useQuery({
     queryKey: ["points"],
     queryFn: fetchPoints,
   })
@@ -61,6 +58,8 @@ export default function HomeScreen() {
       fetchAllFriends()
     }, [isAuthenticated, refetchPoints, fetchAllFriends]),
   )
+
+  const { isLoading: isSignalLoading } = useFetchMySignal()
 
   const handleWebsiteOpen = async () => {
     await WebBrowser.openBrowserAsync(
@@ -103,7 +102,7 @@ export default function HomeScreen() {
           </View>
           <AnimatedSwitch
             isOn={isOn}
-            isLoading={isLoading}
+            isLoading={isSignalLoading}
             onPress={() => handlePress.mutate()}
             style={styles.switch}
           />
