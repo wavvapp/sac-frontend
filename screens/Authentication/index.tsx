@@ -10,7 +10,7 @@ import { useNavigation } from "@react-navigation/native"
 import { CredentialsScreenProps } from "./SignUp/CreateCredentials"
 import AppleIcon from "@/components/vectors/AppleIcon"
 import GoogleIcon from "@/components/vectors/GoogleIcon"
-import { useNavigationHistory } from "@/contexts/NavigationHistoryContext"
+import { StaticPageType } from "@/types"
 
 GoogleSignin.configure({
   webClientId: process.env.WEB_CLIENT_ID,
@@ -20,7 +20,6 @@ GoogleSignin.configure({
 export default function EntryScreen() {
   const { signInWithGoogle, signInWithApple } = useAuth()
   const navigation = useNavigation<CredentialsScreenProps>()
-  useNavigationHistory()
 
   const handleGoogleLogin = async () => {
     await signInWithGoogle(navigation)
@@ -28,6 +27,10 @@ export default function EntryScreen() {
 
   const handleAppleSignIn = async () => {
     await signInWithApple(navigation)
+  }
+
+  const navigateToSaticScreen = (screen: StaticPageType) => {
+    navigation.navigate("StaticContentScreen", { page: screen })
   }
 
   return (
@@ -64,8 +67,17 @@ export default function EntryScreen() {
             By clicking on
             <Text> Sign In / Create an account </Text>
             you agree to our{" "}
-            <Text style={styles.underline}>Terms of Services</Text>. Learn more
-            about our <Text style={styles.underline}>Privacy Policy</Text> and{" "}
+            <Text
+              onPress={() => navigateToSaticScreen("terms")}
+              style={styles.underline}>
+              Terms of Services
+            </Text>
+            . Learn more about our{" "}
+            <Text
+              onPress={() => navigateToSaticScreen("privacy")}
+              style={styles.underline}>
+              Privacy Policy
+            </Text>{" "}
             <Text style={styles.underline}>Cookies Policy</Text>.
           </CustomText>
         </View>
