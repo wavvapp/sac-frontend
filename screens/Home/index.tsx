@@ -18,7 +18,7 @@ import NoFriends from "@/components/cards/NoFriends"
 import { useAuth } from "@/contexts/AuthContext"
 import { useSignal } from "@/hooks/useSignal"
 import { useFriends } from "@/hooks/useFriends"
-import { useQuery, useMutation } from "@tanstack/react-query"
+import { useQuery } from "@tanstack/react-query"
 import { fetchPoints } from "@/libs/fetchPoints"
 import * as WebBrowser from "expo-web-browser"
 import { TouchableOpacity } from "react-native-gesture-handler"
@@ -31,7 +31,7 @@ export type HomeScreenProps = NativeStackNavigationProp<
 const { width } = Dimensions.get("window")
 export default function HomeScreen() {
   const [_, setIsVisible] = useState(false)
-  const { isOn, turnOffSignalStatus, turnOnSignalStatus } = useSignal()
+  const { isOn, turnOnSignalStatus, turnOffSignalStatus } = useSignal()
   const signalingRef = useRef<SignalingRef>(null)
   const navigation = useNavigation<HomeScreenProps>()
   const { fetchAllFriends, friends, isLoading: friendsLoading } = useFriends()
@@ -45,15 +45,13 @@ export default function HomeScreen() {
     queryFn: fetchPoints,
   })
 
-  const handlePress = useMutation({
-    mutationFn: isOn.value ? turnOffSignalStatus : turnOnSignalStatus,
-    onMutate: () => {
-      isOn.value = !isOn.value
-    },
-    onError: () => {
-      isOn.value = !isOn.value
-    },
-  })
+  const handleToggleSignal = useCallback(() => {
+    if (isOn.value) {
+      turnOffSignalStatus.mutate()
+    } else {
+      turnOnSignalStatus.mutate()
+    }
+  }, [isOn, turnOnSignalStatus, turnOffSignalStatus])
   useFocusEffect(
     useCallback(() => {
       if (!isAuthenticated) return
@@ -104,7 +102,9 @@ export default function HomeScreen() {
           <AnimatedSwitch
             isOn={isOn}
             isLoading={isLoading}
-            onPress={() => handlePress.mutate()}
+            onPress={() => {
+              handleToggleSignal()
+            }}
             style={styles.switch}
           />
           <Signaling ref={signalingRef} />

@@ -1,47 +1,82 @@
 import api from "@/service"
 import { Friend, Signal } from "@/types"
-import { useCallback } from "react"
 import { useSharedValue } from "react-native-reanimated"
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 
 export const useSignal = () => {
   const isOn = useSharedValue(false)
+  const queryClient = useQueryClient()
 
-  const fetchMySignal = useCallback(async () => {
-    try {
-      const { data: signal } = await api.get("/my-signal")
-      isOn.value = signal.status === "active"
-      const friendIds = signal.friends.map((friend: Friend) => friend.friendId)
-      const mySignal: Signal = { ...signal, friends: friendIds }
-      return mySignal
-    } catch (error) {
-      console.error("Error with fetching signal", error)
-    }
-  }, [isOn])
+  const {
+    data: signal,
+    isLoading,
+    isError,
+  } = useQuery<Signal>({
+    queryKey: ["my-signal"],
+    queryFn: async () => {
+      const { data } = await api.get("/my-signal")
 
-  const turnOnSignalStatus = async () => {
-    try {
-      await api.post("/my-signal/turn-on")
-      return true
-    } catch (error) {
-      console.error("Error turning on my signal:", error)
-      return false
-    }
-  }
+      isOn.value = data.status === "active"
 
-  const turnOffSignalStatus = async () => {
-    try {
-      await api.post("/my-signal/turn-off")
-      return false
-    } catch (error) {
-      console.error("Error turning off my signal:", error)
-      return true
-    }
-  }
+      const friendIds = data.friends.map((friend: Friend) => friend.friendId)
+
+      return { ...data, friends: friendIds }
+    },
+    staleTime: 5 * 60 * 1000,
+  })
+  const turnOnSignalStatus = useMutation({
+    mutationFn: () => api.post("/my-signal/turn-on"),
+    onMutate: async () => {
+      await queryClient.cancelQueries({ queryKey: ["my-signal"] })
+      const previousSignal = queryClient.getQueryData<Signal>(["my-signal"])
+      queryClient.setQueryData<Signal>(["my-signal"], (old) => ({
+        ...old!,
+        status: "active",
+      }))
+
+      isOn.value = true
+
+      return { previousSignal }
+    },
+    onError: (error, variables, context) => {
+      queryClient.setQueryData(["my-signal"], context?.previousSignal)
+      isOn.value = false
+      console.error("Error turning on signal:", error)
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["my-signal"] })
+    },
+  })
+
+  const turnOffSignalStatus = useMutation({
+    mutationFn: () => api.post("/my-signal/turn-off"),
+    onMutate: async () => {
+      await queryClient.cancelQueries({ queryKey: ["my-signal"] })
+
+      const previousSignal = queryClient.getQueryData<Signal>(["my-signal"])
+      queryClient.setQueryData<Signal>(["my-signal"], (old) => ({
+        ...old!,
+        status: "inactive",
+      }))
+      isOn.value = false
+      return { previousSignal }
+    },
+    onError: (error, variables, context) => {
+      queryClient.setQueryData(["my-signal"], context?.previousSignal)
+      isOn.value = true
+      console.error("Error turning off signal:", error)
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["my-signal"] })
+    },
+  })
 
   return {
+    signal,
     isOn,
+    isLoading,
+    isError,
     turnOnSignalStatus,
     turnOffSignalStatus,
-    fetchMySignal,
   }
 }
