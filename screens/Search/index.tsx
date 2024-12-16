@@ -9,7 +9,7 @@ import Input from "@/components/ui/Input"
 import UserInfo from "@/components/UserInfo"
 import ShareCard from "@/components/Share"
 import { CustomButton } from "@/components/ui/Button"
-import { useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import CloseIcon from "@/components/vectors/CloseIcon"
 import { useNavigation } from "@react-navigation/native"
 import UserAvatar from "@/components/ui/UserAvatar"
@@ -21,61 +21,72 @@ import api from "@/service"
 import { useFriends } from "@/hooks/useFriends"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { StatusBar } from "expo-status-bar"
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 
 const FindFriends = () => {
   const navigation = useNavigation()
   const [search, setSearch] = useState("")
-  const queryClient = useQueryClient()
+  const [filteredUsers, setFilteredUsers] = useState<User[]>([])
+  const [isLoadingFriend, setIsLoadingFriend] = useState<
+    Record<string, boolean>
+  >({})
+  const [allUsers, setAllUsers] = useState<User[]>([])
+  const [isAnyFriendLoading, setIsAnyFriendLoading] = useState(false)
   const { fetchAllFriends } = useFriends()
-
-  const { data: users = [] } = useQuery<User[]>({
-    queryKey: ["users"],
-    queryFn: async () => {
+  const fetchUsers = useCallback(async () => {
+    try {
       const response = await api.get(`/users`)
-      return response.data.map((user: User) => ({
+      const users = response.data.map((user: User) => ({
         id: user.id,
         names: user.names,
         username: user.username,
         profilePictureUrl: user.profilePictureUrl,
         isFriend: user.isFriend,
       }))
-    },
-  })
-
-  const addFriendMutation = useMutation({
-    mutationFn: (friendId: string) => api.post("/friends", { friendId }),
-    onMutate: async (friendId) => {
-      await queryClient.cancelQueries({ queryKey: ["users"] })
-      const previousUsers = queryClient.getQueryData(["users"])
-      queryClient.setQueryData(["users"], (oldUsers: User[]) =>
-        oldUsers.map((user) =>
-          user.id === friendId ? { ...user, isFriend: true } : user,
-        ),
-      )
-      return { previousUsers }
-    },
-    onError: (err, friendId, context) => {
-      queryClient.setQueryData(["users"], context?.previousUsers)
-      console.warn("Error adding friend:", err)
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["users"] })
-      fetchAllFriends()
-    },
-  })
-
-  const filteredUsers = users
-    .filter((user) => user.names.toLowerCase().includes(search.toLowerCase()))
-    .sort((a, b) => a.names.localeCompare(b.names))
+      setAllUsers(users)
+      setFilteredUsers(users)
+    } catch (error) {
+      console.error("error fetching users", error)
+    }
+  }, [])
+  useEffect(() => {
+    fetchUsers()
+  }, [fetchUsers])
 
   const handleSearch = (name: string) => {
     setSearch(name)
+    const filtered = allUsers
+      .filter((user) => user.names.toLowerCase().includes(name.toLowerCase()))
+      .sort((a, b) => a.names.localeCompare(b.names))
+    setFilteredUsers(filtered)
   }
 
-  const handleAddFriend = (user: User) => {
-    if (user.isFriend || addFriendMutation.isPending) return
-    addFriendMutation.mutate(user.id)
+  const handleAddFriend = async (user: User) => {
+    if (isLoadingFriend[user.id] || user.isFriend || isAnyFriendLoading) return
+    try {
+      setIsAnyFriendLoading(true)
+      setIsLoadingFriend((prev) => ({ ...prev, [user.id]: true }))
+      await api.post("/friends", { friendId: user.id })
+      setAllUsers((prevUsers) =>
+        prevUsers.map((currentUser) =>
+          currentUser.id === user.id
+            ? { ...currentUser, isFriend: true }
+            : currentUser,
+        ),
+      )
+      setFilteredUsers((prevUsers) =>
+        prevUsers.map((currentUser) =>
+          currentUser.id === user.id
+            ? { ...currentUser, isFriend: true }
+            : currentUser,
+        ),
+      )
+      await fetchAllFriends()
+    } catch (error: any) {
+      console.warn("Error adding friend:", error.response.data.message)
+    } finally {
+      setIsAnyFriendLoading(false)
+      setIsLoadingFriend((prev) => ({ ...prev, [user.id]: false }))
+    }
   }
 
   const handleClose = () => navigation.goBack()
@@ -103,11 +114,14 @@ const FindFriends = () => {
 
       <ScrollView style={styles.friendsList}>
         {search &&
+          filteredUsers.length > 0 &&
           filteredUsers.map((user) => (
             <TouchableOpacity
               key={user.id}
               style={styles.friendItem}
-              disabled={user.isFriend || addFriendMutation.isPending}
+              disabled={
+                isLoadingFriend[user.id] || user.isFriend || isAnyFriendLoading
+              }
               onPress={() => handleAddFriend(user)}>
               <View style={styles.userDetails}>
                 <UserAvatar imageUrl={user.profilePictureUrl} />
@@ -115,8 +129,7 @@ const FindFriends = () => {
                   <UserInfo fullName={user.names} username={user.username} />
                 </View>
               </View>
-              {addFriendMutation.isPending &&
-              addFriendMutation.variables === user.id ? (
+              {isLoadingFriend[user.id] ? (
                 <ActivityIndicator
                   color={theme.colors.black}
                   size="small"
@@ -129,7 +142,11 @@ const FindFriends = () => {
                   variant="outline"
                   title="Add"
                   onPress={() => handleAddFriend(user)}
-                  disabled={user.isFriend || addFriendMutation.isPending}
+                  disabled={
+                    user.isFriend ||
+                    isLoadingFriend[user.id] ||
+                    isAnyFriendLoading
+                  }
                 />
               )}
             </TouchableOpacity>
