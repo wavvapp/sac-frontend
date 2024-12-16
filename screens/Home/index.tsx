@@ -21,7 +21,7 @@ import { useQuery, useMutation } from "@tanstack/react-query"
 import { fetchPoints } from "@/libs/fetchPoints"
 import * as WebBrowser from "expo-web-browser"
 import { TouchableOpacity } from "react-native-gesture-handler"
-import { useFetchMySignal } from "@/hooks/useSignal_"
+import { useFetchMySignal } from "@/hooks/useSignal"
 import { useStatus } from "@/contexts/StatusContext"
 import api from "@/service"
 

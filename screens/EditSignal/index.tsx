@@ -12,13 +12,14 @@ import ShareCard from "@/components/Share"
 import CustomText from "@/components/ui/CustomText"
 import { theme } from "@/theme"
 import { useAuth } from "@/contexts/AuthContext"
-// import { useStatus } from "@/contexts/StatusContext"
+import { useStatus } from "@/contexts/StatusContext"
 import { RootStackParamList } from "@/navigation"
 import { useState } from "react"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 // import { useSignal } from "@/hooks/useSignal"
 import { StatusBar } from "expo-status-bar"
 import api from "@/service"
+import { Signal } from "@/types"
 
 type EditSignalScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -27,41 +28,30 @@ type EditSignalScreenProps = NativeStackNavigationProp<
 
 export default function EditSignal() {
   const navigation = useNavigation<EditSignalScreenProps>()
-  // const { updateActivity } = useStatus()
+  const { temporaryStatus } = useStatus()
   // const { fetchMySignal } = useSignal()
   const { user } = useAuth()
   const [isLoading, setIsLoading] = useState(false)
   const queryclient = useQueryClient()
 
   const mutation = useMutation({
-    mutationFn: () => api.post("/my-signal/turn-off"),
+    mutationFn: () => {
+      return api.put("/my-signal", {
+        friends: temporaryStatus.friendIds,
+        status_message: temporaryStatus.activity,
+        when: temporaryStatus.timeSlot,
+      })
+    },
     onMutate: () => {
       queryclient.cancelQueries({ queryKey: ["fetch-my-signal"] })
-      const dataForYou = {
-        id: "42c2faf8-7138-47f5-b508-b4523630d330",
+      const optimisticStatus: Signal = {
+        when: temporaryStatus.timeSlot,
+        status_message: temporaryStatus.activity,
+        friends: [],
+        friendIds: [],
         status: "active",
-        when: "NOW",
-        status_message: "A simple message simple==============",
-        createdAt: "2024-12-02T13:52:40.234Z",
-        updatedAt: "2024-12-16T11:48:44.604Z",
-        friendSignal: [],
-        friends: [
-          {
-            friendId: "5ea9c90f-70ad-4a2c-9aaa-445ef64f97ec",
-            username: "Moribund",
-            names: "igor ntwali",
-            profilePictureUrl:
-              "https://lh3.googleusercontent.com/a/ACg8ocIl3uxkfSf84hcRUgQCSOM6hv8huS0xjOUpxsbcj9ilaQwnfP8=s96-c",
-          },
-          {
-            friendId: "3ba1f9f9-22a0-4c25-a80f-53fee1c5a3ed",
-            username: "Igorntwali",
-            names: "Ntwali  Igor",
-            profilePictureUrl: null,
-          },
-        ],
       }
-      queryclient.setQueryData(["fetch-my-signal"], dataForYou)
+      queryclient.setQueryData(["fetch-my-signal"], optimisticStatus)
       setIsLoading(true)
       navigation.goBack()
     },

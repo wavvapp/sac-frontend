@@ -13,7 +13,7 @@ import Animated, {
 import UserAvailability from "@/components/cards/UserAvailability"
 // import { useStatus } from "@/contexts/StatusContext"
 import { useFriends } from "@/hooks/useFriends"
-import { useFetchMySignal } from "@/hooks/useSignal_"
+import { useFetchMySignal } from "@/hooks/useSignal"
 import { useMemo } from "react"
 
 const MAX_VISIBLE_FRIENDS = 3

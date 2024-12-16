@@ -2,8 +2,8 @@ import { CustomButton } from "@/components/ui/Button"
 import CustomText from "@/components/ui/CustomText"
 import Input from "@/components/ui/Input"
 import CheckIcon from "@/components/vectors/CheckIcon"
-// import { TemporaryStatusType, useStatus } from "@/contexts/StatusContext"
-import { useFetchMySignal } from "@/hooks/useSignal_"
+import { TemporaryStatusType, useStatus } from "@/contexts/StatusContext"
+import { useFetchMySignal } from "@/hooks/useSignal"
 import { theme } from "@/theme"
 import { useState } from "react"
 import {
@@ -20,16 +20,16 @@ interface EditActivityProps {
 }
 
 export default function EditActivity({ closeModal }: EditActivityProps) {
-  // const { temporaryStatus, setTemporaryStatus } = useStatus()
+  const { setTemporaryStatus } = useStatus()
   const { data: signalData } = useFetchMySignal()
   const [text, setText] = useState(signalData.status_message)
 
   const handleEdit = () => {
     if (text.trim()) {
-      // setTemporaryStatus((prev: TemporaryStatusType) => ({
-      //   ...prev,
-      //   activity: text.trim(),
-      // }))
+      setTemporaryStatus((prev: TemporaryStatusType) => ({
+        ...prev,
+        activity: text.trim(),
+      }))
       Keyboard.dismiss()
     }
     closeModal()

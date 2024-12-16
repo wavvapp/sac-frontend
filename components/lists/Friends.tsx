@@ -7,7 +7,7 @@ import { useFriends } from "@/hooks/useFriends"
 // import { TemporaryStatusType, useStatus } from "@/contexts/StatusContext"
 import { FriendsSkeleton } from "@/components/cards/FriendsSkeleton"
 import { useQuery } from "@tanstack/react-query"
-import { useFetchMySignal } from "@/hooks/useSignal_"
+import { useFetchMySignal } from "@/hooks/useSignal"
 
 export default function FriendsList() {
   // const { temporaryStatus, setTemporaryStatus } = useStatus()

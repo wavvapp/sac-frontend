@@ -1,17 +1,17 @@
 import {
   createContext,
   useContext,
-  // useState,
+  useState,
   useCallback,
-  // Dispatch,
-  // SetStateAction,
+  Dispatch,
+  SetStateAction,
   useEffect,
 } from "react"
 // import api from "@/service"
 import { useAuth } from "./AuthContext"
 import { Signal } from "@/types"
 import { SharedValue, useSharedValue } from "react-native-reanimated"
-import { useFetchMySignal } from "@/hooks/useSignal_"
+import { useFetchMySignal } from "@/hooks/useSignal"
 // import { useSignal } from "@/hooks/useSignal"
 
 export type TemporaryStatusType = {
@@ -20,17 +20,11 @@ export type TemporaryStatusType = {
   friendIds: string[]
 }
 
-export type SavedStatusType = {
-  timeSlot: string
-  activity: string
-  friendIds: string[]
-}
-
 type StatusContextType = {
-  // temporaryStatus: TemporaryStatusType
+  temporaryStatus: TemporaryStatusType
   // savedStatus: SavedStatusType
   // saveStatus: () => void
-  // setTemporaryStatus: Dispatch<SetStateAction<TemporaryStatusType>>
+  setTemporaryStatus: Dispatch<SetStateAction<TemporaryStatusType>>
   // updateActivity: () => Promise<void>
   // clearStatus: () => void
   isOn: SharedValue<boolean>
@@ -44,27 +38,19 @@ export const StatusProvider: React.FC<{ children: React.ReactNode }> = ({
   const { updateUserInfo } = useAuth()
   const isOn = useSharedValue(false)
 
-  // const initialStatus = {
-  //   timeSlot: "NOW",
-  //   activity: user?.activity || "",
-  //   friendIds: [],
-  // }
-
-  // const [savedStatus, setSavedStatus] = useState<SavedStatusType>({
-  //   timeSlot: temporaryStatus.timeSlot,
-  //   activity: temporaryStatus.activity,
-  //   friendIds: temporaryStatus.friendIds,
-  // })
-
   const { data: signalData } = useFetchMySignal()
-  // const [temporaryStatus, setTemporaryStatus] = useState<TemporaryStatusType >()
+  const [temporaryStatus, setTemporaryStatus] = useState<TemporaryStatusType>({
+    friendIds: signalData.friendIds,
+    activity: signalData.status_message,
+    timeSlot: signalData.when,
+  })
   const updateSignal = useCallback(async (signal: Signal) => {
-    const { status_message, when } = signal
-    // setTemporaryStatus({
-    //   friendIds,
-    //   activity: status_message,
-    //   timeSlot: when,
-    // })
+    const { friendIds, status_message, when } = signal
+    setTemporaryStatus({
+      friendIds,
+      activity: status_message,
+      timeSlot: when,
+    })
     // setSavedStatus({
     //   friendIds,
     //   activity: status_message,
@@ -93,7 +79,7 @@ export const StatusProvider: React.FC<{ children: React.ReactNode }> = ({
   //       status_message: temporaryStatus.activity,
   //       when: temporaryStatus.timeSlot,
   //     })
-  //     return "data"
+  //     return data
   //   } catch (error) {
   //     console.error("Error updating activity status:", error)
   //     throw error
@@ -118,8 +104,8 @@ export const StatusProvider: React.FC<{ children: React.ReactNode }> = ({
       value={{
         // savedStatus,
         // clearStatus,
-        // temporaryStatus,
-        // setTemporaryStatus,
+        temporaryStatus,
+        setTemporaryStatus,
         // saveStatus,
         // updateActivity,
         isOn,

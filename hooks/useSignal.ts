@@ -9,7 +9,7 @@ export const useFetchMySignal = () => {
     queryKey: ["fetch-my-signal"],
     queryFn: async () => {
       const { data } = await api.get("/my-signal")
-      console.log(JSON.stringify(data, null, 2))
+      console.log("----fetching my signal--------------")
       return data
     },
     initialData: {
