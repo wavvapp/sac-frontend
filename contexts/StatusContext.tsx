@@ -1,10 +1,10 @@
 import {
   createContext,
   useContext,
+  useEffect,
   useState,
   Dispatch,
   SetStateAction,
-  useEffect,
 } from "react"
 import { SharedValue, useSharedValue } from "react-native-reanimated"
 import { useFetchMySignal } from "@/hooks/useSignal"
@@ -44,9 +44,7 @@ export const StatusProvider: React.FC<{ children: React.ReactNode }> = ({
       activity: signalData.status_message,
       timeSlot: signalData.when,
     })
-  }, [signalData])
 
-  useEffect(() => {
     isOn.value = signalData?.status === "active"
   }, [isOn, signalData])
 

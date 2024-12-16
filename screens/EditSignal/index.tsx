@@ -29,10 +29,10 @@ type EditSignalScreenProps = NativeStackNavigationProp<
 export default function EditSignal() {
   const navigation = useNavigation<EditSignalScreenProps>()
   const { temporaryStatus, setTemporaryStatus } = useStatus()
+  const { data: signal } = useFetchMySignal()
   const { user } = useAuth()
   const [isLoading, setIsLoading] = useState(false)
   const queryclient = useQueryClient()
-  const { data: signal } = useFetchMySignal()
 
   const mutation = useMutation({
     mutationFn: () => {

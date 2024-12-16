@@ -9,17 +9,17 @@ import { FriendsSkeleton } from "@/components/cards/FriendsSkeleton"
 import { useQuery } from "@tanstack/react-query"
 
 export default function FriendsList() {
-  const { setTemporaryStatus, temporaryStatus } = useStatus()
+  const { temporaryStatus, setTemporaryStatus } = useStatus()
   const { fetchAllFriends } = useFriends()
 
   const { data: friendsListData, isLoading } = useQuery<User[]>({
     queryKey: ["friends"],
     queryFn: fetchAllFriends,
   })
+  const { friendIds } = temporaryStatus
 
   const updateFriendsList = useCallback(
     (friendId: string) => {
-      const friendIds = temporaryStatus.friendIds
       const newFriends = friendIds?.includes(friendId)
         ? friendIds?.filter((id) => id !== friendId)
         : [...friendIds, friendId]
@@ -29,7 +29,7 @@ export default function FriendsList() {
         friendIds: newFriends,
       }))
     },
-    [setTemporaryStatus, temporaryStatus.friendIds],
+    [friendIds, setTemporaryStatus],
   )
   return (
     <View style={styles.container}>
@@ -39,7 +39,7 @@ export default function FriendsList() {
       ) : (
         friendsListData?.map((friend) => (
           <FriendCard
-            selected={temporaryStatus.friendIds?.includes(friend.id)}
+            selected={friendIds?.includes(friend.id)}
             key={friend.id}
             handleChange={() => updateFriendsList(friend.id)}
             user={friend}

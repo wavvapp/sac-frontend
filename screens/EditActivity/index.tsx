@@ -3,7 +3,6 @@ import CustomText from "@/components/ui/CustomText"
 import Input from "@/components/ui/Input"
 import CheckIcon from "@/components/vectors/CheckIcon"
 import { TemporaryStatusType, useStatus } from "@/contexts/StatusContext"
-import { useFetchMySignal } from "@/hooks/useSignal"
 import { theme } from "@/theme"
 import { useState } from "react"
 import {
@@ -20,9 +19,8 @@ interface EditActivityProps {
 }
 
 export default function EditActivity({ closeModal }: EditActivityProps) {
-  const { setTemporaryStatus } = useStatus()
-  const { data: signalData } = useFetchMySignal()
-  const [text, setText] = useState(signalData.status_message)
+  const { temporaryStatus, setTemporaryStatus } = useStatus()
+  const [text, setText] = useState(temporaryStatus.activity)
 
   const handleEdit = () => {
     if (text.trim()) {

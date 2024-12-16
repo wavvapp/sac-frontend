@@ -11,7 +11,6 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated"
 import UserAvailability from "@/components/cards/UserAvailability"
-// import { useStatus } from "@/contexts/StatusContext"
 import { useFriends } from "@/hooks/useFriends"
 import { useFetchMySignal } from "@/hooks/useSignal"
 import { useMemo } from "react"
@@ -29,10 +28,8 @@ export default function UserStatus({
   isOn,
   ...rest
 }: UserStatusProps) {
-  // const { savedStatus } = useStatus()
   const { data: signalData } = useFetchMySignal()
 
-  // const friendsIds = useMemo(() => signalData?.friendIds, [signalData])
   const { friends: signalFriends } = useFriends()
   const navigation = useNavigation<HomeScreenProps>()
 

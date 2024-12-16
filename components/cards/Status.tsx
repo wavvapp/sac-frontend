@@ -9,7 +9,7 @@ type StatusProps = {
 }
 
 export const Status: React.FC<StatusProps> = ({ timeSlots }) => {
-  const { setTemporaryStatus, temporaryStatus } = useStatus()
+  const { temporaryStatus, setTemporaryStatus } = useStatus()
   const handleTimeSlotChange = (selectedTime: string) => {
     setTemporaryStatus((prev: TemporaryStatusType) => ({
       ...prev,
@@ -35,7 +35,10 @@ export const Status: React.FC<StatusProps> = ({ timeSlots }) => {
                 <Badge
                   name={slot}
                   variant={
-                    temporaryStatus.timeSlot === slot ? "default" : "outline"
+                    temporaryStatus.timeSlot.toLowerCase() ===
+                    slot.toLowerCase()
+                      ? "default"
+                      : "outline"
                   }
                   style={styles.badge}
                 />
