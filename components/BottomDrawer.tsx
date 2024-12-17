@@ -4,6 +4,7 @@ import BottomSheet, {
 } from "@gorhom/bottom-sheet"
 import {
   forwardRef,
+  useCallback,
   useEffect,
   useImperativeHandle,
   useMemo,
@@ -33,7 +34,7 @@ const BottomDrawer = forwardRef<BottomDrawerRef, DrawerProps>((props, ref) => {
   }))
 
   const renderBackdrop = (props: BottomSheetBackdropProps) => (
-    <BottomSheetBackdrop {...props} pressBehavior="close" />
+    <BottomSheetBackdrop {...props} pressBehavior="collapse" />
   )
 
   const { refetch } = useQuery({
@@ -42,6 +43,10 @@ const BottomDrawer = forwardRef<BottomDrawerRef, DrawerProps>((props, ref) => {
     refetchInterval: isbottomSheetOpen ? 5000 : false,
     refetchIntervalInBackground: false,
   })
+
+  const handleSheetChanges = useCallback((index: number) => {
+    setIsBottomSheetOpen(index === 1)
+  }, [])
 
   useEffect(() => {
     if (!isbottomSheetOpen) return
@@ -53,7 +58,7 @@ const BottomDrawer = forwardRef<BottomDrawerRef, DrawerProps>((props, ref) => {
       index={0}
       snapPoints={snapPoints}
       enablePanDownToClose={false}
-      onChange={(index) => setIsBottomSheetOpen(index === 1)}
+      onChange={handleSheetChanges}
       backdropComponent={renderBackdrop}>
       {children}
     </BottomSheet>
