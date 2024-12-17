@@ -1,9 +1,12 @@
 import { View, StyleSheet } from "react-native"
 import { CustomButton } from "@/components/ui/Button"
 import { theme } from "@/theme"
-import LogoIcon from "@/components/vectors/LogoIcon"
 import CustomText from "@/components/ui/CustomText"
 import { useAuth } from "@/contexts/AuthContext"
+import LeftArrow from "@/components/vectors/LeftArrow"
+import { ConfirmationAction } from "@/components/cards/ConfirmationAction"
+import LogoutIcon from "@/components/vectors/LogoutIcon"
+import RightIcon from "@/components/vectors/RightIcon"
 
 export default function EntryScreen() {
   const { signOut } = useAuth()
@@ -15,20 +18,35 @@ export default function EntryScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.content}>
-        <View style={styles.logoContainer}>
-          <LogoIcon />
-          <CustomText fontFamily="writer-mono" style={styles.description}>
-            Settings screen
+        <View style={styles.header}>
+          <CustomButton>
+            <LeftArrow />
+          </CustomButton>
+          <CustomText
+            fontFamily="marfa"
+            fontWeight="bold"
+            size="lg"
+            style={styles.description}>
+            Manage account
           </CustomText>
         </View>
-        <View style={styles.subContainer}>
-          <CustomButton
-            variant="primary"
-            title="Sign Out"
-            onPress={handleSignOut}
-            textStyles={styles.buttonText}
-          />
-        </View>
+
+        <View style={styles.divider} />
+
+        <ConfirmationAction
+          leftIcon={<LogoutIcon />}
+          rightIcon={<RightIcon />}
+          title="Log out"
+          description="Are you sure? You'll have to log in again once you're back"
+          onPress={handleSignOut}
+        />
+
+        {/* <CustomButton
+          variant="primary"
+          title="Sign Out"
+          onPress={handleSignOut}
+          textStyles={styles.buttonText}
+        /> */}
       </View>
     </View>
   )
@@ -42,27 +60,25 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     paddingVertical: 70,
-    justifyContent: "space-between",
   },
-  logoContainer: {
-    paddingTop: 227,
+  header: {
+    flexDirection: "row",
     alignItems: "center",
-    marginBottom: 20,
+    padding: 0,
+    // paddingHorizontal: 16,
+    // paddingTop: 20,
+    // paddingBottom: 16,
   },
+
   description: {
     textAlign: "center",
     color: theme.colors.white,
-    marginTop: 10,
   },
-  subContainer: {
-    paddingBottom: 10,
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    gap: 12,
-    flex: 0,
-  },
-  buttonText: {
-    fontWeight: theme.fontWeight.bold,
+  // buttonText: {
+  //   fontWeight: theme.fontWeight.bold,
+  // },
+  divider: {
+    height: 1,
+    marginHorizontal: 16,
   },
 })
