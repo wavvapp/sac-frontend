@@ -51,9 +51,15 @@ const Signaling = forwardRef<SignalingRef>((_, ref) => {
             ItemSeparatorComponent: () => (
               <View style={styles.availableItemSeparator} />
             ),
-            renderItem: ({ item, index }: { item: User; index: number }) =>
+            renderItem: ({
+              item: user,
+              index,
+            }: {
+              item: User
+              index: number
+            }) =>
               SignalingUser({
-                user: item,
+                user,
                 online: true,
                 isLast: index === availableFriends.length - 1,
                 isFirst: index === 0,
@@ -65,7 +71,7 @@ const Signaling = forwardRef<SignalingRef>((_, ref) => {
             ItemSeparatorComponent: () => (
               <View style={styles.offlineItemSeparator} />
             ),
-            renderItem: ({ item, index }: { item: User; index: number }) =>
+            renderItem: ({ item, index }) =>
               SignalingUser({
                 user: item,
                 online: false,

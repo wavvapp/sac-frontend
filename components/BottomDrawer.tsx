@@ -4,6 +4,7 @@ import BottomSheet, {
 } from "@gorhom/bottom-sheet"
 import {
   forwardRef,
+  useCallback,
   useEffect,
   useImperativeHandle,
   useMemo,
@@ -11,6 +12,7 @@ import {
   useState,
 } from "react"
 import { useFriends } from "@/hooks/useFriends"
+
 interface BottomDrawerRef {
   openBottomSheet: () => void
 }
@@ -22,23 +24,31 @@ interface DrawerProps {
 const BottomDrawer = forwardRef<BottomDrawerRef, DrawerProps>((props, ref) => {
   const snapPoints = useMemo(() => ["20%", "88%"], [])
   const bottomSheetRef = useRef<BottomSheet>(null)
-
-  const [isbottomSheetOpen, setIsBottomSheetOpen] = useState<boolean>(false)
+  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState<boolean>(false)
   const { children } = props
+  const { refetch } = useFriends()
+
   useImperativeHandle(ref, () => ({
     openBottomSheet: () => {
       bottomSheetRef.current?.expand()
     },
   }))
-  const { refetch } = useFriends()
-  const renderBackdrop = (props: BottomSheetBackdropProps) => (
-    <BottomSheetBackdrop {...props} pressBehavior="close" />
-  )
 
+  const renderBackdrop = useCallback(
+    (props: BottomSheetBackdropProps) => (
+      <BottomSheetBackdrop {...props} pressBehavior="close" />
+    ),
+    [],
+  )
   useEffect(() => {
-    if (!isbottomSheetOpen) return
+    if (!isBottomSheetOpen) return
     refetch()
-  }, [isbottomSheetOpen, refetch])
+    const intervalId = setInterval(() => {
+      refetch()
+    }, 60000)
+    return () => clearInterval(intervalId)
+  }, [isBottomSheetOpen, refetch])
+
   return (
     <BottomSheet
       ref={bottomSheetRef}
