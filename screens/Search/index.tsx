@@ -18,7 +18,6 @@ import { User } from "@/types"
 import { theme } from "@/theme"
 import CheckIcon from "@/components/vectors/CheckIcon"
 import api from "@/service"
-import { useFriends } from "@/hooks/useFriends"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { StatusBar } from "expo-status-bar"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
@@ -27,7 +26,6 @@ const FindFriends = () => {
   const navigation = useNavigation()
   const [search, setSearch] = useState("")
   const queryClient = useQueryClient()
-  const { fetchAllFriends } = useFriends()
 
   const { data: users = [] } = useQuery<User[]>({
     queryKey: ["users"],
@@ -61,7 +59,6 @@ const FindFriends = () => {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] })
-      fetchAllFriends()
     },
   })
 

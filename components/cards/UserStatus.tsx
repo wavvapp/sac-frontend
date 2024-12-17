@@ -1,7 +1,7 @@
 import { StyleSheet, TouchableOpacity, View, ViewStyle } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import { theme } from "@/theme"
-import { User } from "@/types"
+import { Friend, User } from "@/types"
 import { useNavigation } from "@react-navigation/native"
 import { HomeScreenProps } from "@/screens/Home"
 import Animated, {
@@ -30,16 +30,16 @@ export default function UserStatus({
   const { savedStatus } = useStatus()
   const { friendIds, activity, timeSlot } = savedStatus
 
-  const { friends: signalFriends } = useFriends()
+  const { allFriends: signalFriends } = useFriends()
   const navigation = useNavigation<HomeScreenProps>()
 
-  const friends = signalFriends.filter((friend) =>
+  const friends = signalFriends.filter((friend: Friend) =>
     friendIds.includes(friend.id),
   )
   const visibleFriends = friends.slice(0, MAX_VISIBLE_FRIENDS)
   const remainingCount = Math.max(friends.length - MAX_VISIBLE_FRIENDS, 0)
   const fullFriendsList = visibleFriends
-    .map((friend) => {
+    .map((friend: User) => {
       const firstName = friend.names?.split(" ")[0]
       const lastName = friend.names?.split(" ").slice(1).join(" ")
       return `${firstName} ${lastName?.charAt(0)}`

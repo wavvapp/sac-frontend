@@ -1,75 +1,50 @@
+import { useQuery } from "@tanstack/react-query"
 import api from "@/service"
-import { FriendSignal, User } from "@/types"
-import { useCallback, useEffect, useState } from "react"
+import { Friend, FriendSignal } from "@/types"
 
 export const useFriends = () => {
-  const [friends, setFriends] = useState<User[]>([])
-  const [availableFriends, setAvailableFriends] = useState<User[]>([])
-  const [offlineFriends, setOfflineFriends] = useState<User[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-
-  const filterOfflinefriends = (friends: User[], availableFriends: User[]) => {
-    const friendsData = friends.filter(
-      (friend) =>
-        !availableFriends.some(
-          (availableFriend) => availableFriend.id === friend.id,
-        ),
-    )
-    return friendsData
-  }
-
-  const fetchAvailableFriends = useCallback(async () => {
-    try {
-      const { data } = await api.get("/friend-signals")
-      if (data) {
-        const formattedFriends: User[] = data.map((friend: FriendSignal) => ({
-          ...friend,
-          time: friend.signal.when,
-          activity: friend.signal.status_message,
-        }))
-        setAvailableFriends(formattedFriends)
-        return formattedFriends
-      } else return []
-    } catch (error) {
-      console.error("Error fetching available friends:", error)
-      throw error
-    }
-  }, [])
-  const fetchAllFriends = useCallback(async () => {
-    try {
+  const {
+    data: allFriends = [],
+    isLoading: isFriendsLoading,
+    refetch,
+  } = useQuery({
+    queryKey: ["friends"],
+    queryFn: async () => {
       const { data } = await api.get("/friends")
-      if (data) {
-        setFriends(data)
-      }
-      return data
-    } catch (error) {
-      console.error("Error fetching friends", error)
-    } finally {
-      setIsLoading(false)
-    }
-  }, [])
+      return data || []
+    },
+    retry: 1,
+  })
 
-  const fetchSignalingFriends = async () => {
-    const [allFriends, onlineFriends] = await Promise.all([
-      fetchAllFriends(),
-      fetchAvailableFriends(),
-    ])
-    const offlineFriends = filterOfflinefriends(allFriends, onlineFriends)
-    setOfflineFriends(offlineFriends)
-    return { onlineFriends, offlineFriends }
-  }
+  const { data: availableFriends = [], isLoading: isAvailableFriendsLoading } =
+    useQuery({
+      queryKey: ["friend-signals"],
+      queryFn: async () => {
+        const { data } = await api.get("/friend-signals")
+        return data
+          ? data.map((friend: FriendSignal) => ({
+              ...friend,
+              time: friend.signal.when,
+              activity: friend.signal.status_message,
+            }))
+          : []
+      },
+      retry: 1,
+    })
+  const offlineFriends = allFriends.filter(
+    (friend: Friend) =>
+      !availableFriends.some(
+        (availableFriend: Friend) => availableFriend.id === friend.id,
+      ),
+  )
 
-  useEffect(() => {
-    fetchAllFriends()
-  }, [fetchAllFriends])
+  const isLoading = isFriendsLoading || isAvailableFriendsLoading
 
   return {
-    friends,
+    allFriends,
     availableFriends,
     offlineFriends,
-    fetchAllFriends,
-    fetchAvailableFriends,
-    fetchSignalingFriends,
     isLoading,
+    refetch,
   }
 }
