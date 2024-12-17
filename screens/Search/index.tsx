@@ -59,6 +59,7 @@ const FindFriends = () => {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] })
+      queryClient.invalidateQueries({ queryKey: ["friends"] })
     },
   })
 
