@@ -15,8 +15,8 @@ import { useAuth } from "@/contexts/AuthContext"
 import { useStatus } from "@/contexts/StatusContext"
 import { RootStackParamList } from "@/navigation"
 import { useEffect, useState } from "react"
-import { useMutation } from "@tanstack/react-query"
-import { useSignal } from "@/hooks/useSignal"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
+// import { useSignal } from "@/hooks/useSignal"
 import { StatusBar } from "expo-status-bar"
 
 type EditSignalScreenProps = NativeStackNavigationProp<
@@ -27,9 +27,10 @@ type EditSignalScreenProps = NativeStackNavigationProp<
 export default function EditSignal() {
   const navigation = useNavigation<EditSignalScreenProps>()
   const { updateActivity, saveStatus, clearStatus } = useStatus()
-  const { fetchMySignal } = useSignal()
+  // const { mySignal } = useSignal()
   const { user } = useAuth()
   const [isLoading, setIsLoading] = useState(false)
+  const queryClient = useQueryClient()
 
   const mutation = useMutation({
     mutationFn: updateActivity,
@@ -42,7 +43,7 @@ export default function EditSignal() {
       console.error(error.message)
     },
     onSettled: async () => {
-      await fetchMySignal()
+      queryClient.invalidateQueries({ queryKey: ["my-signal"] })
       setIsLoading(false)
     },
   })

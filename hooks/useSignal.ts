@@ -8,7 +8,7 @@ export const useSignal = () => {
   const queryClient = useQueryClient()
 
   const {
-    data: signal,
+    data: mySignal,
     isLoading,
     isError,
   } = useQuery<Signal>({
@@ -72,7 +72,7 @@ export const useSignal = () => {
   })
 
   return {
-    signal,
+    mySignal,
     isOn,
     isLoading,
     isError,

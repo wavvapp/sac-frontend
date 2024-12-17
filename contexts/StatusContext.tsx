@@ -53,7 +53,7 @@ export const StatusProvider: React.FC<{ children: React.ReactNode }> = ({
     activity: temporaryStatus.activity,
     friendIds: temporaryStatus.friendIds,
   })
-  const { signal } = useSignal()
+  const { mySignal } = useSignal()
   const updateSignal = useCallback(async (signal: Signal) => {
     const { friends, status_message, when } = signal
     setTemporaryStatus({
@@ -72,12 +72,12 @@ export const StatusProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const fetchInitialStatus = useCallback(async () => {
     try {
-      if (!signal) return
-      await updateSignal(signal)
+      if (!mySignal) return
+      await updateSignal(mySignal)
     } catch (error) {
       console.error("Error fetching initial activity status:", error)
     }
-  }, [signal, updateSignal])
+  }, [mySignal, updateSignal])
 
   useEffect(() => {
     fetchInitialStatus()
