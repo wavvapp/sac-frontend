@@ -68,7 +68,7 @@ export default function HomeScreen() {
     }, [isAuthenticated, refetchPoints, fetchAllFriends]),
   )
 
-  const { isLoading: isSignalLoading } = useFetchMySignal()
+  const { isPlaceholderData: isLoading } = useFetchMySignal()
 
   const handleWebsiteOpen = async () => {
     await WebBrowser.openBrowserAsync(
@@ -111,7 +111,7 @@ export default function HomeScreen() {
           </View>
           <AnimatedSwitch
             isOn={isOn}
-            isLoading={isSignalLoading}
+            isLoading={isLoading}
             onPress={() => handlePress.mutate()}
             style={styles.switch}
           />

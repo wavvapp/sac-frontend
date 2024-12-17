@@ -15,7 +15,7 @@ export const useFetchMySignal = () => {
       }
       return signal
     },
-    initialData: {
+    placeholderData: {
       when: "NOW",
       status_message: "a status message",
       friends: [],
