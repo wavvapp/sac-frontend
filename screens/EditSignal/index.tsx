@@ -19,7 +19,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { StatusBar } from "expo-status-bar"
 import api from "@/service"
 import { Signal } from "@/types"
-import { useFetchMySignal } from "@/hooks/useSignal"
+import { useMySignal } from "@/hooks/useSignal"
 
 type EditSignalScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -29,7 +29,7 @@ type EditSignalScreenProps = NativeStackNavigationProp<
 export default function EditSignal() {
   const navigation = useNavigation<EditSignalScreenProps>()
   const { temporaryStatus, setTemporaryStatus } = useStatus()
-  const { data: signal } = useFetchMySignal()
+  const { data: signal } = useMySignal()
   const { user } = useAuth()
   const [isLoading, setIsLoading] = useState(false)
   const queryclient = useQueryClient()

@@ -16,7 +16,7 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native"
 import { onShare } from "@/utils/share"
 import NoFriends from "@/components/cards/NoFriends"
 import { useAuth } from "@/contexts/AuthContext"
-import { useFetchMySignal } from "@/hooks/useSignal"
+import { useMySignal } from "@/hooks/useSignal"
 import { useFriends } from "@/hooks/useFriends"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { fetchPoints } from "@/libs/fetchPoints"
@@ -45,11 +45,13 @@ export default function HomeScreen() {
     queryFn: fetchPoints,
   })
 
+  const toggleSignal = () => {
+    return api.post(isOn.value ? "/my-signal/turn-off" : "/my-signal/turn-on")
+  }
+
   const handlePress = useMutation({
     mutationKey: ["toggle-signal-change"],
-    mutationFn: isOn.value
-      ? () => api.post("/my-signal/turn-off")
-      : () => api.post("/my-signal/turn-on"),
+    mutationFn: toggleSignal,
     onMutate: () => {
       isOn.value = !isOn.value
     },
@@ -68,7 +70,7 @@ export default function HomeScreen() {
     }, [isAuthenticated, refetchPoints, fetchAllFriends]),
   )
 
-  const { isPlaceholderData: isLoading } = useFetchMySignal()
+  const { isPlaceholderData: isLoading } = useMySignal()
 
   const handleWebsiteOpen = async () => {
     await WebBrowser.openBrowserAsync(

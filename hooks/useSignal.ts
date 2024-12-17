@@ -3,7 +3,7 @@ import api from "@/service"
 import { Signal } from "@/types"
 import { useQuery } from "@tanstack/react-query"
 
-export const useFetchMySignal = () => {
+export const useMySignal = () => {
   const { isAuthenticated } = useAuth()
   return useQuery<Signal, Error>({
     queryKey: ["fetch-my-signal"],
@@ -17,7 +17,7 @@ export const useFetchMySignal = () => {
     },
     placeholderData: {
       when: "NOW",
-      status_message: "a status message",
+      status_message: "Available",
       friends: [],
       friendIds: [],
     },

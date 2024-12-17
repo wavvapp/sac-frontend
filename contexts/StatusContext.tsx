@@ -7,7 +7,7 @@ import {
   SetStateAction,
 } from "react"
 import { SharedValue, useSharedValue } from "react-native-reanimated"
-import { useFetchMySignal } from "@/hooks/useSignal"
+import { useMySignal } from "@/hooks/useSignal"
 
 export type TemporaryStatusType = {
   timeSlot: string
@@ -28,7 +28,7 @@ export const StatusProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const isOn = useSharedValue(false)
 
-  const { data: signalData } = useFetchMySignal()
+  const { data: signalData } = useMySignal()
   const [temporaryStatus, setTemporaryStatus] = useState<TemporaryStatusType>({
     friendIds: signalData?.friendIds || [],
     activity: signalData?.status_message || "",
