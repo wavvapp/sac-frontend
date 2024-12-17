@@ -18,7 +18,7 @@ import NoFriends from "@/components/cards/NoFriends"
 import { useAuth } from "@/contexts/AuthContext"
 import { useFetchMySignal } from "@/hooks/useSignal"
 import { useFriends } from "@/hooks/useFriends"
-import { useQuery, useMutation } from "@tanstack/react-query"
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { fetchPoints } from "@/libs/fetchPoints"
 import * as WebBrowser from "expo-web-browser"
 import { TouchableOpacity } from "react-native-gesture-handler"
@@ -38,6 +38,8 @@ export default function HomeScreen() {
   const navigation = useNavigation<HomeScreenProps>()
   const { fetchAllFriends, friends, isLoading: friendsLoading } = useFriends()
   const { user, isAuthenticated } = useAuth()
+  const queryClient = useQueryClient()
+
   const { data, refetch: refetchPoints } = useQuery({
     queryKey: ["points"],
     queryFn: fetchPoints,
@@ -53,6 +55,9 @@ export default function HomeScreen() {
     },
     onError: () => {
       isOn.value = !isOn.value
+    },
+    onSettled() {
+      queryClient.invalidateQueries({ queryKey: ["fetch-my-signal"] })
     },
   })
   useFocusEffect(

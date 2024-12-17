@@ -14,7 +14,7 @@ import { theme } from "@/theme"
 import { useAuth } from "@/contexts/AuthContext"
 import { useStatus } from "@/contexts/StatusContext"
 import { RootStackParamList } from "@/navigation"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { StatusBar } from "expo-status-bar"
 import api from "@/service"
@@ -67,17 +67,15 @@ export default function EditSignal() {
   const handleSaveStatus = async () => {
     mutation.mutate()
   }
-  useEffect(() => {
-    const removeListener = navigation.addListener("beforeRemove", () =>
-      setTemporaryStatus((prev) => ({
-        ...prev,
-        timeSlot: signal.when,
-        activity: signal.status_message,
-        friendIds: signal.friendIds,
-      })),
-    )
-    return () => removeListener()
-  }, [navigation, setTemporaryStatus, signal])
+  const handleCancelAction = () => {
+    setTemporaryStatus((prev) => ({
+      ...prev,
+      timeSlot: signal.when,
+      activity: signal.status_message,
+      friendIds: signal.friendIds,
+    }))
+    navigation.goBack()
+  }
 
   return (
     <View style={style.container}>
@@ -87,9 +85,7 @@ export default function EditSignal() {
           Edit status
         </CustomText>
         <TouchableOpacity
-          onPress={() => {
-            navigation.goBack()
-          }}
+          onPress={handleCancelAction}
           style={style.CrossMarkButton}>
           <CrossMark />
         </TouchableOpacity>
