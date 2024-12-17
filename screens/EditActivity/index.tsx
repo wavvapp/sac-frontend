@@ -93,10 +93,10 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     flex: 1,
+    paddingVertical: 0,
   },
   buttonContainer: {
     alignSelf: "flex-start",
-    marginVertical: 14,
   },
   button: {
     fontWeight: theme.fontWeight.semibold,
