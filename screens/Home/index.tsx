@@ -45,13 +45,11 @@ export default function HomeScreen() {
     queryFn: fetchPoints,
   })
 
-  const toggleSignal = () => {
-    return api.post(isOn.value ? "/my-signal/turn-off" : "/my-signal/turn-on")
-  }
-
   const handlePress = useMutation({
     mutationKey: ["toggle-signal-change"],
-    mutationFn: toggleSignal,
+    mutationFn: isOn.value
+      ? () => api.post("/my-signal/turn-off")
+      : () => api.post("/my-signal/turn-on"),
     onMutate: () => {
       isOn.value = !isOn.value
     },
@@ -70,7 +68,7 @@ export default function HomeScreen() {
     }, [isAuthenticated, refetchPoints, fetchAllFriends]),
   )
 
-  const { isPlaceholderData: isLoading } = useMySignal()
+  const { isPlaceholderData } = useMySignal()
 
   const handleWebsiteOpen = async () => {
     await WebBrowser.openBrowserAsync(
@@ -113,7 +111,7 @@ export default function HomeScreen() {
           </View>
           <AnimatedSwitch
             isOn={isOn}
-            isLoading={isLoading}
+            isLoading={isPlaceholderData}
             onPress={() => handlePress.mutate()}
             style={styles.switch}
           />
