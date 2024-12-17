@@ -30,9 +30,9 @@ export const StatusProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const { data: signalData } = useFetchMySignal()
   const [temporaryStatus, setTemporaryStatus] = useState<TemporaryStatusType>({
-    friendIds: signalData.friendIds,
-    activity: signalData.status_message,
-    timeSlot: signalData.when,
+    friendIds: signalData?.friendIds || [],
+    activity: signalData?.status_message || "",
+    timeSlot: signalData?.when || "NOW",
   })
 
   useEffect(() => {

@@ -22,5 +22,6 @@ export const useFetchMySignal = () => {
       friendIds: [],
     },
     enabled: isAuthenticated,
+    staleTime: 1000 * 60 * 5,
   })
 }

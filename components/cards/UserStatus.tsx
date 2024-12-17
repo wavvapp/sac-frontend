@@ -35,7 +35,7 @@ export default function UserStatus({
 
   const friends = useMemo(() => {
     return signalFriends.filter((friend) =>
-      signal.friendIds?.includes(friend.id),
+      signal?.friendIds?.includes(friend.id),
     )
   }, [signal, signalFriends])
 
@@ -77,7 +77,7 @@ export default function UserStatus({
         style={[styles.animationContainer, style, cardAnimatedStyle]}
         {...rest}>
         <View style={styles.userContainer}>
-          {user && (
+          {user && signal && (
             <UserAvailability
               fullName={user.names}
               time={signal.when}
