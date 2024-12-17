@@ -1,7 +1,6 @@
 import { CustomButton } from "@/components/ui/Button"
 import CustomText from "@/components/ui/CustomText"
 import Input from "@/components/ui/Input"
-import CheckIcon from "@/components/vectors/CheckIcon"
 import { TemporaryStatusType, useStatus } from "@/contexts/StatusContext"
 import { theme } from "@/theme"
 import { useState } from "react"
@@ -56,16 +55,17 @@ export default function EditActivity({ closeModal }: EditActivityProps) {
               autoFocus
             />
             <CustomButton
+              variant="default"
+              textSize="sm"
+              title="Done"
+              textStyles={styles.button}
+              containerStyles={{
+                ...styles.buttonContainer,
+                opacity: !text.trim() ? 0.3 : 1,
+              }}
+              onPress={handleEdit}
               disabled={!text.trim()}
-              style={styles.button}
-              onPress={handleEdit}>
-              <CheckIcon
-                color={theme.colors.black}
-                width={50}
-                height={50}
-                opacity={!text.trim() ? 0.3 : 1}
-              />
-            </CustomButton>
+            />
           </View>
         </KeyboardAvoidingView>
       </View>
@@ -94,8 +94,11 @@ const styles = StyleSheet.create({
   inputContainer: {
     flex: 1,
   },
-  button: {
-    marginRight: -12,
+  buttonContainer: {
     alignSelf: "flex-start",
+    marginVertical: 14,
+  },
+  button: {
+    fontWeight: theme.fontWeight.semibold,
   },
 })
