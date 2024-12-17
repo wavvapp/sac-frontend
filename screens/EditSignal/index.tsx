@@ -14,7 +14,7 @@ import { theme } from "@/theme"
 import { useAuth } from "@/contexts/AuthContext"
 import { useStatus } from "@/contexts/StatusContext"
 import { RootStackParamList } from "@/navigation"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { StatusBar } from "expo-status-bar"
 import api from "@/service"
@@ -60,6 +60,7 @@ export default function EditSignal() {
       console.error(error.message)
     },
     onSettled: async () => {
+      queryclient.invalidateQueries({ queryKey: ["fetch-my-signal"] })
       setIsLoading(false)
     },
   })
@@ -67,16 +68,14 @@ export default function EditSignal() {
   const handleSaveStatus = async () => {
     mutation.mutate()
   }
-  const handleCancelAction = () => {
-    setTemporaryStatus((prev) => ({
-      ...prev,
+  useEffect(() => {
+    if (!signal) return
+    setTemporaryStatus({
       timeSlot: signal.when,
       activity: signal.status_message,
       friendIds: signal.friendIds,
-    }))
-    navigation.goBack()
-  }
-
+    })
+  }, [navigation, signal, setTemporaryStatus])
   return (
     <View style={style.container}>
       <StatusBar style="dark" />
@@ -85,7 +84,7 @@ export default function EditSignal() {
           Edit status
         </CustomText>
         <TouchableOpacity
-          onPress={handleCancelAction}
+          onPress={() => navigation.goBack()}
           style={style.CrossMarkButton}>
           <CrossMark />
         </TouchableOpacity>
