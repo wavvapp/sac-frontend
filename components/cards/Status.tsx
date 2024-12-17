@@ -10,6 +10,7 @@ type StatusProps = {
 
 export const Status: React.FC<StatusProps> = ({ timeSlots }) => {
   const { temporaryStatus, setTemporaryStatus } = useStatus()
+
   const handleTimeSlotChange = (selectedTime: string) => {
     setTemporaryStatus((prev: TemporaryStatusType) => ({
       ...prev,

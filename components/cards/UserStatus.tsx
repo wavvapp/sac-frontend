@@ -28,16 +28,16 @@ export default function UserStatus({
   isOn,
   ...rest
 }: UserStatusProps) {
-  const { data: signalData } = useFetchMySignal()
+  const { data: signal } = useFetchMySignal()
 
   const { friends: signalFriends } = useFriends()
   const navigation = useNavigation<HomeScreenProps>()
 
   const friends = useMemo(() => {
     return signalFriends.filter((friend) =>
-      signalData.friendIds?.includes(friend.id),
+      signal.friendIds?.includes(friend.id),
     )
-  }, [signalData, signalFriends])
+  }, [signal, signalFriends])
 
   const visibleFriends = friends.slice(0, MAX_VISIBLE_FRIENDS)
   const remainingCount = Math.max(friends.length - MAX_VISIBLE_FRIENDS, 0)
@@ -80,8 +80,8 @@ export default function UserStatus({
           {user && (
             <UserAvailability
               fullName={user.names}
-              time={signalData.when}
-              activity={signalData.status_message}
+              time={signal.when}
+              activity={signal.status_message}
             />
           )}
           <View style={{ opacity: 0.5 }}>
