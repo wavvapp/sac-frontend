@@ -11,7 +11,6 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { RootStackParamList } from "@/navigation"
 import { useFriends } from "@/hooks/useFriends"
 import { User } from "@/types"
-
 export interface SignalingRef {
   openBottomSheet: () => void
 }
@@ -20,10 +19,10 @@ type SearchProp = NativeStackNavigationProp<RootStackParamList, "Search">
 const { width } = Dimensions.get("window")
 const Signaling = forwardRef<SignalingRef>((_, ref) => {
   const navigation = useNavigation<SearchProp>()
-  const { availableFriends, offlineFriends } = useFriends()
+  const { availableFriends, offlineFriends, allFriends } = useFriends()
 
   return (
-    <BottomDrawer ref={ref}>
+    <BottomDrawer ref={ref} fetchFriends={allFriends}>
       <View style={styles.header}>
         <CustomText size="lg" fontWeight="semibold" style={styles.headerText}>
           Friends
