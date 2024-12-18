@@ -17,10 +17,10 @@ import { StatusBar } from "expo-status-bar"
 import api from "@/service"
 import { Signal } from "@/types"
 import { useMySignal } from "@/hooks/useSignal"
-import ConfirmAction from "@/components/ConfirmAction"
 import { onShare } from "@/utils/share"
 import ShareIcon from "@/components/vectors/ShareIcon"
 import Header from "@/components/cards/Header"
+import ActionCard from "@/components/cards/ActionCard"
 
 type EditSignalScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -80,7 +80,7 @@ export default function EditSignal() {
   return (
     <View style={style.container}>
       <StatusBar style="dark" />
-      <Header title=" Edit status" />
+      <Header title="Edit status" />
       <ScrollView
         keyboardShouldPersistTaps="always"
         contentContainerStyle={{
@@ -99,8 +99,8 @@ export default function EditSignal() {
           timeSlots={["NOW", "MORNING", "LUNCH", "AFTERNOON", "EVENING"]}
         />
         <FriendsList />
-        <ConfirmAction
-          title=" Your friends are not on Wavv?"
+        <ActionCard
+          title="Your friends are not on Wavv?"
           description="Invite them to join you"
           onPress={() => onShare(user?.username)}
           icon={<ShareIcon />}

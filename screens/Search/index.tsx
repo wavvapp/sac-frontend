@@ -20,9 +20,9 @@ import { StatusBar } from "expo-status-bar"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { onShare } from "@/utils/share"
 import ShareIcon from "@/components/vectors/ShareIcon"
-import ConfirmAction from "@/components/ConfirmAction"
 import { useAuth } from "@/contexts/AuthContext"
 import Header from "@/components/cards/Header"
+import ActionCard from "@/components/cards/ActionCard"
 
 const FindFriends = () => {
   const [search, setSearch] = useState("")
@@ -77,8 +77,6 @@ const FindFriends = () => {
     if (user.isFriend || addFriend.isPending) return
     addFriend.mutate(user.id)
   }
-
-
 
   return (
     <SafeAreaView style={styles.container}>
@@ -137,8 +135,8 @@ const FindFriends = () => {
         )}
 
         <View style={styles.share}>
-          <ConfirmAction
-            title=" Your friends are not on Wavv?"
+          <ActionCard
+            title="Your friends are not on Wavv?"
             description="Invite them to join you"
             onPress={() => onShare(user?.username)}
             icon={<ShareIcon />}

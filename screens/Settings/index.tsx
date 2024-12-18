@@ -2,10 +2,10 @@ import { View, StyleSheet } from "react-native"
 import { theme } from "@/theme"
 import { useAuth } from "@/contexts/AuthContext"
 import LogoutIcon from "@/components/vectors/LogoutIcon"
-import ConfirmAction from "@/components/ConfirmAction"
 import Header from "@/components/cards/Header"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { StatusBar } from "expo-status-bar"
+import ActionCard from "@/components/cards/ActionCard"
 
 export default function EntryScreen() {
   const { signOut } = useAuth()
@@ -21,10 +21,8 @@ export default function EntryScreen() {
       <View
         style={{
           paddingHorizontal: 20,
-          width: "100%",
-          gap: 20,
         }}>
-        <ConfirmAction
+        <ActionCard
           title="Log out"
           description="Are you sure? You'll have to log in again once you're back"
           icon={<LogoutIcon />}

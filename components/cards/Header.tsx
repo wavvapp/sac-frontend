@@ -1,5 +1,5 @@
 import { View, StyleSheet } from "react-native"
-import CustomText from "../ui/CustomText"
+import CustomText from "@/components/ui/CustomText"
 import { TouchableOpacity } from "react-native"
 import { theme } from "@/theme"
 import CloseIcon from "@/components/vectors/CloseIcon"
