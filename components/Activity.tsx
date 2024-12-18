@@ -11,6 +11,8 @@ import EditIcon from "@/components/vectors/EditIcon"
 import EditActivity from "@/screens/EditActivity"
 import { useStatus } from "@/contexts/StatusContext"
 import { theme } from "@/theme"
+import { capitalizeFirstLetter } from "@/utils"
+
 export default function Activity({ isLoading }: { isLoading: boolean }) {
   const [isModalVisible, setIsModalVisible] = useState(false)
   const { temporaryStatus } = useStatus()
@@ -35,7 +37,7 @@ export default function Activity({ isLoading }: { isLoading: boolean }) {
               size="lg"
               fontWeight="semibold"
               style={styles.statusText}>
-              {temporaryStatus.activity}
+              {capitalizeFirstLetter(temporaryStatus.activity)}
             </CustomText>
             <EditIcon />
           </>
