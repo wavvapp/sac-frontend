@@ -1,15 +1,15 @@
 import { View, StyleSheet } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import FriendCard from "@/components/Friend"
-import { useFriends } from "@/hooks/useFriends"
 import { TemporaryStatusType, useStatus } from "@/contexts/StatusContext"
 import { FriendsSkeleton } from "@/components/cards/FriendsSkeleton"
 import { User } from "@/types"
 import { useCallback } from "react"
+import { useFriends } from "@/hooks/useFriends_"
 
 export default function FriendsList() {
   const { temporaryStatus, setTemporaryStatus } = useStatus()
-  const { allFriends, isLoading } = useFriends()
+  const { data: allFriends, isLoading } = useFriends()
   const { friendIds } = temporaryStatus
 
   const updateFriendsList = useCallback(

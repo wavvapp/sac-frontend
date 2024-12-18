@@ -5,15 +5,16 @@ import { Friend, FriendSignal } from "@/types"
 export const useFriends = () => {
   const queryClient = useQueryClient()
   const {
-    data: allFriends = [],
-    isLoading: isFriendsLoading,
+    data: allFriends,
+    isFetching: isFriendsLoading,
     refetch: refetchAllFriends,
+    isSuccess,
   } = useQuery({
     queryKey: ["friends"],
     queryFn: async () => {
       try {
         const { data } = await api.get("/friends")
-        return data || []
+        return data
       } catch (error) {
         console.error("Failed to fetch friends:", error)
         return []
@@ -23,7 +24,7 @@ export const useFriends = () => {
   })
 
   const {
-    data: availableFriends = [],
+    data: availableFriends,
     isLoading: isAvailableFriendsLoading,
     refetch: refetchAvailableFriends,
   } = useQuery({
@@ -38,11 +39,12 @@ export const useFriends = () => {
           }))
         : []
     },
+    initialData: [],
     retry: 1,
   })
   const offlineFriends = allFriends.filter(
     (friend: Friend) =>
-      !availableFriends.some(
+      !availableFriends?.some(
         (availableFriend: Friend) => availableFriend.id === friend.id,
       ),
   )
@@ -59,6 +61,7 @@ export const useFriends = () => {
     return result ?? []
   }
   return {
+    isSuccess,
     allFriends,
     availableFriends,
     offlineFriends,

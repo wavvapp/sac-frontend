@@ -33,7 +33,7 @@ const Signaling = forwardRef<SignalingRef>((_, ref) => {
           title="FIND"
           textStyles={{ fontWeight: 600 }}
           onPress={() => {
-            instantRefresh()
+            // instantRefresh()
             navigation.navigate("Search")
           }}
         />

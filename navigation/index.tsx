@@ -11,11 +11,12 @@ import { theme } from "@/theme"
 import EntryScreen from "@/screens/Authentication"
 import CreateCredentials from "@/screens/Authentication/SignUp/CreateCredentials"
 import { StatusProvider } from "@/contexts/StatusContext"
-import { useFriends } from "@/hooks/useFriends"
+// import { useFriends } from "@/hooks/useFriends"
 import * as SplashScreen from "expo-splash-screen"
 import { useEffect } from "react"
 import { StaticPageType } from "@/types"
 import StaticContentScreen from "@/screens/StaticContentScreen"
+import { useFriends } from "@/hooks/useFriends_"
 export type RootStackParamList = {
   EntryScreen: undefined
   Home: undefined
@@ -31,7 +32,7 @@ export type RootStackParamList = {
 export default function AppNavigator() {
   const Stack = createNativeStackNavigator<RootStackParamList>()
   const { isAuthenticated, isLoading, isNewUser } = useAuth()
-  const { isLoading: isFriendsLoading } = useFriends()
+  const { isFetching: isFriendsLoading } = useFriends()
 
   useEffect(() => {
     if (!isLoading && !isFriendsLoading) {
