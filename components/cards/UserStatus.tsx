@@ -30,16 +30,16 @@ export default function UserStatus({
   const { savedStatus } = useStatus()
   const { friendIds, activity, timeSlot } = savedStatus
 
-  const { friends: signalFriends } = useFriends()
+  const { allFriends: signalFriends } = useFriends()
   const navigation = useNavigation<HomeScreenProps>()
 
-  const friends = signalFriends.filter((friend) =>
+  const friends = signalFriends.filter((friend: User) =>
     friendIds.includes(friend.id),
   )
   const visibleFriends = friends.slice(0, MAX_VISIBLE_FRIENDS)
   const remainingCount = Math.max(friends.length - MAX_VISIBLE_FRIENDS, 0)
   const fullFriendsList = visibleFriends
-    .map((friend) => {
+    .map((friend: User) => {
       const firstName = friend.names?.split(" ")[0]
       const lastName = friend.names?.split(" ").slice(1).join(" ")
       return `${firstName} ${lastName?.charAt(0)}`

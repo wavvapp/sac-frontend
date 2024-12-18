@@ -10,6 +10,7 @@ import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { RootStackParamList } from "@/navigation"
 import { useFriends } from "@/hooks/useFriends"
+import { User } from "@/types"
 export interface SignalingRef {
   openBottomSheet: () => void
 }
@@ -18,11 +19,10 @@ type SearchProp = NativeStackNavigationProp<RootStackParamList, "Search">
 const { width } = Dimensions.get("window")
 const Signaling = forwardRef<SignalingRef>((_, ref) => {
   const navigation = useNavigation<SearchProp>()
-  const { availableFriends, offlineFriends, fetchSignalingFriends } =
-    useFriends()
+  const { availableFriends, offlineFriends, instantRefresh } = useFriends()
 
   return (
-    <BottomDrawer ref={ref} fetchFriends={fetchSignalingFriends}>
+    <BottomDrawer ref={ref} fetchFriends={instantRefresh}>
       <View style={styles.header}>
         <CustomText size="lg" fontWeight="semibold" style={styles.headerText}>
           Friends
@@ -33,6 +33,7 @@ const Signaling = forwardRef<SignalingRef>((_, ref) => {
           title="FIND"
           textStyles={{ fontWeight: 600 }}
           onPress={() => {
+            instantRefresh()
             navigation.navigate("Search")
           }}
         />
@@ -50,7 +51,13 @@ const Signaling = forwardRef<SignalingRef>((_, ref) => {
             ItemSeparatorComponent: () => (
               <View style={styles.availableItemSeparator} />
             ),
-            renderItem: ({ item: user, index }) =>
+            renderItem: ({
+              item: user,
+              index,
+            }: {
+              item: User
+              index: number
+            }) =>
               SignalingUser({
                 user,
                 online: true,

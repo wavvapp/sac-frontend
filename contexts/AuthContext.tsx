@@ -69,7 +69,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       await AsyncStorage.setItem("@Auth:user", JSON.stringify(user))
       setUser(userData)
     } catch (err) {
-      console.log("error with saving user info")
+      console.error("error with saving user info")
     }
   }
 
