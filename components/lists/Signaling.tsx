@@ -19,10 +19,10 @@ type SearchProp = NativeStackNavigationProp<RootStackParamList, "Search">
 const { width } = Dimensions.get("window")
 const Signaling = forwardRef<SignalingRef>((_, ref) => {
   const navigation = useNavigation<SearchProp>()
-  const { availableFriends, offlineFriends, allFriends, refetch } = useFriends()
+  const { availableFriends, offlineFriends, instantRefresh } = useFriends()
 
   return (
-    <BottomDrawer ref={ref} fetchFriends={allFriends}>
+    <BottomDrawer ref={ref} fetchFriends={instantRefresh}>
       <View style={styles.header}>
         <CustomText size="lg" fontWeight="semibold" style={styles.headerText}>
           Friends
@@ -33,7 +33,7 @@ const Signaling = forwardRef<SignalingRef>((_, ref) => {
           title="FIND"
           textStyles={{ fontWeight: 600 }}
           onPress={() => {
-            refetch()
+            instantRefresh()
             navigation.navigate("Search")
           }}
         />
