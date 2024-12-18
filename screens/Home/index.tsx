@@ -36,7 +36,7 @@ export default function HomeScreen() {
   const { isOn } = useStatus()
   const signalingRef = useRef<SignalingRef>(null)
   const navigation = useNavigation<HomeScreenProps>()
-  const { fetchAllFriends, friends, isLoading: friendsLoading } = useFriends()
+  const { allFriends, isLoading: friendsLoading } = useFriends()
   const { user, isAuthenticated } = useAuth()
   const queryClient = useQueryClient()
 
@@ -64,8 +64,7 @@ export default function HomeScreen() {
     useCallback(() => {
       if (!isAuthenticated) return
       refetchPoints()
-      fetchAllFriends()
-    }, [isAuthenticated, refetchPoints, fetchAllFriends]),
+    }, [isAuthenticated, refetchPoints]),
   )
 
   const { isPlaceholderData } = useMySignal()
@@ -102,7 +101,7 @@ export default function HomeScreen() {
           </CustomButton>
         </View>
       </View>
-      {!friends.length && !friendsLoading ? (
+      {!allFriends.length && !friendsLoading ? (
         <NoFriends />
       ) : (
         <>
