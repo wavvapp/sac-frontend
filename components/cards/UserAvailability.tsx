@@ -32,7 +32,7 @@ export default function UserAvailability({
         fontFamily="writer-mono"
         numberOfLines={2}
         ellipsizeMode="tail">
-        {capitalizeFirstLetter(activity || "")}
+        {capitalizeFirstLetter(activity)}
       </CustomText>
     </View>
   )
