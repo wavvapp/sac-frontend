@@ -1,9 +1,7 @@
-import { useAuth } from "@/contexts/AuthContext"
 import api from "@/service"
 import { useQuery } from "@tanstack/react-query"
 
 export const useFriends = () => {
-  const { isAuthenticated } = useAuth()
   return useQuery({
     queryKey: ["friends"],
     queryFn: async () => {
@@ -16,6 +14,5 @@ export const useFriends = () => {
       }
     },
     initialData: [],
-    enabled: isAuthenticated,
   })
 }

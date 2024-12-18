@@ -5,7 +5,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { StyleSheet, View, Dimensions, StatusBar, Platform } from "react-native"
 import { runOnJS, useDerivedValue } from "react-native-reanimated"
 import { AnimatedSwitch } from "@/components/AnimatedSwitch"
-import { useCallback, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import Signaling, { SignalingRef } from "@/components/lists/Signaling"
 import Settings from "@/components/vectors/Settings"
 import { theme } from "@/theme"
@@ -37,7 +37,7 @@ export default function HomeScreen() {
   const { isOn } = useStatus()
   const signalingRef = useRef<SignalingRef>(null)
   const navigation = useNavigation<HomeScreenProps>()
-  const { data: allFriends, isFetching: friendsLoading } = useFriends()
+  const { data: allFriends, isFetched } = useFriends()
   const { user, isAuthenticated } = useAuth()
   const queryClient = useQueryClient()
 
@@ -102,7 +102,7 @@ export default function HomeScreen() {
           </CustomButton>
         </View>
       </View>
-      {!allFriends.length && !friendsLoading ? (
+      {!allFriends.length && isFetched ? (
         <NoFriends />
       ) : (
         <>
