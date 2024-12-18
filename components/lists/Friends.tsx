@@ -5,22 +5,26 @@ import { useFriends } from "@/hooks/useFriends"
 import { TemporaryStatusType, useStatus } from "@/contexts/StatusContext"
 import { FriendsSkeleton } from "@/components/cards/FriendsSkeleton"
 import { User } from "@/types"
+import { useCallback } from "react"
 
 export default function FriendsList() {
   const { temporaryStatus, setTemporaryStatus } = useStatus()
   const { allFriends, isLoading } = useFriends()
   const { friendIds } = temporaryStatus
 
-  const updateFriendsList = (friendId: string) => {
-    const newFriends = friendIds?.includes(friendId)
-      ? friendIds.filter((id) => id !== friendId)
-      : [...friendIds, friendId]
+  const updateFriendsList = useCallback(
+    (friendId: string) => {
+      const newFriends = friendIds?.includes(friendId)
+        ? friendIds.filter((id) => id !== friendId)
+        : [...friendIds, friendId]
 
-    setTemporaryStatus((prev: TemporaryStatusType) => ({
-      ...prev,
-      friendIds: newFriends,
-    }))
-  }
+      setTemporaryStatus((prev: TemporaryStatusType) => ({
+        ...prev,
+        friendIds: newFriends,
+      }))
+    },
+    [friendIds, setTemporaryStatus],
+  )
 
   return (
     <View style={styles.container}>
