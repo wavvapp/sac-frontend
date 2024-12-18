@@ -4,7 +4,7 @@ import Svg, { Path, SvgProps } from "react-native-svg"
 function LogoutIcon({
   width = 32,
   height = 32,
-  color = theme.colors.white,
+  color = theme.colors.black,
   ...rest
 }: SvgProps) {
   return (
