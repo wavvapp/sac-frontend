@@ -16,12 +16,14 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native"
 import { onShare } from "@/utils/share"
 import NoFriends from "@/components/cards/NoFriends"
 import { useAuth } from "@/contexts/AuthContext"
-import { useSignal } from "@/hooks/useSignal"
+import { useMySignal } from "@/hooks/useSignal"
 import { useFriends } from "@/hooks/useFriends"
-import { useQuery, useMutation } from "@tanstack/react-query"
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { fetchPoints } from "@/libs/fetchPoints"
 import * as WebBrowser from "expo-web-browser"
 import { TouchableOpacity } from "react-native-gesture-handler"
+import { useStatus } from "@/contexts/StatusContext"
+import api from "@/service"
 
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -31,27 +33,31 @@ export type HomeScreenProps = NativeStackNavigationProp<
 const { width } = Dimensions.get("window")
 export default function HomeScreen() {
   const [_, setIsVisible] = useState(false)
-  const { isOn, turnOffSignalStatus, turnOnSignalStatus } = useSignal()
+  const { isOn } = useStatus()
   const signalingRef = useRef<SignalingRef>(null)
   const navigation = useNavigation<HomeScreenProps>()
   const { allFriends, isLoading: friendsLoading } = useFriends()
   const { user, isAuthenticated } = useAuth()
-  const {
-    data,
-    refetch: refetchPoints,
-    isLoading,
-  } = useQuery({
+  const queryClient = useQueryClient()
+
+  const { data, refetch: refetchPoints } = useQuery({
     queryKey: ["points"],
     queryFn: fetchPoints,
   })
 
   const handlePress = useMutation({
-    mutationFn: isOn.value ? turnOffSignalStatus : turnOnSignalStatus,
+    mutationKey: ["toggle-signal-change"],
+    mutationFn: isOn.value
+      ? () => api.post("/my-signal/turn-off")
+      : () => api.post("/my-signal/turn-on"),
     onMutate: () => {
       isOn.value = !isOn.value
     },
     onError: () => {
       isOn.value = !isOn.value
+    },
+    onSettled() {
+      queryClient.invalidateQueries({ queryKey: ["fetch-my-signal"] })
     },
   })
   useFocusEffect(
@@ -60,6 +66,8 @@ export default function HomeScreen() {
       refetchPoints()
     }, [isAuthenticated, refetchPoints]),
   )
+
+  const { isPlaceholderData } = useMySignal()
 
   const handleWebsiteOpen = async () => {
     await WebBrowser.openBrowserAsync(
@@ -102,7 +110,7 @@ export default function HomeScreen() {
           </View>
           <AnimatedSwitch
             isOn={isOn}
-            isLoading={isLoading}
+            isLoading={isPlaceholderData}
             onPress={() => handlePress.mutate()}
             style={styles.switch}
           />

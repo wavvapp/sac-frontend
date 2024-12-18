@@ -1,7 +1,7 @@
 import { StyleSheet, TouchableOpacity, View, ViewStyle } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import { theme } from "@/theme"
-import { User } from "@/types"
+import { Friend, User } from "@/types"
 import { useNavigation } from "@react-navigation/native"
 import { HomeScreenProps } from "@/screens/Home"
 import Animated, {
@@ -11,8 +11,9 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated"
 import UserAvailability from "@/components/cards/UserAvailability"
-import { useStatus } from "@/contexts/StatusContext"
 import { useFriends } from "@/hooks/useFriends"
+import { useMySignal } from "@/hooks/useSignal"
+import { useMemo } from "react"
 
 const MAX_VISIBLE_FRIENDS = 3
 
@@ -27,22 +28,24 @@ export default function UserStatus({
   isOn,
   ...rest
 }: UserStatusProps) {
-  const { savedStatus } = useStatus()
-  const { friendIds, activity, timeSlot } = savedStatus
+  const { data: signal } = useMySignal()
 
   const { allFriends: signalFriends } = useFriends()
   const navigation = useNavigation<HomeScreenProps>()
 
-  const friends = signalFriends.filter((friend: User) =>
-    friendIds.includes(friend.id),
-  )
+  const friends = useMemo(() => {
+    return signalFriends.filter((friend: Friend) =>
+      signal?.friendIds?.includes(friend.id),
+    )
+  }, [signal, signalFriends])
+
   const visibleFriends = friends.slice(0, MAX_VISIBLE_FRIENDS)
   const remainingCount = Math.max(friends.length - MAX_VISIBLE_FRIENDS, 0)
   const fullFriendsList = visibleFriends
     .map((friend: User) => {
       const firstName = friend.names?.split(" ")[0]
       const lastName = friend.names?.split(" ").slice(1).join(" ")
-      return `${firstName} ${lastName?.charAt(0)}`
+      return `${firstName} ${lastName?.trim().charAt(0)}`
     })
     .join(", ")
 
@@ -74,11 +77,11 @@ export default function UserStatus({
         style={[styles.animationContainer, style, cardAnimatedStyle]}
         {...rest}>
         <View style={styles.userContainer}>
-          {user && (
+          {user && signal && (
             <UserAvailability
               fullName={user.names}
-              time={timeSlot}
-              activity={activity}
+              time={signal.when}
+              activity={signal.status_message}
             />
           )}
           <View style={{ opacity: 0.5 }}>
