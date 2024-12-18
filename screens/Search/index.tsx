@@ -27,10 +27,10 @@ const FindFriends = () => {
   const [search, setSearch] = useState("")
   const queryClient = useQueryClient()
 
-  const { data: users = [] } = useQuery<User[]>({
-    queryKey: ["users"],
+  const { data: filteredUsers = [], isLoading } = useQuery<User[]>({
+    queryKey: ["users", { search }],
     queryFn: async () => {
-      const response = await api.get(`/users`)
+      const response = await api.get("/users")
       return response.data.map((user: User) => ({
         id: user.id,
         names: user.names,
@@ -39,13 +39,22 @@ const FindFriends = () => {
         isFriend: user.isFriend,
       }))
     },
+    select: (data) =>
+      search
+        ? data
+            .filter((user) =>
+              user.names.toLowerCase().includes(search.toLowerCase()),
+            )
+            .sort((a, b) => a.names.localeCompare(b.names))
+        : data,
+    staleTime: 1000 * 60 * 5,
   })
 
   const addFriendMutation = useMutation({
     mutationFn: (friendId: string) => api.post("/friends", { friendId }),
     onMutate: async (friendId) => {
       await queryClient.cancelQueries({ queryKey: ["users"] })
-      const previousUsers = queryClient.getQueryData(["users"])
+      const previousUsers = queryClient.getQueryData<User[]>(["users"])
       queryClient.setQueryData(["users"], (oldUsers: User[]) =>
         oldUsers.map((user) =>
           user.id === friendId ? { ...user, isFriend: true } : user,
@@ -53,7 +62,7 @@ const FindFriends = () => {
       )
       return { previousUsers }
     },
-    onError: (err, friendId, context) => {
+    onError: (err, _, context) => {
       queryClient.setQueryData(["users"], context?.previousUsers)
       console.warn("Error adding friend:", err)
     },
@@ -63,13 +72,7 @@ const FindFriends = () => {
     },
   })
 
-  const filteredUsers = users
-    .filter((user) => user.names.toLowerCase().includes(search.toLowerCase()))
-    .sort((a, b) => a.names.localeCompare(b.names))
-
-  const handleSearch = (name: string) => {
-    setSearch(name)
-  }
+  const handleSearch = (name: string) => setSearch(name)
 
   const handleAddFriend = (user: User) => {
     if (user.isFriend || addFriendMutation.isPending) return
@@ -98,9 +101,10 @@ const FindFriends = () => {
         handleTextChange={handleSearch}
         containerStyle={styles.input}
       />
-
       <ScrollView style={styles.friendsList}>
-        {search &&
+        {isLoading ? (
+          <ActivityIndicator size="large" color={theme.colors.black} />
+        ) : (
           filteredUsers.map((user) => (
             <TouchableOpacity
               key={user.id}
@@ -131,8 +135,9 @@ const FindFriends = () => {
                 />
               )}
             </TouchableOpacity>
-          ))}
-        {search && !filteredUsers.length && (
+          ))
+        )}
+        {search && !filteredUsers.length && !isLoading && (
           <View style={styles.notFoundContainer}>
             <CustomText
               size="sm"
@@ -142,7 +147,6 @@ const FindFriends = () => {
             </CustomText>
           </View>
         )}
-
         <View style={styles.share}>
           <ShareCard />
         </View>
@@ -150,7 +154,6 @@ const FindFriends = () => {
     </SafeAreaView>
   )
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
