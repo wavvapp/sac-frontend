@@ -42,7 +42,6 @@ const BottomDrawer = forwardRef<BottomDrawerRef, DrawerProps>((props, ref) => {
       const result = await fetchFriends()
       return result || []
     },
-    retry: 1,
     refetchInterval: isbottomSheetOpen ? 5000 : false,
     refetchIntervalInBackground: false,
   })

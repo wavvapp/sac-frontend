@@ -55,7 +55,7 @@ const FindFriends = () => {
     },
     onError: (err, friendId, context) => {
       queryClient.setQueryData(["users"], context?.previousUsers)
-      console.warn("Error adding friend:", err)
+      console.error("Error adding friend:", err)
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] })
