@@ -11,10 +11,15 @@ export const useFriends = () => {
   } = useQuery({
     queryKey: ["friends"],
     queryFn: async () => {
-      const { data } = await api.get("/friends")
-      return data || []
+      try {
+        const { data } = await api.get("/friends")
+        return data || []
+      } catch (error) {
+        console.error("Failed to fetch friends:", error)
+        return []
+      }
     },
-    retry: 1,
+    initialData: [],
   })
 
   const {
@@ -50,7 +55,8 @@ export const useFriends = () => {
   const instantRefresh = async () => {
     await queryClient.invalidateQueries({ queryKey: ["friends"] })
     await queryClient.invalidateQueries({ queryKey: ["friend-signals"] })
-    return refetch()
+    const result = await refetch()
+    return result ?? []
   }
   return {
     allFriends,

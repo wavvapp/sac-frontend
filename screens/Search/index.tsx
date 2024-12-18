@@ -41,7 +41,7 @@ const FindFriends = () => {
     },
   })
 
-  const addFriendMutation = useMutation({
+  const addFriend = useMutation({
     mutationFn: (friendId: string) => api.post("/friends", { friendId }),
     onMutate: async (friendId) => {
       await queryClient.cancelQueries({ queryKey: ["users"] })
@@ -72,8 +72,8 @@ const FindFriends = () => {
   }
 
   const handleAddFriend = (user: User) => {
-    if (user.isFriend || addFriendMutation.isPending) return
-    addFriendMutation.mutate(user.id)
+    if (user.isFriend || addFriend.isPending) return
+    addFriend.mutate(user.id)
   }
 
   const handleClose = () => navigation.goBack()
@@ -105,7 +105,7 @@ const FindFriends = () => {
             <TouchableOpacity
               key={user.id}
               style={styles.friendItem}
-              disabled={user.isFriend || addFriendMutation.isPending}
+              disabled={user.isFriend || addFriend.isPending}
               onPress={() => handleAddFriend(user)}>
               <View style={styles.userDetails}>
                 <UserAvatar imageUrl={user.profilePictureUrl} />
@@ -113,8 +113,7 @@ const FindFriends = () => {
                   <UserInfo fullName={user.names} username={user.username} />
                 </View>
               </View>
-              {addFriendMutation.isPending &&
-              addFriendMutation.variables === user.id ? (
+              {addFriend.isPending && addFriend.variables === user.id ? (
                 <ActivityIndicator
                   color={theme.colors.black}
                   size="small"
@@ -127,7 +126,7 @@ const FindFriends = () => {
                   variant="outline"
                   title="Add"
                   onPress={() => handleAddFriend(user)}
-                  disabled={user.isFriend || addFriendMutation.isPending}
+                  disabled={user.isFriend || addFriend.isPending}
                 />
               )}
             </TouchableOpacity>

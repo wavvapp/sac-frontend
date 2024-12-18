@@ -38,10 +38,7 @@ const BottomDrawer = forwardRef<BottomDrawerRef, DrawerProps>((props, ref) => {
 
   const { refetch } = useQuery({
     queryKey: ["fetch-signaling-friends"],
-    queryFn: async () => {
-      const result = await fetchFriends()
-      return result || []
-    },
+    queryFn: () => fetchFriends(),
     refetchInterval: isbottomSheetOpen ? 5000 : false,
     refetchIntervalInBackground: false,
   })
