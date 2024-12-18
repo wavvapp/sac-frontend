@@ -12,9 +12,11 @@ import { useAuth } from "@/contexts/AuthContext"
 import { useStatus } from "@/contexts/StatusContext"
 import { RootStackParamList } from "@/navigation"
 import { useEffect, useState } from "react"
-import { useMutation } from "@tanstack/react-query"
-import { useSignal } from "@/hooks/useSignal"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { StatusBar } from "expo-status-bar"
+import api from "@/service"
+import { Signal } from "@/types"
+import { useMySignal } from "@/hooks/useSignal"
 import ConfirmAction from "@/components/ConfirmAction"
 import { onShare } from "@/utils/share"
 import ShareIcon from "@/components/vectors/ShareIcon"
@@ -27,14 +29,30 @@ type EditSignalScreenProps = NativeStackNavigationProp<
 
 export default function EditSignal() {
   const navigation = useNavigation<EditSignalScreenProps>()
-  const { updateActivity, saveStatus, clearStatus } = useStatus()
-  const { fetchMySignal } = useSignal()
+  const { temporaryStatus, setTemporaryStatus } = useStatus()
+  const { data: signal } = useMySignal()
   const { user } = useAuth()
   const [isLoading, setIsLoading] = useState(false)
+  const queryclient = useQueryClient()
 
   const mutation = useMutation({
-    mutationFn: updateActivity,
+    mutationFn: () => {
+      return api.put("/my-signal", {
+        friends: temporaryStatus.friendIds,
+        status_message: temporaryStatus.activity,
+        when: temporaryStatus.timeSlot,
+      })
+    },
     onMutate: () => {
+      queryclient.cancelQueries({ queryKey: ["fetch-my-signal"] })
+      const optimisticStatus: Signal = {
+        when: temporaryStatus.timeSlot,
+        status_message: temporaryStatus.activity,
+        friends: [],
+        friendIds: temporaryStatus.friendIds,
+        status: "active",
+      }
+      queryclient.setQueryData(["fetch-my-signal"], optimisticStatus)
       setIsLoading(true)
       navigation.goBack()
     },
@@ -43,22 +61,22 @@ export default function EditSignal() {
       console.error(error.message)
     },
     onSettled: async () => {
-      await fetchMySignal()
+      queryclient.invalidateQueries({ queryKey: ["fetch-my-signal"] })
       setIsLoading(false)
     },
   })
 
   const handleSaveStatus = async () => {
     mutation.mutate()
-    saveStatus()
   }
   useEffect(() => {
-    const removeListener = navigation.addListener("beforeRemove", () =>
-      clearStatus(),
-    )
-    return () => removeListener()
-  }, [navigation, clearStatus])
-
+    if (!signal) return
+    setTemporaryStatus({
+      timeSlot: signal.when,
+      activity: signal.status_message,
+      friendIds: signal.friendIds,
+    })
+  }, [navigation, signal, setTemporaryStatus])
   return (
     <View style={style.container}>
       <StatusBar style="dark" />

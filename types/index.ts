@@ -47,7 +47,7 @@ export interface User {
   isFriend?: boolean
 }
 export interface Friend {
-  id: string
+  id?: string
   friendId: string
   username: string
   user: User
@@ -66,7 +66,8 @@ export interface Signal {
   status_message: string
   createdAt?: string
   updatedAt?: string
-  friends: string[]
+  friends: Friend[]
+  friendIds: string[]
 }
 
 export type FriendSignal = {
