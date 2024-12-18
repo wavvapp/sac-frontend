@@ -1,15 +1,11 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query"
+import { useQuery } from "@tanstack/react-query"
 import api from "@/service"
-import { Friend, FriendSignal } from "@/types"
+import { FriendSignal } from "@/types"
+import { useAuth } from "@/contexts/AuthContext"
 
 export const useFriends = () => {
-  const queryClient = useQueryClient()
-  const {
-    data: allFriends,
-    isFetching: isFriendsLoading,
-    refetch: refetchAllFriends,
-    isSuccess,
-  } = useQuery({
+  const { isAuthenticated } = useAuth()
+  return useQuery({
     queryKey: ["friends"],
     queryFn: async () => {
       try {
@@ -20,53 +16,24 @@ export const useFriends = () => {
         return []
       }
     },
+    enabled: isAuthenticated,
     initialData: [],
   })
+}
 
-  const {
-    data: availableFriends,
-    isLoading: isAvailableFriendsLoading,
-    refetch: refetchAvailableFriends,
-  } = useQuery({
+export const useSignalingFriends = () => {
+  return useQuery({
     queryKey: ["friend-signals"],
     queryFn: async () => {
       const { data } = await api.get("/friend-signals")
-      return data
-        ? data.map((friend: FriendSignal) => ({
-            ...friend,
-            time: friend.signal.when,
-            activity: friend.signal.status_message,
-          }))
-        : []
+      const friendSignals = data.map((friend: FriendSignal) => ({
+        ...friend,
+        time: friend.signal.when,
+        activity: friend.signal.status_message,
+      }))
+      return friendSignals
     },
     initialData: [],
     retry: 1,
   })
-  const offlineFriends = allFriends.filter(
-    (friend: Friend) =>
-      !availableFriends?.some(
-        (availableFriend: Friend) => availableFriend.id === friend.id,
-      ),
-  )
-
-  const isLoading = isFriendsLoading || isAvailableFriendsLoading
-  const refetch = async () => {
-    await Promise.all([refetchAllFriends(), refetchAvailableFriends()])
-  }
-
-  const instantRefresh = async () => {
-    await queryClient.invalidateQueries({ queryKey: ["friends"] })
-    await queryClient.invalidateQueries({ queryKey: ["friend-signals"] })
-    const result = await refetch()
-    return result ?? []
-  }
-  return {
-    isSuccess,
-    allFriends,
-    availableFriends,
-    offlineFriends,
-    isLoading,
-    refetch,
-    instantRefresh,
-  }
 }

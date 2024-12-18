@@ -11,10 +11,9 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated"
 import UserAvailability from "@/components/cards/UserAvailability"
-// import { useFriends } from "@/hooks/useFriends"
+import { useFriends } from "@/hooks/useFriends"
 import { useMySignal } from "@/hooks/useSignal"
 import { useMemo } from "react"
-import { useFriends } from "@/hooks/useFriends_"
 
 const MAX_VISIBLE_FRIENDS = 3
 
@@ -31,14 +30,14 @@ export default function UserStatus({
 }: UserStatusProps) {
   const { data: signal } = useMySignal()
 
-  const { data: signalFriends } = useFriends()
+  const { data: allFriends } = useFriends()
   const navigation = useNavigation<HomeScreenProps>()
 
   const friends = useMemo(() => {
-    return signalFriends.filter((friend: Friend) =>
-      signal?.friendIds?.includes(friend.id),
+    return allFriends.filter((friend: Friend) =>
+      signal?.friendIds?.includes(friend.id || ""),
     )
-  }, [signal, signalFriends])
+  }, [signal, allFriends])
 
   const visibleFriends = friends.slice(0, MAX_VISIBLE_FRIENDS)
   const remainingCount = Math.max(friends.length - MAX_VISIBLE_FRIENDS, 0)

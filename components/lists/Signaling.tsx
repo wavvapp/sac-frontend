@@ -1,4 +1,4 @@
-import { forwardRef } from "react"
+import { forwardRef, useMemo } from "react"
 import { View, StyleSheet, Dimensions } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import BottomDrawer from "@/components/BottomDrawer"
@@ -9,8 +9,8 @@ import SignalingUser from "@/components/SignalingUser"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { RootStackParamList } from "@/navigation"
-import { useFriends } from "@/hooks/useFriends"
-import { User } from "@/types"
+import { useFriends, useSignalingFriends } from "@/hooks/useFriends"
+import { Friend, User } from "@/types"
 export interface SignalingRef {
   openBottomSheet: () => void
 }
@@ -19,10 +19,21 @@ type SearchProp = NativeStackNavigationProp<RootStackParamList, "Search">
 const { width } = Dimensions.get("window")
 const Signaling = forwardRef<SignalingRef>((_, ref) => {
   const navigation = useNavigation<SearchProp>()
-  const { availableFriends, offlineFriends, instantRefresh } = useFriends()
+  const { data: allFriends } = useFriends()
+
+  const { data: availableFriends } = useSignalingFriends()
+
+  const offlineFriends = useMemo(() => {
+    return allFriends.filter(
+      (friend: Friend) =>
+        !availableFriends?.some(
+          (availableFriend: Friend) => availableFriend.id === friend.id,
+        ),
+    )
+  }, [allFriends, availableFriends])
 
   return (
-    <BottomDrawer ref={ref} fetchFriends={instantRefresh}>
+    <BottomDrawer ref={ref}>
       <View style={styles.header}>
         <CustomText size="lg" fontWeight="semibold" style={styles.headerText}>
           Friends

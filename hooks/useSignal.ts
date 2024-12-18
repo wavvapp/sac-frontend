@@ -1,8 +1,7 @@
 import api from "@/service"
 import { Signal } from "@/types"
 import { useQuery } from "@tanstack/react-query"
-import { useFriends } from "./useFriends_"
-// import { useFriends } from "./useFriends"
+import { useFriends } from "./useFriends"
 
 export const useMySignal = () => {
   const { isSuccess } = useFriends()
