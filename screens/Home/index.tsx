@@ -23,6 +23,7 @@ import { TouchableOpacity } from "react-native-gesture-handler"
 import { useStatus } from "@/contexts/StatusContext"
 import api from "@/service"
 import { useFriends } from "@/queries/friends"
+import { useMySignal } from "@/queries/signal"
 
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -36,6 +37,7 @@ export default function HomeScreen() {
   const signalingRef = useRef<SignalingRef>(null)
   const navigation = useNavigation<HomeScreenProps>()
   const { data: allFriends, isFetched } = useFriends()
+  const { isPlaceholderData } = useMySignal()
   const { user, isAuthenticated } = useAuth()
   const queryClient = useQueryClient()
 
@@ -107,7 +109,7 @@ export default function HomeScreen() {
           </View>
           <AnimatedSwitch
             isOn={isOn}
-            isLoading={!isFetched}
+            isLoading={isPlaceholderData}
             onPress={() => handlePress.mutate()}
             style={styles.switch}
           />

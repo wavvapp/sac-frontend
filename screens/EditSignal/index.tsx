@@ -1,15 +1,12 @@
-import { StyleSheet, TouchableOpacity, View } from "react-native"
+import { StyleSheet, View } from "react-native"
 import Status from "@/components/cards/Status"
 import { CustomButton } from "@/components/ui/Button"
 import UserAvatar from "@/components/ui/UserAvatar"
-import CrossMark from "@/components/vectors/CrossMark"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import FriendsList from "@/components/lists/Friends"
 import Activity from "@/components/Activity"
 import { ScrollView } from "react-native-gesture-handler"
-import ShareCard from "@/components/Share"
-import CustomText from "@/components/ui/CustomText"
 import { theme } from "@/theme"
 import { useAuth } from "@/contexts/AuthContext"
 import { useStatus } from "@/contexts/StatusContext"
@@ -20,6 +17,10 @@ import { StatusBar } from "expo-status-bar"
 import api from "@/service"
 import { Signal } from "@/types"
 import { useMySignal } from "@/queries/signal"
+import { onShare } from "@/utils/share"
+import ShareIcon from "@/components/vectors/ShareIcon"
+import Header from "@/components/cards/Header"
+import ActionCard from "@/components/cards/Action"
 
 type EditSignalScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -79,16 +80,7 @@ export default function EditSignal() {
   return (
     <View style={style.container}>
       <StatusBar style="dark" />
-      <View style={style.navBar}>
-        <CustomText style={style.headerText} fontWeight="bold">
-          Edit status
-        </CustomText>
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          style={style.CrossMarkButton}>
-          <CrossMark />
-        </TouchableOpacity>
-      </View>
+      <Header title="Edit status" />
       <ScrollView
         keyboardShouldPersistTaps="always"
         contentContainerStyle={{
@@ -107,7 +99,13 @@ export default function EditSignal() {
           timeSlots={["NOW", "MORNING", "LUNCH", "AFTERNOON", "EVENING"]}
         />
         <FriendsList />
-        <ShareCard style={{ marginHorizontal: 20 }} />
+        <ActionCard
+          title="Your friends are not on Wavv?"
+          description="Invite them to join you"
+          onPress={() => onShare(user?.username)}
+          icon={<ShareIcon />}
+          style={{ marginHorizontal: 20 }}
+        />
       </ScrollView>
       <CustomButton
         activeOpacity={0.8}
@@ -130,33 +128,11 @@ const style = StyleSheet.create({
     backgroundColor: theme.colors.white,
     position: "relative",
   },
-  navBar: {
-    justifyContent: "space-between",
-    alignItems: "center",
-    flexDirection: "row",
-    width: "100%",
-    paddingHorizontal: 20,
-    position: "absolute",
-    top: 44,
-    backgroundColor: theme.colors.white,
-    zIndex: 10,
-  },
-  headerText: {
-    flexGrow: 1,
-    textAlign: "center",
-    fontSize: 20,
-    lineHeight: 28,
-  },
   saveButton: {
     position: "absolute",
     bottom: 20,
     zIndex: 10,
     width: "90%",
     marginHorizontal: 20,
-  },
-  CrossMarkButton: {
-    padding: 5,
-    position: "absolute",
-    right: 20,
   },
 })

@@ -7,11 +7,8 @@ import {
 } from "react-native"
 import Input from "@/components/ui/Input"
 import UserInfo from "@/components/UserInfo"
-import ShareCard from "@/components/Share"
 import { CustomButton } from "@/components/ui/Button"
 import { useState } from "react"
-import CloseIcon from "@/components/vectors/CloseIcon"
-import { useNavigation } from "@react-navigation/native"
 import UserAvatar from "@/components/ui/UserAvatar"
 import CustomText from "@/components/ui/CustomText"
 import { User } from "@/types"
@@ -21,10 +18,15 @@ import api from "@/service"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { StatusBar } from "expo-status-bar"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
+import { onShare } from "@/utils/share"
+import ShareIcon from "@/components/vectors/ShareIcon"
+import { useAuth } from "@/contexts/AuthContext"
+import Header from "@/components/cards/Header"
+import ActionCard from "@/components/cards/Action"
 
 const FindFriends = () => {
-  const navigation = useNavigation()
   const [search, setSearch] = useState("")
+  const { user } = useAuth()
   const queryClient = useQueryClient()
 
   const { data: users = [] } = useQuery<User[]>({
@@ -76,20 +78,10 @@ const FindFriends = () => {
     addFriend.mutate(user.id)
   }
 
-  const handleClose = () => navigation.goBack()
-
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="dark" />
-      <View style={styles.header}>
-        <View style={styles.spacer} />
-        <CustomText size="lg" fontWeight="semibold">
-          Find Friends
-        </CustomText>
-        <TouchableOpacity onPress={handleClose}>
-          <CloseIcon color={theme.colors.black} />
-        </TouchableOpacity>
-      </View>
+      <Header title="Find Friends" />
       <Input
         variant="primary"
         textSize="base"
@@ -143,7 +135,12 @@ const FindFriends = () => {
         )}
 
         <View style={styles.share}>
-          <ShareCard />
+          <ActionCard
+            title="Your friends are not on Wavv?"
+            description="Invite them to join you"
+            onPress={() => onShare(user?.username)}
+            icon={<ShareIcon />}
+          />
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -156,18 +153,8 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     backgroundColor: theme.colors.white,
   },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingBottom: 22,
-    paddingHorizontal: 20,
-  },
   input: {
     marginHorizontal: 20,
-  },
-  spacer: {
-    width: 24,
   },
   friendsList: {
     marginTop: 10,
