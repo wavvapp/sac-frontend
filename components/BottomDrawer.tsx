@@ -37,6 +37,10 @@ const BottomDrawer = forwardRef<BottomDrawerRef, DrawerProps>((props, ref) => {
     <BottomSheetBackdrop {...props} pressBehavior="collapse" />
   )
 
+  const handleSheetChanges = useCallback((index: number) => {
+    setIsBottomSheetOpen(index === 1)
+  }, [])
+
   useEffect(() => {
     let intervalId: NodeJS.Timeout
 
@@ -53,10 +57,6 @@ const BottomDrawer = forwardRef<BottomDrawerRef, DrawerProps>((props, ref) => {
       }
     }
   }, [queryClient, isbottomSheetOpen])
-
-  const handleSheetChanges = useCallback((index: number) => {
-    setIsBottomSheetOpen(index === 1)
-  }, [])
 
   return (
     <BottomSheet
