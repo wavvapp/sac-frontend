@@ -7,7 +7,7 @@ import { SafeAreaView } from "react-native-safe-area-context"
 import { StatusBar } from "expo-status-bar"
 import ActionCard from "@/components/cards/Action"
 
-export default function EntryScreen() {
+export default function SettingScreen() {
   const { signOut } = useAuth()
 
   const handleSignOut = async () => {
