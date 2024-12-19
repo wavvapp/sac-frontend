@@ -16,7 +16,6 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native"
 import { onShare } from "@/utils/share"
 import NoFriends from "@/components/cards/NoFriends"
 import { useAuth } from "@/contexts/AuthContext"
-import { useMySignal } from "@/hooks/useSignal"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { fetchPoints } from "@/libs/fetchPoints"
 import * as WebBrowser from "expo-web-browser"
@@ -67,8 +66,6 @@ export default function HomeScreen() {
     }, [isAuthenticated, refetchPoints]),
   )
 
-  const { isPlaceholderData } = useMySignal()
-
   const handleWebsiteOpen = async () => {
     await WebBrowser.openBrowserAsync(
       "https://7axab-zyaaa-aaaao-qjv7a-cai.icp0.io/",
@@ -110,7 +107,7 @@ export default function HomeScreen() {
           </View>
           <AnimatedSwitch
             isOn={isOn}
-            isLoading={isPlaceholderData}
+            isLoading={!isFetched}
             onPress={() => handlePress.mutate()}
             style={styles.switch}
           />

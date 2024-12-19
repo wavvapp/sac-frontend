@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query"
 import api from "@/service"
-import { FriendSignal } from "@/types"
+import { Friend, FriendSignal, User } from "@/types"
 import { useAuth } from "@/contexts/AuthContext"
 
 export const useFriends = () => {
   const { isAuthenticated } = useAuth()
-  return useQuery({
+  return useQuery<Friend[], Error>({
     queryKey: ["friends"],
     queryFn: async () => {
       try {
@@ -22,7 +22,7 @@ export const useFriends = () => {
 }
 
 export const useSignalingFriends = () => {
-  return useQuery({
+  return useQuery<User[], Error>({
     queryKey: ["friend-signals"],
     queryFn: async () => {
       const { data } = await api.get("/friend-signals")

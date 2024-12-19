@@ -27,7 +27,7 @@ const Signaling = forwardRef<SignalingRef>((_, ref) => {
     return allFriends.filter(
       (friend: Friend) =>
         !availableFriends?.some(
-          (availableFriend: Friend) => availableFriend.id === friend.id,
+          (availableFriend: User) => availableFriend.id === friend.id,
         ),
     )
   }, [allFriends, availableFriends])
