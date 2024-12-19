@@ -16,14 +16,14 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native"
 import { onShare } from "@/utils/share"
 import NoFriends from "@/components/cards/NoFriends"
 import { useAuth } from "@/contexts/AuthContext"
-import { useMySignal } from "@/hooks/useSignal"
-import { useFriends } from "@/hooks/useFriends"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { fetchPoints } from "@/libs/fetchPoints"
 import * as WebBrowser from "expo-web-browser"
 import { TouchableOpacity } from "react-native-gesture-handler"
 import { useStatus } from "@/contexts/StatusContext"
 import api from "@/service"
+import { useFriends } from "@/queries/friends"
+import { useMySignal } from "@/queries/signal"
 
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -36,7 +36,8 @@ export default function HomeScreen() {
   const { isOn } = useStatus()
   const signalingRef = useRef<SignalingRef>(null)
   const navigation = useNavigation<HomeScreenProps>()
-  const { allFriends, isLoading: friendsLoading } = useFriends()
+  const { data: allFriends, isFetched } = useFriends()
+  const { isPlaceholderData } = useMySignal()
   const { user, isAuthenticated } = useAuth()
   const queryClient = useQueryClient()
 
@@ -57,7 +58,7 @@ export default function HomeScreen() {
       isOn.value = !isOn.value
     },
     onSettled() {
-      queryClient.invalidateQueries({ queryKey: ["fetch-my-signal"] })
+      queryClient.refetchQueries({ queryKey: ["fetch-my-signal"] })
     },
   })
   useFocusEffect(
@@ -66,8 +67,6 @@ export default function HomeScreen() {
       refetchPoints()
     }, [isAuthenticated, refetchPoints]),
   )
-
-  const { isPlaceholderData } = useMySignal()
 
   const handleWebsiteOpen = async () => {
     await WebBrowser.openBrowserAsync(
@@ -101,7 +100,7 @@ export default function HomeScreen() {
           </CustomButton>
         </View>
       </View>
-      {!allFriends.length && !friendsLoading ? (
+      {!allFriends?.length && isFetched ? (
         <NoFriends />
       ) : (
         <>
