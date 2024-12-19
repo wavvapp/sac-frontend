@@ -5,7 +5,7 @@ import LogoutIcon from "@/components/vectors/LogoutIcon"
 import Header from "@/components/cards/Header"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { StatusBar } from "expo-status-bar"
-import ActionCard from "@/components/cards/ActionCard"
+import ActionCard from "@/components/cards/Action"
 
 export default function EntryScreen() {
   const { signOut } = useAuth()

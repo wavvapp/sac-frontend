@@ -20,7 +20,7 @@ import { useMySignal } from "@/hooks/useSignal"
 import { onShare } from "@/utils/share"
 import ShareIcon from "@/components/vectors/ShareIcon"
 import Header from "@/components/cards/Header"
-import ActionCard from "@/components/cards/ActionCard"
+import ActionCard from "@/components/cards/Action"
 
 type EditSignalScreenProps = NativeStackNavigationProp<
   RootStackParamList,

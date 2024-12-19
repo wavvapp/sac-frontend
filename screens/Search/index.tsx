@@ -22,7 +22,7 @@ import { onShare } from "@/utils/share"
 import ShareIcon from "@/components/vectors/ShareIcon"
 import { useAuth } from "@/contexts/AuthContext"
 import Header from "@/components/cards/Header"
-import ActionCard from "@/components/cards/ActionCard"
+import ActionCard from "@/components/cards/Action"
 
 const FindFriends = () => {
   const [search, setSearch] = useState("")
