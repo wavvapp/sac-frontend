@@ -11,8 +11,8 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated"
 import UserAvailability from "@/components/cards/UserAvailability"
-import { useFriends } from "@/hooks/useFriends"
-import { useMySignal } from "@/hooks/useSignal"
+import { useFriends } from "@/queries/friends"
+import { useMySignal } from "@/queries/signal"
 import { useMemo } from "react"
 
 const MAX_VISIBLE_FRIENDS = 3

@@ -19,7 +19,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { StatusBar } from "expo-status-bar"
 import api from "@/service"
 import { Signal } from "@/types"
-import { useMySignal } from "@/hooks/useSignal"
+import { useMySignal } from "@/queries/signal"
 
 type EditSignalScreenProps = NativeStackNavigationProp<
   RootStackParamList,

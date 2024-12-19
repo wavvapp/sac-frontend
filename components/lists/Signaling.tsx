@@ -9,7 +9,7 @@ import SignalingUser from "@/components/SignalingUser"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { RootStackParamList } from "@/navigation"
-import { useFriends, useSignalingFriends } from "@/hooks/useFriends"
+import { useFriends, useSignalingFriends } from "@/queries/friends"
 import { Friend, User } from "@/types"
 import { useQueryClient } from "@tanstack/react-query"
 export interface SignalingRef {

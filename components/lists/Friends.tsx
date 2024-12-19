@@ -5,7 +5,7 @@ import { TemporaryStatusType, useStatus } from "@/contexts/StatusContext"
 import { FriendsSkeleton } from "@/components/cards/FriendsSkeleton"
 import { User } from "@/types"
 import { useCallback } from "react"
-import { useFriends } from "@/hooks/useFriends"
+import { useFriends } from "@/queries/friends"
 
 export default function FriendsList() {
   const { temporaryStatus, setTemporaryStatus } = useStatus()

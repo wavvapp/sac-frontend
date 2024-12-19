@@ -22,7 +22,7 @@ import * as WebBrowser from "expo-web-browser"
 import { TouchableOpacity } from "react-native-gesture-handler"
 import { useStatus } from "@/contexts/StatusContext"
 import api from "@/service"
-import { useFriends } from "@/hooks/useFriends"
+import { useFriends } from "@/queries/friends"
 
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
