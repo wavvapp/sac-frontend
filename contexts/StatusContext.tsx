@@ -7,7 +7,7 @@ import {
   SetStateAction,
 } from "react"
 import { SharedValue, useSharedValue } from "react-native-reanimated"
-import { useMySignal } from "@/hooks/useSignal"
+import { useMySignal } from "@/queries/signal"
 
 export type TemporaryStatusType = {
   timeSlot: string
