@@ -16,6 +16,7 @@ export const useFriends = () => {
         return []
       }
     },
+    staleTime: Infinity,
     enabled: isAuthenticated,
     initialData: [],
   })

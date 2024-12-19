@@ -60,7 +60,7 @@ export default function EditSignal() {
       console.error(error.message)
     },
     onSettled: async () => {
-      queryclient.invalidateQueries({ queryKey: ["fetch-my-signal"] })
+      queryclient.refetchQueries({ queryKey: ["fetch-my-signal"] })
       setIsLoading(false)
     },
   })

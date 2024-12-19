@@ -56,7 +56,7 @@ export default function HomeScreen() {
       isOn.value = !isOn.value
     },
     onSettled() {
-      queryClient.invalidateQueries({ queryKey: ["fetch-my-signal"] })
+      queryClient.refetchQueries({ queryKey: ["fetch-my-signal"] })
     },
   })
   useFocusEffect(

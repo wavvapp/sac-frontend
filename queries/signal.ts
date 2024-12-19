@@ -1,7 +1,7 @@
 import api from "@/service"
 import { Signal } from "@/types"
 import { useQuery } from "@tanstack/react-query"
-import { useFriends } from "./friends"
+import { useFriends } from "@/queries/friends"
 
 export const useMySignal = () => {
   const { isSuccess } = useFriends()
@@ -22,6 +22,5 @@ export const useMySignal = () => {
       friendIds: [],
     },
     enabled: isSuccess,
-    staleTime: 1000 * 60 * 5,
   })
 }
