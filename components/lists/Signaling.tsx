@@ -11,6 +11,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { RootStackParamList } from "@/navigation"
 import { useFriends, useSignalingFriends } from "@/hooks/useFriends"
 import { Friend, User } from "@/types"
+import { useQueryClient } from "@tanstack/react-query"
 export interface SignalingRef {
   openBottomSheet: () => void
 }
@@ -20,8 +21,8 @@ const { width } = Dimensions.get("window")
 const Signaling = forwardRef<SignalingRef>((_, ref) => {
   const navigation = useNavigation<SearchProp>()
   const { data: allFriends } = useFriends()
-
   const { data: availableFriends } = useSignalingFriends()
+  const queryClient = useQueryClient()
 
   const offlineFriends = useMemo(() => {
     return allFriends.filter(
@@ -44,7 +45,8 @@ const Signaling = forwardRef<SignalingRef>((_, ref) => {
           title="FIND"
           textStyles={{ fontWeight: 600 }}
           onPress={() => {
-            // instantRefresh()
+            queryClient.refetchQueries({ queryKey: ["friend-signals"] })
+            queryClient.refetchQueries({ queryKey: ["friends"] })
             navigation.navigate("Search")
           }}
         />
