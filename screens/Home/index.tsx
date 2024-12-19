@@ -100,7 +100,7 @@ export default function HomeScreen() {
           </CustomButton>
         </View>
       </View>
-      {!allFriends.length && isFetched ? (
+      {!allFriends?.length && isFetched ? (
         <NoFriends />
       ) : (
         <>

@@ -21,13 +21,14 @@ const { width } = Dimensions.get("window")
 const Signaling = forwardRef<SignalingRef>((_, ref) => {
   const navigation = useNavigation<SearchProp>()
   const { data: allFriends } = useFriends()
-  const { data: availableFriends } = useSignalingFriends()
+  const { data: availableFriends = [] } = useSignalingFriends()
   const queryClient = useQueryClient()
 
   const offlineFriends = useMemo(() => {
+    if (!allFriends) return []
     return allFriends.filter(
       (friend: Friend) =>
-        !availableFriends?.some(
+        !availableFriends.some(
           (availableFriend: User) => availableFriend.id === friend.id,
         ),
     )

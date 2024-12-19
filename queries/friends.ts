@@ -13,7 +13,7 @@ export const useFriends = () => {
     },
     staleTime: Infinity,
     enabled: isAuthenticated,
-    initialData: [],
+    placeholderData: [],
   })
 }
 
@@ -29,7 +29,7 @@ export const useSignalingFriends = () => {
       }))
       return friendSignals
     },
-    initialData: [],
+    placeholderData: [],
     retry: 1,
   })
 }
