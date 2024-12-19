@@ -8,13 +8,8 @@ export const useFriends = () => {
   return useQuery<Friend[], Error>({
     queryKey: ["friends"],
     queryFn: async () => {
-      try {
-        const { data } = await api.get("/friends")
-        return data
-      } catch (error) {
-        console.error("Failed to fetch friends:", error)
-        return []
-      }
+      const { data } = await api.get("/friends")
+      return data
     },
     staleTime: Infinity,
     enabled: isAuthenticated,
