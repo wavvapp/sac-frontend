@@ -12,7 +12,6 @@ import { RootStackParamList } from "@/navigation"
 import { useFriends, useSignalingFriends } from "@/queries/friends"
 import { Friend, User } from "@/types"
 import { useQueryClient } from "@tanstack/react-query"
-import { FriendsSkeleton } from "../cards/FriendsSkeleton"
 export interface SignalingRef {
   openBottomSheet: () => void
 }
@@ -57,11 +56,6 @@ const Signaling = forwardRef<SignalingRef>((_, ref) => {
           }}
         />
       </View>
-      {isFetchingAvailableFriends && (
-        <View style={{ paddingHorizontal: 20 }}>
-          <FriendsSkeleton />
-        </View>
-      )}
       {!availableFriends.length && !isFetchingAvailableFriends && (
         <CustomText style={styles.noUsers}>
           None of your friends on Wavv are available today
