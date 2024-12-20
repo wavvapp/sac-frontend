@@ -17,6 +17,8 @@ import { Provider, User } from "@/types"
 import { CredentialsScreenProps } from "@/screens/Authentication/SignUp/CreateCredentials"
 import * as AppleAuthentication from "expo-apple-authentication"
 import { handleApiSignIn } from "@/libs/handleApiSignIn"
+import { useQueryClient } from "@tanstack/react-query"
+import api from "@/service"
 
 interface AuthContextData {
   user: User | null
@@ -42,6 +44,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const [isLoading, setIsLoading] = useState(true)
   const [currentToken, setCurrentToken] = useState<string | null>(null)
   const [isNewUser, setIsNewUser] = useState<boolean>(false)
+  const queryClient = useQueryClient()
 
   useEffect(() => {
     loadStoredData()
@@ -67,6 +70,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       await AsyncStorage.setItem("@Auth:accessToken", accessToken)
       await AsyncStorage.setItem("@Auth:refreshToken", refreshToken)
       await AsyncStorage.setItem("@Auth:user", JSON.stringify(user))
+      queryClient.setQueryData(["friends"], [])
       setUser(userData)
     } catch (err) {
       console.error("error with saving user info")
@@ -174,6 +178,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     if (storedUser && storedToken) {
       setUser(JSON.parse(storedUser))
     }
+    await queryClient.prefetchQuery({
+      queryKey: ["friends"],
+      queryFn: async () => {
+        const { data } = await api.get("/friends")
+        return data
+      },
+    })
     setIsLoading(false)
   }
 
