@@ -192,6 +192,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     await AsyncStorage.removeItem("@Auth:accessToken")
     await AsyncStorage.removeItem("@Auth:user")
     await AsyncStorage.removeItem("@Auth:refreshToken")
+    queryClient.clear()
     setUser(null)
   }
 
