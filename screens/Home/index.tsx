@@ -57,6 +57,7 @@ export default function HomeScreen() {
       isOn.value = !isOn.value
     },
     onSettled() {
+      queryClient.refetchQueries({ queryKey: ["points"] })
       queryClient.refetchQueries({ queryKey: ["fetch-my-signal"] })
     },
   })

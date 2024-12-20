@@ -62,7 +62,7 @@ export interface Friend {
 
 export interface Signal {
   id?: string
-  status?: string
+  hasEnded?: boolean
   when: string
   status_message: string
   createdAt?: string
