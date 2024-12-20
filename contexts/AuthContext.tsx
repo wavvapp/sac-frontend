@@ -144,7 +144,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       queryKey: ["friends"],
       queryFn: async () => {
         const { data } = await api.get("/friends")
-        console.log("----friends", data?.length)
         return data
       },
     })

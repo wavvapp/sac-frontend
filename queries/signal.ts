@@ -15,6 +15,7 @@ export const useMySignal = () => {
     },
     placeholderData: {
       when: "NOW",
+      hasEnded: true,
       status_message: "Available",
       friends: [],
       friendIds: [],

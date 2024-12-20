@@ -45,7 +45,7 @@ export const StatusProvider: React.FC<{ children: React.ReactNode }> = ({
       timeSlot: signalData.when,
     })
 
-    isOn.value = signalData?.status === "active"
+    isOn.value = !signalData?.hasEnded
   }, [isOn, signalData])
 
   return (
