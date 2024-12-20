@@ -70,7 +70,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       await AsyncStorage.setItem("@Auth:accessToken", accessToken)
       await AsyncStorage.setItem("@Auth:refreshToken", refreshToken)
       await AsyncStorage.setItem("@Auth:user", JSON.stringify(user))
-      queryClient.setQueryData(["friends"], [])
       setUser(userData)
     } catch (err) {
       console.error("error with saving user info")
@@ -91,6 +90,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         platform: Platform.OS === "ios" ? "web" : "android",
       })
       setIsNewUser(false)
+      queryClient.setQueryData(["friends"], [])
       await completeSignIn(data)
     } catch (error) {
       console.error("Error when signing up: ", error)

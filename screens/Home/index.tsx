@@ -36,7 +36,7 @@ export default function HomeScreen() {
   const { isOn } = useStatus()
   const signalingRef = useRef<SignalingRef>(null)
   const navigation = useNavigation<HomeScreenProps>()
-  const { data: allFriends, isFetched } = useFriends()
+  const { data: allFriends } = useFriends()
   const { user, isAuthenticated } = useAuth()
   const queryClient = useQueryClient()
 
@@ -100,7 +100,7 @@ export default function HomeScreen() {
           </CustomButton>
         </View>
       </View>
-      {!allFriends?.length && isFetched ? (
+      {!allFriends?.length ? (
         <NoFriends />
       ) : (
         <>
