@@ -1,12 +1,10 @@
 import api from "@/service"
 import { Signal } from "@/types"
 import { useQuery } from "@tanstack/react-query"
-import { useFriends } from "@/queries/friends"
 
 export const useMySignal = () => {
-  const { isSuccess } = useFriends()
   return useQuery<Signal, Error>({
-    queryKey: ["fetch-my-signal", isSuccess],
+    queryKey: ["fetch-my-signal"],
     queryFn: async () => {
       const { data } = await api.get("/my-signal")
       const signal = {
@@ -21,6 +19,5 @@ export const useMySignal = () => {
       friends: [],
       friendIds: [],
     },
-    enabled: isSuccess,
   })
 }
