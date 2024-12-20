@@ -22,10 +22,7 @@ const Signaling = forwardRef<SignalingRef>((_, ref) => {
   const navigation = useNavigation<SearchProp>()
   const [isbottomSheetOpen, setIsBottomSheetOpen] = useState<boolean>(false)
   const { data: allFriends } = useFriends(isbottomSheetOpen)
-  const {
-    data: availableFriends = [],
-    isFetching: isFetchingAvailableFriends,
-  } = useSignalingFriends(isbottomSheetOpen)
+  const { data: availableFriends = [] } = useSignalingFriends(isbottomSheetOpen)
   const queryClient = useQueryClient()
 
   const offlineFriends = useMemo(() => {
@@ -56,7 +53,7 @@ const Signaling = forwardRef<SignalingRef>((_, ref) => {
           }}
         />
       </View>
-      {!availableFriends.length && !isFetchingAvailableFriends && (
+      {!availableFriends.length && (
         <CustomText style={styles.noUsers}>
           None of your friends on Wavv are available today
         </CustomText>
