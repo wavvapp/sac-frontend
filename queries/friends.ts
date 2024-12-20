@@ -1,18 +1,15 @@
 import { useQuery } from "@tanstack/react-query"
 import api from "@/service"
 import { Friend, FriendSignal, User } from "@/types"
-import { useAuth } from "@/contexts/AuthContext"
 
 export const useFriends = (shouldRefetch?: boolean) => {
-  const { isAuthenticated } = useAuth()
   return useQuery<Friend[], Error>({
-    queryKey: ["friends", isAuthenticated],
+    queryKey: ["friends"],
     queryFn: async () => {
       const { data } = await api.get("/friends")
       return data
     },
     staleTime: Infinity,
-    enabled: isAuthenticated,
     refetchInterval: shouldRefetch ? 5000 : false,
     placeholderData: [],
   })

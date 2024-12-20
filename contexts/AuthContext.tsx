@@ -4,6 +4,7 @@ import {
   useEffect,
   useContext,
   ReactNode,
+  useCallback,
 } from "react"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import {
@@ -70,6 +71,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       await AsyncStorage.setItem("@Auth:accessToken", accessToken)
       await AsyncStorage.setItem("@Auth:refreshToken", refreshToken)
       await AsyncStorage.setItem("@Auth:user", JSON.stringify(user))
+      await prefetchFriends()
       setUser(userData)
     } catch (err) {
       console.error("error with saving user info")
@@ -137,6 +139,17 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     }
   }
 
+  const prefetchFriends = useCallback(async () => {
+    await queryClient.prefetchQuery({
+      queryKey: ["friends"],
+      queryFn: async () => {
+        const { data } = await api.get("/friends")
+        console.log("----friends", data?.length)
+        return data
+      },
+    })
+  }, [queryClient])
+
   const signInWithApple = async (navigation: CredentialsScreenProps) => {
     try {
       const credential = await AppleAuthentication.signInAsync({
@@ -178,13 +191,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     if (storedUser && storedToken) {
       setUser(JSON.parse(storedUser))
     }
-    await queryClient.prefetchQuery({
-      queryKey: ["friends"],
-      queryFn: async () => {
-        const { data } = await api.get("/friends")
-        return data
-      },
-    })
+    await prefetchFriends()
     setIsLoading(false)
   }
 
