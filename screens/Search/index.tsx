@@ -66,7 +66,11 @@ const FindFriends = () => {
   })
 
   const filteredUsers = users
-    .filter((user) => user.names.toLowerCase().includes(search.toLowerCase()))
+    .filter(
+      (user) =>
+        user.names.toLowerCase().includes(search.toLowerCase()) ||
+        user.username.toLowerCase().includes(search.toLowerCase()),
+    )
     .sort((a, b) => a.names.localeCompare(b.names))
 
   const handleSearch = (name: string) => {
