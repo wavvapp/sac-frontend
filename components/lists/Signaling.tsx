@@ -12,6 +12,7 @@ import { RootStackParamList } from "@/navigation"
 import { useFriends, useSignalingFriends } from "@/queries/friends"
 import { Friend, User } from "@/types"
 import { useQueryClient } from "@tanstack/react-query"
+import { FriendsSkeleton } from "../cards/FriendsSkeleton"
 export interface SignalingRef {
   openBottomSheet: () => void
 }
@@ -22,7 +23,10 @@ const Signaling = forwardRef<SignalingRef>((_, ref) => {
   const navigation = useNavigation<SearchProp>()
   const [isbottomSheetOpen, setIsBottomSheetOpen] = useState<boolean>(false)
   const { data: allFriends } = useFriends(isbottomSheetOpen)
-  const { data: availableFriends = [] } = useSignalingFriends(isbottomSheetOpen)
+  const {
+    data: availableFriends = [],
+    isFetching: isFetchingAvailableFriends,
+  } = useSignalingFriends(isbottomSheetOpen)
   const queryClient = useQueryClient()
 
   const offlineFriends = useMemo(() => {
@@ -53,7 +57,12 @@ const Signaling = forwardRef<SignalingRef>((_, ref) => {
           }}
         />
       </View>
-      {!availableFriends.length && (
+      {isFetchingAvailableFriends && (
+        <View style={{ paddingHorizontal: 20 }}>
+          <FriendsSkeleton />
+        </View>
+      )}
+      {!availableFriends.length && !isFetchingAvailableFriends && (
         <CustomText style={styles.noUsers}>
           None of your friends on Wavv are available today
         </CustomText>
