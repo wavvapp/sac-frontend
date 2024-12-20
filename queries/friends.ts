@@ -3,7 +3,7 @@ import api from "@/service"
 import { Friend, FriendSignal, User } from "@/types"
 import { useAuth } from "@/contexts/AuthContext"
 
-export const useFriends = (shouldRefetch: boolean) => {
+export const useFriends = (shouldRefetch?: boolean) => {
   const { isAuthenticated } = useAuth()
   return useQuery<Friend[], Error>({
     queryKey: ["friends", isAuthenticated],
@@ -18,7 +18,7 @@ export const useFriends = (shouldRefetch: boolean) => {
   })
 }
 
-export const useSignalingFriends = (shouldRefetch: boolean) => {
+export const useSignalingFriends = (shouldRefetch?: boolean) => {
   return useQuery<User[], Error>({
     queryKey: ["friend-signals"],
     queryFn: async () => {

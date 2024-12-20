@@ -37,7 +37,6 @@ export default function HomeScreen() {
   const signalingRef = useRef<SignalingRef>(null)
   const navigation = useNavigation<HomeScreenProps>()
   const { data: allFriends, isFetched } = useFriends()
-  const { isPlaceholderData } = useMySignal()
   const { user, isAuthenticated } = useAuth()
   const queryClient = useQueryClient()
 
@@ -67,6 +66,7 @@ export default function HomeScreen() {
       refetchPoints()
     }, [isAuthenticated, refetchPoints]),
   )
+  const { isPlaceholderData } = useMySignal()
 
   const handleWebsiteOpen = async () => {
     await WebBrowser.openBrowserAsync(

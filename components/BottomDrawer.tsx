@@ -24,7 +24,7 @@ interface DrawerProps {
 const BottomDrawer = forwardRef<BottomDrawerRef, DrawerProps>((props, ref) => {
   const snapPoints = useMemo(() => ["20%", "88%"], [])
   const bottomSheetRef = useRef<BottomSheet>(null)
-  const { children } = props
+  const { children, setIsBottomSheetOpen } = props
   useImperativeHandle(ref, () => ({
     openBottomSheet: () => {
       bottomSheetRef.current?.expand()
@@ -35,12 +35,9 @@ const BottomDrawer = forwardRef<BottomDrawerRef, DrawerProps>((props, ref) => {
     <BottomSheetBackdrop {...props} pressBehavior="collapse" />
   )
 
-  const handleSheetChanges = useCallback(
-    (index: number) => {
-      props.setIsBottomSheetOpen(index === 1)
-    },
-    [props],
-  )
+  const handleSheetChanges = useCallback((index: number) => {
+    setIsBottomSheetOpen(index === 1)
+  }, [])
 
   return (
     <BottomSheet
