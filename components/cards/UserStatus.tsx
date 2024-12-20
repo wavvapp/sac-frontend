@@ -11,8 +11,8 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated"
 import UserAvailability from "@/components/cards/UserAvailability"
-import { useFriends } from "@/hooks/useFriends"
-import { useMySignal } from "@/hooks/useSignal"
+import { useFriends } from "@/queries/friends"
+import { useMySignal } from "@/queries/signal"
 import { useMemo } from "react"
 
 const MAX_VISIBLE_FRIENDS = 3
@@ -30,29 +30,39 @@ export default function UserStatus({
 }: UserStatusProps) {
   const { data: signal } = useMySignal()
 
-  const { allFriends: signalFriends } = useFriends()
+  const { data: allFriends } = useFriends()
   const navigation = useNavigation<HomeScreenProps>()
 
   const friends = useMemo(() => {
-    return signalFriends.filter((friend: Friend) =>
-      signal?.friendIds?.includes(friend.id),
+    if (!allFriends) return []
+    return allFriends.filter((friend: Friend) =>
+      signal?.friendIds?.includes(friend.id || ""),
     )
-  }, [signal, signalFriends])
+  }, [signal, allFriends])
 
-  const visibleFriends = friends.slice(0, MAX_VISIBLE_FRIENDS)
-  const remainingCount = Math.max(friends.length - MAX_VISIBLE_FRIENDS, 0)
-  const fullFriendsList = visibleFriends
-    .map((friend: User) => {
-      const firstName = friend.names?.split(" ")[0]
-      const lastName = friend.names?.split(" ").slice(1).join(" ")
-      return `${firstName} ${lastName?.trim().charAt(0)}`
-    })
-    .join(", ")
+  const visibleFriends = useMemo(
+    () => friends.slice(0, MAX_VISIBLE_FRIENDS),
+    [friends],
+  )
+  const remainingCount = useMemo(
+    () => Math.max(friends.length - MAX_VISIBLE_FRIENDS, 0),
+    [friends.length],
+  )
+  const fullFriendsList = useMemo(() => {
+    return visibleFriends
+      .map((friend: User) => {
+        const firstName = friend.names?.split(" ")[0]
+        const lastName = friend.names?.split(" ").slice(1).join(" ")
+        return `${firstName} ${lastName?.trim().charAt(0)}`
+      })
+      .join(", ")
+  }, [visibleFriends])
 
-  const visibleFriendsList =
-    remainingCount > 0
+  const visibleFriendsList = useMemo(() => {
+    return remainingCount > 0
       ? `${fullFriendsList}, +${remainingCount} more`
       : fullFriendsList
+  }, [remainingCount, fullFriendsList])
 
   const cardAnimatedStyle = useAnimatedStyle(() => {
     const moveValue = interpolate(Number(isOn.value), [0, 1], [0, 1])

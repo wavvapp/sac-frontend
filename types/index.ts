@@ -47,11 +47,12 @@ export interface User {
   isFriend?: boolean
 }
 export interface Friend {
-  id?: string
+  id: string
   friendId: string
   username: string
   user: User
-  name: string
+  names: string
+  email: string
   time?: string
   activity?: string
   selected?: boolean

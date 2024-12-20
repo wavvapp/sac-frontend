@@ -3,15 +3,14 @@ import BottomSheet, {
   BottomSheetBackdropProps,
 } from "@gorhom/bottom-sheet"
 import {
+  Dispatch,
   forwardRef,
+  SetStateAction,
   useCallback,
-  useEffect,
   useImperativeHandle,
   useMemo,
   useRef,
-  useState,
 } from "react"
-import { useQuery } from "@tanstack/react-query"
 
 interface BottomDrawerRef {
   openBottomSheet: () => void
@@ -19,14 +18,13 @@ interface BottomDrawerRef {
 
 interface DrawerProps {
   children: React.ReactNode
-  fetchFriends: () => Promise<any>
+  setIsBottomSheetOpen: Dispatch<SetStateAction<boolean>>
 }
 
 const BottomDrawer = forwardRef<BottomDrawerRef, DrawerProps>((props, ref) => {
   const snapPoints = useMemo(() => ["20%", "88%"], [])
   const bottomSheetRef = useRef<BottomSheet>(null)
-  const [isbottomSheetOpen, setIsBottomSheetOpen] = useState<boolean>(false)
-  const { children, fetchFriends } = props
+  const { children, setIsBottomSheetOpen } = props
   useImperativeHandle(ref, () => ({
     openBottomSheet: () => {
       bottomSheetRef.current?.expand()
@@ -37,21 +35,10 @@ const BottomDrawer = forwardRef<BottomDrawerRef, DrawerProps>((props, ref) => {
     <BottomSheetBackdrop {...props} pressBehavior="collapse" />
   )
 
-  const { refetch } = useQuery({
-    queryKey: ["fetch-signaling-friends"],
-    queryFn: () => fetchFriends(),
-    refetchInterval: isbottomSheetOpen ? 5000 : false,
-    refetchIntervalInBackground: false,
-  })
-
   const handleSheetChanges = useCallback((index: number) => {
     setIsBottomSheetOpen(index === 1)
   }, [])
 
-  useEffect(() => {
-    if (!isbottomSheetOpen) return
-    refetch()
-  }, [isbottomSheetOpen, refetch])
   return (
     <BottomSheet
       ref={bottomSheetRef}
