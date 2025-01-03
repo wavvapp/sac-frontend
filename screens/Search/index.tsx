@@ -49,7 +49,7 @@ const FindFriends = () => {
   })
 
   const createDebouncedSearch = (callback: (value: string) => void) =>
-    debounce(callback, 500, { leading: true, trailing: true })
+    debounce(callback, 200, { leading: true, trailing: true })
 
   const debouncedSetSearchQuery = useMemo(
     () =>
