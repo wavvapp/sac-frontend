@@ -25,6 +25,7 @@ import Header from "@/components/cards/Header"
 import ActionCard from "@/components/cards/Action"
 import debounce from "lodash.debounce"
 import { useAddFriend } from "@/queries/friends"
+import { FriendsSkeleton } from "@/components/cards/FriendsSkeleton"
 
 const FindFriends = () => {
   const [search, setSearch] = useState("")
@@ -32,7 +33,7 @@ const FindFriends = () => {
   const { user } = useAuth()
   const addFriend = useAddFriend()
 
-  const { data: users = [] } = useQuery<User[]>({
+  const { data: users = [], isFetching } = useQuery<User[]>({
     queryKey: ["users", searchQueryText],
     enabled: searchQueryText.trim().length > 0,
     queryFn: async () => {
@@ -48,7 +49,7 @@ const FindFriends = () => {
   })
 
   const createDebouncedSearch = (callback: (value: string) => void) =>
-    debounce(callback, 500, { leading: false, trailing: true })
+    debounce(callback, 500, { leading: true, trailing: true })
 
   const debouncedSetSearchQuery = useMemo(
     () =>
@@ -85,38 +86,49 @@ const FindFriends = () => {
       />
 
       <ScrollView style={styles.friendsList}>
-        {search &&
-          users.map((user) => (
-            <TouchableOpacity
-              key={user.id}
-              style={styles.friendItem}
-              disabled={user.isFriend || addFriend.isPending}
-              onPress={() => handleAddFriend(user)}>
-              <View style={styles.userDetails}>
-                <UserAvatar imageUrl={user.profilePictureUrl} />
-                <View style={{ marginLeft: 8, flex: 1 }}>
-                  <UserInfo fullName={user.names} username={user.username} />
-                </View>
-              </View>
-              {addFriend.isPending && addFriend.variables === user.id ? (
-                <ActivityIndicator
-                  color={theme.colors.black}
-                  size="small"
-                  style={styles.loaderIcon}
-                />
-              ) : user.isFriend ? (
-                <CheckIcon color={theme.colors.black} />
-              ) : (
-                <CustomButton
-                  variant="outline"
-                  title="Add"
-                  onPress={() => handleAddFriend(user)}
+        {search && (
+          <>
+            {isFetching ? (
+              <FriendsSkeleton />
+            ) : (
+              users.map((user) => (
+                <TouchableOpacity
+                  key={user.id}
+                  style={styles.friendItem}
                   disabled={user.isFriend || addFriend.isPending}
-                />
-              )}
-            </TouchableOpacity>
-          ))}
-        {search && !users.length && (
+                  onPress={() => handleAddFriend(user)}>
+                  <View style={styles.userDetails}>
+                    <UserAvatar imageUrl={user.profilePictureUrl} />
+                    <View style={{ marginLeft: 8, flex: 1 }}>
+                      <UserInfo
+                        fullName={user.names}
+                        username={user.username}
+                      />
+                    </View>
+                  </View>
+                  {addFriend.isPending && addFriend.variables === user.id ? (
+                    <ActivityIndicator
+                      color={theme.colors.black}
+                      size="small"
+                      style={styles.loaderIcon}
+                    />
+                  ) : user.isFriend ? (
+                    <CheckIcon color={theme.colors.black} />
+                  ) : (
+                    <CustomButton
+                      variant="outline"
+                      title="Add"
+                      onPress={() => handleAddFriend(user)}
+                      disabled={user.isFriend || addFriend.isPending}
+                    />
+                  )}
+                </TouchableOpacity>
+              ))
+            )}
+          </>
+        )}
+
+        {search && !users.length && !isFetching && (
           <View style={styles.notFoundContainer}>
             <CustomText
               size="sm"
