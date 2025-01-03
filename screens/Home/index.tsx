@@ -24,6 +24,7 @@ import { useStatus } from "@/contexts/StatusContext"
 import api from "@/service"
 import { useFriends } from "@/queries/friends"
 import { useMySignal } from "@/queries/signal"
+import AlertDialog from "@/components/AlertDialog"
 
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -108,6 +109,7 @@ export default function HomeScreen() {
           <View style={styles.UserStatus}>
             <UserStatus isOn={isOn} user={user} />
           </View>
+          <AlertDialog />
           <AnimatedSwitch
             isOn={isOn}
             isLoading={isPlaceholderData}

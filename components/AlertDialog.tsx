@@ -1,22 +1,42 @@
 import { useState } from "react"
-import { Modal, View, Text, Button, StyleSheet } from "react-native"
+import { Modal, View, StyleSheet } from "react-native"
+import CustomText from "@/components/ui/CustomText"
+import { theme } from "@/theme"
+import { CustomButton } from "./ui/Button"
 
-export default function App() {
+export default function AlertDialog() {
   const [modalVisible, setModalVisible] = useState(false)
 
   return (
     <View style={styles.centeredView}>
-      <Button title="Show Modal" onPress={() => setModalVisible(true)} />
+      <CustomButton onPress={() => setModalVisible(true)}>
+        <CustomText style={{ color: theme.colors.white }}>
+          Show Modal
+        </CustomText>
+      </CustomButton>
 
       <Modal
-        animationType="slide"
+        animationType="fade"
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}>
-        <View style={styles.centeredView}>
+        <View style={styles.overlay}>
           <View style={styles.modalView}>
-            <Text style={styles.modalText}>This is a modal!</Text>
-            <Button title="Hide Modal" onPress={() => setModalVisible(false)} />
+            <CustomText style={styles.title} fontWeight="semibold">
+              No connection
+            </CustomText>
+            <CustomText
+              style={styles.description}
+              fontFamily="writer-mono"
+              size="sm">
+              Make sure that you are connected{"\n"}to the internet and try
+              again
+            </CustomText>
+            <CustomButton
+              style={styles.button}
+              onPress={() => setModalVisible(false)}
+              title="CLOSE"
+            />
           </View>
         </View>
       </Modal>
@@ -29,22 +49,39 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 22,
+  },
+  overlay: {
+    flex: 1,
+    backgroundColor: theme.colors.blur,
+    justifyContent: "center",
+    alignItems: "center",
   },
   modalView: {
-    margin: 20,
+    width: "80%",
     backgroundColor: "white",
-    borderRadius: 20,
-    padding: 35,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
+    borderRadius: 12,
+    padding: 24,
+    alignItems: "flex-start",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
   },
-  modalText: {
-    marginBottom: 15,
-    textAlign: "center",
+  title: {
+    fontSize: 20,
+    marginBottom: 7,
+  },
+  description: {
+    marginBottom: 26,
+  },
+  button: {
+    width: "100%",
+    backgroundColor: theme.colors.black,
+    padding: 16,
+    borderRadius: 8,
+    alignItems: "center",
   },
 })
