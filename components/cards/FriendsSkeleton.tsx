@@ -52,9 +52,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   avatarSkeleton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 56,
+    height: 56,
+    borderRadius: 40,
     backgroundColor: theme.colors.gray,
   },
   nameSkeleton: {

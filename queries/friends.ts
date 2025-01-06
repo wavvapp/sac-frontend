@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import api from "@/service"
 import { Friend, FriendSignal, User } from "@/types"
 
@@ -30,5 +30,38 @@ export const useSignalingFriends = (shouldRefetch?: boolean) => {
     placeholderData: [],
     refetchInterval: shouldRefetch ? 5000 : false,
     retry: 1,
+  })
+}
+
+export const useAddFriend = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (friendId: string) => api.post("/friends", { friendId }),
+    onMutate: async (friendId) => {
+      await queryClient.cancelQueries({
+        queryKey: ["users"],
+        exact: false,
+      })
+      const previousUsers = queryClient.getQueryData(["users", false])
+      queryClient.setQueriesData(
+        { queryKey: ["users"], exact: false },
+        (oldUsers: User[] = []) =>
+          oldUsers.map((user) =>
+            user.id === friendId ? { ...user, isFriend: true } : user,
+          ),
+      )
+      return { previousUsers }
+    },
+    onError: (err, friendId, context) => {
+      queryClient.setQueriesData(
+        { queryKey: ["users"], exact: false },
+        context?.previousUsers,
+      )
+      console.error("Error adding friend:", err)
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["users"], exact: false })
+      queryClient.invalidateQueries({ queryKey: ["friends"] })
+    },
   })
 }
