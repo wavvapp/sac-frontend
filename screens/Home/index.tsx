@@ -5,7 +5,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { StyleSheet, View, Dimensions, StatusBar, Platform } from "react-native"
 import { runOnJS, useDerivedValue } from "react-native-reanimated"
 import { AnimatedSwitch } from "@/components/AnimatedSwitch"
-import { useCallback, useEffect, useRef, useState } from "react"
+import { useCallback, useRef, useState } from "react"
 import Signaling, { SignalingRef } from "@/components/lists/Signaling"
 import Settings from "@/components/vectors/Settings"
 import { theme } from "@/theme"
@@ -16,12 +16,7 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native"
 import { onShare } from "@/utils/share"
 import NoFriends from "@/components/cards/NoFriends"
 import { useAuth } from "@/contexts/AuthContext"
-import {
-  useQuery,
-  useMutation,
-  useQueryClient,
-  onlineManager,
-} from "@tanstack/react-query"
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { fetchPoints } from "@/libs/fetchPoints"
 import * as WebBrowser from "expo-web-browser"
 import { TouchableOpacity } from "react-native-gesture-handler"
@@ -29,7 +24,6 @@ import { useStatus } from "@/contexts/StatusContext"
 import api from "@/service"
 import { useFriends } from "@/queries/friends"
 import { useMySignal } from "@/queries/signal"
-import NetInfo from "@react-native-community/netinfo"
 
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -39,25 +33,28 @@ export type HomeScreenProps = NativeStackNavigationProp<
 const { width } = Dimensions.get("window")
 export default function HomeScreen() {
   const [_, setIsVisible] = useState(false)
-  const [isOnline, setIsOnline] = useState(true)
+
   const { isOn } = useStatus()
   const signalingRef = useRef<SignalingRef>(null)
   const navigation = useNavigation<HomeScreenProps>()
   const { data: allFriends } = useFriends()
-  const { user, isAuthenticated } = useAuth()
+  const { user, isAuthenticated, isOnline } = useAuth()
   const queryClient = useQueryClient()
 
   const { data, refetch: refetchPoints } = useQuery({
     queryKey: ["points"],
     queryFn: fetchPoints,
   })
-
   const handlePress = useMutation({
     mutationKey: ["toggle-signal-change"],
     mutationFn: isOn.value
       ? () => api.post("/my-signal/turn-off")
       : () => api.post("/my-signal/turn-on"),
+    networkMode: "online",
     onMutate: () => {
+      if (!isOnline) {
+        return
+      }
       isOn.value = !isOn.value
     },
     onError: () => {
@@ -88,24 +85,8 @@ export default function HomeScreen() {
     return runOnJS(setIsVisible)(false)
   }, [isOn.value])
 
-  const handleNetworkConnectivity = useCallback(() => {
-    onlineManager.setEventListener((setOnline) => {
-      return NetInfo.addEventListener((state) => {
-        setOnline(!!state.isConnected)
-      })
-    })
+  console.log({ isOnline })
 
-    const unsubscribe = onlineManager.subscribe((onlineStatus) => {
-      setIsOnline(onlineStatus)
-    })
-    return () => {
-      unsubscribe()
-    }
-  }, [setIsOnline])
-  useEffect(() => {
-    handleNetworkConnectivity()
-  }, [handleNetworkConnectivity])
-  console.log(isOnline)
   return (
     <View style={styles.container}>
       {/* <PerlinNoise isOn={isOn} color1="#281713" color2="blue" /> */}

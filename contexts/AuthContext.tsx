@@ -18,8 +18,9 @@ import { Provider, User } from "@/types"
 import { CredentialsScreenProps } from "@/screens/Authentication/SignUp/CreateCredentials"
 import * as AppleAuthentication from "expo-apple-authentication"
 import { handleApiSignIn } from "@/libs/handleApiSignIn"
-import { useQueryClient } from "@tanstack/react-query"
+import { onlineManager, useQueryClient } from "@tanstack/react-query"
 import api from "@/service"
+import NetInfo from "@react-native-community/netinfo"
 
 interface AuthContextData {
   user: User | null
@@ -31,6 +32,7 @@ interface AuthContextData {
   isNewUser: boolean
   registerUser: (username: string) => Promise<void>
   signInWithApple: (navigation: CredentialsScreenProps) => Promise<void>
+  isOnline: boolean
 }
 interface ExtendedUser extends User {
   access_token: string
@@ -45,11 +47,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const [isLoading, setIsLoading] = useState(true)
   const [currentToken, setCurrentToken] = useState<string | null>(null)
   const [isNewUser, setIsNewUser] = useState<boolean>(false)
+  const [isOnline, setIsOnline] = useState(true)
   const queryClient = useQueryClient()
 
-  useEffect(() => {
-    loadStoredData()
-  }, [])
   async function completeSignIn(userData: ExtendedUser): Promise<void> {
     try {
       const {
@@ -194,6 +194,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     setIsLoading(false)
   }
 
+  useEffect(() => {
+    loadStoredData()
+  }, [])
+
   async function signOut(): Promise<void> {
     await AsyncStorage.removeItem("@Auth:accessToken")
     await AsyncStorage.removeItem("@Auth:user")
@@ -209,6 +213,17 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     setUser(updatedUserInfo)
   }
 
+  useEffect(() => {
+    const unsubscribe = NetInfo.addEventListener((state) => {
+      const onlineStatus = !!state.isConnected
+      setIsOnline(onlineStatus)
+      onlineManager.setOnline(onlineStatus)
+    })
+    return () => {
+      unsubscribe()
+    }
+  }, [])
+
   return (
     <AuthContext.Provider
       value={{
@@ -221,6 +236,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         isNewUser,
         registerUser,
         signInWithApple,
+        isOnline,
       }}>
       {children}
     </AuthContext.Provider>
