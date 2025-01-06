@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useCallback, useState } from "react"
 import { Modal, View, StyleSheet, Platform } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import { theme } from "@/theme"
@@ -19,10 +19,10 @@ export default function AlertDialog({
 }: AlertDialogProps) {
   const [isVisible, setIsVisible] = useState(false)
 
-  const close = () => {
+  const close = useCallback(() => {
     setIsVisible(false)
     if (onClose) onClose()
-  }
+  }, [onClose])
   const open = () => setIsVisible(true)
   AlertDialog.open = open
   AlertDialog.close = close
