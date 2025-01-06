@@ -109,13 +109,13 @@ export default function HomeScreen() {
           <View style={styles.UserStatus}>
             <UserStatus isOn={isOn} user={user} />
           </View>
-          <AlertDialog />
           <AnimatedSwitch
             isOn={isOn}
             isLoading={isPlaceholderData}
             onPress={() => handlePress.mutate()}
             style={styles.switch}
           />
+          <AlertDialog />
           <Signaling ref={signalingRef} />
         </>
       )}
