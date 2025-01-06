@@ -22,13 +22,10 @@ export default function AlertDialog() {
         onRequestClose={() => setModalVisible(false)}>
         <View style={styles.overlay}>
           <View style={styles.modalView}>
-            <CustomText style={styles.title} fontFamily="suisse" size="lg">
+            <CustomText style={styles.title} size="lg">
               No connection
             </CustomText>
-            <CustomText
-              style={styles.description}
-              fontFamily="marfa"
-              size="base">
+            <CustomText style={styles.description} fontFamily="marfa">
               Make sure that you are connected{"\n"}to the internet and try
               again
             </CustomText>
