@@ -99,7 +99,7 @@ const FindFriends = () => {
                   onPress={() => handleAddFriend(user)}>
                   <View style={styles.userDetails}>
                     <UserAvatar imageUrl={user.profilePictureUrl} />
-                    <View style={{ marginLeft: 8, flex: 1 }}>
+                    <View style={styles.userInfo}>
                       <UserInfo
                         fullName={user.names}
                         username={user.username}
@@ -186,6 +186,7 @@ const styles = StyleSheet.create({
   },
   notFoundText: { color: theme.colors.black_500 },
   loaderIcon: { paddingRight: 4 },
+  userInfo: { marginLeft: 8, flex: 1 },
 })
 
 export default FindFriends
