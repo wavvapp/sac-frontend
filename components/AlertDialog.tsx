@@ -7,14 +7,14 @@ import { CustomButton } from "@/components/ui/Button"
 interface AlertDialogProps {
   title: string
   description: string
-  cancelLabelText?: string
+  labelText?: string
   onClose?: () => void
 }
 
 export default function AlertDialog({
   title,
   description,
-  cancelLabelText = "CLOSE",
+  labelText = "CLOSE",
   onClose,
 }: AlertDialogProps) {
   const [isVisible, setIsVisible] = useState(false)
@@ -45,7 +45,7 @@ export default function AlertDialog({
             fullWidth
             containerStyles={{ width: "100%" }}
             onPress={close}
-            title={cancelLabelText}
+            title={labelText}
           />
         </View>
       </View>
