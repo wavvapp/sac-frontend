@@ -1,40 +1,44 @@
-import { useState } from "react"
 import { Modal, View, StyleSheet, Platform } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import { theme } from "@/theme"
 import { CustomButton } from "./ui/Button"
 
-export default function AlertDialog() {
-  const [modalVisible, setModalVisible] = useState(false)
+interface AlertDialogProps {
+  isOpen: boolean
+  title: string
+  description: string
+  cancelLabelText?: string
+  onClose: () => void
+}
 
+export default function AlertDialog({
+  isOpen,
+  title,
+  description,
+  cancelLabelText = "CLOSE",
+  onClose,
+}: AlertDialogProps) {
   return (
     <View style={styles.centeredView}>
-      <CustomButton onPress={() => setModalVisible(true)}>
-        <CustomText style={{ color: theme.colors.white }}>
-          Show Modal
-        </CustomText>
-      </CustomButton>
-
       <Modal
         animationType="fade"
         transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}>
+        visible={isOpen}
+        onRequestClose={onClose}>
         <View style={styles.overlay}>
           <View style={styles.modalView}>
             <CustomText style={styles.title} size="lg">
-              No connection
+              {title}
             </CustomText>
             <CustomText style={styles.description} fontFamily="marfa">
-              Make sure that you are connected{"\n"}to the internet and try
-              again
+              {description}
             </CustomText>
             <CustomButton
               variant="secondary"
               fullWidth
               containerStyles={{ width: "100%" }}
-              onPress={() => setModalVisible(false)}
-              title="CLOSE"
+              onPress={onClose}
+              title={cancelLabelText}
             />
           </View>
         </View>

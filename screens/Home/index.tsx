@@ -40,6 +40,7 @@ export default function HomeScreen() {
   const { data: allFriends } = useFriends()
   const { user, isAuthenticated } = useAuth()
   const queryClient = useQueryClient()
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   const { data, refetch: refetchPoints } = useQuery({
     queryKey: ["points"],
@@ -115,7 +116,26 @@ export default function HomeScreen() {
             onPress={() => handlePress.mutate()}
             style={styles.switch}
           />
-          <AlertDialog />
+          {/* TODO: this is for testing purpose, it will be remove after
+          implementing modal functionality */}
+          <View
+            style={{
+              flex: 1,
+              justifyContent: "center",
+              alignItems: "center",
+              marginTop: 30,
+            }}>
+            <CustomButton
+              onPress={() => setIsModalOpen(true)}
+              title="Show Modal"
+            />
+            <AlertDialog
+              isOpen={isModalOpen}
+              title="No connection"
+              description="Make sure that you are connected to the internet and try again"
+              onClose={() => setIsModalOpen(false)}
+            />
+          </View>
           <Signaling ref={signalingRef} />
         </>
       )}
