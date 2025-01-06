@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Modal, View, StyleSheet } from "react-native"
+import { Modal, View, StyleSheet, Platform } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import { theme } from "@/theme"
 import { CustomButton } from "./ui/Button"
@@ -22,11 +22,7 @@ export default function AlertDialog() {
         onRequestClose={() => setModalVisible(false)}>
         <View style={styles.overlay}>
           <View style={styles.modalView}>
-            <CustomText
-              style={styles.title}
-              fontWeight="semibold"
-              fontFamily="suisse"
-              size="lg">
+            <CustomText style={styles.title} fontFamily="suisse" size="lg">
               No connection
             </CustomText>
             <CustomText
@@ -37,7 +33,9 @@ export default function AlertDialog() {
               again
             </CustomText>
             <CustomButton
-              style={styles.button}
+              variant="secondary"
+              fullWidth
+              containerStyles={{ width: "100%" }}
               onPress={() => setModalVisible(false)}
               title="CLOSE"
             />
@@ -62,7 +60,7 @@ const styles = StyleSheet.create({
   },
   modalView: {
     width: "80%",
-    backgroundColor: "white",
+    backgroundColor: theme.colors.white,
     borderRadius: 12,
     padding: 24,
     alignItems: "flex-start",
@@ -77,15 +75,9 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     marginBottom: 7,
+    fontWeight: Platform.OS === "ios" ? "semibold" : "bold",
   },
   description: {
     marginBottom: 26,
-  },
-  button: {
-    width: "100%",
-    backgroundColor: theme.colors.black,
-    padding: 16,
-    borderRadius: 8,
-    alignItems: "center",
   },
 })
