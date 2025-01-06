@@ -14,7 +14,6 @@ export const theme: Theme = {
     gray: "#E3E3E3",
     light_gray: "#898989",
     red: "#6B2222",
-    blur: "rgba(0, 0, 0, 0.8)",
   },
   fontSize: {
     sm: 13,

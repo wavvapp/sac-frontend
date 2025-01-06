@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
   },
   overlay: {
     flex: 1,
-    backgroundColor: theme.colors.blur,
+    backgroundColor: theme.colors.black_250,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   title: {
-    fontSize: 20,
+    fontSize: theme.fontSize.lg,
     marginBottom: 7,
     fontWeight: Platform.OS === "ios" ? "semibold" : "bold",
   },
