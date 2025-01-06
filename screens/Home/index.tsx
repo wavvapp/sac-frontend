@@ -40,7 +40,6 @@ export default function HomeScreen() {
   const { data: allFriends } = useFriends()
   const { user, isAuthenticated } = useAuth()
   const queryClient = useQueryClient()
-  const [isModalOpen, setIsModalOpen] = useState(false)
 
   const { data, refetch: refetchPoints } = useQuery({
     queryKey: ["points"],
@@ -83,6 +82,10 @@ export default function HomeScreen() {
     return runOnJS(setIsVisible)(false)
   }, [isOn.value])
 
+  const showDialog = () => {
+    AlertDialog.open()
+  }
+
   return (
     <View style={styles.container}>
       {/* <PerlinNoise isOn={isOn} color1="#281713" color2="blue" /> */}
@@ -123,17 +126,12 @@ export default function HomeScreen() {
               flex: 1,
               justifyContent: "center",
               alignItems: "center",
-              marginTop: 30,
+              marginBottom: 90,
             }}>
-            <CustomButton
-              onPress={() => setIsModalOpen(true)}
-              title="Show Modal"
-            />
+            <CustomButton onPress={showDialog} title="Show Modal" />
             <AlertDialog
-              isOpen={isModalOpen}
               title="No connection"
               description="Make sure that you are connected to the internet and try again"
-              onClose={() => setIsModalOpen(false)}
             />
           </View>
           <Signaling ref={signalingRef} />

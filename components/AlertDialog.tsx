@@ -1,62 +1,65 @@
+import { useState } from "react"
 import { Modal, View, StyleSheet, Platform } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import { theme } from "@/theme"
-import { CustomButton } from "./ui/Button"
+import { CustomButton } from "@/components/ui/Button"
 
 interface AlertDialogProps {
-  isOpen: boolean
   title: string
   description: string
   cancelLabelText?: string
-  onClose: () => void
+  onClose?: () => void
 }
 
 export default function AlertDialog({
-  isOpen,
   title,
   description,
   cancelLabelText = "CLOSE",
   onClose,
 }: AlertDialogProps) {
+  const [isVisible, setIsVisible] = useState(false)
+
+  const close = () => {
+    setIsVisible(false)
+    if (onClose) onClose()
+  }
+  const open = () => setIsVisible(true)
+  AlertDialog.open = open
+  AlertDialog.close = close
   return (
-    <View style={styles.centeredView}>
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={isOpen}
-        onRequestClose={onClose}>
-        <View style={styles.overlay}>
-          <View style={styles.modalView}>
-            <CustomText style={styles.title} size="lg">
-              {title}
-            </CustomText>
-            <CustomText style={styles.description} fontFamily="marfa">
-              {description}
-            </CustomText>
-            <CustomButton
-              variant="secondary"
-              fullWidth
-              containerStyles={{ width: "100%" }}
-              onPress={onClose}
-              title={cancelLabelText}
-            />
-          </View>
+    <Modal
+      animationType="fade"
+      transparent={true}
+      visible={isVisible}
+      onRequestClose={close}>
+      <View style={styles.overlay}>
+        <View style={styles.modalView}>
+          <CustomText style={styles.title} size="lg">
+            {title}
+          </CustomText>
+          <CustomText style={styles.description} fontFamily="marfa">
+            {description}
+          </CustomText>
+          <CustomButton
+            variant="secondary"
+            fullWidth
+            containerStyles={{ width: "100%" }}
+            onPress={close}
+            title={cancelLabelText}
+          />
         </View>
-      </Modal>
-    </View>
+      </View>
+    </Modal>
   )
 }
 
+AlertDialog.open = () => {}
+AlertDialog.close = () => {}
+
 const styles = StyleSheet.create({
-  centeredView: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    paddingBottom: 50,
-  },
   overlay: {
     flex: 1,
-    backgroundColor: theme.colors.black_250,
+    backgroundColor: theme.colors.black_30,
     justifyContent: "center",
     alignItems: "center",
   },
