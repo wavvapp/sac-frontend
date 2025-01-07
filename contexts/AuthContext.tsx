@@ -21,6 +21,7 @@ import { handleApiSignIn } from "@/libs/handleApiSignIn"
 import { onlineManager, useQueryClient } from "@tanstack/react-query"
 import api from "@/service"
 import NetInfo from "@react-native-community/netinfo"
+import AlertDialog from "@/components/AlertDialog"
 
 interface AuthContextData {
   user: User | null
@@ -239,6 +240,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         isOnline,
       }}>
       {children}
+      {!isOnline && (
+        <AlertDialog
+          title="No connection"
+          description="Make sure that you are connected to the internet and try again"
+        />
+      )}
     </AuthContext.Provider>
   )
 }

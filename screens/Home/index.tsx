@@ -5,7 +5,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { StyleSheet, View, Dimensions, StatusBar, Platform } from "react-native"
 import { runOnJS, useDerivedValue } from "react-native-reanimated"
 import { AnimatedSwitch } from "@/components/AnimatedSwitch"
-import { useCallback, useEffect, useRef, useState } from "react"
+import { useCallback, useRef, useState } from "react"
 import Signaling, { SignalingRef } from "@/components/lists/Signaling"
 import Settings from "@/components/vectors/Settings"
 import { theme } from "@/theme"
@@ -24,7 +24,6 @@ import { useStatus } from "@/contexts/StatusContext"
 import api from "@/service"
 import { useFriends } from "@/queries/friends"
 import { useMySignal } from "@/queries/signal"
-import AlertDialog from "@/components/AlertDialog"
 
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -85,29 +84,6 @@ export default function HomeScreen() {
     }
     return runOnJS(setIsVisible)(false)
   }, [isOn.value])
-
-  useEffect(() => {
-    if (!isOnline) {
-      AlertDialog.open()
-    }
-  }, [isOnline])
-
-  if (!isOnline) {
-    return (
-      <View
-        style={{
-          flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-          marginBottom: 90,
-        }}>
-        <AlertDialog
-          title="No connection"
-          description="Make sure that you are connected to the internet and try again"
-        />
-      </View>
-    )
-  }
 
   return (
     <View style={styles.container}>

@@ -21,12 +21,14 @@ export default function AlertDialog({
 }: AlertDialogProps) {
   const [isVisible, setIsVisible] = useState(false)
   const { isOnline } = useAuth()
+
   const close = useCallback(() => {
     if (isOnline) {
       setIsVisible(false)
     }
     if (onClose) onClose()
   }, [onClose, setIsVisible, isOnline])
+
   const open = () => setIsVisible(true)
   AlertDialog.open = open
   AlertDialog.close = close
