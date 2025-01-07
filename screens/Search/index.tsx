@@ -27,7 +27,7 @@ const FindFriends = () => {
   const { user } = useAuth()
   const addFriend = useAddFriend()
 
-  const { data: users = [], isFetching } = useQuery<User[]>({
+  const { data: users = [], isLoading } = useQuery<User[]>({
     queryKey: ["users", searchQueryText],
     enabled: searchQueryText.trim().length > 0,
     queryFn: async () => {
@@ -82,7 +82,7 @@ const FindFriends = () => {
       <ScrollView style={styles.friendsList}>
         {search && (
           <>
-            {isFetching ? (
+            {isLoading ? (
               <FriendsSkeleton />
             ) : (
               users.map((user) => (
@@ -116,7 +116,7 @@ const FindFriends = () => {
           </>
         )}
 
-        {search && !users.length && !isFetching && (
+        {search && !users.length && !isLoading && (
           <View style={styles.notFoundContainer}>
             <CustomText
               size="sm"
