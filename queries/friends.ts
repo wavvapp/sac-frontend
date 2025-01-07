@@ -42,24 +42,33 @@ export const useAddFriend = () => {
         queryKey: ["users"],
         exact: false,
       })
-      const previousUsers = queryClient.getQueryData(["users", false])
+
+      const previousUsers =
+        queryClient
+          .getQueriesData({
+            queryKey: ["users"],
+            exact: false,
+          })
+          .slice(-1)[0]?.[1] || []
       queryClient.setQueriesData(
         { queryKey: ["users"], exact: false },
-        (oldUsers: User[] = []) =>
-          oldUsers.map((user) =>
+        (oldUsers: User[] = []) => {
+          console.log(friendId, JSON.stringify(oldUsers, null, 2))
+          return oldUsers.map((user) =>
             user.id === friendId ? { ...user, isFriend: true } : user,
-          ),
+          )
+        },
       )
       return { previousUsers }
     },
-    onError: (err, friendId, context) => {
+    onError: (err, _, context) => {
       queryClient.setQueriesData(
         { queryKey: ["users"], exact: false },
         context?.previousUsers,
       )
       console.error("Error adding friend:", err)
     },
-    onSettled: () => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"], exact: false })
       queryClient.invalidateQueries({ queryKey: ["friends"] })
     },

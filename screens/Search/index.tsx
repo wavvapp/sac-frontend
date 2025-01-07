@@ -106,13 +106,7 @@ const FindFriends = () => {
                       />
                     </View>
                   </View>
-                  {addFriend.isPending && addFriend.variables === user.id ? (
-                    <ActivityIndicator
-                      color={theme.colors.black}
-                      size="small"
-                      style={styles.loaderIcon}
-                    />
-                  ) : user.isFriend ? (
+                  {user.isFriend ? (
                     <CheckIcon color={theme.colors.black} />
                   ) : (
                     <CustomButton
@@ -128,7 +122,7 @@ const FindFriends = () => {
           </>
         )}
 
-        {search && !users.length && !isFetching && (
+        {search && !users?.length && !isFetching && (
           <View style={styles.notFoundContainer}>
             <CustomText
               size="sm"
