@@ -3,6 +3,7 @@ import { Theme } from "@/types"
 export const theme: Theme = {
   colors: {
     black: "#000000",
+    black_30: "#000000BF",
     black_50: "#1A1A1D",
     black_100: "#0000000D",
     black_200: "#00000033",

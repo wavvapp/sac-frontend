@@ -8,7 +8,7 @@ import {
 import Input from "@/components/ui/Input"
 import UserInfo from "@/components/UserInfo"
 import { CustomButton } from "@/components/ui/Button"
-import { useState } from "react"
+import { useCallback, useMemo, useState } from "react"
 import UserAvatar from "@/components/ui/UserAvatar"
 import CustomText from "@/components/ui/CustomText"
 import { User } from "@/types"
@@ -17,22 +17,27 @@ import CheckIcon from "@/components/vectors/CheckIcon"
 import api from "@/service"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { StatusBar } from "expo-status-bar"
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
+import { useQuery } from "@tanstack/react-query"
 import { onShare } from "@/utils/share"
 import ShareIcon from "@/components/vectors/ShareIcon"
 import { useAuth } from "@/contexts/AuthContext"
 import Header from "@/components/cards/Header"
 import ActionCard from "@/components/cards/Action"
+import debounce from "lodash.debounce"
+import { useAddFriend } from "@/queries/friends"
+import { FriendsSkeleton } from "@/components/cards/FriendsSkeleton"
 
 const FindFriends = () => {
   const [search, setSearch] = useState("")
+  const [searchQueryText, setSearchQueryText] = useState("")
   const { user } = useAuth()
-  const queryClient = useQueryClient()
+  const addFriend = useAddFriend()
 
-  const { data: users = [] } = useQuery<User[]>({
-    queryKey: ["users"],
+  const { data: users = [], isFetching } = useQuery<User[]>({
+    queryKey: ["users", searchQueryText],
+    enabled: searchQueryText.trim().length > 0,
     queryFn: async () => {
-      const response = await api.get(`/users`)
+      const response = await api.get(`/users?q=${searchQueryText}`)
       return response.data.map((user: User) => ({
         id: user.id,
         names: user.names,
@@ -43,39 +48,24 @@ const FindFriends = () => {
     },
   })
 
-  const addFriend = useMutation({
-    mutationFn: (friendId: string) => api.post("/friends", { friendId }),
-    onMutate: async (friendId) => {
-      await queryClient.cancelQueries({ queryKey: ["users"] })
-      const previousUsers = queryClient.getQueryData(["users"])
-      queryClient.setQueryData(["users"], (oldUsers: User[]) =>
-        oldUsers.map((user) =>
-          user.id === friendId ? { ...user, isFriend: true } : user,
-        ),
-      )
-      return { previousUsers }
-    },
-    onError: (err, friendId, context) => {
-      queryClient.setQueryData(["users"], context?.previousUsers)
-      console.error("Error adding friend:", err)
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["users"] })
-      queryClient.invalidateQueries({ queryKey: ["friends"] })
-    },
-  })
+  const createDebouncedSearch = (callback: (value: string) => void) =>
+    debounce(callback, 200, { leading: true, trailing: true })
 
-  const filteredUsers = users
-    .filter(
-      (user) =>
-        user.names.toLowerCase().includes(search.toLowerCase()) ||
-        user.username.toLowerCase().includes(search.toLowerCase()),
-    )
-    .sort((a, b) => a.names.localeCompare(b.names))
+  const debouncedSetSearchQuery = useMemo(
+    () =>
+      createDebouncedSearch((value: string) => {
+        setSearchQueryText(value)
+      }),
+    [],
+  )
 
-  const handleSearch = (name: string) => {
-    setSearch(name)
-  }
+  const handleSearch = useCallback(
+    (name: string) => {
+      setSearch(name)
+      debouncedSetSearchQuery(name)
+    },
+    [debouncedSetSearchQuery],
+  )
 
   const handleAddFriend = (user: User) => {
     if (user.isFriend || addFriend.isPending) return
@@ -96,38 +86,49 @@ const FindFriends = () => {
       />
 
       <ScrollView style={styles.friendsList}>
-        {search &&
-          filteredUsers.map((user) => (
-            <TouchableOpacity
-              key={user.id}
-              style={styles.friendItem}
-              disabled={user.isFriend || addFriend.isPending}
-              onPress={() => handleAddFriend(user)}>
-              <View style={styles.userDetails}>
-                <UserAvatar imageUrl={user.profilePictureUrl} />
-                <View style={{ marginLeft: 8, flex: 1 }}>
-                  <UserInfo fullName={user.names} username={user.username} />
-                </View>
-              </View>
-              {addFriend.isPending && addFriend.variables === user.id ? (
-                <ActivityIndicator
-                  color={theme.colors.black}
-                  size="small"
-                  style={styles.loaderIcon}
-                />
-              ) : user.isFriend ? (
-                <CheckIcon color={theme.colors.black} />
-              ) : (
-                <CustomButton
-                  variant="outline"
-                  title="Add"
-                  onPress={() => handleAddFriend(user)}
+        {search && (
+          <>
+            {isFetching ? (
+              <FriendsSkeleton />
+            ) : (
+              users.map((user) => (
+                <TouchableOpacity
+                  key={user.id}
+                  style={styles.friendItem}
                   disabled={user.isFriend || addFriend.isPending}
-                />
-              )}
-            </TouchableOpacity>
-          ))}
-        {search && !filteredUsers.length && (
+                  onPress={() => handleAddFriend(user)}>
+                  <View style={styles.userDetails}>
+                    <UserAvatar imageUrl={user.profilePictureUrl} />
+                    <View style={styles.userInfo}>
+                      <UserInfo
+                        fullName={user.names}
+                        username={user.username}
+                      />
+                    </View>
+                  </View>
+                  {addFriend.isPending && addFriend.variables === user.id ? (
+                    <ActivityIndicator
+                      color={theme.colors.black}
+                      size="small"
+                      style={styles.loaderIcon}
+                    />
+                  ) : user.isFriend ? (
+                    <CheckIcon color={theme.colors.black} />
+                  ) : (
+                    <CustomButton
+                      variant="outline"
+                      title="Add"
+                      onPress={() => handleAddFriend(user)}
+                      disabled={user.isFriend || addFriend.isPending}
+                    />
+                  )}
+                </TouchableOpacity>
+              ))
+            )}
+          </>
+        )}
+
+        {search && !users.length && !isFetching && (
           <View style={styles.notFoundContainer}>
             <CustomText
               size="sm"
@@ -185,6 +186,7 @@ const styles = StyleSheet.create({
   },
   notFoundText: { color: theme.colors.black_500 },
   loaderIcon: { paddingRight: 4 },
+  userInfo: { marginLeft: 8, flex: 1 },
 })
 
 export default FindFriends
