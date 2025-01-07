@@ -3,12 +3,14 @@ import { Modal, View, StyleSheet, Platform } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import { theme } from "@/theme"
 import { CustomButton } from "@/components/ui/Button"
+import { useAuth } from "@/contexts/AuthContext"
 
 interface AlertDialogProps {
   title: string
   description: string
   labelText?: string
   onClose?: () => void
+  alertVisible?: boolean
 }
 
 export default function AlertDialog({
@@ -18,11 +20,13 @@ export default function AlertDialog({
   onClose,
 }: AlertDialogProps) {
   const [isVisible, setIsVisible] = useState(false)
-
+  const { isOnline } = useAuth()
   const close = useCallback(() => {
-    setIsVisible(false)
+    if (isOnline) {
+      setIsVisible(false)
+    }
     if (onClose) onClose()
-  }, [onClose])
+  }, [onClose, setIsVisible, isOnline])
   const open = () => setIsVisible(true)
   AlertDialog.open = open
   AlertDialog.close = close
