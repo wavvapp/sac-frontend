@@ -52,16 +52,14 @@ export const useAddFriend = () => {
           .slice(-1)[0]?.[1] || []
       queryClient.setQueriesData(
         { queryKey: ["users"], exact: false },
-        (oldUsers: User[] = []) => {
-          console.log(friendId, JSON.stringify(oldUsers, null, 2))
-          return oldUsers.map((user) =>
+        (oldUsers: User[] = []) =>
+          oldUsers.map((user) =>
             user.id === friendId ? { ...user, isFriend: true } : user,
-          )
-        },
+          ),
       )
       return { previousUsers }
     },
-    onError: (err, _, context) => {
+    onError: (err, friendId, context) => {
       queryClient.setQueriesData(
         { queryKey: ["users"], exact: false },
         context?.previousUsers,

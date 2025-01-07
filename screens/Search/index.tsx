@@ -1,10 +1,4 @@
-import {
-  View,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  ActivityIndicator,
-} from "react-native"
+import { View, StyleSheet, ScrollView, TouchableOpacity } from "react-native"
 import Input from "@/components/ui/Input"
 import UserInfo from "@/components/UserInfo"
 import { CustomButton } from "@/components/ui/Button"
@@ -122,7 +116,7 @@ const FindFriends = () => {
           </>
         )}
 
-        {search && !users?.length && !isFetching && (
+        {search && !users.length && !isFetching && (
           <View style={styles.notFoundContainer}>
             <CustomText
               size="sm"
@@ -179,7 +173,6 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   notFoundText: { color: theme.colors.black_500 },
-  loaderIcon: { paddingRight: 4 },
   userInfo: { marginLeft: 8, flex: 1 },
 })
 
