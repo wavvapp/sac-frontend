@@ -35,8 +35,11 @@ export default function UserStatus({
 
   const friends = useMemo(() => {
     if (!allFriends) return []
-    return allFriends.filter((friend: Friend) =>
+    const filteredFriends = allFriends.filter((friend: Friend) =>
       signal?.friendIds?.includes(friend.id || ""),
+    )
+    return filteredFriends.sort((a, b) =>
+      (a.names || "").localeCompare(b.names || ""),
     )
   }, [signal, allFriends])
 
