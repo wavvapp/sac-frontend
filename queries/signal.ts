@@ -1,5 +1,5 @@
 import api from "@/service"
-import { Signal } from "@/types"
+import { Friend, Signal } from "@/types"
 import { useQuery } from "@tanstack/react-query"
 
 export const useMySignal = () => {
@@ -9,7 +9,7 @@ export const useMySignal = () => {
       const { data } = await api.get("/my-signal")
       const signal = {
         ...data,
-        friendIds: data.friends.map((friend: any) => friend?.friendId),
+        friendIds: data.friends.map((friend: Friend) => friend?.friendId),
       }
       return signal
     },

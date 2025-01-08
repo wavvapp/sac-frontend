@@ -14,7 +14,7 @@ import {
   statusCodes,
 } from "@react-native-google-signin/google-signin"
 import { Platform } from "react-native"
-import { Provider, User } from "@/types"
+import { Friend, Provider, User } from "@/types"
 import { CredentialsScreenProps } from "@/screens/Authentication/SignUp/CreateCredentials"
 import * as AppleAuthentication from "expo-apple-authentication"
 import { handleApiSignIn } from "@/libs/handleApiSignIn"
@@ -156,7 +156,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         const { data } = await api.get("/my-signal")
         const signal = {
           ...data,
-          friendIds: data.friends.map((friend: any) => friend?.friendId),
+          friendIds: data.friends.map((friend: Friend) => friend?.friendId),
         }
         return signal
       },
