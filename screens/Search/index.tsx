@@ -46,6 +46,7 @@ const FindFriends = () => {
         isFriend: user.isFriend,
       }))
     },
+    networkMode: "offlineFirst",
   })
 
   const createDebouncedSearch = (callback: (value: string) => void) =>

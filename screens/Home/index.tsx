@@ -88,7 +88,8 @@ export default function HomeScreen() {
     <View style={styles.container}>
       {/* <PerlinNoise isOn={isOn} color1="#281713" color2="blue" /> */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={handleWebsiteOpen}>
+        <TouchableOpacity
+          onPress={() => handleOfflineAction(handleWebsiteOpen)}>
           <Badge variant="primary" name={data?.points?.toFixed(1) || 0} />
         </TouchableOpacity>
         <View style={styles.buttonContainer}>

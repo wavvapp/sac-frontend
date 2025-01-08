@@ -1,4 +1,4 @@
-import { StyleSheet, View } from "react-native"
+import { StyleSheet } from "react-native"
 import Status from "@/components/cards/Status"
 import { CustomButton } from "@/components/ui/Button"
 import UserAvatar from "@/components/ui/UserAvatar"
@@ -22,6 +22,7 @@ import ShareIcon from "@/components/vectors/ShareIcon"
 import Header from "@/components/cards/Header"
 import ActionCard from "@/components/cards/Action"
 import { useOfflineHandler } from "@/hooks/useOfflineHandler"
+import { SafeAreaView } from "react-native-safe-area-context"
 
 type EditSignalScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -80,7 +81,7 @@ export default function EditSignal() {
     })
   }, [navigation, signal, setTemporaryStatus])
   return (
-    <View style={style.container}>
+    <SafeAreaView style={style.container}>
       <StatusBar style="dark" />
       <Header title="Edit status" />
       <ScrollView
@@ -119,14 +120,13 @@ export default function EditSignal() {
         onPress={handleSaveStatus}
         disabled={isLoading}
       />
-    </View>
+    </SafeAreaView>
   )
 }
 
 const style = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 44,
     backgroundColor: theme.colors.white,
     position: "relative",
   },

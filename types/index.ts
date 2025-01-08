@@ -69,6 +69,7 @@ export interface Signal {
   updatedAt?: string
   friends: Friend[]
   friendIds: string[]
+  status?: string
 }
 
 export type FriendSignal = {
