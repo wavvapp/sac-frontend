@@ -1,10 +1,4 @@
-import {
-  View,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  ActivityIndicator,
-} from "react-native"
+import { View, StyleSheet, ScrollView, TouchableOpacity } from "react-native"
 import Input from "@/components/ui/Input"
 import UserInfo from "@/components/UserInfo"
 import { CustomButton } from "@/components/ui/Button"
@@ -33,7 +27,7 @@ const FindFriends = () => {
   const { user } = useAuth()
   const addFriend = useAddFriend()
 
-  const { data: users = [], isFetching } = useQuery<User[]>({
+  const { data: users = [], isLoading } = useQuery<User[]>({
     queryKey: ["users", searchQueryText],
     enabled: searchQueryText.trim().length > 0,
     queryFn: async () => {
@@ -88,7 +82,7 @@ const FindFriends = () => {
       <ScrollView style={styles.friendsList}>
         {search && (
           <>
-            {isFetching ? (
+            {isLoading ? (
               <FriendsSkeleton />
             ) : (
               users.map((user) => (
@@ -106,13 +100,7 @@ const FindFriends = () => {
                       />
                     </View>
                   </View>
-                  {addFriend.isPending && addFriend.variables === user.id ? (
-                    <ActivityIndicator
-                      color={theme.colors.black}
-                      size="small"
-                      style={styles.loaderIcon}
-                    />
-                  ) : user.isFriend ? (
+                  {user.isFriend ? (
                     <CheckIcon color={theme.colors.black} />
                   ) : (
                     <CustomButton
@@ -128,7 +116,7 @@ const FindFriends = () => {
           </>
         )}
 
-        {search && !users.length && !isFetching && (
+        {search && !users.length && !isLoading && (
           <View style={styles.notFoundContainer}>
             <CustomText
               size="sm"
@@ -185,7 +173,6 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   notFoundText: { color: theme.colors.black_500 },
-  loaderIcon: { paddingRight: 4 },
   userInfo: { marginLeft: 8, flex: 1 },
 })
 
