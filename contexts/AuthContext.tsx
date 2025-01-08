@@ -20,7 +20,6 @@ import * as AppleAuthentication from "expo-apple-authentication"
 import { handleApiSignIn } from "@/libs/handleApiSignIn"
 import { useQueryClient } from "@tanstack/react-query"
 import api from "@/service"
-// import NetInfo from "@react-native-community/netinfo"
 import AlertDialog from "@/components/AlertDialog"
 import { useOfflineHandler } from "@/hooks/useOfflineHandler"
 
