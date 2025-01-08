@@ -39,7 +39,7 @@ export default function FriendsList() {
       ...selectedFriends.sort(sortFriendsByName),
       ...unselectedFriends.sort(sortFriendsByName),
     ]
-  }, [allFriends, friendIds])
+  }, [allFriends])
   return (
     <View style={styles.container}>
       <CustomText size="sm">Who can see it</CustomText>
