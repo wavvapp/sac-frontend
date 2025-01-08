@@ -49,7 +49,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const [isLoading, setIsLoading] = useState(true)
   const [currentToken, setCurrentToken] = useState<string | null>(null)
   const [isNewUser, setIsNewUser] = useState<boolean>(false)
-  // const [isOnline, setIsOnline] = useState(true)
   const { isOnline } = useOfflineHandler()
   const queryClient = useQueryClient()
 
@@ -235,7 +234,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         <AlertDialog
           title="No connection"
           description="Make sure that you are connected to the internet and try again"
-          alertVisible={true}
         />
       )}
     </AuthContext.Provider>
