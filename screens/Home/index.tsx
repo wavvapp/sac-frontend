@@ -44,7 +44,6 @@ export default function HomeScreen() {
     queryKey: ["points"],
     queryFn: fetchPoints,
   })
-
   const handlePress = useMutation({
     mutationKey: ["toggle-signal-change"],
     mutationFn: isOn.value

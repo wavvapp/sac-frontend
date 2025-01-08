@@ -9,7 +9,8 @@ export const useFriends = (shouldRefetch?: boolean) => {
       const { data } = await api.get("/friends")
       return data
     },
-    staleTime: Infinity,
+    staleTime: 0,
+    refetchOnMount: true,
     refetchInterval: shouldRefetch ? 5000 : false,
     placeholderData: [],
   })
