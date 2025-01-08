@@ -149,6 +149,20 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     })
   }, [queryClient])
 
+  const prefetchSignal = useCallback(async () => {
+    await queryClient.prefetchQuery({
+      queryKey: ["fetch-my-signal"],
+      queryFn: async () => {
+        const { data } = await api.get("/my-signal")
+        const signal = {
+          ...data,
+          friendIds: data.friends.map((friend: any) => friend?.friendId),
+        }
+        return signal
+      },
+    })
+  }, [queryClient])
+
   const signInWithApple = async (navigation: CredentialsScreenProps) => {
     try {
       const credential = await AppleAuthentication.signInAsync({
@@ -190,7 +204,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     if (storedUser && storedToken) {
       setUser(JSON.parse(storedUser))
     }
-    await prefetchFriends()
+    await Promise.all([prefetchSignal(), prefetchFriends()])
     setIsLoading(false)
   }
 

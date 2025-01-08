@@ -13,12 +13,6 @@ export const useMySignal = () => {
       }
       return signal
     },
-    placeholderData: {
-      when: "NOW",
-      hasEnded: true,
-      status_message: "Available",
-      friends: [],
-      friendIds: [],
-    },
+    staleTime: 10000,
   })
 }
