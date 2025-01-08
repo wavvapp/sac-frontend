@@ -1,9 +1,9 @@
-import { useCallback, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { Modal, View, StyleSheet, Platform } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import { theme } from "@/theme"
 import { CustomButton } from "@/components/ui/Button"
-import { useAuth } from "@/contexts/AuthContext"
+import { useOfflineHandler } from "@/hooks/useOfflineHandler"
 
 interface AlertDialogProps {
   title: string
@@ -20,14 +20,16 @@ export default function AlertDialog({
   onClose,
 }: AlertDialogProps) {
   const [isVisible, setIsVisible] = useState(false)
-  const { isOnline } = useAuth()
+  const { handleOfflineAction } = useOfflineHandler()
 
   const close = useCallback(() => {
-    if (isOnline) {
-      setIsVisible(false)
-    }
+    setIsVisible(false)
     if (onClose) onClose()
-  }, [onClose, setIsVisible, isOnline])
+  }, [onClose])
+
+  useEffect(() => {
+    handleOfflineAction()
+  }, [handleOfflineAction])
 
   const open = () => setIsVisible(true)
   AlertDialog.open = open

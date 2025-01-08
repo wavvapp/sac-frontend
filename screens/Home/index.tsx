@@ -24,6 +24,7 @@ import { useStatus } from "@/contexts/StatusContext"
 import api from "@/service"
 import { useFriends } from "@/queries/friends"
 import { useMySignal } from "@/queries/signal"
+import { useOfflineHandler } from "@/hooks/useOfflineHandler"
 
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -38,8 +39,9 @@ export default function HomeScreen() {
   const signalingRef = useRef<SignalingRef>(null)
   const navigation = useNavigation<HomeScreenProps>()
   const { data: allFriends } = useFriends()
-  const { user, isAuthenticated, isOnline } = useAuth()
+  const { user, isAuthenticated } = useAuth()
   const queryClient = useQueryClient()
+  const { handleOfflineAction } = useOfflineHandler()
 
   const { data, refetch: refetchPoints } = useQuery({
     queryKey: ["points"],
@@ -52,10 +54,7 @@ export default function HomeScreen() {
       : () => api.post("/my-signal/turn-on"),
     networkMode: "online",
     onMutate: () => {
-      if (!isOnline) {
-        return
-      }
-      isOn.value = !isOn.value
+      handleOfflineAction(() => (isOn.value = !isOn.value))
     },
     onError: () => {
       isOn.value = !isOn.value

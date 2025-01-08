@@ -12,6 +12,7 @@ import { RootStackParamList } from "@/navigation"
 import { useFriends, useSignalingFriends } from "@/queries/friends"
 import { Friend, User } from "@/types"
 import { useQueryClient } from "@tanstack/react-query"
+import { useOfflineHandler } from "@/hooks/useOfflineHandler"
 export interface SignalingRef {
   openBottomSheet: () => void
 }
@@ -23,6 +24,7 @@ const Signaling = forwardRef<SignalingRef>((_, ref) => {
   const [isbottomSheetOpen, setIsBottomSheetOpen] = useState<boolean>(false)
   const { data: allFriends } = useFriends(isbottomSheetOpen)
   const { data: availableFriends = [] } = useSignalingFriends(isbottomSheetOpen)
+  const { handleOfflineAction } = useOfflineHandler()
   const queryClient = useQueryClient()
 
   const offlineFriends = useMemo(() => {
@@ -35,6 +37,12 @@ const Signaling = forwardRef<SignalingRef>((_, ref) => {
     )
   }, [allFriends, availableFriends])
 
+  const openSearch = () => {
+    queryClient.refetchQueries({ queryKey: ["friend-signals"] })
+    queryClient.refetchQueries({ queryKey: ["friends"] })
+    navigation.navigate("Search")
+  }
+
   return (
     <BottomDrawer ref={ref} setIsBottomSheetOpen={setIsBottomSheetOpen}>
       <View style={styles.header}>
@@ -46,11 +54,7 @@ const Signaling = forwardRef<SignalingRef>((_, ref) => {
           textSize="sm"
           title="FIND"
           textStyles={{ fontWeight: 600 }}
-          onPress={() => {
-            queryClient.refetchQueries({ queryKey: ["friend-signals"] })
-            queryClient.refetchQueries({ queryKey: ["friends"] })
-            navigation.navigate("Search")
-          }}
+          onPress={() => handleOfflineAction(openSearch)}
         />
       </View>
       {!availableFriends.length && (

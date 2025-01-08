@@ -21,6 +21,7 @@ import { onShare } from "@/utils/share"
 import ShareIcon from "@/components/vectors/ShareIcon"
 import Header from "@/components/cards/Header"
 import ActionCard from "@/components/cards/Action"
+import { useOfflineHandler } from "@/hooks/useOfflineHandler"
 
 type EditSignalScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -33,6 +34,7 @@ export default function EditSignal() {
   const { data: signal } = useMySignal()
   const { user } = useAuth()
   const [isLoading, setIsLoading] = useState(false)
+  const { handleOfflineAction } = useOfflineHandler()
   const queryclient = useQueryClient()
 
   const mutation = useMutation({
@@ -67,7 +69,7 @@ export default function EditSignal() {
   })
 
   const handleSaveStatus = async () => {
-    mutation.mutate()
+    handleOfflineAction(() => mutation.mutate())
   }
   useEffect(() => {
     if (!signal) return

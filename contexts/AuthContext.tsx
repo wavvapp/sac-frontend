@@ -18,10 +18,11 @@ import { Provider, User } from "@/types"
 import { CredentialsScreenProps } from "@/screens/Authentication/SignUp/CreateCredentials"
 import * as AppleAuthentication from "expo-apple-authentication"
 import { handleApiSignIn } from "@/libs/handleApiSignIn"
-import { onlineManager, useQueryClient } from "@tanstack/react-query"
+import { useQueryClient } from "@tanstack/react-query"
 import api from "@/service"
-import NetInfo from "@react-native-community/netinfo"
+// import NetInfo from "@react-native-community/netinfo"
 import AlertDialog from "@/components/AlertDialog"
+import { useOfflineHandler } from "@/hooks/useOfflineHandler"
 
 interface AuthContextData {
   user: User | null
@@ -48,7 +49,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const [isLoading, setIsLoading] = useState(true)
   const [currentToken, setCurrentToken] = useState<string | null>(null)
   const [isNewUser, setIsNewUser] = useState<boolean>(false)
-  const [isOnline, setIsOnline] = useState(true)
+  // const [isOnline, setIsOnline] = useState(true)
+  const { isOnline } = useOfflineHandler()
   const queryClient = useQueryClient()
 
   async function completeSignIn(userData: ExtendedUser): Promise<void> {
@@ -214,17 +216,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     setUser(updatedUserInfo)
   }
 
-  useEffect(() => {
-    const unsubscribe = NetInfo.addEventListener((state) => {
-      const onlineStatus = !!state.isConnected
-      setIsOnline(onlineStatus)
-      onlineManager.setOnline(onlineStatus)
-    })
-    return () => {
-      unsubscribe()
-    }
-  }, [])
-
   return (
     <AuthContext.Provider
       value={{
@@ -244,6 +235,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         <AlertDialog
           title="No connection"
           description="Make sure that you are connected to the internet and try again"
+          alertVisible={true}
         />
       )}
     </AuthContext.Provider>

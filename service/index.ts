@@ -4,6 +4,8 @@ import axios, {
   InternalAxiosRequestConfig,
 } from "axios"
 import AsyncStorage from "@react-native-async-storage/async-storage"
+import NetInfo from "@react-native-community/netinfo"
+import AlertDialog from "@/components/AlertDialog"
 
 // Create an Axios instance
 const api = axios.create({
@@ -29,6 +31,11 @@ const refreshAccessToken = async (refreshToken: string) => {
 // Request Interceptor
 api.interceptors.request.use(
   async (config: InternalAxiosRequestConfig) => {
+    const netInfo = await NetInfo.fetch()
+    if (!netInfo.isConnected) {
+      AlertDialog.open()
+      return Promise.reject(new Error("No internet connection"))
+    }
     const token = await AsyncStorage.getItem("@Auth:accessToken")
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
