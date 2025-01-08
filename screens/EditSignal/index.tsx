@@ -50,7 +50,6 @@ export default function EditSignal() {
         status_message: temporaryStatus.activity,
         friends: [],
         friendIds: temporaryStatus.friendIds,
-        status: "active",
       }
       queryclient.setQueryData(["fetch-my-signal"], optimisticStatus)
       setIsLoading(true)
