@@ -20,6 +20,8 @@ import * as AppleAuthentication from "expo-apple-authentication"
 import { handleApiSignIn } from "@/libs/handleApiSignIn"
 import { useQueryClient } from "@tanstack/react-query"
 import api from "@/service"
+import AlertDialog from "@/components/AlertDialog"
+import { useOfflineHandler } from "@/hooks/useOfflineHandler"
 
 interface AuthContextData {
   user: User | null
@@ -31,6 +33,7 @@ interface AuthContextData {
   isNewUser: boolean
   registerUser: (username: string) => Promise<void>
   signInWithApple: (navigation: CredentialsScreenProps) => Promise<void>
+  isOnline: boolean
 }
 interface ExtendedUser extends User {
   access_token: string
@@ -45,11 +48,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const [isLoading, setIsLoading] = useState(true)
   const [currentToken, setCurrentToken] = useState<string | null>(null)
   const [isNewUser, setIsNewUser] = useState<boolean>(false)
+  const { isOnline } = useOfflineHandler()
   const queryClient = useQueryClient()
 
-  useEffect(() => {
-    loadStoredData()
-  }, [])
   async function completeSignIn(userData: ExtendedUser): Promise<void> {
     try {
       const {
@@ -194,6 +195,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     setIsLoading(false)
   }
 
+  useEffect(() => {
+    loadStoredData()
+  }, [])
+
   async function signOut(): Promise<void> {
     await AsyncStorage.removeItem("@Auth:accessToken")
     await AsyncStorage.removeItem("@Auth:user")
@@ -221,8 +226,15 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         isNewUser,
         registerUser,
         signInWithApple,
+        isOnline,
       }}>
       {children}
+      {!isOnline && (
+        <AlertDialog
+          title="No connection"
+          description="Make sure that you are connected to the internet and try again"
+        />
+      )}
     </AuthContext.Provider>
   )
 }

@@ -23,6 +23,7 @@ export default function AlertDialog({
     setIsVisible(false)
     if (onClose) onClose()
   }, [onClose])
+
   const open = () => setIsVisible(true)
   AlertDialog.open = open
   AlertDialog.close = close

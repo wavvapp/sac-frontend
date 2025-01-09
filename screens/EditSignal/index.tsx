@@ -1,4 +1,4 @@
-import { StyleSheet, View } from "react-native"
+import { StyleSheet } from "react-native"
 import Status from "@/components/cards/Status"
 import { CustomButton } from "@/components/ui/Button"
 import UserAvatar from "@/components/ui/UserAvatar"
@@ -21,6 +21,8 @@ import { onShare } from "@/utils/share"
 import ShareIcon from "@/components/vectors/ShareIcon"
 import Header from "@/components/cards/Header"
 import ActionCard from "@/components/cards/Action"
+import { useOfflineHandler } from "@/hooks/useOfflineHandler"
+import { SafeAreaView } from "react-native-safe-area-context"
 
 type EditSignalScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -33,6 +35,7 @@ export default function EditSignal() {
   const { data: signal } = useMySignal()
   const { user } = useAuth()
   const [isLoading, setIsLoading] = useState(false)
+  const { handleOfflineAction } = useOfflineHandler()
   const queryclient = useQueryClient()
 
   const mutation = useMutation({
@@ -67,7 +70,7 @@ export default function EditSignal() {
   })
 
   const handleSaveStatus = async () => {
-    mutation.mutate()
+    handleOfflineAction(() => mutation.mutate())
   }
   useEffect(() => {
     if (!signal) return
@@ -78,7 +81,7 @@ export default function EditSignal() {
     })
   }, [navigation, signal, setTemporaryStatus])
   return (
-    <View style={style.container}>
+    <SafeAreaView style={style.container}>
       <StatusBar style="dark" />
       <Header title="Edit status" />
       <ScrollView
@@ -117,16 +120,16 @@ export default function EditSignal() {
         onPress={handleSaveStatus}
         disabled={isLoading}
       />
-    </View>
+    </SafeAreaView>
   )
 }
 
 const style = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 44,
     backgroundColor: theme.colors.white,
     position: "relative",
+    paddingTop: 20,
   },
   saveButton: {
     position: "absolute",

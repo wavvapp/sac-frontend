@@ -35,6 +35,12 @@ const Signaling = forwardRef<SignalingRef>((_, ref) => {
     )
   }, [allFriends, availableFriends])
 
+  const openSearch = () => {
+    queryClient.refetchQueries({ queryKey: ["friend-signals"] })
+    queryClient.refetchQueries({ queryKey: ["friends"] })
+    navigation.navigate("Search")
+  }
+
   return (
     <BottomDrawer ref={ref} setIsBottomSheetOpen={setIsBottomSheetOpen}>
       <View style={styles.header}>
@@ -46,11 +52,7 @@ const Signaling = forwardRef<SignalingRef>((_, ref) => {
           textSize="sm"
           title="FIND"
           textStyles={{ fontWeight: 600 }}
-          onPress={() => {
-            queryClient.refetchQueries({ queryKey: ["friend-signals"] })
-            queryClient.refetchQueries({ queryKey: ["friends"] })
-            navigation.navigate("Search")
-          }}
+          onPress={() => openSearch()}
         />
       </View>
       {!availableFriends.length && (

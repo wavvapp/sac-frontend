@@ -24,6 +24,7 @@ import { useStatus } from "@/contexts/StatusContext"
 import api from "@/service"
 import { useFriends } from "@/queries/friends"
 import { useMySignal } from "@/queries/signal"
+import { useOfflineHandler } from "@/hooks/useOfflineHandler"
 
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -39,19 +40,20 @@ export default function HomeScreen() {
   const { data: allFriends } = useFriends()
   const { user, isAuthenticated } = useAuth()
   const queryClient = useQueryClient()
+  const { handleOfflineAction } = useOfflineHandler()
 
   const { data, refetch: refetchPoints } = useQuery({
     queryKey: ["points"],
     queryFn: fetchPoints,
   })
-
   const handlePress = useMutation({
     mutationKey: ["toggle-signal-change"],
     mutationFn: isOn.value
       ? () => api.post("/my-signal/turn-off")
       : () => api.post("/my-signal/turn-on"),
+    networkMode: "online",
     onMutate: () => {
-      isOn.value = !isOn.value
+      handleOfflineAction(() => (isOn.value = !isOn.value))
     },
     onError: () => {
       isOn.value = !isOn.value
@@ -85,7 +87,8 @@ export default function HomeScreen() {
     <View style={styles.container}>
       {/* <PerlinNoise isOn={isOn} color1="#281713" color2="blue" /> */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={handleWebsiteOpen}>
+        <TouchableOpacity
+          onPress={() => handleOfflineAction(handleWebsiteOpen)}>
           <Badge variant="primary" name={data?.points?.toFixed(1) || 0} />
         </TouchableOpacity>
         <View style={styles.buttonContainer}>
