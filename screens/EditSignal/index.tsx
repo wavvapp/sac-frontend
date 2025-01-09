@@ -129,6 +129,7 @@ const style = StyleSheet.create({
     flex: 1,
     backgroundColor: theme.colors.white,
     position: "relative",
+    paddingTop: 20,
   },
   saveButton: {
     position: "absolute",
