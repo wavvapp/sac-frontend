@@ -10,7 +10,6 @@ export const useFriends = (shouldRefetch?: boolean) => {
       return data
     },
     staleTime: 0,
-    refetchOnMount: true,
     refetchInterval: shouldRefetch ? 5000 : false,
     placeholderData: [],
   })
