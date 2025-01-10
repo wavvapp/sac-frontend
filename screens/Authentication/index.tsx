@@ -30,7 +30,7 @@ export default function EntryScreen() {
   }
 
   const navigateToSaticScreen = (screen: StaticPageType) => {
-    navigation.navigate("StaticContentScreen", { page: screen })
+    navigation.navigate("StaticContentScreen", { pageSlug: screen })
   }
 
   return (
