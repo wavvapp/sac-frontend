@@ -26,9 +26,8 @@ const StatusContext = createContext<StatusContextType>({} as StatusContextType)
 export const StatusProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const isOn = useSharedValue(false)
-
   const { data: signalData } = useMySignal()
+  const isOn = useSharedValue(!signalData?.hasEnded)
   const [temporaryStatus, setTemporaryStatus] = useState<TemporaryStatusType>({
     friendIds: signalData?.friendIds || [],
     activity: signalData?.status_message || "",
