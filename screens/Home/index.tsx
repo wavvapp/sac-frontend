@@ -71,13 +71,9 @@ export default function HomeScreen() {
   )
   const { isPlaceholderData } = useMySignal()
   const handleWebsiteOpen = async () => {
-    if (!process.env.POINTS_CANISTER_LINK) {
-      throw new Error(
-        "POINTS_CANISTER_LINK is not defined in the environment variables.",
-      )
-    }
-    await WebBrowser.openBrowserAsync(process.env.POINTS_CANISTER_LINK)
+    await WebBrowser.openBrowserAsync(process.env.POINTS_CANISTER_LINK || "")
   }
+
   useDerivedValue(() => {
     if (isOn.value) {
       return runOnJS(setIsVisible)(true)
