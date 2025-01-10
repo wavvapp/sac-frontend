@@ -70,12 +70,15 @@ export default function HomeScreen() {
     }, [isAuthenticated, refetchPoints]),
   )
   const { isPlaceholderData } = useMySignal()
-
   const handleWebsiteOpen = async () => {
-    await WebBrowser.openBrowserAsync(
-      "https://7axab-zyaaa-aaaao-qjv7a-cai.icp0.io/",
-    )
+    if (!process.env.POINTS_CANISTER_LINK) {
+      throw new Error(
+        "POINTS_CANISTER_LINK is not defined in the environment variables.",
+      )
+    }
+    await WebBrowser.openBrowserAsync(process.env.POINTS_CANISTER_LINK)
   }
+
   useDerivedValue(() => {
     if (isOn.value) {
       return runOnJS(setIsVisible)(true)
