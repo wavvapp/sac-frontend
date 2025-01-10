@@ -4,13 +4,14 @@ import FriendCard from "@/components/Friend"
 import { TemporaryStatusType, useStatus } from "@/contexts/StatusContext"
 import { FriendsSkeleton } from "@/components/cards/FriendsSkeleton"
 import { User } from "@/types"
-import { useCallback, useMemo } from "react"
+import { useCallback } from "react"
 import { useFriends } from "@/queries/friends"
 
 export default function FriendsList() {
   const { temporaryStatus, setTemporaryStatus } = useStatus()
   const { data: allFriends, isLoading } = useFriends()
   const { friendIds } = temporaryStatus
+
   const updateFriendsList = useCallback(
     (friendId: string) => {
       const newFriends = friendIds?.includes(friendId)
@@ -25,28 +26,13 @@ export default function FriendsList() {
     [friendIds, setTemporaryStatus],
   )
 
-  const sortedFriends = useMemo(() => {
-    if (!allFriends) return []
-    const selectedFriends = allFriends.filter((friend) =>
-      friendIds?.includes(friend.id),
-    )
-    const unselectedFriends = allFriends.filter(
-      (friend) => !friendIds?.includes(friend.id),
-    )
-    const sortFriendsByName = (a: User, b: User) =>
-      a.names.localeCompare(b.names)
-    return [
-      ...selectedFriends.sort(sortFriendsByName),
-      ...unselectedFriends.sort(sortFriendsByName),
-    ]
-  }, [allFriends])
   return (
     <View style={styles.container}>
       <CustomText size="sm">Who can see it</CustomText>
       {isLoading ? (
         <FriendsSkeleton />
       ) : (
-        sortedFriends?.map((friend: User) => (
+        allFriends?.map((friend: User) => (
           <FriendCard
             selected={friendIds?.includes(friend.id)}
             key={friend.id}

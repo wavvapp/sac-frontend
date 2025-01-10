@@ -1,6 +1,7 @@
 import { useState, useCallback, useMemo } from "react"
 import { useQueryClient } from "@tanstack/react-query"
 import api from "@/service"
+import { Friend } from "@/types"
 
 interface PrefetchOptions {
   onSuccess?: () => void
@@ -35,9 +36,23 @@ export const usePrefetch = (): UsePrefetchResult => {
     })
   }, [queryClient])
 
+  const prefetchSignal = useCallback(async () => {
+    await queryClient.prefetchQuery({
+      queryKey: ["fetch-my-signal"],
+      queryFn: async () => {
+        const { data } = await api.get("/my-signal")
+        const signal = {
+          ...data,
+          friendIds: data.friends.map((friend: Friend) => friend?.friendId),
+        }
+        return signal
+      },
+    })
+  }, [queryClient])
+
   const prefetchConfigs = useMemo(() => {
-    return [prefetchUsers]
-  }, [prefetchUsers])
+    return [prefetchUsers, prefetchSignal]
+  }, [prefetchSignal, prefetchUsers])
 
   const startPrefetch = useCallback(
     async (options: PrefetchOptions = {}) => {
