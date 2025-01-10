@@ -1,4 +1,4 @@
-import { View, StyleSheet } from "react-native"
+import { View, StyleSheet, Platform } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import { TouchableOpacity } from "react-native"
 import { theme } from "@/theme"
@@ -10,7 +10,7 @@ export default function Header({ title }: { title: string }) {
   return (
     <View style={styles.header}>
       <View style={styles.spacer} />
-      <CustomText size="lg" fontWeight="bold">
+      <CustomText size="lg" style={styles.title}>
         {title}
       </CustomText>
       <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -30,5 +30,8 @@ const styles = StyleSheet.create({
   },
   spacer: {
     width: 24,
+  },
+  title: {
+    fontWeight: Platform.OS === "ios" ? "semibold" : "bold",
   },
 })
