@@ -29,7 +29,7 @@ export default function EntryScreen() {
     await signInWithApple(navigation)
   }
 
-  const navigateToSaticScreen = (screen: StaticPageType) => {
+  const navigateToStaticScreen = (screen: StaticPageType) => {
     navigation.navigate("StaticContentScreen", { pageSlug: screen })
   }
 
@@ -68,13 +68,13 @@ export default function EntryScreen() {
             <Text> Sign In / Create an account </Text>
             you agree to our{" "}
             <Text
-              onPress={() => navigateToSaticScreen("terms")}
+              onPress={() => navigateToStaticScreen("terms")}
               style={styles.underline}>
               Terms of Services
             </Text>
             . Learn more about our{" "}
             <Text
-              onPress={() => navigateToSaticScreen("privacy")}
+              onPress={() => navigateToStaticScreen("privacy")}
               style={styles.underline}>
               Privacy Policy
             </Text>{" "}
