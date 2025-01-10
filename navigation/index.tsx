@@ -11,7 +11,7 @@ import { theme } from "@/theme"
 import EntryScreen from "@/screens/Authentication"
 import CreateCredentials from "@/screens/Authentication/SignUp/CreateCredentials"
 import { StatusProvider } from "@/contexts/StatusContext"
-import { useFriends } from "@/queries/friends"
+import { usePrefetch } from "@/hooks/useSplashScreen"
 import * as SplashScreen from "expo-splash-screen"
 import { useEffect } from "react"
 import { StaticPageType } from "@/types"
@@ -31,14 +31,23 @@ export type RootStackParamList = {
 
 export default function AppNavigator() {
   const Stack = createNativeStackNavigator<RootStackParamList>()
-  const { isAuthenticated, isLoading, isNewUser, isOnline } = useAuth()
-  const { isFetching: isFriendsLoading } = useFriends()
-
+  const { isAuthenticated, isNewUser, isOnline } = useAuth()
+  const { isPrefetching, startPrefetch } = usePrefetch()
   useEffect(() => {
-    if (!isLoading && !isFriendsLoading) {
-      SplashScreen.hideAsync()
+    const initializeApp = async () => {
+      await startPrefetch({
+        onSuccess: async () => {
+          await SplashScreen.hideAsync()
+        },
+        onError: async (error) => {
+          console.error("Prefetch failed---------:", error)
+          await SplashScreen.hideAsync()
+        },
+      })
     }
-  }, [isFriendsLoading, isLoading])
+
+    initializeApp()
+  }, [startPrefetch])
 
   useEffect(() => {
     if (!isOnline) {
@@ -46,6 +55,9 @@ export default function AppNavigator() {
     }
   }, [isOnline])
 
+  if (isPrefetching) {
+    return null
+  }
   return (
     <NavigationContainer>
       {isAuthenticated ? (

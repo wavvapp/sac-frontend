@@ -4,7 +4,6 @@ import {
   useEffect,
   useContext,
   ReactNode,
-  useCallback,
 } from "react"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import {
@@ -19,7 +18,6 @@ import { CredentialsScreenProps } from "@/screens/Authentication/SignUp/CreateCr
 import * as AppleAuthentication from "expo-apple-authentication"
 import { handleApiSignIn } from "@/libs/handleApiSignIn"
 import { useQueryClient } from "@tanstack/react-query"
-import api from "@/service"
 import AlertDialog from "@/components/AlertDialog"
 import { useOfflineHandler } from "@/hooks/useOfflineHandler"
 
@@ -72,7 +70,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       await AsyncStorage.setItem("@Auth:accessToken", accessToken)
       await AsyncStorage.setItem("@Auth:refreshToken", refreshToken)
       await AsyncStorage.setItem("@Auth:user", JSON.stringify(user))
-      await prefetchFriends()
       setUser(userData)
     } catch (err) {
       console.error("error with saving user info")
@@ -140,16 +137,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     }
   }
 
-  const prefetchFriends = useCallback(async () => {
-    await queryClient.prefetchQuery({
-      queryKey: ["friends"],
-      queryFn: async () => {
-        const { data } = await api.get("/friends")
-        return data
-      },
-    })
-  }, [queryClient])
-
   const signInWithApple = async (navigation: CredentialsScreenProps) => {
     try {
       const credential = await AppleAuthentication.signInAsync({
@@ -191,7 +178,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     if (storedUser && storedToken) {
       setUser(JSON.parse(storedUser))
     }
-    await prefetchFriends()
     setIsLoading(false)
   }
 
