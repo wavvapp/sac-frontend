@@ -1,5 +1,5 @@
 import React, { useEffect } from "react"
-import { Dimensions, StyleSheet } from "react-native"
+import { StyleSheet } from "react-native"
 import {
   Easing,
   interpolate,
@@ -11,9 +11,7 @@ import {
   withTiming,
 } from "react-native-reanimated"
 import { Canvas, Fill, Shader, Skia, vec } from "@shopify/react-native-skia"
-
-// Get device width and height
-const { width, height } = Dimensions.get("window")
+import { height, width } from "@/utils/dimensions"
 
 // Props for the PerlinNoise component
 interface PerlinNoiseProps {
