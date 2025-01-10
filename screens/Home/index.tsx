@@ -78,7 +78,6 @@ export default function HomeScreen() {
     }
     await WebBrowser.openBrowserAsync(process.env.POINTS_CANISTER_LINK)
   }
-
   useDerivedValue(() => {
     if (isOn.value) {
       return runOnJS(setIsVisible)(true)
