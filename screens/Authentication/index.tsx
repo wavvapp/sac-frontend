@@ -115,6 +115,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 12,
     flex: 0,
+    paddingHorizontal: 2,
   },
 
   agreementText: {
