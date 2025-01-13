@@ -36,10 +36,12 @@ api.interceptors.request.use(
       AlertDialog.open()
       return Promise.reject(new Error("No internet connection"))
     }
+    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
     const token = await AsyncStorage.getItem("@Auth:accessToken")
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
     }
+    config.headers["x-timezone"] = timezone
     return config
   },
   (error: AxiosError) => {
