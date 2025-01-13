@@ -6,7 +6,7 @@ import {
   ActivityIndicator,
   TextInput,
 } from "react-native"
-import { Fragment, useRef, useState } from "react"
+import { useRef, useState } from "react"
 import CustomText from "@/components/ui/CustomText"
 import EditIcon from "@/components/vectors/EditIcon"
 import EditActivity from "@/screens/EditActivity"
