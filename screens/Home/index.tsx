@@ -71,7 +71,9 @@ export default function HomeScreen() {
   )
   const { isPlaceholderData } = useMySignal()
   const handleWebsiteOpen = async () => {
-    await WebBrowser.openBrowserAsync(process.env.POINTS_CANISTER_URL || "")
+    if (process.env.POINTS_CANISTER_URL) {
+      await WebBrowser.openBrowserAsync(process.env.POINTS_CANISTER_URL || "")
+    }
   }
 
   useDerivedValue(() => {
