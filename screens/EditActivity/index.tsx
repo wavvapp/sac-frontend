@@ -3,7 +3,7 @@ import CustomText from "@/components/ui/CustomText"
 import Input from "@/components/ui/Input"
 import { TemporaryStatusType, useStatus } from "@/contexts/StatusContext"
 import { theme } from "@/theme"
-import { useEffect, useRef, useState } from "react"
+import { Ref, useState } from "react"
 import {
   View,
   StyleSheet,
@@ -16,16 +16,15 @@ import {
 
 interface EditActivityProps {
   closeModal: () => void
+  inputRef: Ref<TextInput>
 }
 
-export default function EditActivity({ closeModal }: EditActivityProps) {
+export default function EditActivity({
+  closeModal,
+  inputRef,
+}: EditActivityProps) {
   const { temporaryStatus, setTemporaryStatus } = useStatus()
   const [text, setText] = useState(temporaryStatus.activity)
-  const inputRef = useRef<TextInput>(null)
-
-  const focusInput = () => {
-    inputRef.current?.focus()
-  }
 
   const handleEdit = () => {
     if (text.trim()) {
@@ -37,13 +36,6 @@ export default function EditActivity({ closeModal }: EditActivityProps) {
     }
     closeModal()
   }
-
-  useEffect(() => {
-    const timeout = setTimeout(focusInput, 50)
-    return () => {
-      clearTimeout(timeout)
-    }
-  }, [])
 
   return (
     <TouchableWithoutFeedback onPress={closeModal}>

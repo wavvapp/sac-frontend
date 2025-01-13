@@ -4,8 +4,9 @@ import {
   View,
   Modal,
   ActivityIndicator,
+  TextInput,
 } from "react-native"
-import { useState } from "react"
+import { Fragment, useRef, useState } from "react"
 import CustomText from "@/components/ui/CustomText"
 import EditIcon from "@/components/vectors/EditIcon"
 import EditActivity from "@/screens/EditActivity"
@@ -16,9 +17,13 @@ import { capitalizeFirstLetter } from "@/utils"
 export default function Activity({ isLoading }: { isLoading: boolean }) {
   const [isModalVisible, setIsModalVisible] = useState(false)
   const { temporaryStatus } = useStatus()
+  const inputRef = useRef<TextInput>(null)
 
   const openModal = () => setIsModalVisible(true)
   const closeModal = () => setIsModalVisible(false)
+  const triggerKeyboardFocus = () => {
+    inputRef.current?.focus()
+  }
   return (
     <View style={styles.container}>
       <CustomText size="base" fontWeight="medium">
@@ -49,8 +54,9 @@ export default function Activity({ isLoading }: { isLoading: boolean }) {
           transparent={true}
           animationType="slide"
           presentationStyle="overFullScreen"
-          onRequestClose={closeModal}>
-          <EditActivity closeModal={closeModal} />
+          onRequestClose={closeModal}
+          onShow={triggerKeyboardFocus}>
+          <EditActivity closeModal={closeModal} inputRef={inputRef} />
         </Modal>
       )}
     </View>
