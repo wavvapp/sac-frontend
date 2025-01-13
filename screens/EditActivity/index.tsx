@@ -3,7 +3,7 @@ import CustomText from "@/components/ui/CustomText"
 import Input from "@/components/ui/Input"
 import { TemporaryStatusType, useStatus } from "@/contexts/StatusContext"
 import { theme } from "@/theme"
-import { useState } from "react"
+import { useRef, useState } from "react"
 import {
   View,
   StyleSheet,
@@ -11,6 +11,7 @@ import {
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
+  TextInput,
 } from "react-native"
 
 interface EditActivityProps {
@@ -20,6 +21,11 @@ interface EditActivityProps {
 export default function EditActivity({ closeModal }: EditActivityProps) {
   const { temporaryStatus, setTemporaryStatus } = useStatus()
   const [text, setText] = useState(temporaryStatus.activity)
+  const inputRef = useRef<TextInput>(null)
+
+  const focusInput = () => {
+    inputRef.current?.focus()
+  }
 
   const handleEdit = () => {
     if (text.trim()) {
@@ -53,6 +59,8 @@ export default function EditActivity({ closeModal }: EditActivityProps) {
               containerStyle={styles.inputContainer}
               multiline
               autoFocus
+              ref={inputRef}
+              onLayout={focusInput}
             />
             <CustomButton
               variant="default"
