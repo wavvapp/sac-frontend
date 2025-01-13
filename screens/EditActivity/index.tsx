@@ -3,7 +3,7 @@ import CustomText from "@/components/ui/CustomText"
 import Input from "@/components/ui/Input"
 import { TemporaryStatusType, useStatus } from "@/contexts/StatusContext"
 import { theme } from "@/theme"
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import {
   View,
   StyleSheet,
@@ -38,6 +38,13 @@ export default function EditActivity({ closeModal }: EditActivityProps) {
     closeModal()
   }
 
+  useEffect(() => {
+    const timeout = setTimeout(focusInput, 50)
+    return () => {
+      clearTimeout(timeout)
+    }
+  }, [])
+
   return (
     <TouchableWithoutFeedback onPress={closeModal}>
       <View style={styles.overlay}>
@@ -58,9 +65,7 @@ export default function EditActivity({ closeModal }: EditActivityProps) {
               variant="ghost"
               containerStyle={styles.inputContainer}
               multiline
-              autoFocus
               ref={inputRef}
-              onLayout={focusInput}
             />
             <CustomButton
               variant="default"
