@@ -1,18 +1,26 @@
-import { StyleSheet, TouchableOpacity, View, ViewStyle } from "react-native"
+import {
+  StyleSheet,
+  TextStyle,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+} from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import { theme } from "@/theme"
 import { ReactNode } from "react"
 
 export default function ActionCard({
   style,
+  titleStyle,
   title,
   description,
   icon,
   onPress,
 }: {
   style?: ViewStyle
+  titleStyle?: TextStyle
   title: string
-  description: string
+  description?: string
   icon: ReactNode
   onPress: () => void
 }) {
@@ -21,8 +29,14 @@ export default function ActionCard({
       <View style={[styles.container, style]}>
         <View style={styles.iconContainer}>{icon}</View>
         <View style={styles.textContainer}>
-          <CustomText fontWeight="semibold">{title}</CustomText>
-          <CustomText style={styles.inviteButtonText}>{description}</CustomText>
+          <CustomText fontWeight="semibold" style={titleStyle}>
+            {title}
+          </CustomText>
+          {description && (
+            <CustomText style={styles.inviteButtonText}>
+              {description}
+            </CustomText>
+          )}
         </View>
       </View>
     </TouchableOpacity>

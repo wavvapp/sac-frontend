@@ -6,6 +6,10 @@ import Header from "@/components/cards/Header"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { StatusBar } from "expo-status-bar"
 import ActionCard from "@/components/cards/Action"
+import UserIcon from "@/components/vectors/UserIcon"
+import ShareIcon from "@/components/vectors/ShareIcon"
+import BellIcon from "@/components/vectors/BellIcon"
+import TrashIcon from "@/components/vectors/TrashIcon"
 
 export default function SettingScreen() {
   const { signOut } = useAuth()
@@ -17,16 +21,37 @@ export default function SettingScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="dark" />
-      <Header title="Manage account" />
-      <View
-        style={{
-          paddingHorizontal: 20,
-        }}>
+      <Header title="Settings" />
+      <View style={styles.contentContainer}>
+        <ActionCard
+          title="Personal informations"
+          description="Update your data"
+          icon={<UserIcon />}
+          onPress={() => {}}
+        />
+        <ActionCard
+          title="Your friends are not on Wavv?"
+          description="Invite them to join you"
+          icon={<ShareIcon />}
+          onPress={() => {}}
+        />
+        <ActionCard
+          title="Push notifications"
+          description="Manage preferences"
+          icon={<BellIcon />}
+          onPress={() => {}}
+        />
         <ActionCard
           title="Log out"
-          description="Are you sure? You'll have to log in again once you're back"
           icon={<LogoutIcon />}
           onPress={handleSignOut}
+        />
+        <ActionCard
+          titleStyle={{ color: theme.colors.red_500 }}
+          title="Delete Account"
+          description=""
+          icon={<TrashIcon />}
+          onPress={() => {}}
         />
       </View>
     </SafeAreaView>
@@ -38,5 +63,11 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 20,
     backgroundColor: theme.colors.white,
+    justifyContent: "space-between",
+    paddingBottom: 32,
+  },
+  contentContainer: {
+    paddingHorizontal: 20,
+    gap: 12,
   },
 })
