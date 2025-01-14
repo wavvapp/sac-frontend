@@ -3,20 +3,27 @@ import { Modal, View, StyleSheet, Platform } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import { theme } from "@/theme"
 import { CustomButton } from "@/components/ui/Button"
+import { AlertDialogVariant } from "@/types"
 
 interface AlertDialogProps {
   title: string
   description: string
   labelText?: string
+  confirmText?: string
   onClose?: () => void
+  onConfirm?: () => void
+  variant?: AlertDialogVariant
 }
 
 export default function AlertDialog({
   title,
   description,
   labelText = "CLOSE",
+  confirmText = "CONFIRM",
   onClose,
-}: AlertDialogProps) {
+  onConfirm,
+  variant = "primary",
+}: AlertDialogProps): JSX.Element {
   const [isVisible, setIsVisible] = useState(false)
 
   const close = useCallback(() => {
@@ -24,9 +31,15 @@ export default function AlertDialog({
     if (onClose) onClose()
   }, [onClose])
 
+  const handleConfirm = useCallback(() => {
+    setIsVisible(false)
+    if (onConfirm) onConfirm()
+  }, [onConfirm])
+
   const open = () => setIsVisible(true)
   AlertDialog.open = open
   AlertDialog.close = close
+
   return (
     <Modal
       animationType="fade"
@@ -41,13 +54,31 @@ export default function AlertDialog({
           <CustomText style={styles.description} fontFamily="marfa">
             {description}
           </CustomText>
-          <CustomButton
-            variant="secondary"
-            fullWidth
-            containerStyles={{ width: "100%" }}
-            onPress={close}
-            title={labelText}
-          />
+
+          {variant === "confirm" ? (
+            <View style={styles.buttonContainer}>
+              <CustomButton
+                variant="secondary"
+                containerStyles={styles.cancelButton}
+                onPress={close}
+                title={labelText}
+              />
+              <CustomButton
+                variant="primary"
+                containerStyles={styles.confirmButton}
+                onPress={handleConfirm}
+                title={confirmText}
+              />
+            </View>
+          ) : (
+            <CustomButton
+              variant="secondary"
+              fullWidth
+              containerStyles={{ width: "100%" }}
+              onPress={close}
+              title={labelText}
+            />
+          )}
         </View>
       </View>
     </Modal>
@@ -69,7 +100,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.white,
     borderRadius: 12,
     padding: 24,
-    alignItems: "flex-start",
+    alignItems: "center",
     shadowOffset: {
       width: 0,
       height: 2,
@@ -85,5 +116,18 @@ const styles = StyleSheet.create({
   },
   description: {
     marginBottom: 26,
+    textAlign: "center",
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    width: "100%",
+    justifyContent: "space-between",
+    gap: 12,
+  },
+  cancelButton: {
+    flex: 1,
+  },
+  confirmButton: {
+    flex: 1,
   },
 })

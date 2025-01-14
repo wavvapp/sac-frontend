@@ -25,6 +25,7 @@ import api from "@/service"
 import { useFriends } from "@/queries/friends"
 import { useMySignal } from "@/queries/signal"
 import { useOfflineHandler } from "@/hooks/useOfflineHandler"
+import AlertDialog from "@/components/AlertDialog"
 
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -83,6 +84,10 @@ export default function HomeScreen() {
     return runOnJS(setIsVisible)(false)
   }, [isOn.value])
 
+  const showDialog = () => {
+    AlertDialog.open()
+  }
+
   return (
     <View style={styles.container}>
       {/* <PerlinNoise isOn={isOn} color1="#281713" color2="blue" /> */}
@@ -117,6 +122,20 @@ export default function HomeScreen() {
             onPress={() => handlePress.mutate()}
             style={styles.switch}
           />
+          <View
+            style={{
+              flex: 1,
+              justifyContent: "center",
+              alignItems: "center",
+              marginBottom: 90,
+            }}>
+            <CustomButton onPress={showDialog} title="Show Modal" />
+            <AlertDialog
+              title="No connection"
+              description="Make sure that you are connected to the internet and try again"
+              // variant="confirm"
+            />
+          </View>
           <Signaling ref={signalingRef} />
         </>
       )}
