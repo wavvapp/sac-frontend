@@ -19,6 +19,7 @@ export type ButtonVariant =
   | "ghost"
   | "default"
   | "destructive"
+  | "danger"
 export type FontFamilyVariant = "suisse" | "marfa" | "writer-mono"
 export type fontStyleVariant = "normal" | "italic"
 export type BadgeVariant = "default" | "outline" | "primary"

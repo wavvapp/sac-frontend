@@ -134,8 +134,9 @@ export default function HomeScreen() {
               title="No connection"
               description="Make sure that you are connected to the internet and try again"
               variant="confirm"
-              confirmText="yes"
-              cancelText="no"
+              confirmText="yes, delete"
+              cancelText="cancel"
+              buttonStyles="danger"
             />
           </View>
           <Signaling ref={signalingRef} />

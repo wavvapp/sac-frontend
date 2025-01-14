@@ -6,14 +6,14 @@ import { CustomButton } from "@/components/ui/Button"
 import { AlertDialogVariant, buttonStylesVariant } from "@/types"
 
 interface AlertDialogProps {
-  title: string
-  description: string
+  title?: string
+  description: React.ReactNode
   cancelText?: string
   confirmText?: string
   onClose?: () => void
   onConfirm?: () => void
   variant?: AlertDialogVariant
-  ButtonStyles?: buttonStylesVariant
+  buttonStyles?: buttonStylesVariant
 }
 
 export default function AlertDialog({
@@ -24,6 +24,7 @@ export default function AlertDialog({
   onClose,
   onConfirm,
   variant = "primary",
+  buttonStyles = "primary",
 }: AlertDialogProps): JSX.Element {
   const [isVisible, setIsVisible] = useState(false)
 
@@ -65,10 +66,9 @@ export default function AlertDialog({
                 containerStyles={styles.halfButton}
               />
               <CustomButton
-                variant="secondary"
+                variant={buttonStyles === "danger" ? "danger" : "secondary"}
                 onPress={close}
                 title={confirmText}
-                containerStyles={styles.halfButton}
               />
             </View>
           ) : (

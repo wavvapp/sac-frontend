@@ -14,7 +14,7 @@ export const theme: Theme = {
     white_500: "#FFFFFF80",
     gray: "#E3E3E3",
     light_gray: "#898989",
-    red: "#6B2222",
+    red: "#EA4335",
   },
   fontSize: {
     sm: 13,
