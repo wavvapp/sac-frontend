@@ -2,6 +2,19 @@
   "expo": {
     "plugins": [
       [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#bada55",
+          "image": "./assets/images/splash.png",
+          "resizeMode": "contain", 
+          "dark": {
+            "image": "./assets/images/splash.png",
+            "backgroundColor": "#bada55",
+            "resizeMode": "contain"
+          }
+        }
+      ],
+      [
         "@react-native-google-signin/google-signin",
         {
           "iosUrlScheme": "com.googleusercontent.apps.351310982043-28dk2k254o76heo1d4pr3uftmgsjmihh"
@@ -15,11 +28,6 @@
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "userInterfaceStyle": "light",
-    "splash": {
-      "image": "./assets/images/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#000000"
-    },
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "usesAppleSignIn": true,

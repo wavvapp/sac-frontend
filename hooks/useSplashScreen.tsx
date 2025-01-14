@@ -18,7 +18,7 @@ interface UsePrefetchResult {
 
 export const usePrefetch = (): UsePrefetchResult => {
   const queryClient = useQueryClient()
-  const [isPrefetching, setIsPrefetching] = useState(false)
+  const [isPrefetching, setIsPrefetching] = useState(true)
   const [prefetchError, setPrefetchError] = useState<Error | null>(null)
 
   const resetPrefetchState = useCallback(() => {

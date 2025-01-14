@@ -10,12 +10,12 @@ import { SafeAreaProvider } from "react-native-safe-area-context"
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync()
+setTimeout(SplashScreen.hideAsync, 5000)
 
 const queryClient = new QueryClient()
 
 export default function App() {
   const { loaded, error } = useFont()
-
   if (!loaded && !error) {
     return null
   }
