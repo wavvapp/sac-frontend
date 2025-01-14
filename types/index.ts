@@ -90,3 +90,4 @@ export enum Provider {
 export type StaticPageType = "privacy" | "terms"
 
 export type AlertDialogVariant = "primary" | "confirm"
+export type buttonStylesVariant = "primary" | "danger"

@@ -3,22 +3,23 @@ import { Modal, View, StyleSheet, Platform } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import { theme } from "@/theme"
 import { CustomButton } from "@/components/ui/Button"
-import { AlertDialogVariant } from "@/types"
+import { AlertDialogVariant, buttonStylesVariant } from "@/types"
 
 interface AlertDialogProps {
   title: string
   description: string
-  labelText?: string
+  cancelText?: string
   confirmText?: string
   onClose?: () => void
   onConfirm?: () => void
   variant?: AlertDialogVariant
+  ButtonStyles?: buttonStylesVariant
 }
 
 export default function AlertDialog({
   title,
   description,
-  labelText = "CLOSE",
+  cancelText = "CLOSE",
   confirmText = "CONFIRM",
   onClose,
   onConfirm,
@@ -60,13 +61,13 @@ export default function AlertDialog({
               <CustomButton
                 variant="outline"
                 onPress={handleConfirm}
-                title={confirmText}
+                title={cancelText}
                 containerStyles={styles.halfButton}
               />
               <CustomButton
                 variant="secondary"
                 onPress={close}
-                title={labelText}
+                title={confirmText}
                 containerStyles={styles.halfButton}
               />
             </View>
@@ -74,7 +75,7 @@ export default function AlertDialog({
             <CustomButton
               variant="secondary"
               onPress={close}
-              title={labelText}
+              title={cancelText}
             />
           )}
         </View>
