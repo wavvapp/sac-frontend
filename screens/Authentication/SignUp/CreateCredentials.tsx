@@ -3,6 +3,7 @@ import Badge from "@/components/ui/Badge"
 import CustomText from "@/components/ui/CustomText"
 import Input from "@/components/ui/Input"
 import CrossMark from "@/components/vectors/CrossMark"
+import { ACCOUNT_SETUP_STEPS } from "@/constants/account-setup-steps"
 import { VALIDATION_PATTERNS } from "@/constants/patterns"
 import { useAuth } from "@/contexts/AuthContext"
 import { RootStackParamList } from "@/navigation"
@@ -11,6 +12,7 @@ import { theme } from "@/theme"
 import { AccountCreationStep } from "@/types"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
+import { useMutation } from "@tanstack/react-query"
 import { useEffect, useMemo, useState } from "react"
 import {
   StyleSheet,
@@ -28,17 +30,20 @@ export type CredentialsScreenProps = NativeStackNavigationProp<
 
 export default function CreateCredentials() {
   const navigation = useNavigation<CredentialsScreenProps>()
-  const [step, setStep] = useState<AccountCreationStep>(2)
+  const [step, setStep] = useState<AccountCreationStep>(1)
   const [text, setText] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [isError, setIsError] = useState(false)
   const { registerUser } = useAuth()
 
+  const [verification, setVerification] = useState()
+
   const isInputValid = useMemo(() => {
     if (text.trim().length < 5) return false
-
-    if (step === 1 && VALIDATION_PATTERNS.fullName.test(text)) return true
-    if (step === 2 && VALIDATION_PATTERNS.username.test(text)) return true
+    if (step === 1 && VALIDATION_PATTERNS.verificationCode.test(text))
+      return true
+    if (step === 2 && VALIDATION_PATTERNS.fullName.test(text)) return true
+    if (step === 3 && VALIDATION_PATTERNS.username.test(text)) return true
 
     return false
   }, [step, text])
@@ -47,30 +52,6 @@ export default function CreateCredentials() {
     if (isLoading || isError) return true
     return !isInputValid
   }, [isError, isInputValid, isLoading])
-
-  const stepsData: Record<
-    AccountCreationStep,
-    {
-      badgeName: string
-      titleText: string
-      inputPlaceholder: string
-      descriptionText: string
-    }
-  > = {
-    1: {
-      badgeName: "1/2",
-      titleText: "What is your name?",
-      inputPlaceholder: "Full name",
-      descriptionText: "Add your name so friends can find you.",
-    },
-    2: {
-      badgeName: "2/2",
-      titleText: "Add your username",
-      inputPlaceholder: "Username",
-      descriptionText:
-        "Usernames can only contain letters, numbers, underscores, and periods.",
-    },
-  }
 
   const handleUsernameSubmit = async () => {
     try {
@@ -91,13 +72,23 @@ export default function CreateCredentials() {
   const handleNameSubmit = () => {
     // TODO: logic for name submission.
     setText("")
-    setStep(2)
+    setStep(3)
   }
+
+  const handleVerificationCode = useMutation({
+    mutationFn: async () => {
+      setVerification(text)
+    },
+    onSuccess: () => {
+      setText("")
+      setStep(2)
+    },
+  })
 
   const handleSubmit = async () => {
     if (!isInputValid) return
-
-    if (step === 1) handleNameSubmit()
+    if (step === 1) handleVerificationCode.mutate(text)
+    if (step === 2) handleNameSubmit()
     else await handleUsernameSubmit()
   }
 
@@ -119,7 +110,7 @@ export default function CreateCredentials() {
             }}>
             <Badge
               variant="primary"
-              name={stepsData[step].badgeName}
+              name={ACCOUNT_SETUP_STEPS[step].badgeName}
               style={[isDisabled && styles.disabledBadge]}
             />
           </View>
@@ -131,18 +122,18 @@ export default function CreateCredentials() {
         </View>
         <View style={styles.mainContent}>
           <CustomText style={styles.title} size="lg">
-            {stepsData[step].titleText}
+            {ACCOUNT_SETUP_STEPS[step].titleText}
           </CustomText>
           <Input
             handleTextChange={setText}
             variant="secondary"
-            placeholder={stepsData[step].inputPlaceholder}
+            placeholder={ACCOUNT_SETUP_STEPS[step].inputPlaceholder}
             value={text}
             onSubmitEditing={handleSubmit}
             autoFocus
           />
           <CustomText size="base" style={styles.description}>
-            {stepsData[step].descriptionText}
+            {ACCOUNT_SETUP_STEPS[step].descriptionText}
           </CustomText>
         </View>
         <CredentialsButton
