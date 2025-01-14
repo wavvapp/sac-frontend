@@ -2,23 +2,29 @@ import {
   StyleSheet,
   TouchableOpacity,
   View,
-  Modal,
   ActivityIndicator,
 } from "react-native"
 import { useState } from "react"
 import CustomText from "@/components/ui/CustomText"
 import EditIcon from "@/components/vectors/EditIcon"
 import EditActivity from "@/screens/EditActivity"
-import { useStatus } from "@/contexts/StatusContext"
+import { TemporaryStatusType, useStatus } from "@/contexts/StatusContext"
 import { theme } from "@/theme"
 import { capitalizeFirstLetter } from "@/utils"
+import BottomModal from "@/components/BottomModal"
 
 export default function Activity({ isLoading }: { isLoading: boolean }) {
   const [isModalVisible, setIsModalVisible] = useState(false)
-  const { temporaryStatus } = useStatus()
+  const { temporaryStatus, setTemporaryStatus } = useStatus()
 
   const openModal = () => setIsModalVisible(true)
   const closeModal = () => setIsModalVisible(false)
+  const updateStatus = (text: string) => {
+    setTemporaryStatus((prev: TemporaryStatusType) => ({
+      ...prev,
+      activity: text.trim(),
+    }))
+  }
   return (
     <View style={styles.container}>
       <CustomText size="base" fontWeight="medium">
@@ -43,16 +49,16 @@ export default function Activity({ isLoading }: { isLoading: boolean }) {
           </>
         )}
       </TouchableOpacity>
-
-      {isModalVisible && (
-        <Modal
-          transparent={true}
-          animationType="slide"
-          presentationStyle="overFullScreen"
-          onRequestClose={closeModal}>
-          <EditActivity closeModal={closeModal} />
-        </Modal>
-      )}
+      <BottomModal visible={isModalVisible} onClose={closeModal}>
+        <EditActivity
+          closeModal={closeModal}
+          title="Status"
+          placeholderText="Status message"
+          buttonText="Done"
+          initialInputValue={temporaryStatus.activityext}
+          onPress={updateStatus}
+        />
+      </BottomModal>
     </View>
   )
 }

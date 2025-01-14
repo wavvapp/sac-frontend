@@ -1,7 +1,7 @@
 import { CustomButton } from "@/components/ui/Button"
 import CustomText from "@/components/ui/CustomText"
 import Input from "@/components/ui/Input"
-import { TemporaryStatusType, useStatus } from "@/contexts/StatusContext"
+import { useStatus } from "@/contexts/StatusContext"
 import { theme } from "@/theme"
 import { useState } from "react"
 import {
@@ -14,19 +14,27 @@ import {
 } from "react-native"
 
 interface EditActivityProps {
+  title: string
+  placeholderText: string
+  initialInputValue: string
+  buttonText: string
+  onPress: (text: string) => void
   closeModal: () => void
 }
 
-export default function EditActivity({ closeModal }: EditActivityProps) {
-  const { temporaryStatus, setTemporaryStatus } = useStatus()
-  const [text, setText] = useState(temporaryStatus.activity)
+export default function EditActivity({
+  closeModal,
+  title,
+  placeholderText,
+  initialInputValue,
+  buttonText,
+  onPress,
+}: EditActivityProps) {
+  const [text, setText] = useState(initialInputValue)
 
   const handleEdit = () => {
     if (text.trim()) {
-      setTemporaryStatus((prev: TemporaryStatusType) => ({
-        ...prev,
-        activity: text.trim(),
-      }))
+      onPress(text)
       Keyboard.dismiss()
     }
     closeModal()
@@ -40,12 +48,12 @@ export default function EditActivity({ closeModal }: EditActivityProps) {
           style={styles.modalContainer}
           onStartShouldSetResponder={() => true}>
           <CustomText fontWeight="normal" fontFamily="suisse" size="lg">
-            Status
+            {title}
           </CustomText>
           <View style={styles.formContainer}>
             <Input
               textSize="lg"
-              placeholder="Status message"
+              placeholder={placeholderText}
               handleTextChange={setText}
               value={text}
               onSubmitEditing={handleEdit}
@@ -57,7 +65,7 @@ export default function EditActivity({ closeModal }: EditActivityProps) {
             <CustomButton
               variant="default"
               textSize="sm"
-              title="Done"
+              title={buttonText}
               textStyles={styles.button}
               containerStyles={{
                 ...styles.buttonContainer,
