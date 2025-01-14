@@ -58,23 +58,21 @@ export default function AlertDialog({
           {variant === "confirm" ? (
             <View style={styles.buttonContainer}>
               <CustomButton
-                variant="secondary"
-                containerStyles={styles.cancelButton}
-                onPress={close}
-                title={labelText}
-              />
-              <CustomButton
-                variant="primary"
-                containerStyles={styles.confirmButton}
+                variant="outline"
                 onPress={handleConfirm}
                 title={confirmText}
+                containerStyles={styles.halfButton}
+              />
+              <CustomButton
+                variant="secondary"
+                onPress={close}
+                title={labelText}
+                containerStyles={styles.halfButton}
               />
             </View>
           ) : (
             <CustomButton
               variant="secondary"
-              fullWidth
-              containerStyles={{ width: "100%" }}
               onPress={close}
               title={labelText}
             />
@@ -121,13 +119,12 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: "row",
     width: "100%",
-    justifyContent: "space-between",
+    justifyContent: "center",
     gap: 12,
   },
-  cancelButton: {
-    flex: 1,
-  },
-  confirmButton: {
-    flex: 1,
+  halfButton: {
+    width: "50%",
+    justifyContent: "center",
+    alignItems: "center",
   },
 })

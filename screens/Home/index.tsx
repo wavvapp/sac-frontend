@@ -133,7 +133,7 @@ export default function HomeScreen() {
             <AlertDialog
               title="No connection"
               description="Make sure that you are connected to the internet and try again"
-              // variant="confirm"
+              variant="confirm"
             />
           </View>
           <Signaling ref={signalingRef} />
