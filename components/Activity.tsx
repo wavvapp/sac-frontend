@@ -55,7 +55,7 @@ export default function Activity({ isLoading }: { isLoading: boolean }) {
           title="Status"
           placeholderText="Status message"
           buttonText="Done"
-          initialInputValue={temporaryStatus.activityext}
+          initialInputValue={temporaryStatus.activity}
           onPress={updateStatus}
         />
       </BottomModal>
