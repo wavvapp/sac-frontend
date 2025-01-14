@@ -109,6 +109,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   title: {
+    textAlign: "center",
     fontSize: theme.fontSize.lg,
     marginBottom: 7,
     fontWeight: Platform.OS === "ios" ? "semibold" : "bold",

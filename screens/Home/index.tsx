@@ -122,23 +122,23 @@ export default function HomeScreen() {
             onPress={() => handlePress.mutate()}
             style={styles.switch}
           />
-          <View
+          {/* <View
             style={{
               flex: 1,
               justifyContent: "center",
               alignItems: "center",
               marginBottom: 90,
             }}>
-            {/* <CustomButton onPress={showDialog} title="Show Modal" /> */}
-            {/* <AlertDialog
+            <CustomButton onPress={showDialog} title="Show Modal" />
+            <AlertDialog
               title="No connection"
               description="Make sure that you are connected to the internet and try again"
               variant="confirm"
               confirmText="yes, delete"
               cancelText="cancel"
               buttonStyles="danger"
-            /> */}
-          </View>
+            />
+          </View> */}
           <Signaling ref={signalingRef} />
         </>
       )}
