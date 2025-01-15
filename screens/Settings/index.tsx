@@ -24,37 +24,38 @@ export default function SettingScreen() {
       <StatusBar style="dark" />
       <Header title="Settings" />
       <View style={styles.contentContainer}>
-        <ActionCard
-          title="Personal informations"
-          description="Update your data"
-          icon={<UserIcon />}
-          onPress={() => {}}
-        />
-        <ActionCard
-          title="Your friends are not on Wavv?"
-          description="Invite them to join you"
-          icon={<ShareIcon />}
-          onPress={() => {}}
-        />
-        <ActionCard
-          title="Push notifications"
-          description="Manage preferences"
-          icon={<BellIcon />}
-          onPress={() => {}}
-        />
         <UserProfile />
-        <ActionCard
-          title="Log out"
-          icon={<LogoutIcon />}
-          onPress={handleSignOut}
-        />
-        <ActionCard
-          titleStyle={{ color: theme.colors.red_500 }}
-          title="Delete Account"
-          description=""
-          icon={<TrashIcon />}
-          onPress={() => {}}
-        />
+        <View style={styles.optionsContainer}>
+          <ActionCard
+            title="Personal information"
+            description="Update your data"
+            icon={<UserIcon />}
+            onPress={() => {}}
+          />
+          <ActionCard
+            title="Your friends are not on Wavv?"
+            description="Invite them to join you"
+            icon={<ShareIcon />}
+            onPress={() => {}}
+          />
+          <ActionCard
+            title="Push notifications"
+            description="Manage preferences"
+            icon={<BellIcon />}
+            onPress={() => {}}
+          />
+          <ActionCard
+            title="Log out"
+            icon={<LogoutIcon />}
+            onPress={handleSignOut}
+          />
+          <ActionCard
+            titleStyle={{ color: theme.colors.red_500 }}
+            title="Delete Account"
+            icon={<TrashIcon />}
+            onPress={() => {}}
+          />
+        </View>
       </View>
     </SafeAreaView>
   )
@@ -65,10 +66,14 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 20,
     backgroundColor: theme.colors.white,
-    justifyContent: "space-between",
     paddingBottom: 32,
   },
   contentContainer: {
+    flex: 1,
+    justifyContent: "space-between",
+    paddingTop: 10,
+  },
+  optionsContainer: {
     paddingHorizontal: 20,
     gap: 12,
   },
