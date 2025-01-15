@@ -1,5 +1,5 @@
 import UserStatus from "@/components/cards/UserStatus"
-// import PerlinNoise from "@/components/PerlinNoise"
+import PerlinNoise from "@/components/PerlinNoise"
 import { RootStackParamList } from "@/navigation"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { StyleSheet, View, StatusBar, Platform } from "react-native"
@@ -85,7 +85,7 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      {/* <PerlinNoise isOn={isOn} color1="#281713" color2="blue" /> */}
+      <PerlinNoise isOn={isOn} color1="#281713" color2="blue" />
       <View style={styles.header}>
         <TouchableOpacity
           onPress={() => handleOfflineAction(handleWebsiteOpen)}>
