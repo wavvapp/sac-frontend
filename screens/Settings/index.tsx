@@ -11,6 +11,7 @@ import ShareIcon from "@/components/vectors/ShareIcon"
 import BellIcon from "@/components/vectors/BellIcon"
 import TrashIcon from "@/components/vectors/TrashIcon"
 import UserProfile from "@/components/cards/UserProfile"
+import { SettingOption } from "@/types"
 
 export default function SettingScreen() {
   const { signOut } = useAuth()
@@ -18,7 +19,7 @@ export default function SettingScreen() {
   const handleSignOut = async () => {
     await signOut()
   }
-  const settingOptions = [
+  const settingOptions: SettingOption[] = [
     {
       title: "Personal information",
       description: "Update your data",
