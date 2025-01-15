@@ -6,6 +6,7 @@ import Header from "@/components/cards/Header"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { StatusBar } from "expo-status-bar"
 import ActionCard from "@/components/cards/Action"
+import UserProfile from "@/components/cards/UserProfile"
 
 export default function SettingScreen() {
   const { signOut } = useAuth()
@@ -22,6 +23,7 @@ export default function SettingScreen() {
         style={{
           paddingHorizontal: 20,
         }}>
+        <UserProfile />
         <ActionCard
           title="Log out"
           description="Are you sure? You'll have to log in again once you're back"
