@@ -14,27 +14,27 @@ type StaticPageScreenProps = NativeStackScreenProps<
 >
 
 function StaticContentScreen({ route, navigation }: StaticPageScreenProps) {
-  const { page } = route.params
+  const { pageSlug } = route.params
   return (
     <View style={styles.container}>
       <StatusBar style="dark" />
       <View style={styles.navBar}>
         <CustomText style={styles.headerText} fontStyle="italic">
-          {STATIC_PAGE_CONTENTS[page].pageTitle}
+          {STATIC_PAGE_CONTENTS[pageSlug].pageTitle}
         </CustomText>
         <TouchableOpacity
           onPress={async () => {
             navigation.navigate("EntryScreen")
           }}
           style={styles.CrossMarkButton}>
-          <CrossMark color="#ffffff" width="20" height="20" />
+          <CrossMark color={theme.colors.white} width="20" height="20" />
         </TouchableOpacity>
       </View>
       <ScrollView
         style={{ flexGrow: 1, paddingBottom: 40 }}
         scrollEventThrottle={16}
         contentContainerStyle={styles.contentText}>
-        {STATIC_PAGE_CONTENTS[page].pageContent.map((section, index) => {
+        {STATIC_PAGE_CONTENTS[pageSlug].pageContent.map((section, index) => {
           return (
             <View key={index} style={styles.sectionContainer}>
               <CustomText size="base" style={styles.sectionTitle}>

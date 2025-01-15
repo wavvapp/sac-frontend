@@ -1,4 +1,10 @@
-import { StyleSheet, TouchableOpacity, View, ViewStyle } from "react-native"
+import {
+  Platform,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+} from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import { theme } from "@/theme"
 import { ReactNode } from "react"
@@ -21,7 +27,7 @@ export default function ActionCard({
       <View style={[styles.container, style]}>
         <View style={styles.iconContainer}>{icon}</View>
         <View style={styles.textContainer}>
-          <CustomText fontWeight="semibold">{title}</CustomText>
+          <CustomText style={styles.title}>{title}</CustomText>
           <CustomText style={styles.inviteButtonText}>{description}</CustomText>
         </View>
       </View>
@@ -34,6 +40,9 @@ const styles = StyleSheet.create({
     gap: 6,
     flexDirection: "row",
     alignItems: "center",
+  },
+  title: {
+    fontWeight: Platform.OS === "ios" ? "semibold" : "bold",
   },
   iconContainer: {
     borderWidth: 1,

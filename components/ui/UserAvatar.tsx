@@ -1,3 +1,4 @@
+import { useMemo } from "react"
 import {
   Image,
   ImageSourcePropType,
@@ -7,7 +8,7 @@ import {
 } from "react-native"
 interface UserProfileProps extends ViewProps {
   imageUrl?: ImageSourcePropType
-  size?: "small" | "large"
+  size?: "small" | "medium" | "large"
 }
 
 export default function UserAvatar({
@@ -19,14 +20,15 @@ export default function UserAvatar({
   const source: ImageSourcePropType = imageUrl
     ? { uri: imageUrl }
     : require("@/assets/images/users/default-image.png")
+
+  const avatarSize = useMemo(() => {
+    if (size === "medium") return styles.medium
+    if (size === "large") return styles.large
+    return styles.small
+  }, [size])
+
   return (
-    <View
-      {...rest}
-      style={[
-        styles.container,
-        size === "small" ? styles.small : styles.large,
-        style,
-      ]}>
+    <View {...rest} style={[styles.container, avatarSize, style]}>
       <Image source={source} style={styles.image} />
     </View>
   )
@@ -48,6 +50,10 @@ const styles = StyleSheet.create({
   small: {
     width: 56,
     height: 56,
+  },
+  medium: {
+    width: 96,
+    height: 96,
   },
   large: {
     width: 160,
