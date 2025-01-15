@@ -26,6 +26,7 @@ import { useFriends } from "@/queries/friends"
 import { useMySignal } from "@/queries/signal"
 import { useOfflineHandler } from "@/hooks/useOfflineHandler"
 import AlertDialog from "@/components/AlertDialog"
+import CustomText from "@/components/ui/CustomText"
 
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -132,7 +133,9 @@ export default function HomeScreen() {
             <CustomButton onPress={showDialog} title="Show Modal" />
             <AlertDialog
               title="No connection"
-              description="Make sure that you are connected to the internet and try again"
+              description=" This action is permanent and cannot be undone. All your
+                    data, including profile and username, will be permanently
+                    deleted. Do you wish to proceed?"
               variant="confirm"
               confirmText="yes, delete"
               cancelText="cancel"
