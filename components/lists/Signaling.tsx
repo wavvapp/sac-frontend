@@ -1,5 +1,5 @@
 import { forwardRef, useMemo, useState } from "react"
-import { View, StyleSheet, Dimensions } from "react-native"
+import { View, StyleSheet } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import BottomDrawer from "@/components/BottomDrawer"
 import { CustomButton } from "@/components/ui/Button"
@@ -12,12 +12,13 @@ import { RootStackParamList } from "@/navigation"
 import { useFriends, useSignalingFriends } from "@/queries/friends"
 import { Friend, User } from "@/types"
 import { useQueryClient } from "@tanstack/react-query"
+import { width } from "@/utils/dimensions"
+
 export interface SignalingRef {
   openBottomSheet: () => void
 }
 type SearchProp = NativeStackNavigationProp<RootStackParamList, "Search">
 
-const { width } = Dimensions.get("window")
 const Signaling = forwardRef<SignalingRef>((_, ref) => {
   const navigation = useNavigation<SearchProp>()
   const [isbottomSheetOpen, setIsBottomSheetOpen] = useState<boolean>(false)

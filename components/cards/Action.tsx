@@ -1,4 +1,5 @@
 import {
+  Platform,
   StyleSheet,
   TextStyle,
   TouchableOpacity,
@@ -29,7 +30,7 @@ export default function ActionCard({
       <View style={[styles.container, style]}>
         <View style={styles.iconContainer}>{icon}</View>
         <View style={styles.textContainer}>
-          <CustomText fontWeight="semibold" style={titleStyle}>
+          <CustomText style={[styles.title,titleStyle]}>
             {title}
           </CustomText>
           {description && (
@@ -48,6 +49,9 @@ const styles = StyleSheet.create({
     gap: 6,
     flexDirection: "row",
     alignItems: "center",
+  },
+  title: {
+    fontWeight: Platform.OS === "ios" ? "semibold" : "bold",
   },
   iconContainer: {
     borderWidth: 1,

@@ -3,7 +3,7 @@ import CustomText from "@/components/ui/CustomText"
 import Input from "@/components/ui/Input"
 import { TemporaryStatusType, useStatus } from "@/contexts/StatusContext"
 import { theme } from "@/theme"
-import { useState } from "react"
+import { Ref, useState } from "react"
 import {
   View,
   StyleSheet,
@@ -11,13 +11,18 @@ import {
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
+  TextInput,
 } from "react-native"
 
 interface EditActivityProps {
   closeModal: () => void
+  inputRef: Ref<TextInput>
 }
 
-export default function EditActivity({ closeModal }: EditActivityProps) {
+export default function EditActivity({
+  closeModal,
+  inputRef,
+}: EditActivityProps) {
   const { temporaryStatus, setTemporaryStatus } = useStatus()
   const [text, setText] = useState(temporaryStatus.activity)
 
@@ -52,7 +57,7 @@ export default function EditActivity({ closeModal }: EditActivityProps) {
               variant="ghost"
               containerStyle={styles.inputContainer}
               multiline
-              autoFocus
+              ref={inputRef}
             />
             <CustomButton
               variant="default"

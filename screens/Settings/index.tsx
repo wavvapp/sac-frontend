@@ -10,6 +10,7 @@ import UserIcon from "@/components/vectors/UserIcon"
 import ShareIcon from "@/components/vectors/ShareIcon"
 import BellIcon from "@/components/vectors/BellIcon"
 import TrashIcon from "@/components/vectors/TrashIcon"
+import UserProfile from "@/components/cards/UserProfile"
 
 export default function SettingScreen() {
   const { signOut } = useAuth()
@@ -41,6 +42,7 @@ export default function SettingScreen() {
           icon={<BellIcon />}
           onPress={() => {}}
         />
+        <UserProfile />
         <ActionCard
           title="Log out"
           icon={<LogoutIcon />}

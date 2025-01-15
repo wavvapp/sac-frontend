@@ -26,7 +26,7 @@ export type RootStackParamList = {
   Signaling: undefined
   CreateCredentials: undefined
   Search: undefined
-  StaticContentScreen: { page: StaticPageType }
+  StaticContentScreen: { pageSlug: StaticPageType }
 }
 
 export default function AppNavigator() {
@@ -85,7 +85,7 @@ export default function AppNavigator() {
             name="StaticContentScreen"
             options={{ presentation: "modal", headerShown: false }}
             component={StaticContentScreen}
-            initialParams={{ page: "privacy" }}
+            initialParams={{ pageSlug: "privacy" }}
           />
           <Stack.Screen
             name="CreateCredentials"
