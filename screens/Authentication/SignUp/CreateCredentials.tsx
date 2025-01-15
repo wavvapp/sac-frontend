@@ -53,43 +53,53 @@ export default function CreateCredentials() {
     return !isInputValid
   }, [isError, isInputValid, isLoading])
 
-  const handleUsernameSubmit = async () => {
-    try {
+  const handleUsernameSubmit = useMutation({
+    mutationFn: async () => {
+      console.log("username being calledddddddd")
       if (!isInputValid) return
-      setIsLoading(true)
       const { data } = await api.get(`/users/${text}`)
       if (data.message.toLowerCase() === "username already exist") {
-        setIsError(true)
-        return
-      } else registerUser(text)
-    } catch (error) {
+        throw new Error("Username already exists")
+      }
+      registerUser(text)
+    },
+    onMutate: () => {
+      setIsLoading(true)
+    },
+    onError: (error) => {
       console.error("Error fetching user data:", error)
-    } finally {
+    },
+    onSettled: () => {
       setIsLoading(false)
-    }
-  }
+    },
+  })
 
   const handleNameSubmit = () => {
     // TODO: logic for name submission.
     setText("")
     setStep(3)
   }
+  console.log(step, "step")
 
   const handleVerificationCode = useMutation({
     mutationFn: async () => {
       setVerification(text)
     },
+    onMutate: () => {
+      setIsLoading(true)
+    },
     onSuccess: () => {
       setText("")
       setStep(2)
+      setIsLoading(false)
     },
   })
-
+  console.log(verification, "verifification code ")
   const handleSubmit = async () => {
     if (!isInputValid) return
-    if (step === 1) handleVerificationCode.mutate(text)
+    if (step === 1) handleVerificationCode.mutate()
     if (step === 2) handleNameSubmit()
-    else await handleUsernameSubmit()
+    if (step === 3) handleUsernameSubmit.mutate()
   }
 
   useEffect(() => {
