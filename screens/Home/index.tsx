@@ -26,7 +26,6 @@ import { useFriends } from "@/queries/friends"
 import { useMySignal } from "@/queries/signal"
 import { useOfflineHandler } from "@/hooks/useOfflineHandler"
 import AlertDialog from "@/components/AlertDialog"
-import CustomText from "@/components/ui/CustomText"
 
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
