@@ -50,34 +50,31 @@ export default function EditActivity({
           behavior={Platform.OS === "ios" ? "padding" : "height"}
           style={styles.modalContainer}
           onStartShouldSetResponder={() => true}>
-          <CustomText fontWeight="normal" fontFamily="suisse" size="lg">
-            {title}
-          </CustomText>
-          <View style={styles.formContainer}>
-            <Input
-              textSize="lg"
-              placeholder={placeholderText}
-              handleTextChange={setText}
-              value={text}
-              onSubmitEditing={handleEdit}
-              variant="ghost"
-              containerStyle={styles.inputContainer}
-              multiline
-              ref={inputRef}
-            />
+          <View style={styles.formHeader}>
+            <CustomText>{title}</CustomText>
             <CustomButton
               variant="default"
               textSize="sm"
               title={buttonText}
               textStyles={styles.button}
               containerStyles={{
-                ...styles.buttonContainer,
-                opacity: !text.trim() ? 0.3 : 1,
+                opacity: !text.trim() ? 0.5 : 1,
               }}
               onPress={handleEdit}
               disabled={!text.trim()}
             />
           </View>
+          <Input
+            textSize="lg"
+            placeholder={placeholderText}
+            handleTextChange={setText}
+            value={text}
+            onSubmitEditing={handleEdit}
+            variant="ghost"
+            containerStyle={styles.inputContainer}
+            multiline
+            ref={inputRef}
+          />
         </KeyboardAvoidingView>
       </View>
     </TouchableWithoutFeedback>
@@ -97,17 +94,16 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 12,
     borderTopRightRadius: 12,
   },
-  formContainer: {
+  formHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     gap: 4,
+    alignItems: "flex-end",
   },
   inputContainer: {
     flex: 1,
     paddingVertical: 0,
-  },
-  buttonContainer: {
-    alignSelf: "flex-start",
+    marginVertical: 10,
   },
   button: {
     fontWeight: theme.fontWeight.semibold,

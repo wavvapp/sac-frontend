@@ -4,7 +4,7 @@ import { Modal } from "react-native"
 interface BottomModalProps {
   visible: boolean
   onClose: () => void
-  onShow: () => void
+  onShow?: () => void
   children: ReactNode
 }
 
@@ -20,7 +20,7 @@ export default function BottomModal({
       animationType="slide"
       presentationStyle="overFullScreen"
       onRequestClose={onClose}
-      onShow={onShow}
+      onShow={() => onShow && onShow()}
       visible={visible}>
       {children}
     </Modal>
