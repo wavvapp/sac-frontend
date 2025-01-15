@@ -1,4 +1,3 @@
-import React from "react"
 import { View, StyleSheet } from "react-native"
 import UserAvatar from "@/components/ui/UserAvatar"
 import { useAuth } from "@/contexts/AuthContext"
