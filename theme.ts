@@ -15,8 +15,7 @@ export const theme: Theme = {
     gray: "#E3E3E3",
     gray_100: "#cccccc",
     light_gray: "#898989",
-    red: "#6B2222",
-    red_500: "#EA4335",
+    red: "#EA4335",
   },
   fontSize: {
     sm: 13,

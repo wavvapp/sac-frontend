@@ -18,7 +18,39 @@ export default function SettingScreen() {
   const handleSignOut = async () => {
     await signOut()
   }
-
+  const settingOptions = [
+    {
+      title: "Personal information",
+      description: "Update your data",
+      icon: <UserIcon />,
+      onPress: () => {},
+    },
+    {
+      title: "Your friends are not on Wavv?",
+      description: "Invite them to join you",
+      icon: <ShareIcon />,
+      onPress: () => {},
+    },
+    {
+      title: "Push notifications",
+      description: "Manage preferences",
+      icon: <BellIcon />,
+      onPress: () => {},
+    },
+    {
+      title: "Push notifications",
+      description: "",
+      icon: <LogoutIcon />,
+      onPress: () => {},
+    },
+    {
+      title: "Delete Account",
+      description: "",
+      icon: <TrashIcon />,
+      onPress: handleSignOut,
+      titleStyle: { color: theme.colors.red },
+    },
+  ]
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="dark" />
@@ -26,35 +58,16 @@ export default function SettingScreen() {
       <View style={styles.contentContainer}>
         <UserProfile />
         <View style={styles.optionsContainer}>
-          <ActionCard
-            title="Personal information"
-            description="Update your data"
-            icon={<UserIcon />}
-            onPress={() => {}}
-          />
-          <ActionCard
-            title="Your friends are not on Wavv?"
-            description="Invite them to join you"
-            icon={<ShareIcon />}
-            onPress={() => {}}
-          />
-          <ActionCard
-            title="Push notifications"
-            description="Manage preferences"
-            icon={<BellIcon />}
-            onPress={() => {}}
-          />
-          <ActionCard
-            title="Log out"
-            icon={<LogoutIcon />}
-            onPress={handleSignOut}
-          />
-          <ActionCard
-            titleStyle={{ color: theme.colors.red_500 }}
-            title="Delete Account"
-            icon={<TrashIcon />}
-            onPress={() => {}}
-          />
+          {settingOptions?.map((option, index) => (
+            <ActionCard
+              key={index}
+              title={option.title}
+              description={option.description}
+              icon={option.icon}
+              titleStyle={option.titleStyle || undefined}
+              onPress={option.onPress}
+            />
+          ))}
         </View>
       </View>
     </SafeAreaView>

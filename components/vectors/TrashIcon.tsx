@@ -5,7 +5,7 @@ import Svg, { Path } from "react-native-svg"
 export default function TrashIcon({
   width = 24,
   height = 24,
-  color = theme.colors.red_500,
+  color = theme.colors.red,
   ...rest
 }) {
   return (
