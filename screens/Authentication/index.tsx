@@ -11,6 +11,7 @@ import { CredentialsScreenProps } from "./SignUp/CreateCredentials"
 import AppleIcon from "@/components/vectors/AppleIcon"
 import GoogleIcon from "@/components/vectors/GoogleIcon"
 import { StaticPageType } from "@/types"
+import { height } from "@/utils/dimensions"
 
 GoogleSignin.configure({
   webClientId: process.env.WEB_CLIENT_ID,
@@ -93,12 +94,13 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    paddingVertical: 70,
+    paddingTop: height * 0.4,
+    paddingBottom: 70,
     justifyContent: "space-between",
   },
   logoContainer: {
-    paddingTop: 227,
     alignItems: "center",
+    alignSelf: "center",
     marginBottom: 20,
   },
   description: {
@@ -113,6 +115,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 12,
     flex: 0,
+    paddingHorizontal: 2,
   },
 
   agreementText: {

@@ -27,7 +27,7 @@ function StaticContentScreen({ route, navigation }: StaticPageScreenProps) {
             navigation.navigate("EntryScreen")
           }}
           style={styles.CrossMarkButton}>
-          <CrossMark color="#ffffff" width="20" height="20" />
+          <CrossMark color={theme.colors.white} width="20" height="20" />
         </TouchableOpacity>
       </View>
       <ScrollView
