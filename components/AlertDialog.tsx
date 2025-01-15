@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react"
-import { Modal, View, StyleSheet, Platform } from "react-native"
+import { Modal, View, StyleSheet, Platform, Dimensions } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import { theme } from "@/theme"
 import { CustomButton } from "@/components/ui/Button"
@@ -27,6 +27,7 @@ export default function AlertDialog({
   buttonStyles = "primary",
 }: AlertDialogProps): JSX.Element {
   const [isVisible, setIsVisible] = useState(false)
+  const screenWidth = Dimensions.get("window").width
 
   const close = useCallback(() => {
     setIsVisible(false)
@@ -42,6 +43,12 @@ export default function AlertDialog({
   AlertDialog.open = open
   AlertDialog.close = close
 
+  const getModalWidth = () => {
+    if (screenWidth < 360) return "95%" // Very small phones
+    if (screenWidth < 400) return "90%" // Small phones
+    return "85%" // Default for larger phones
+  }
+
   return (
     <Modal
       animationType="fade"
@@ -49,10 +56,12 @@ export default function AlertDialog({
       visible={isVisible}
       onRequestClose={close}>
       <View style={styles.overlay}>
-        <View style={styles.modalView}>
-          <CustomText style={styles.title} size="lg">
-            {title}
-          </CustomText>
+        <View style={[styles.modalView, { width: getModalWidth() }]}>
+          {title && (
+            <CustomText style={styles.title} size="lg">
+              {title}
+            </CustomText>
+          )}
           <CustomText style={styles.description} fontFamily="marfa">
             {description}
           </CustomText>
@@ -95,7 +104,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   modalView: {
-    width: "80%",
     backgroundColor: theme.colors.white,
     borderRadius: 12,
     padding: 24,

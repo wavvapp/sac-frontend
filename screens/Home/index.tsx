@@ -25,7 +25,7 @@ import api from "@/service"
 import { useFriends } from "@/queries/friends"
 import { useMySignal } from "@/queries/signal"
 import { useOfflineHandler } from "@/hooks/useOfflineHandler"
-// import AlertDialog from "@/components/AlertDialog"
+import AlertDialog from "@/components/AlertDialog"
 
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -84,9 +84,9 @@ export default function HomeScreen() {
     return runOnJS(setIsVisible)(false)
   }, [isOn.value])
 
-  // const showDialog = () => {
-  //   AlertDialog.open()
-  // }
+  const showDialog = () => {
+    AlertDialog.open()
+  }
 
   return (
     <View style={styles.container}>
@@ -122,7 +122,7 @@ export default function HomeScreen() {
             onPress={() => handlePress.mutate()}
             style={styles.switch}
           />
-          {/* <View
+          <View
             style={{
               flex: 1,
               justifyContent: "center",
@@ -138,7 +138,7 @@ export default function HomeScreen() {
               cancelText="cancel"
               buttonStyles="danger"
             />
-          </View> */}
+          </View>
           <Signaling ref={signalingRef} />
         </>
       )}
