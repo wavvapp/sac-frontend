@@ -1,5 +1,6 @@
 import { CustomButton } from "@/components/ui/Button"
 import { RootStackParamList } from "@/navigation"
+import { theme } from "@/theme"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import React, { useState } from "react"
@@ -72,7 +73,7 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
-    borderColor: "#ccc",
+    borderColor: theme.colors.gray_100,
     borderWidth: 1,
     marginBottom: 12,
     paddingLeft: 8,

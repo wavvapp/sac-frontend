@@ -3,8 +3,9 @@ import {
   TouchableOpacity,
   View,
   ActivityIndicator,
+  TextInput,
 } from "react-native"
-import { useState } from "react"
+import { useRef, useState } from "react"
 import CustomText from "@/components/ui/CustomText"
 import EditIcon from "@/components/vectors/EditIcon"
 import EditActivity from "@/screens/EditActivity"
@@ -16,6 +17,7 @@ import BottomModal from "@/components/BottomModal"
 export default function Activity({ isLoading }: { isLoading: boolean }) {
   const [isModalVisible, setIsModalVisible] = useState(false)
   const { temporaryStatus, setTemporaryStatus } = useStatus()
+  const inputRef = useRef<TextInput>(null)
 
   const openModal = () => setIsModalVisible(true)
   const closeModal = () => setIsModalVisible(false)
@@ -24,6 +26,9 @@ export default function Activity({ isLoading }: { isLoading: boolean }) {
       ...prev,
       activity: text.trim(),
     }))
+  }
+  const triggerKeyboardFocus = () => {
+    inputRef.current?.focus()
   }
   return (
     <View style={styles.container}>
@@ -49,7 +54,7 @@ export default function Activity({ isLoading }: { isLoading: boolean }) {
           </>
         )}
       </TouchableOpacity>
-      <BottomModal visible={isModalVisible} onClose={closeModal}>
+      <BottomModal visible={isModalVisible} onShow={triggerKeyboardFocus} onClose={closeModal}>
         <EditActivity
           closeModal={closeModal}
           title="Status"
@@ -57,6 +62,7 @@ export default function Activity({ isLoading }: { isLoading: boolean }) {
           buttonText="Done"
           initialInputValue={temporaryStatus.activity}
           onPress={updateStatus}
+          inputRef={inputRef}
         />
       </BottomModal>
     </View>
