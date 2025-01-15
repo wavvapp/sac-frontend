@@ -1,19 +1,17 @@
-import React, { useEffect, useState } from 'react'
-import { Dimensions, StyleSheet, View } from 'react-native'
+import React, { useEffect } from "react"
+import { StyleSheet } from "react-native"
 import {
   Easing,
-  runOnJS,
+  interpolate,
   runOnUI,
   SharedValue,
   useDerivedValue,
   useSharedValue,
   withRepeat,
-  withTiming
-} from 'react-native-reanimated'
-import { Canvas, Fill, Shader, Skia, vec } from '@shopify/react-native-skia'
-
-// Get device width and height
-const { width, height } = Dimensions.get('window')
+  withTiming,
+} from "react-native-reanimated"
+import { Canvas, Fill, Shader, Skia, vec } from "@shopify/react-native-skia"
+import { height, width } from "@/utils/dimensions"
 
 // Props for the PerlinNoise component
 interface PerlinNoiseProps {
@@ -22,155 +20,122 @@ interface PerlinNoiseProps {
   color2: string // Second color to be used
 }
 
-const PerlinNoise: React.FC<PerlinNoiseProps> = ({ color1, color2, isOn }) => {
-  const [showBackground, setShowBackground] = useState(false)
+const PerlinNoise: React.FC<PerlinNoiseProps> = ({ isOn }) => {
   // Create a Skia Runtime Effect for the noise shader
   const noiseShader = Skia.RuntimeEffect.Make(`uniform float2 u_resolution;
 uniform float u_time;
-uniform half4 u_color1; // First custom color (white)
-uniform half4 u_color2; // Second custom color (red)
+uniform float u_brightness;
+uniform float u_flashness;
 
-// Fade function for smooth interpolation
-float fade(float t) { 
-    return t * t * t * (t * (t * 6.0 - 15.0) + 10.0); 
-}
-
-// Smooth transition for 2D vectors
-float2 _smooth(float2 x) { 
-    return float2(fade(x.x), fade(x.y)); 
-}
-
-// Hash function to generate pseudo-random vectors based on input coordinates
-float2 hash(float2 co, float u_time) {
-    float m = dot(co, float2(12.9898, 78.233));
-    return fract(float2(sin(m), cos(m)) * 43758.5453 * (u_time + 50.0) * 0.0000009) * 15.0 - 1.0;
-}
-
-// 2D Perlin Noise function
-float perlinNoise(float2 uv, float u_time) {
-    float2 PT  = floor(uv);
-    float2 pt  = fract(uv);
-    float2 mmpt = _smooth(pt);
-    
-    float4 grads = float4(
-        dot(hash(PT + float2(0.0, 1.0), u_time), pt - float2(0.0, 1.0)), 
-        dot(hash(PT + float2(1.0, 1.0), u_time), pt - float2(1.0, 1.0)),
-        dot(hash(PT + float2(0.0, 0.0), u_time), pt - float2(0.0, 0.0)), 
-        dot(hash(PT + float2(1.0, 0.0), u_time), pt - float2(1.0, 0.0))
-    );
-
-    return mix(
-        mix(grads.z, grads.w, mmpt.x), 
-        mix(grads.x, grads.y, mmpt.x), 
-        mmpt.y
-    );
-}
-
-// Fractal Brownian Motion (fbm) function
-float fbm(float2 uv, float u_time) {
-    float finalNoise = 0.0;
-    finalNoise += 0.50000 * perlinNoise(2.0 * uv, u_time);
-    finalNoise += 0.25000 * perlinNoise(4.0 * uv, u_time);
-    finalNoise += 0.12500 * perlinNoise(8.0 * uv, u_time);
-    finalNoise += 0.06250 * perlinNoise(16.0 * uv, u_time);
-    finalNoise += 0.03125 * perlinNoise(32.0 * uv, u_time);
-    
-    return finalNoise;
+// Rotation function
+float2 rotate(float2 v, float a) {
+    float s = sin(a);
+    float c = cos(a);
+    float2x2 m = float2x2(c, -s, s, c);
+    return m * v;
 }
 
 half4 main(float2 fragCoord) {
-    float2 uv = fragCoord.xy / u_resolution.y;
+    float2 uv = fragCoord / u_resolution;
+    float2 p = (uv * 2.0 - 1.0) * float2(u_resolution.x / u_resolution.y, 1.0);
 
-    // Calculate noise sample
-    float noiseSample = fbm(2.0 * uv, u_time) + 0.5;
-    float x = fbm(2.0 * uv * (0.5 - noiseSample), u_time) + 0.5;
+    // New control variables
+    float zoom = 0.1;     // Zoom level (1.0 is original, larger values zoom out)
+    float2 offset = float2(0.0, 0.0); // X and Y offset
+    float rotation = 135.06; // Rotation angle in radians
 
-    half4 fragColor;
+    // Existing control variables
+    float spacing = 0.5;
+    float amplitude = 3.0;
+    float intensity = 2.0;
+    float speed = 0.009;
+    float brightness = u_brightness + u_flashness * sin(u_time); // New brightness control (1.0 is original, larger values increase brightness)
 
-    // Use solid colors based on the value of 'x'
-    if (x > 0.8) {
-      fragColor = half4(1.0, 1.0, 1.0, 1.0); // Solid white
-      } else if (x > 0.6) {
-        fragColor = half4(0.0, 0.0, 0.0, 0.50); // Solid grey
-    } else if (x > 0.4) {
-        fragColor = u_color1;
-    } else if (x > 0.2) {
-        fragColor = half4(0.0, 0.0, 0.0, 1.0); // Solid black
-    } else if (x > 0.1) {
-        fragColor = u_color2; // Custom color 2
-    } else {
-        fragColor = half4(0.0, 0.0, 0.0, 0.25); // light grey
+    // Apply transformations
+    p = rotate(p, rotation);
+    p = p * zoom + offset;
+
+    float3 col = float3(0.0);
+    const int iterations = 200; // Fixed number of iterations
+
+    for (int i = 0; i < iterations; i++) {
+        float r = float(i) * 0.01 * spacing;
+
+        float2 waveOffset = float2(0, sin(-u_time * speed + float(i) * 0.03 / spacing) * float(i) * 0.008 / spacing * amplitude);
+
+        col += float3(1.0) / (3.0 + 3000.0 * intensity * (abs(length(
+            sin(p.x * 3237.0 + p.y * 100.888) * 0.020 * amplitude + p - waveOffset
+        ) - r)));
     }
 
-    return fragColor; // Output the final solid color
+    col *= spacing * intensity;
+
+    // Apply brightness
+    col *= brightness;
+
+    // Clamp the final color to prevent over-saturation
+    col = clamp(col, float3(0.0), float3(1.0));
+
+    return half4(col, 1.9);
 }
+
 `)! // Assert non-null with `!`
 
   // Time variable for animation using Reanimated's shared value
   const time = useSharedValue(1)
-  const randomValue = Math.random() * 60 // Generate the random value on the JS thread
-
-  useDerivedValue(() => {
-    // When the shared value changes, update React state
-    runOnJS(setShowBackground)(isOn.value) // Assuming 1 means "on"
-  }, [isOn])
+  const u_brightness = useSharedValue(0)
+  const u_flashness = useSharedValue(0)
 
   // Start a repeating animation for the time variable
   useEffect(() => {
-    if (!showBackground) {
-      runOnUI(() => {
-        time.value = 0
-      })()
-      return
-    }
-
     runOnUI(() => {
       time.value = withRepeat(
-        withTiming(randomValue, {
-          duration: 9000,
-          easing: Easing.linear // Removed any easing effect
+        withTiming(50, {
+          duration: 80000,
+          easing: Easing.elastic(), // Removed any easing effect
         }),
         -1,
         true,
-        () => {          
-          // Generate a new random value after each repeat cycle
-          time.value = Math.random() * 60 // This will be triggered after each cycle
-        }
       )
     })()
-  }, [showBackground])
+  }, [isOn])
 
-  // Convert the color props to Skia's color format
-  const skiaColor1 = Skia.Color(color1)
-  const skiaColor2 = Skia.Color(color2)
+  useDerivedValue(() => {
+    const brightness = interpolate(Number(isOn.value), [0, 1], [0.4, 1.0])
+    const flasshness = interpolate(Number(isOn.value), [0, 1], [0.0, 0.5])
+    u_brightness.value = withTiming(brightness, {
+      duration: 400,
+      easing: Easing.elastic(), // Removed any easing effect
+    })
+    u_flashness.value = withTiming(flasshness, {
+      duration: 400,
+      easing: Easing.elastic(), // Removed any easing effect
+    })
+  }, [isOn.value]) // Track correct dependencies
 
-  const uniforms = useDerivedValue(() => ({
-    u_time: time.value, // Time value for animation
-    u_resolution: vec(width, height), // Screen resolution
-    u_color1: skiaColor1, // First color
-    u_color2: skiaColor2 // Second color
-  }))
+  const uniforms = useDerivedValue(() => {
+    return {
+      u_time: time.value, // Time value for animation
+      u_resolution: vec(width, height), // Screen resolution
+      u_brightness: u_brightness.value, // Directly using the interpolated value
+      u_flashness: u_flashness.value, // Directly using the interpolated value
+    }
+  }, [time.value, width, height, isOn.value]) // Track correct dependencies
 
   // Render the canvas with the noise shader applied
-  return showBackground ? (
+  return (
     <Canvas style={styles.canvas}>
       <Fill>
         <Shader source={noiseShader} uniforms={uniforms} />
       </Fill>
     </Canvas>
-  ) : (
-    <View style={styles.blackBackground} />
   )
 }
 
 const styles = StyleSheet.create({
   canvas: {
-    ...StyleSheet.absoluteFillObject
-  },
-  blackBackground: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'black'
-  }
+  },
 })
 
 export default PerlinNoise

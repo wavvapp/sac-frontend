@@ -1,34 +1,26 @@
-import { StyleSheet, View, ViewProps } from "react-native";
-import CustomText from "@/components/ui/CustomText";
-import Badge from "@/components/ui/Badge";
-import { theme } from "@/theme";
+import { StyleSheet, View, ViewProps } from "react-native"
+import CustomText from "@/components/ui/CustomText"
+import { theme } from "@/theme"
 
 interface UserInfoProps extends ViewProps {
-  firstName: string;
-  lastName: string;
-  time: string;
-  activity: string;
+  fullName: string
+  username: string
 }
 
 export default function UserInfo({
-  firstName,
-  lastName,
-  time,
-  activity,
+  fullName,
+  username,
   style,
   ...rest
 }: UserInfoProps) {
   return (
     <View style={(styles.container, style)} {...rest}>
-      <CustomText size="lg" style={styles.nameContainer} fontWeight="medium">
-        {`${firstName} ${lastName}`}
+      <CustomText fontWeight="semibold">{fullName}</CustomText>
+      <CustomText fontFamily="writer-mono" style={styles.username}>
+        @{username}
       </CustomText>
-      <View style={styles.detailsContainer}>
-        <Badge name={time} variant="outline" />
-        <CustomText size="sm">{activity}</CustomText>
-      </View>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -36,13 +28,8 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.white,
     flexDirection: "row",
   },
-  nameContainer: {
-    textTransform: "uppercase",
+  username: {
+    color: theme.colors.black,
+    opacity: 0.5,
   },
-  detailsContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 6,
-    marginTop: 2,
-  },
-});
+})

@@ -1,59 +1,81 @@
-import React, { useState } from "react";
-import { View, ScrollView, StyleSheet } from "react-native";
-import { CustomButton } from "@/components/ui/Button";
-import CustomText from "@/components/ui/CustomText";
+import { View, ScrollView, StyleSheet, TouchableOpacity } from "react-native"
+import CustomText from "@/components/ui/CustomText"
+import Badge from "@/components/ui/Badge"
+import { theme } from "@/theme"
+import { TemporaryStatusType, useStatus } from "@/contexts/StatusContext"
 
-interface StatusProps {
-  timeSlots: string[];
+type StatusProps = {
+  timeSlots: string[]
 }
 
-function Status({ timeSlots }: StatusProps) {
-  const [activeSlot, setActiveSlot] = useState<string>(timeSlots[0]);
-  const handlePress = (slot: string) => {
-    setActiveSlot(slot);
-  };
+export const Status: React.FC<StatusProps> = ({ timeSlots }) => {
+  const { temporaryStatus, setTemporaryStatus } = useStatus()
+
+  const handleTimeSlotChange = (selectedTime: string) => {
+    setTemporaryStatus((prev: TemporaryStatusType) => ({
+      ...prev,
+      timeSlot: selectedTime,
+    }))
+  }
 
   return (
     <View style={styles.container}>
-      <CustomText style={styles.title} fontWeight="bold">When</CustomText>
-      <ScrollView
-        horizontal={true}
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.scrollContainer}
-      >
-        <View style={styles.buttonContainer}>
-          {timeSlots.map((slot) => (
-            <View key={slot}>
-              <CustomButton
-                title={slot}
-                onPress={() => handlePress(slot)}
-                textSize="lg"
-                variant="secondary"
-                active={activeSlot === slot}
-              />
-            </View>
-          ))}
-        </View>
-      </ScrollView>
+      <CustomText size="sm" style={styles.title} fontWeight="medium">
+        When
+      </CustomText>
+      <View style={styles.scrollContainer}>
+        <ScrollView
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.scrollContentContainer}>
+          <View style={styles.buttonContainer}>
+            {timeSlots.map((slot) => (
+              <TouchableOpacity
+                onPress={() => handleTimeSlotChange(slot)}
+                key={slot}>
+                <Badge
+                  name={slot}
+                  variant={
+                    temporaryStatus.timeSlot.toLowerCase() ===
+                    slot.toLowerCase()
+                      ? "default"
+                      : "outline"
+                  }
+                  style={styles.badge}
+                />
+              </TouchableOpacity>
+            ))}
+          </View>
+        </ScrollView>
+      </View>
     </View>
-  );
+  )
 }
 
-export default Status;
+export default Status
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    gap: 18,
   },
   title: {
-    paddingHorizontal: 15,
-    paddingBottom:18
+    paddingHorizontal: 20,
   },
   scrollContainer: {
-    paddingHorizontal: 15,
+    flexDirection: "row",
+  },
+  scrollContentContainer: {
+    paddingHorizontal: 20,
   },
   buttonContainer: {
     flexDirection: "row",
-    gap:8
+    gap: 8,
   },
-});
+  badge: {
+    fontFamily: theme.fontFamily["writer-mono"].normal?.normal,
+    paddingVertical: 7.5,
+    paddingHorizontal: 16,
+    fontSize: theme.fontSize.sm,
+    lineHeight: theme.lineHeight.sm,
+  },
+})

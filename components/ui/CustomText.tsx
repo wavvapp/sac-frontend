@@ -1,40 +1,53 @@
-import { FontWeightVariants, SizeVariants } from "@/types";
-import { Text, TextProps, TextStyle } from "react-native";
-
-const typographyStylesMap: Record<SizeVariants, TextStyle> = {
-  "2xl": { fontSize: 40, lineHeight: 51.88 },
-  xl: { fontSize: 28, lineHeight: 36.32 },
-  lg: { fontSize: 18, lineHeight: 21.85 },
-  base: { fontSize: 16, lineHeight: 19.42 },
-  sm: { fontSize: 14, lineHeight: 18.16 },
-  xs: { fontSize: 11, lineHeight: 13.26 },
-};
-
-const fontWeightMap: Record<FontWeightVariants, TextStyle> = {
-  bold: { fontWeight: 700 },
-  semibold: { fontWeight: 600 },
-  medium: { fontWeight: 500 },
-  normal: { fontWeight: 400 },
-};
+import { theme } from "@/theme"
+import {
+  FontFamilyVariant,
+  fontStyleVariant,
+  FontWeightVariant,
+  TypographySizeVariant,
+} from "@/types"
+import { Text, TextProps, TextStyle } from "react-native"
 
 interface CustomTextProps extends TextProps {
-  size?: SizeVariants;
-  fontWeight?: FontWeightVariants;
+  size?: TypographySizeVariant
+  fontWeight?: FontWeightVariant
+  fontFamily?: FontFamilyVariant
+  fontStyle?: fontStyleVariant
 }
 
 export default function CustomText({
   size = "base",
   fontWeight = "normal",
+  fontFamily = "suisse",
+  fontStyle = "normal",
   style = {},
   children,
   ...rest
 }: CustomTextProps) {
+  const getFontFamilyStyle = (): TextStyle => {
+    const styleObj = style as TextStyle
+    const fontWeightValue =
+      (styleObj.fontWeight as FontWeightVariant) || fontWeight
+    const selectedFontWeight =
+      theme.fontFamily[fontFamily][fontWeightValue] ||
+      theme.fontFamily[fontFamily].normal
+    const selectedFontFamily =
+      selectedFontWeight?.[fontStyle] || selectedFontWeight?.normal
+
+    return { fontFamily: selectedFontFamily }
+  }
+
   return (
     <Text
-      style={[typographyStylesMap[size], fontWeightMap[fontWeight], style]}
-      {...rest}
-    >
+      style={[
+        { fontSize: theme.fontSize[size] },
+        { lineHeight: theme.lineHeight[size] },
+        { fontWeight: theme.fontWeight[fontWeight] },
+        { fontStyle: theme.fontStyle[fontStyle] },
+        getFontFamilyStyle(),
+        style,
+      ]}
+      {...rest}>
       {children}
     </Text>
-  );
+  )
 }

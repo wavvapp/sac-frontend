@@ -1,7 +1,16 @@
 {
   "expo": {
-    "name": "social_app",
-    "slug": "social_app",
+    "plugins": [
+      [
+        "@react-native-google-signin/google-signin",
+        {
+          "iosUrlScheme": "com.googleusercontent.apps.351310982043-28dk2k254o76heo1d4pr3uftmgsjmihh"
+        }
+      ],
+       "expo-apple-authentication"
+    ],
+    "name": "Wavv",
+    "slug": "Wavv",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -9,14 +18,13 @@
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#000000"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
+      "usesAppleSignIn": true,
       "supportsTablet": true,
-      "bundleIdentifier": "com.yourcompany.yourappname",
+      "bundleIdentifier": "com.apeunit.social.app",
       "buildNumber": "1.0.0",
       "infoPlist": {
         "NSCameraUsageDescription": "This app uses the camera to scan barcodes on event tickets.",
@@ -34,9 +42,10 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
+        "foregroundImage": "./assets/images/icon.png",
+        "backgroundColor": "#000000"
+      },
+      "package": "com.apeunit.socialapp"
     },
     "web": {
       "favicon": "./assets/images/favicon.png"

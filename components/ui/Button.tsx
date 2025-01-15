@@ -1,76 +1,188 @@
-import { StyleSheet, TextStyle, TouchableOpacity, TouchableOpacityProps, ViewStyle } from "react-native";
-import CustomText from "@/components/ui/CustomText";
-import { ButtonVariant, SizeVariants } from "@/types";
-import { theme } from "@/theme";
+import {
+  StyleSheet,
+  TextStyle,
+  TouchableOpacity,
+  TouchableOpacityProps,
+  View,
+  ViewStyle,
+} from "react-native"
+import CustomText from "@/components/ui/CustomText"
+import { ButtonVariant, TypographySizeVariant } from "@/types"
+import { theme } from "@/theme"
+
 interface ButtonProps extends TouchableOpacityProps {
-    variant?: ButtonVariant;
-    textSize: SizeVariants;
-    title: string;
-    active?: boolean,
-    containerStyles?: ViewStyle,
-    textStyles?: TextStyle
-}
-export function CustomButton(
-    {
-        variant = 'primary',
-        onPress,
-        textSize,
-        textStyles = {},
-        containerStyles = {},
-        active,
-        title,
-        ...rest
-    }: ButtonProps): JSX.Element {
-
-    const variantStyles = {
-        primary: {
-            container: styles.primary,
-            text: styles.primaryVariantText,
-        },
-        secondary: {
-            container: [styles.secondary, active && styles.secondaryActive],
-            text: [styles.secondaryVariantText, active && styles.secondaryActiveVariantText],
-        }
-    }
-
-    const { container, text } = variantStyles[variant] || variantStyles.primary;
-
-    return (
-        <TouchableOpacity onPress={onPress} style={[container, containerStyles]}  {...rest} >
-            <CustomText size={textSize} style={[text, textStyles]}>{title}</CustomText>
-        </TouchableOpacity>
-    )
+  variant?: ButtonVariant
+  textSize?: TypographySizeVariant
+  title?: string
+  active?: boolean
+  containerStyles?: ViewStyle
+  textStyles?: TextStyle
+  disabled?: boolean
+  fullWidth?: boolean
+  children?: React.ReactNode
+  hasCenteredIcon?: boolean
 }
 
-
-const styles = StyleSheet.create({
+export function CustomButton({
+  variant = "default",
+  onPress,
+  textSize = "sm",
+  textStyles = {},
+  containerStyles = {},
+  disabled,
+  children,
+  fullWidth,
+  title,
+  hasCenteredIcon = false,
+  ...rest
+}: ButtonProps): JSX.Element {
+  const variantStyles = {
     primary: {
-        backgroundColor: theme.colors.black,
-        color: theme.colors.white,
-        borderRadius: 4,
-        paddingVertical: 10,
-        paddingHorizontal: 24
-    },
-    primaryVariantText: {
-        color: theme.colors.white,
-        fontWeight: 500
+      container: styles.primary,
+      text: styles.primaryText,
     },
     secondary: {
-        backgroundColor: theme.colors.white,
-        borderColor: theme.colors.black,
-        borderWidth: 1,
-        paddingVertical: 10,
-        paddingHorizontal: 16,
-        borderRadius: 100
+      container: {
+        ...(fullWidth && styles.secondaryFullWidth),
+        ...styles.secondary,
+      },
+      text: styles.secondaryText,
     },
-    secondaryActive: {
-        backgroundColor: theme.colors.black
+    outline: {
+      container: styles.outline,
+      text: styles.outlineText,
     },
-    secondaryVariantText: {
-        color: theme.colors.black,
-        textTransform: "uppercase"
+    destructive: {
+      container: styles.destructive,
+      text: styles.descructiveText,
     },
-    secondaryActiveVariantText: {
-        color: theme.colors.white,
-    }
+    ghost: {
+      container: styles.ghost,
+      text: {},
+    },
+    default: {
+      container: styles.default,
+      text: styles.secondaryText,
+    },
+  }
+  const { container, text } = variantStyles[variant] || variantStyles.default
+
+  return (
+    <TouchableOpacity
+      onPress={onPress}
+      style={[
+        styles.buttonContainer,
+        container,
+        disabled && styles.disabled,
+        containerStyles,
+      ]}
+      disabled={disabled}
+      {...rest}>
+      <View
+        style={[
+          children && title && !hasCenteredIcon
+            ? [styles.childrenContainer]
+            : {},
+          hasCenteredIcon && [styles.centeredIcon],
+        ]}>
+        {children}
+      </View>
+      {title && (
+        <CustomText
+          size={textSize}
+          fontWeight="semibold"
+          fontFamily="marfa"
+          style={[text, styles.buttonText, textStyles]}>
+          {title}
+        </CustomText>
+      )}
+    </TouchableOpacity>
+  )
+}
+
+const styles = StyleSheet.create({
+  buttonContainer: {
+    borderRadius: 6,
+    flexDirection: "row",
+    alignItems: "center",
+    position: "relative",
+    alignContent: "center",
+  },
+  default: {
+    paddingHorizontal: 16,
+    paddingVertical: 9,
+    borderWidth: 1,
+    borderColor: theme.colors.black_200,
+    backgroundColor: theme.colors.black,
+  },
+  buttonText: {
+    letterSpacing: 0.03,
+    textTransform: "uppercase",
+  },
+  primary: {
+    backgroundColor: theme.colors.white,
+    borderColor: theme.colors.white,
+    borderWidth: 1,
+    width: 350,
+    justifyContent: "center",
+    alignContent: "center",
+    alignItems: "center",
+    paddingVertical: 21,
+  },
+  primaryText: {
+    color: theme.colors.black,
+  },
+  childrenContainer: {
+    position: "absolute",
+    left: 16,
+    top: 16,
+  },
+  secondary: {
+    backgroundColor: theme.colors.black,
+    paddingVertical: 21,
+    paddingHorizontal: 32,
+    borderWidth: 1,
+    borderColor: theme.colors.red,
+  },
+  secondaryFullWidth: {
+    width: 350,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  secondaryText: {
+    color: theme.colors.white,
+  },
+  outline: {
+    backgroundColor: theme.colors.white,
+    borderColor: theme.colors.black_200,
+    borderWidth: 1,
+    paddingVertical: 9,
+    paddingHorizontal: 16,
+  },
+  outlineText: {
+    color: theme.colors.black,
+  },
+  destructive: {
+    borderColor: theme.colors.white_200,
+    borderWidth: 1,
+    paddingVertical: 21,
+    width: 350,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  descructiveText: {
+    color: theme.colors.white,
+  },
+  ghost: {
+    width: 48,
+    height: 48,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  disabled: {
+    opacity: 0.3,
+  },
+  centeredIcon: {
+    paddingRight: 8,
+  },
 })
