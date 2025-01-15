@@ -54,7 +54,10 @@ export default function Activity({ isLoading }: { isLoading: boolean }) {
           </>
         )}
       </TouchableOpacity>
-      <BottomModal visible={isModalVisible} onShow={triggerKeyboardFocus} onClose={closeModal}>
+      <BottomModal
+        visible={isModalVisible}
+        onShow={triggerKeyboardFocus}
+        onClose={closeModal}>
         <EditActivity
           closeModal={closeModal}
           title="Status"
