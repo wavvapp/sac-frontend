@@ -25,7 +25,6 @@ import api from "@/service"
 import { useFriends } from "@/queries/friends"
 import { useMySignal } from "@/queries/signal"
 import { useOfflineHandler } from "@/hooks/useOfflineHandler"
-// import AlertDialog from "@/components/AlertDialog"
 import { height, width } from "@/utils/dimensions"
 
 export type HomeScreenProps = NativeStackNavigationProp<
@@ -84,10 +83,6 @@ export default function HomeScreen() {
     return runOnJS(setIsVisible)(false)
   }, [isOn.value])
 
-  // const showDialog = () => {
-  //   AlertDialog.open()
-  // }
-
   return (
     <View style={styles.container}>
       {/* <PerlinNoise isOn={isOn} color1="#281713" color2="blue" /> */}
@@ -122,25 +117,6 @@ export default function HomeScreen() {
             onPress={() => handlePress.mutate()}
             style={styles.switch}
           />
-          {/* <View
-            style={{
-              flex: 1,
-              justifyContent: "center",
-              alignItems: "center",
-              marginBottom: 90,
-            }}>
-            <CustomButton onPress={showDialog} title="Show Modal" />
-            <AlertDialog
-              title="No connection"
-              description=" This action is permanent and cannot be undone. All your
-                    data, including profile and username, will be permanently
-                    deleted. Do you wish to proceed?"
-              variant="confirm"
-              confirmText="yes, delete"
-              cancelText="cancel"
-              buttonStyles="danger"
-            />
-          </View> */}
           <Signaling ref={signalingRef} />
         </>
       )}
