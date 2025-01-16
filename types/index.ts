@@ -19,6 +19,7 @@ export type ButtonVariant =
   | "ghost"
   | "default"
   | "destructive"
+  | "danger"
 export type FontFamilyVariant = "suisse" | "marfa" | "writer-mono"
 export type fontStyleVariant = "normal" | "italic"
 export type BadgeVariant = "default" | "outline" | "primary"
@@ -89,6 +90,7 @@ export enum Provider {
 
 export type StaticPageType = "privacy" | "terms"
 
+export type AlertDialogVariant = "primary" | "confirm"
 export type SettingOption = {
   title: string
   description: string
