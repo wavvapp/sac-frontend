@@ -65,7 +65,7 @@ export default function SettingScreen() {
               title={option.title}
               description={option.description}
               icon={option.icon}
-              titleStyle={option.titleStyle || undefined}
+              titleStyle={option.titleStyle || {}}
               onPress={option.onPress}
             />
           ))}
