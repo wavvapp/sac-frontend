@@ -1,6 +1,7 @@
 import {
   Platform,
   StyleSheet,
+  TextStyle,
   TouchableOpacity,
   View,
   ViewStyle,
@@ -8,17 +9,20 @@ import {
 import CustomText from "@/components/ui/CustomText"
 import { theme } from "@/theme"
 import { ReactNode } from "react"
+import ChevronRightIcon from "@/components/vectors/ChevronRightIcon"
 
 export default function ActionCard({
   style,
+  titleStyle,
   title,
   description,
   icon,
   onPress,
 }: {
   style?: ViewStyle
+  titleStyle?: TextStyle
   title: string
-  description: string
+  description?: string
   icon: ReactNode
   onPress: () => void
 }) {
@@ -27,9 +31,14 @@ export default function ActionCard({
       <View style={[styles.container, style]}>
         <View style={styles.iconContainer}>{icon}</View>
         <View style={styles.textContainer}>
-          <CustomText style={styles.title}>{title}</CustomText>
-          <CustomText style={styles.inviteButtonText}>{description}</CustomText>
+          <CustomText style={[styles.title, titleStyle]}>{title}</CustomText>
+          {description && (
+            <CustomText style={styles.inviteButtonText}>
+              {description}
+            </CustomText>
+          )}
         </View>
+        <ChevronRightIcon />
       </View>
     </TouchableOpacity>
   )

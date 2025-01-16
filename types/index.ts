@@ -91,3 +91,10 @@ export enum Provider {
 export type StaticPageType = "privacy" | "terms"
 
 export type AlertDialogVariant = "primary" | "confirm"
+export type SettingOption = {
+  title: string
+  description: string
+  icon: React.JSX.Element
+  onPress: () => void | Promise<void>
+  titleStyle?: TextStyle
+}
