@@ -12,7 +12,6 @@ import api from "@/service"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { StatusBar } from "expo-status-bar"
 import { useQuery } from "@tanstack/react-query"
-import { openShareDialog } from "@/utils/share"
 import ShareIcon from "@/components/vectors/ShareIcon"
 import { useAuth } from "@/contexts/AuthContext"
 import Header from "@/components/cards/Header"
@@ -20,11 +19,13 @@ import ActionCard from "@/components/cards/Action"
 import debounce from "lodash.debounce"
 import { useAddFriend } from "@/queries/friends"
 import { FriendsSkeleton } from "@/components/cards/FriendsSkeleton"
+import { onShare } from "@/utils/share"
+import { VerificationCodeCard } from "@/components/cards/Verification-code"
 
 const FindFriends = () => {
   const [search, setSearch] = useState("")
   const [searchQueryText, setSearchQueryText] = useState("")
-  const { user } = useAuth()
+  const { showAlert } = useAuth()
   const addFriend = useAddFriend()
 
   const { data: users = [], isLoading } = useQuery<User[]>({
@@ -132,7 +133,16 @@ const FindFriends = () => {
           <ActionCard
             title="Your friends are not on Wavv?"
             description="Invite them to join you"
-            onPress={openShareDialog}
+            onPress={() => {
+              showAlert({
+                title: "Share this invite code with your friend",
+                description: <VerificationCodeCard />,
+                variant: "confirm",
+                confirmText: "Share",
+                cancelText: "cancel",
+                onConfirm: () => onShare("Some other name"),
+              })
+            }}
             icon={<ShareIcon />}
           />
         </View>

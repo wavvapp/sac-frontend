@@ -34,6 +34,7 @@ interface AuthContextData {
   registerUser: (username: string) => Promise<void>
   signInWithApple: (navigation: CredentialsScreenProps) => Promise<void>
   isOnline: boolean
+  showAlert: (props: any) => void
 }
 interface ExtendedUser extends User {
   access_token: string
@@ -47,6 +48,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const [user, setUser] = useState<User | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [currentToken, setCurrentToken] = useState<string | null>(null)
+  const [alertProps, setAlertProps] = useState<any | null>(null)
   const [isNewUser, setIsNewUser] = useState<boolean>(false)
   const { isOnline } = useOfflineHandler()
   const queryClient = useQueryClient()
@@ -234,6 +236,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     } else AlertDialog.close()
   }, [isOnline])
 
+  const showAlert = useCallback((props: any) => {
+    setAlertProps(props)
+    AlertDialog.open()
+  }, [])
   return (
     <AuthContext.Provider
       value={{
@@ -247,11 +253,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         registerUser,
         signInWithApple,
         isOnline,
+        showAlert,
       }}>
       {children}
       <AlertDialog
-        title="No connection"
+        title="No connection today"
         description="Make sure that you are connected to the internet and try again"
+        {...alertProps}
       />
     </AuthContext.Provider>
   )
