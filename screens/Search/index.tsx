@@ -20,7 +20,7 @@ import debounce from "lodash.debounce"
 import { useAddFriend } from "@/queries/friends"
 import { FriendsSkeleton } from "@/components/cards/FriendsSkeleton"
 import { onShare } from "@/utils/share"
-import { VerificationCodeCard } from "@/components/cards/Verification-code"
+import { CopiableText } from "@/components/cards/CopiableText"
 
 const FindFriends = () => {
   const [search, setSearch] = useState("")
@@ -136,7 +136,7 @@ const FindFriends = () => {
             onPress={() => {
               showAlert({
                 title: "Share this invite code with your friend",
-                description: <VerificationCodeCard />,
+                description: <CopiableText text="964 021" />,
                 variant: "confirm",
                 confirmText: "Share",
                 cancelText: "cancel",

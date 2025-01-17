@@ -27,6 +27,7 @@ export default function AlertDialog({
   buttonStyles = "primary",
 }: AlertDialogProps): JSX.Element {
   const [isVisible, setIsVisible] = useState(false)
+
   const close = useCallback(() => {
     setIsVisible(false)
     if (onClose) onClose()
@@ -37,9 +38,7 @@ export default function AlertDialog({
     if (onConfirm) onConfirm()
   }, [onConfirm])
 
-  const open = () => {
-    setIsVisible(true)
-  }
+  const open = () => setIsVisible(true)
   AlertDialog.open = open
   AlertDialog.close = close
 
@@ -87,7 +86,7 @@ export default function AlertDialog({
   )
 }
 
-AlertDialog.open = (_?: AlertDialogProps) => {}
+AlertDialog.open = () => {}
 AlertDialog.close = () => {}
 
 const styles = StyleSheet.create({
