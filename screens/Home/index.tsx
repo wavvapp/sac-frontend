@@ -26,6 +26,7 @@ import { useFriends } from "@/queries/friends"
 import { useMySignal } from "@/queries/signal"
 import { useOfflineHandler } from "@/hooks/useOfflineHandler"
 import { height, width } from "@/utils/dimensions"
+import { CopiableText } from "@/components/cards/CopiableText"
 
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -38,7 +39,7 @@ export default function HomeScreen() {
   const signalingRef = useRef<SignalingRef>(null)
   const navigation = useNavigation<HomeScreenProps>()
   const { data: allFriends } = useFriends()
-  const { user, isAuthenticated } = useAuth()
+  const { user, isAuthenticated, showAlert } = useAuth()
   const queryClient = useQueryClient()
   const { handleOfflineAction } = useOfflineHandler()
 
@@ -94,7 +95,16 @@ export default function HomeScreen() {
         <View style={styles.buttonContainer}>
           <CustomButton
             style={styles.iconButton}
-            onPress={() => onShare(user?.username)}>
+            onPress={() =>
+              showAlert({
+                title: "Share this invite code with your friend",
+                description: <CopiableText text="964 021" />,
+                variant: "confirm",
+                confirmText: "Share",
+                cancelText: "cancel",
+                onConfirm: () => onShare("Some other name"),
+              })
+            }>
             <ShareIcon color={theme.colors.white} />
           </CustomButton>
           <CustomButton

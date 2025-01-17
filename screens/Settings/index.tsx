@@ -12,9 +12,11 @@ import BellIcon from "@/components/vectors/BellIcon"
 import TrashIcon from "@/components/vectors/TrashIcon"
 import UserProfile from "@/components/cards/UserProfile"
 import { SettingOption } from "@/types"
+import { CopiableText } from "@/components/cards/CopiableText"
+import { onShare } from "@/utils/share"
 
 export default function SettingScreen() {
-  const { signOut } = useAuth()
+  const { signOut, showAlert } = useAuth()
 
   const handleSignOut = async () => {
     await signOut()
@@ -30,7 +32,15 @@ export default function SettingScreen() {
       title: "Your friends are not on Wavv?",
       description: "Invite them to join you",
       icon: <ShareIcon />,
-      onPress: () => {},
+      onPress: () =>
+        showAlert({
+          title: "Share this invite code with your friend",
+          description: <CopiableText text="964 021" />,
+          variant: "confirm",
+          confirmText: "Share",
+          cancelText: "cancel",
+          onConfirm: () => onShare("Some other name"),
+        }),
     },
     {
       title: "Push notifications",

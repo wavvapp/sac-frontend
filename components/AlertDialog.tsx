@@ -65,12 +65,13 @@ export default function AlertDialog({
                 variant="outline"
                 onPress={close}
                 title={cancelText}
-                containerStyles={styles.halfButton}
+                containerStyles={styles.button}
               />
               <CustomButton
                 variant={buttonStyles === "danger" ? "danger" : "secondary"}
                 onPress={handleConfirm}
                 title={confirmText}
+                containerStyles={styles.button}
               />
             </View>
           ) : (
@@ -126,9 +127,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     gap: 12,
   },
-  halfButton: {
-    width: "50%",
+  button: {
+    flex: 1,
     justifyContent: "center",
-    alignItems: "center",
+    paddingHorizontal: 16,
   },
 })
