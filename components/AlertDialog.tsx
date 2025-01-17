@@ -27,6 +27,16 @@ export default function AlertDialog({
   buttonStyles = "primary",
 }: AlertDialogProps): JSX.Element {
   const [isVisible, setIsVisible] = useState(false)
+  const [alertBody, setAlertBody] = useState<AlertDialogProps>({
+    title,
+    description,
+    cancelText,
+    confirmText,
+    onClose,
+    onConfirm,
+    variant,
+    buttonStyles,
+  })
 
   const close = useCallback(() => {
     setIsVisible(false)
@@ -38,7 +48,18 @@ export default function AlertDialog({
     if (onConfirm) onConfirm()
   }, [onConfirm])
 
-  const open = () => setIsVisible(true)
+  const open = (body?: AlertDialogProps) => {
+    if (body) setAlertBody(body)
+    else {
+      setAlertBody({
+        title: "No connection",
+        description:
+          "Make sure that you are connected to the internet and try again",
+        cancelText: "CLOSE",
+      })
+    }
+    setIsVisible(true)
+  }
   AlertDialog.open = open
   AlertDialog.close = close
 
@@ -50,34 +71,36 @@ export default function AlertDialog({
       onRequestClose={close}>
       <View style={styles.overlay}>
         <View style={styles.modalView}>
-          {title && (
+          {alertBody.title && (
             <CustomText style={styles.title} size="lg">
-              {title}
+              {alertBody.title}
             </CustomText>
           )}
           <CustomText style={styles.description} fontFamily="marfa">
-            {description}
+            {alertBody.description}
           </CustomText>
 
-          {variant === "confirm" ? (
+          {alertBody.variant === "confirm" ? (
             <View style={styles.buttonContainer}>
               <CustomButton
                 variant="outline"
                 onPress={handleConfirm}
-                title={cancelText}
+                title={alertBody.cancelText}
                 containerStyles={styles.halfButton}
               />
               <CustomButton
-                variant={buttonStyles === "danger" ? "danger" : "secondary"}
+                variant={
+                  alertBody.buttonStyles === "danger" ? "danger" : "secondary"
+                }
                 onPress={close}
-                title={confirmText}
+                title={alertBody.confirmText}
               />
             </View>
           ) : (
             <CustomButton
               variant="secondary"
               onPress={close}
-              title={cancelText}
+              title={alertBody.cancelText}
             />
           )}
         </View>
@@ -86,7 +109,7 @@ export default function AlertDialog({
   )
 }
 
-AlertDialog.open = () => {}
+AlertDialog.open = (_?: AlertDialogProps) => {}
 AlertDialog.close = () => {}
 
 const styles = StyleSheet.create({
@@ -114,6 +137,7 @@ const styles = StyleSheet.create({
     fontSize: theme.fontSize.lg,
     marginBottom: 7,
     fontWeight: Platform.OS === "ios" ? "semibold" : "bold",
+    maxWidth: 210,
   },
   description: {
     marginBottom: 26,

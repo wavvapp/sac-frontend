@@ -12,7 +12,7 @@ import api from "@/service"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { StatusBar } from "expo-status-bar"
 import { useQuery } from "@tanstack/react-query"
-import { onShare } from "@/utils/share"
+import { openShareDialog } from "@/utils/share"
 import ShareIcon from "@/components/vectors/ShareIcon"
 import { useAuth } from "@/contexts/AuthContext"
 import Header from "@/components/cards/Header"
@@ -132,7 +132,7 @@ const FindFriends = () => {
           <ActionCard
             title="Your friends are not on Wavv?"
             description="Invite them to join you"
-            onPress={() => onShare(user?.username)}
+            onPress={openShareDialog}
             icon={<ShareIcon />}
           />
         </View>

@@ -228,6 +228,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     setUser(updatedUserInfo)
   }
 
+  useEffect(() => {
+    if (!isOnline) {
+      AlertDialog.open()
+    } else AlertDialog.close()
+  }, [isOnline])
+
   return (
     <AuthContext.Provider
       value={{
@@ -243,12 +249,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         isOnline,
       }}>
       {children}
-      {!isOnline && (
-        <AlertDialog
-          title="No connection"
-          description="Make sure that you are connected to the internet and try again"
-        />
-      )}
+      <AlertDialog
+        title="No connection"
+        description="Make sure that you are connected to the internet and try again"
+      />
     </AuthContext.Provider>
   )
 }
