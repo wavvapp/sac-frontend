@@ -1,14 +1,17 @@
 import { User } from "@/types"
-import { View, StyleSheet } from "react-native"
+import { View, StyleSheet, TouchableOpacity } from "react-native"
 import UserAvatar from "@/components/ui/UserAvatar"
 import UserAvailability from "@/components/cards/UserAvailability"
 import UserInfo from "@/components/UserInfo"
 import { theme } from "@/theme"
+import BellIcon from "@/components/vectors/BellIcon"
+
 interface SignalingUserProps {
   user: User
   online: boolean
   isLast: boolean
   isFirst: boolean
+  notificationEnabled: boolean
 }
 
 export default function SignalingUser({
@@ -16,7 +19,11 @@ export default function SignalingUser({
   online,
   isLast,
   isFirst,
+  notificationEnabled,
 }: SignalingUserProps) {
+  const bellColor = notificationEnabled
+    ? theme.colors.black
+    : theme.colors.black_200
   return (
     <View
       style={[
@@ -37,6 +44,9 @@ export default function SignalingUser({
           <UserInfo fullName={user.names} username={user.username} />
         )}
       </View>
+      <TouchableOpacity>
+        <BellIcon color={bellColor} />
+      </TouchableOpacity>
     </View>
   )
 }
@@ -45,6 +55,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 10,
     paddingHorizontal: 20,
+    alignItems: "center",
   },
   lastCardInTheListStyles: {
     paddingBottom: 20,
