@@ -45,7 +45,7 @@ export default function SignalingUser({
         )}
       </View>
       <TouchableOpacity>
-        <BellIcon color={bellColor} />
+        <BellIcon width={16} height={16} color={bellColor} />
       </TouchableOpacity>
     </View>
   )
