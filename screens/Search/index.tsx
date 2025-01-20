@@ -66,6 +66,7 @@ const FindFriends = () => {
     if (user.isFriend || addFriend.isPending) return
     addFriend.mutate(user.id)
   }
+  console.log(user)
 
   return (
     <SafeAreaView style={styles.container}>
@@ -102,7 +103,10 @@ const FindFriends = () => {
                     </View>
                   </View>
                   {user.isFriend ? (
-                    <CheckIcon color={theme.colors.black} />
+                    <TouchableOpacity
+                      onPress={() => console.log("Unfriend a user")}>
+                      <CheckIcon color={theme.colors.black} />
+                    </TouchableOpacity>
                   ) : (
                     <CustomButton
                       variant="outline"
