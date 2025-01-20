@@ -5,7 +5,7 @@ import { theme } from "@/theme"
 import { CustomButton } from "@/components/ui/Button"
 import { AlertDialogVariant, ButtonVariant } from "@/types"
 
-export interface AlertDialogProps {
+interface AlertDialogProps {
   title?: string
   description: React.ReactNode
   cancelText?: string
@@ -19,8 +19,8 @@ export interface AlertDialogProps {
 
 export default function AlertDialog(props: AlertDialogProps): JSX.Element {
   const [isVisible, setIsVisible] = useState(false)
+  const [dialogProps, setDialogProps] = useState(props)
 
-  const [propsState, setPropsState] = useState(props)
   const {
     title,
     description,
@@ -31,7 +31,7 @@ export default function AlertDialog(props: AlertDialogProps): JSX.Element {
     variant = "primary",
     buttonStyles = "primary",
     closeAutomatically = true,
-  } = propsState
+  } = dialogProps
   const close = useCallback(() => {
     setIsVisible(false)
     if (onClose) onClose()
@@ -43,9 +43,9 @@ export default function AlertDialog(props: AlertDialogProps): JSX.Element {
   }, [closeAutomatically, onConfirm])
 
   const open = (props?: AlertDialogProps) => {
-    if (props) setPropsState(props)
+    if (props) setDialogProps(props)
     else
-      setPropsState({
+      setDialogProps({
         title: "No connection",
         description:
           "Make sure that you are connected to the internet and try again",
