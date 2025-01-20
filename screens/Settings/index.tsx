@@ -39,16 +39,16 @@ export default function SettingScreen() {
       onPress: () => {},
     },
     {
-      title: "Push notifications",
+      title: "Log out",
       description: "",
       icon: <LogoutIcon />,
-      onPress: () => {},
+      onPress: handleSignOut,
     },
     {
       title: "Delete Account",
       description: "",
       icon: <TrashIcon />,
-      onPress: handleSignOut,
+      onPress: () => {},
       titleStyle: { color: theme.colors.red },
     },
   ]
