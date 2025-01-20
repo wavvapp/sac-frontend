@@ -20,7 +20,7 @@ import * as AppleAuthentication from "expo-apple-authentication"
 import { handleApiSignIn } from "@/libs/handleApiSignIn"
 import { useQueryClient } from "@tanstack/react-query"
 import api from "@/service"
-import AlertDialog from "@/components/AlertDialog"
+import AlertDialog, { AlertDialogProps } from "@/components/AlertDialog"
 import { useOfflineHandler } from "@/hooks/useOfflineHandler"
 
 interface AuthContextData {
@@ -48,7 +48,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const [user, setUser] = useState<User | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [currentToken, setCurrentToken] = useState<string | null>(null)
-  const [alertProps, setAlertProps] = useState<any | null>(null)
+  const [alertProps, setAlertProps] = useState<AlertDialogProps | null>(null)
   const [isNewUser, setIsNewUser] = useState<boolean>(false)
   const { isOnline } = useOfflineHandler()
   const queryClient = useQueryClient()

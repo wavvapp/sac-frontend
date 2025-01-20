@@ -5,7 +5,7 @@ import { theme } from "@/theme"
 import { CustomButton } from "@/components/ui/Button"
 import { AlertDialogVariant, ButtonVariant } from "@/types"
 
-interface AlertDialogProps {
+export interface AlertDialogProps {
   title?: string
   description: React.ReactNode
   cancelText?: string
