@@ -20,7 +20,7 @@ import * as AppleAuthentication from "expo-apple-authentication"
 import { handleApiSignIn } from "@/libs/handleApiSignIn"
 import { useQueryClient } from "@tanstack/react-query"
 import api from "@/service"
-import AlertDialog, { AlertDialogProps } from "@/components/AlertDialog"
+import AlertDialog from "@/components/AlertDialog"
 import { useOfflineHandler } from "@/hooks/useOfflineHandler"
 
 interface AuthContextData {
@@ -34,7 +34,6 @@ interface AuthContextData {
   registerUser: (username: string) => Promise<void>
   signInWithApple: (navigation: CredentialsScreenProps) => Promise<void>
   isOnline: boolean
-  showAlert: (props: any) => void
 }
 interface ExtendedUser extends User {
   access_token: string
@@ -48,7 +47,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const [user, setUser] = useState<User | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [currentToken, setCurrentToken] = useState<string | null>(null)
-  const [alertProps, setAlertProps] = useState<AlertDialogProps | null>(null)
   const [isNewUser, setIsNewUser] = useState<boolean>(false)
   const { isOnline } = useOfflineHandler()
   const queryClient = useQueryClient()
@@ -235,14 +233,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
   useEffect(() => {
     if (isOnline) return
-    setAlertProps(null)
     AlertDialog.open()
   }, [isOnline])
-
-  const showAlert = useCallback((props: any) => {
-    setAlertProps(props)
-    AlertDialog.open()
-  }, [])
 
   return (
     <AuthContext.Provider
@@ -257,13 +249,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         registerUser,
         signInWithApple,
         isOnline,
-        showAlert,
       }}>
       {children}
       <AlertDialog
-        title="No connection today"
+        title="No connection"
         description="Make sure that you are connected to the internet and try again"
-        {...alertProps}
       />
     </AuthContext.Provider>
   )

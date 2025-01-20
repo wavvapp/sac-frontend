@@ -14,9 +14,10 @@ import UserProfile from "@/components/cards/UserProfile"
 import { SettingOption } from "@/types"
 import { CopiableText } from "@/components/cards/CopiableText"
 import { onShare } from "@/utils/share"
+import AlertDialog from "@/components/AlertDialog"
 
 export default function SettingScreen() {
-  const { signOut, showAlert, user } = useAuth()
+  const { signOut, user } = useAuth()
 
   const handleSignOut = async () => {
     await signOut()
@@ -33,7 +34,7 @@ export default function SettingScreen() {
       description: "Invite them to join you",
       icon: <ShareIcon />,
       onPress: () =>
-        showAlert({
+        AlertDialog.open({
           title: "Share this invite code with your friend",
           description: <CopiableText text={user?.verificationCode || ""} />,
           variant: "confirm",

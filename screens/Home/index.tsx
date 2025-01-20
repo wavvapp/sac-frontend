@@ -27,6 +27,7 @@ import { useMySignal } from "@/queries/signal"
 import { useOfflineHandler } from "@/hooks/useOfflineHandler"
 import { height, width } from "@/utils/dimensions"
 import { CopiableText } from "@/components/cards/CopiableText"
+import AlertDialog from "@/components/AlertDialog"
 
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -39,7 +40,7 @@ export default function HomeScreen() {
   const signalingRef = useRef<SignalingRef>(null)
   const navigation = useNavigation<HomeScreenProps>()
   const { data: allFriends } = useFriends()
-  const { user, isAuthenticated, showAlert } = useAuth()
+  const { user, isAuthenticated } = useAuth()
   const queryClient = useQueryClient()
   const { handleOfflineAction } = useOfflineHandler()
 
@@ -96,7 +97,7 @@ export default function HomeScreen() {
           <CustomButton
             style={styles.iconButton}
             onPress={() =>
-              showAlert({
+              AlertDialog.open({
                 title: "Share this invite code with your friend",
                 // TODO: change this once BE is ready
                 description: (

@@ -21,11 +21,12 @@ import { useAddFriend } from "@/queries/friends"
 import { FriendsSkeleton } from "@/components/cards/FriendsSkeleton"
 import { onShare } from "@/utils/share"
 import { CopiableText } from "@/components/cards/CopiableText"
+import AlertDialog from "@/components/AlertDialog"
 
 const FindFriends = () => {
   const [search, setSearch] = useState("")
   const [searchQueryText, setSearchQueryText] = useState("")
-  const { showAlert, user } = useAuth()
+  const { user } = useAuth()
   const addFriend = useAddFriend()
 
   const { data: users = [], isLoading } = useQuery<User[]>({
@@ -134,7 +135,7 @@ const FindFriends = () => {
             title="Your friends are not on Wavv?"
             description="Invite them to join you"
             onPress={() => {
-              showAlert({
+              AlertDialog.open({
                 title: "Share this invite code with your friend",
                 description: (
                   <CopiableText text={user?.verificationCode || ""} />

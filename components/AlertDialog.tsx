@@ -17,19 +17,21 @@ export interface AlertDialogProps {
   closeAutomatically?: boolean
 }
 
-export default function AlertDialog({
-  title,
-  description,
-  cancelText = "CLOSE",
-  confirmText = "CONFIRM",
-  onClose,
-  onConfirm,
-  variant = "primary",
-  buttonStyles = "primary",
-  closeAutomatically = true,
-}: AlertDialogProps): JSX.Element {
+export default function AlertDialog(props: AlertDialogProps): JSX.Element {
   const [isVisible, setIsVisible] = useState(false)
 
+  const [propsState, setPropsState] = useState(props)
+  const {
+    title,
+    description,
+    cancelText = "CLOSE",
+    confirmText = "CONFIRM",
+    onClose,
+    onConfirm,
+    variant = "primary",
+    buttonStyles = "primary",
+    closeAutomatically = true,
+  } = propsState
   const close = useCallback(() => {
     setIsVisible(false)
     if (onClose) onClose()
@@ -40,7 +42,16 @@ export default function AlertDialog({
     if (onConfirm) onConfirm()
   }, [closeAutomatically, onConfirm])
 
-  const open = () => setIsVisible(true)
+  const open = (props?: AlertDialogProps) => {
+    if (props) setPropsState(props)
+    else
+      setPropsState({
+        title: "No connection",
+        description:
+          "Make sure that you are connected to the internet and try again",
+      })
+    setIsVisible(true)
+  }
   AlertDialog.open = open
   AlertDialog.close = close
 
@@ -94,7 +105,7 @@ export default function AlertDialog({
   )
 }
 
-AlertDialog.open = () => {}
+AlertDialog.open = (_?: AlertDialogProps) => {}
 AlertDialog.close = () => {}
 
 const styles = StyleSheet.create({
