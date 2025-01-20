@@ -1,4 +1,4 @@
-import { View, StyleSheet } from "react-native"
+import { View, StyleSheet, TextInput } from "react-native"
 import { theme } from "@/theme"
 import { useAuth } from "@/contexts/AuthContext"
 import LogoutIcon from "@/components/vectors/LogoutIcon"
@@ -12,19 +12,32 @@ import BellIcon from "@/components/vectors/BellIcon"
 import TrashIcon from "@/components/vectors/TrashIcon"
 import UserProfile from "@/components/cards/UserProfile"
 import { SettingOption } from "@/types"
+import BottomModal from "@/components/BottomModal"
+import EditActivity from "@/screens/EditActivity"
+import { useRef, useState } from "react"
 
 export default function SettingScreen() {
-  const { signOut } = useAuth()
+  const { signOut, user } = useAuth()
+  const [editProfile, setEditProfile] = useState(false)
+  const inputRef = useRef<TextInput>(null)
 
   const handleSignOut = async () => {
     await signOut()
+  }
+  const editUserProfile = () => {
+    console.log("editing")
+    setEditProfile(false)
+  }
+  const toggleEditProfileModal = () => {
+    if (editProfile) return editUserProfile()
+    setEditProfile(!editProfile)
   }
   const settingOptions: SettingOption[] = [
     {
       title: "Personal information",
       description: "Update your data",
       icon: <UserIcon />,
-      onPress: () => {},
+      onPress: toggleEditProfileModal,
     },
     {
       title: "Your friends are not on Wavv?",
@@ -71,6 +84,17 @@ export default function SettingScreen() {
           ))}
         </View>
       </View>
+      <BottomModal visible={editProfile} onClose={toggleEditProfileModal}>
+        <EditActivity
+          closeModal={toggleEditProfileModal}
+          title="Name"
+          placeholderText="Enter your name to continue"
+          buttonText="SAVE"
+          initialInputValue={user?.names || ""}
+          onPress={editUserProfile}
+          inputRef={inputRef}
+        />
+      </BottomModal>
     </SafeAreaView>
   )
 }
