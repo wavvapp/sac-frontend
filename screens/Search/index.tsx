@@ -144,6 +144,7 @@ const FindFriends = () => {
                 cancelText: "cancel",
                 onConfirm: () =>
                   onShare(user?.username, user?.verificationCode),
+                closeAutomatically: false,
               })
             }}
             icon={<ShareIcon />}

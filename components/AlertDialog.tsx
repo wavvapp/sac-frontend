@@ -14,6 +14,7 @@ export interface AlertDialogProps {
   onConfirm?: () => void
   variant?: AlertDialogVariant
   buttonStyles?: ButtonVariant
+  closeAutomatically?: boolean
 }
 
 export default function AlertDialog({
@@ -25,6 +26,7 @@ export default function AlertDialog({
   onConfirm,
   variant = "primary",
   buttonStyles = "primary",
+  closeAutomatically = true,
 }: AlertDialogProps): JSX.Element {
   const [isVisible, setIsVisible] = useState(false)
 
@@ -34,9 +36,9 @@ export default function AlertDialog({
   }, [onClose])
 
   const handleConfirm = useCallback(() => {
-    setIsVisible(false)
+    closeAutomatically && setIsVisible(false)
     if (onConfirm) onConfirm()
-  }, [onConfirm])
+  }, [closeAutomatically, onConfirm])
 
   const open = () => setIsVisible(true)
   AlertDialog.open = open
@@ -92,8 +94,8 @@ export default function AlertDialog({
   )
 }
 
-AlertDialog.open = () => { }
-AlertDialog.close = () => { }
+AlertDialog.open = () => {}
+AlertDialog.close = () => {}
 
 const styles = StyleSheet.create({
   overlay: {

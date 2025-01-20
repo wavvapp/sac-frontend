@@ -107,6 +107,7 @@ export default function HomeScreen() {
                 cancelText: "cancel",
                 onConfirm: () =>
                   onShare(user?.username, user?.verificationCode),
+                closeAutomatically: false,
               })
             }>
             <ShareIcon color={theme.colors.white} />

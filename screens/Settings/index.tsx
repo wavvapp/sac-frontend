@@ -40,6 +40,7 @@ export default function SettingScreen() {
           confirmText: "Share",
           cancelText: "cancel",
           onConfirm: () => onShare(user?.username, user?.verificationCode),
+          closeAutomatically: false,
         }),
     },
     {
