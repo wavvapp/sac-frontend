@@ -1,8 +1,11 @@
-import { APP_LINK } from "@/constants/links"
 import { Share } from "react-native"
 
-export const onShare = (username: string = "me") => {
+export const onShare = (
+  username: string = "me",
+  verificationCode: string = "000 000",
+) => {
   Share.share({
-    message: `Hey! Join ${username} using Wavv and keep up to date with things they do! Download the app here: ${APP_LINK}`,
+    message: `Hey! Join me using Wavv and keep up to date with things I do!
+Use my invite code ${verificationCode} to sign up and connect with me. You can find me as: ${username}  once you’re in!`,
   })
 }

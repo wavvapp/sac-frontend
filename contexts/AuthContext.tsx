@@ -70,12 +70,15 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         email,
         username,
         profilePictureUrl: profilePictureUrl,
+        // TODO: Use the code from backend once its available
+        verificationCode: "964 201",
       }
       await AsyncStorage.setItem("@Auth:accessToken", accessToken)
       await AsyncStorage.setItem("@Auth:refreshToken", refreshToken)
       await AsyncStorage.setItem("@Auth:user", JSON.stringify(user))
       await prefetchFriends()
-      setUser(userData)
+      // TODO: use the code from the backend once its available
+      setUser({ ...userData, verificationCode: "964 201" })
     } catch (err) {
       console.error("error with saving user info")
     }
@@ -231,15 +234,16 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   }
 
   useEffect(() => {
-    if (!isOnline) {
-      AlertDialog.open()
-    } else AlertDialog.close()
+    if (isOnline) return
+    setAlertProps(null)
+    AlertDialog.open()
   }, [isOnline])
 
   const showAlert = useCallback((props: any) => {
     setAlertProps(props)
     AlertDialog.open()
   }, [])
+
   return (
     <AuthContext.Provider
       value={{

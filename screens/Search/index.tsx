@@ -25,7 +25,7 @@ import { CopiableText } from "@/components/cards/CopiableText"
 const FindFriends = () => {
   const [search, setSearch] = useState("")
   const [searchQueryText, setSearchQueryText] = useState("")
-  const { showAlert } = useAuth()
+  const { showAlert, user } = useAuth()
   const addFriend = useAddFriend()
 
   const { data: users = [], isLoading } = useQuery<User[]>({
@@ -136,11 +136,14 @@ const FindFriends = () => {
             onPress={() => {
               showAlert({
                 title: "Share this invite code with your friend",
-                description: <CopiableText text="964 021" />,
+                description: (
+                  <CopiableText text={user?.verificationCode || ""} />
+                ),
                 variant: "confirm",
                 confirmText: "Share",
                 cancelText: "cancel",
-                onConfirm: () => onShare("Some other name"),
+                onConfirm: () =>
+                  onShare(user?.username, user?.verificationCode),
               })
             }}
             icon={<ShareIcon />}

@@ -55,9 +55,14 @@ export default function AlertDialog({
               {title}
             </CustomText>
           )}
-          <CustomText style={styles.description} fontFamily="marfa">
-            {description}
-          </CustomText>
+
+          {typeof description === "string" ? (
+            <CustomText style={styles.description} fontFamily="marfa">
+              {description}
+            </CustomText>
+          ) : (
+            <View style={styles.description}>{description}</View>
+          )}
 
           {variant === "confirm" ? (
             <View style={styles.buttonContainer}>
@@ -87,8 +92,8 @@ export default function AlertDialog({
   )
 }
 
-AlertDialog.open = () => {}
-AlertDialog.close = () => {}
+AlertDialog.open = () => { }
+AlertDialog.close = () => { }
 
 const styles = StyleSheet.create({
   overlay: {

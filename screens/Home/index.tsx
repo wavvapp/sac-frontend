@@ -98,11 +98,15 @@ export default function HomeScreen() {
             onPress={() =>
               showAlert({
                 title: "Share this invite code with your friend",
-                description: <CopiableText text="964 021" />,
+                // TODO: change this once BE is ready
+                description: (
+                  <CopiableText text={user?.verificationCode || ""} />
+                ),
                 variant: "confirm",
                 confirmText: "Share",
                 cancelText: "cancel",
-                onConfirm: () => onShare("Some other name"),
+                onConfirm: () =>
+                  onShare(user?.username, user?.verificationCode),
               })
             }>
             <ShareIcon color={theme.colors.white} />

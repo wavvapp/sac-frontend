@@ -16,7 +16,7 @@ import { CopiableText } from "@/components/cards/CopiableText"
 import { onShare } from "@/utils/share"
 
 export default function SettingScreen() {
-  const { signOut, showAlert } = useAuth()
+  const { signOut, showAlert, user } = useAuth()
 
   const handleSignOut = async () => {
     await signOut()
@@ -35,11 +35,11 @@ export default function SettingScreen() {
       onPress: () =>
         showAlert({
           title: "Share this invite code with your friend",
-          description: <CopiableText text="964 021" />,
+          description: <CopiableText text={user?.verificationCode || ""} />,
           variant: "confirm",
           confirmText: "Share",
           cancelText: "cancel",
-          onConfirm: () => onShare("Some other name"),
+          onConfirm: () => onShare(user?.username, user?.verificationCode),
         }),
     },
     {
