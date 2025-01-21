@@ -10,7 +10,6 @@ interface PrefetchOptions {
 }
 
 interface UsePrefetchResult {
-  isPrefetching: boolean
   prefetchError: Error | null
   startPrefetch: (options?: PrefetchOptions) => Promise<void>
   resetPrefetchState: () => void
@@ -18,11 +17,9 @@ interface UsePrefetchResult {
 
 export const usePrefetch = (): UsePrefetchResult => {
   const queryClient = useQueryClient()
-  const [isPrefetching, setIsPrefetching] = useState(true)
   const [prefetchError, setPrefetchError] = useState<Error | null>(null)
 
   const resetPrefetchState = useCallback(() => {
-    setIsPrefetching(false)
     setPrefetchError(null)
   }, [])
 
@@ -58,7 +55,6 @@ export const usePrefetch = (): UsePrefetchResult => {
     async (options: PrefetchOptions = {}) => {
       const { onSuccess, onError } = options
 
-      setIsPrefetching(true)
       setPrefetchError(null)
 
       try {
@@ -69,15 +65,12 @@ export const usePrefetch = (): UsePrefetchResult => {
           error instanceof Error ? error : new Error("Prefetch failed")
         setPrefetchError(finalError)
         onError?.(finalError)
-      } finally {
-        setIsPrefetching(false)
       }
     },
     [prefetchConfigs],
   )
 
   return {
-    isPrefetching,
     prefetchError,
     startPrefetch,
     resetPrefetchState,

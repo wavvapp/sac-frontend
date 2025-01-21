@@ -13,7 +13,7 @@ import CreateCredentials from "@/screens/Authentication/SignUp/CreateCredentials
 import { StatusProvider } from "@/contexts/StatusContext"
 import { usePrefetch } from "@/hooks/useSplashScreen"
 import * as SplashScreen from "expo-splash-screen"
-import { useEffect, useRef } from "react"
+import { useCallback, useEffect, useRef } from "react"
 import { StaticPageType } from "@/types"
 import StaticContentScreen from "@/screens/StaticContentScreen"
 import AlertDialog from "@/components/AlertDialog"
@@ -34,31 +34,30 @@ export type RootStackParamList = {
 export default function AppNavigator() {
   const Stack = createNativeStackNavigator<RootStackParamList>()
   const { isAuthenticated, isNewUser, isOnline } = useAuth()
-  const { isPrefetching, startPrefetch } = usePrefetch()
+  const { startPrefetch } = usePrefetch()
 
   const isInitialized = useRef(false)
 
   const handleLayout = () => {
     if (!isInitialized.current) {
       isInitialized.current = true
-      // initializeApp()
     }
   }
-  useEffect(() => {
-    const initializeApp = async () => {
-      await startPrefetch({
-        onSuccess: async () => {
-          await SplashScreen.hideAsync()
-        },
-        onError: async (error) => {
-          console.error("Prefetch failed---------:", error)
-          await SplashScreen.hideAsync()
-        },
-      })
-    }
-
-    initializeApp()
+  const initializeApp = useCallback(async () => {
+    await startPrefetch({
+      onSuccess: async () => {
+        await SplashScreen.hideAsync()
+      },
+      onError: async (error) => {
+        console.error("Prefetch failed---------:", error)
+        await SplashScreen.hideAsync()
+      },
+    })
   }, [startPrefetch])
+
+  useEffect(() => {
+    initializeApp()
+  }, [initializeApp])
 
   useEffect(() => {
     if (!isOnline) {
@@ -66,9 +65,6 @@ export default function AppNavigator() {
     }
   }, [isOnline])
 
-  if (isPrefetching) {
-    return null
-  }
   return (
     <View onLayout={handleLayout} style={{ flex: 1 }}>
       <NavigationContainer>
