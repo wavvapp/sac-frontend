@@ -12,6 +12,9 @@ import BellIcon from "@/components/vectors/BellIcon"
 import TrashIcon from "@/components/vectors/TrashIcon"
 import UserProfile from "@/components/cards/UserProfile"
 import { SettingOption } from "@/types"
+import { CopiableText } from "@/components/cards/CopiableText"
+import { onShare } from "@/utils/share"
+import AlertDialog from "@/components/AlertDialog"
 import BottomModal from "@/components/BottomModal"
 import EditActivity from "@/screens/EditActivity"
 import { useRef, useState } from "react"
@@ -44,7 +47,16 @@ export default function SettingScreen() {
       title: "Your friends are not on Wavv?",
       description: "Invite them to join you",
       icon: <ShareIcon />,
-      onPress: () => {},
+      onPress: () =>
+        AlertDialog.open({
+          title: "Share this invite code with your friend",
+          description: <CopiableText text={user?.verificationCode || ""} />,
+          variant: "confirm",
+          confirmText: "Share",
+          cancelText: "cancel",
+          onConfirm: () => onShare(user?.username, user?.verificationCode),
+          closeAutomatically: false,
+        }),
     },
     {
       title: "Push notifications",
@@ -53,16 +65,16 @@ export default function SettingScreen() {
       onPress: () => {},
     },
     {
-      title: "Push notifications",
+      title: "Log out",
       description: "",
       icon: <LogoutIcon />,
-      onPress: () => {},
+      onPress: handleSignOut,
     },
     {
       title: "Delete Account",
       description: "",
       icon: <TrashIcon />,
-      onPress: handleSignOut,
+      onPress: () => {},
       titleStyle: { color: theme.colors.red },
     },
   ]
