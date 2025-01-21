@@ -19,26 +19,26 @@ import { useUpdateUserInfo } from "@/queries/user"
 
 export default function SettingScreen() {
   const { signOut, user } = useAuth()
-  const [editProfile, setEditProfile] = useState(false)
+  const [editUserInfo, setEditUserInfo] = useState(false)
   const inputRef = useRef<TextInput>(null)
-  const updateUserProfile = useUpdateUserInfo()
+  const updateUser = useUpdateUserInfo()
 
   const handleSignOut = async () => {
     await signOut()
   }
-  const editUserProfile = (newNames: string) => {
-    updateUserProfile.mutate({ names: newNames })
-    setEditProfile(false)
+  const updateUserInfo = (newNames: string) => {
+    updateUser.mutate({ names: newNames })
+    setEditUserInfo(false)
   }
-  const toggleEditProfileModal = () => {
-    setEditProfile(!editProfile)
+  const toggleEditInfoModal = () => {
+    setEditUserInfo(!editUserInfo)
   }
   const settingOptions: SettingOption[] = [
     {
       title: "Personal information",
       description: "Update your data",
       icon: <UserIcon />,
-      onPress: toggleEditProfileModal,
+      onPress: toggleEditInfoModal,
     },
     {
       title: "Your friends are not on Wavv?",
@@ -85,14 +85,14 @@ export default function SettingScreen() {
           ))}
         </View>
       </View>
-      <BottomModal visible={editProfile} onClose={toggleEditProfileModal}>
+      <BottomModal visible={editUserInfo} onClose={toggleEditInfoModal}>
         <EditActivity
-          closeModal={toggleEditProfileModal}
+          closeModal={toggleEditInfoModal}
           title="Name"
           placeholderText="Enter your name to continue"
           buttonText="SAVE"
           initialInputValue={user?.names || ""}
-          onPress={editUserProfile}
+          onPress={updateUserInfo}
           inputRef={inputRef}
         />
       </BottomModal>
