@@ -11,6 +11,7 @@ import { CredentialsScreenProps } from "./SignUp/CreateCredentials"
 import AppleIcon from "@/components/vectors/AppleIcon"
 import GoogleIcon from "@/components/vectors/GoogleIcon"
 import { StaticPageType } from "@/types"
+import { height } from "@/utils/dimensions"
 
 GoogleSignin.configure({
   webClientId: process.env.WEB_CLIENT_ID,
@@ -29,8 +30,8 @@ export default function EntryScreen() {
     await signInWithApple(navigation)
   }
 
-  const navigateToSaticScreen = (screen: StaticPageType) => {
-    navigation.navigate("StaticContentScreen", { page: screen })
+  const navigateToStaticScreen = (screen: StaticPageType) => {
+    navigation.navigate("StaticContentScreen", { pageSlug: screen })
   }
 
   return (
@@ -68,13 +69,13 @@ export default function EntryScreen() {
             <Text> Sign In / Create an account </Text>
             you agree to our{" "}
             <Text
-              onPress={() => navigateToSaticScreen("terms")}
+              onPress={() => navigateToStaticScreen("terms")}
               style={styles.underline}>
               Terms of Services
             </Text>
             . Learn more about our{" "}
             <Text
-              onPress={() => navigateToSaticScreen("privacy")}
+              onPress={() => navigateToStaticScreen("privacy")}
               style={styles.underline}>
               Privacy Policy
             </Text>{" "}
@@ -93,12 +94,13 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    paddingVertical: 70,
+    paddingTop: height * 0.4,
+    paddingBottom: 70,
     justifyContent: "space-between",
   },
   logoContainer: {
-    paddingTop: 227,
     alignItems: "center",
+    alignSelf: "center",
     marginBottom: 20,
   },
   description: {
@@ -113,6 +115,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 12,
     flex: 0,
+    paddingHorizontal: 2,
   },
 
   agreementText: {

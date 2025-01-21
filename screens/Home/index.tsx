@@ -2,7 +2,7 @@ import UserStatus from "@/components/cards/UserStatus"
 // import PerlinNoise from "@/components/PerlinNoise"
 import { RootStackParamList } from "@/navigation"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
-import { StyleSheet, View, Dimensions, StatusBar, Platform } from "react-native"
+import { StyleSheet, View, StatusBar, Platform } from "react-native"
 import { runOnJS, useDerivedValue } from "react-native-reanimated"
 import { AnimatedSwitch } from "@/components/AnimatedSwitch"
 import { useCallback, useRef, useState } from "react"
@@ -25,13 +25,13 @@ import api from "@/service"
 import { useFriends } from "@/queries/friends"
 import { useMySignal } from "@/queries/signal"
 import { useOfflineHandler } from "@/hooks/useOfflineHandler"
+import { height, width } from "@/utils/dimensions"
 
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
   "Home"
 >
 
-const { width } = Dimensions.get("window")
 export default function HomeScreen() {
   const [_, setIsVisible] = useState(false)
   const { isOn } = useStatus()
@@ -70,12 +70,12 @@ export default function HomeScreen() {
     }, [isAuthenticated, refetchPoints]),
   )
   const { isPlaceholderData } = useMySignal()
-
   const handleWebsiteOpen = async () => {
-    await WebBrowser.openBrowserAsync(
-      "https://7axab-zyaaa-aaaao-qjv7a-cai.icp0.io/",
-    )
+    if (process.env.POINTS_CANISTER_URL) {
+      await WebBrowser.openBrowserAsync(process.env.POINTS_CANISTER_URL)
+    }
   }
+
   useDerivedValue(() => {
     if (isOn.value) {
       return runOnJS(setIsVisible)(true)
@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingTop:
       Platform.OS === "ios"
-        ? Dimensions.get("window").height >= 812
+        ? height >= 812
           ? 47
           : 27
         : StatusBar.currentHeight || 0,

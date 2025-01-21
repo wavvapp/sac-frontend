@@ -7,6 +7,7 @@ import {
 } from "react-native"
 import { InputVariant, TypographySizeVariant } from "@/types"
 import { theme } from "@/theme"
+import { forwardRef, Ref } from "react"
 
 const placeHolderColorMap: Record<InputVariant, string> = {
   primary: theme.colors.black_500,
@@ -21,17 +22,20 @@ interface InputProps extends TextInputProps {
   handleTextChange: (text: string) => void
 }
 
-export default function Input({
-  value = "",
-  variant = "primary",
-  textSize = "base",
-  placeholder = "",
-  handleTextChange,
-  keyboardType = "default",
-  containerStyle = {},
-  style,
-  ...rest
-}: InputProps) {
+function Input(
+  {
+    value = "",
+    variant = "primary",
+    textSize = "base",
+    placeholder = "",
+    handleTextChange,
+    keyboardType = "default",
+    containerStyle = {},
+    style,
+    ...rest
+  }: InputProps,
+  ref: Ref<TextInput>,
+) {
   const variantStyles = {
     primary: {
       container: styles.primaryContainer,
@@ -68,10 +72,13 @@ export default function Input({
         onChangeText={handleTextChange}
         keyboardType={keyboardType}
         {...rest}
+        ref={ref}
       />
     </View>
   )
 }
+
+export default forwardRef(Input)
 
 const styles = StyleSheet.create({
   container: {
