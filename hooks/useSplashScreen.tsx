@@ -2,6 +2,7 @@ import { useState, useCallback, useMemo } from "react"
 import { useQueryClient } from "@tanstack/react-query"
 import api from "@/service"
 import { Friend } from "@/types"
+import * as SplashScreen from "expo-splash-screen"
 
 interface PrefetchOptions {
   onSuccess?: () => void
@@ -51,24 +52,18 @@ export const usePrefetch = (): UsePrefetchResult => {
     return [prefetchUsers, prefetchSignal]
   }, [prefetchSignal, prefetchUsers])
 
-  const startPrefetch = useCallback(
-    async (options: PrefetchOptions = {}) => {
-      const { onSuccess, onError } = options
-
-      setPrefetchError(null)
-
-      try {
-        await Promise.all(prefetchConfigs.map((fn) => fn()))
-        onSuccess?.()
-      } catch (error) {
-        const finalError =
-          error instanceof Error ? error : new Error("Prefetch failed")
-        setPrefetchError(finalError)
-        onError?.(finalError)
-      }
-    },
-    [prefetchConfigs],
-  )
+  const startPrefetch = useCallback(async () => {
+    setPrefetchError(null)
+    try {
+      await Promise.all(prefetchConfigs.map((fn) => fn()))
+    } catch (error) {
+      const finalError =
+        error instanceof Error ? error : new Error("Prefetch failed")
+      setPrefetchError(finalError)
+    } finally {
+      await SplashScreen.hideAsync()
+    }
+  }, [prefetchConfigs])
 
   return {
     prefetchError,

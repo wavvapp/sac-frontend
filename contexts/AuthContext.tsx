@@ -20,6 +20,7 @@ import { handleApiSignIn } from "@/libs/handleApiSignIn"
 import { useQueryClient } from "@tanstack/react-query"
 import AlertDialog from "@/components/AlertDialog"
 import { useOfflineHandler } from "@/hooks/useOfflineHandler"
+import { usePrefetch } from "@/hooks/useSplashScreen"
 
 interface AuthContextData {
   user: User | null
@@ -48,6 +49,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const [isNewUser, setIsNewUser] = useState<boolean>(false)
   const { isOnline } = useOfflineHandler()
   const queryClient = useQueryClient()
+  const { startPrefetch } = usePrefetch()
 
   async function completeSignIn(userData: ExtendedUser): Promise<void> {
     try {
@@ -70,6 +72,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       await AsyncStorage.setItem("@Auth:accessToken", accessToken)
       await AsyncStorage.setItem("@Auth:refreshToken", refreshToken)
       await AsyncStorage.setItem("@Auth:user", JSON.stringify(user))
+      await startPrefetch()
       setUser(userData)
     } catch (err) {
       console.error("error with saving user info")
@@ -178,6 +181,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     if (storedUser && storedToken) {
       setUser(JSON.parse(storedUser))
     }
+    await startPrefetch()
     setIsLoading(false)
   }
 
