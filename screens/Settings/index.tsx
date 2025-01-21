@@ -7,18 +7,20 @@ import { SafeAreaView } from "react-native-safe-area-context"
 import { StatusBar } from "expo-status-bar"
 import ActionCard from "@/components/cards/Action"
 import UserIcon from "@/components/vectors/UserIcon"
-import ShareIcon from "@/components/vectors/ShareIcon"
 import BellIcon from "@/components/vectors/BellIcon"
 import TrashIcon from "@/components/vectors/TrashIcon"
 import UserProfile from "@/components/cards/UserProfile"
 import { SettingOption } from "@/types"
+import { useDeleteUser } from "../../queries/friends"
+import ShareIcon from "@/components/vectors/ShareIcon"
 
 export default function SettingScreen() {
   const { signOut } = useAuth()
-
-  const handleSignOut = async () => {
-    await signOut()
+  const { mutate: deleteUser } = useDeleteUser()
+  const handleDeleteAccount = () => {
+    deleteUser()
   }
+
   const settingOptions: SettingOption[] = [
     {
       title: "Personal information",
@@ -39,17 +41,17 @@ export default function SettingScreen() {
       onPress: () => {},
     },
     {
-      title: "Push notifications",
+      title: "Log out",
       description: "",
       icon: <LogoutIcon />,
-      onPress: () => {},
+      onPress: signOut,
     },
     {
       title: "Delete Account",
       description: "",
       icon: <TrashIcon />,
-      onPress: handleSignOut,
       titleStyle: { color: theme.colors.red },
+      onPress: handleDeleteAccount,
     },
   ]
   return (

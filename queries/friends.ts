@@ -32,6 +32,22 @@ export const useSignalingFriends = (shouldRefetch?: boolean) => {
     retry: 1,
   })
 }
+export const useDeleteUser = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: () => api.delete("/users"),
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users"] })
+      queryClient.invalidateQueries({ queryKey: ["friends"] })
+      queryClient.invalidateQueries({ queryKey: ["friend-signals"] })
+    },
+
+    onError: (error) => {
+      console.error("Error deleting user:", error)
+    },
+  })
+}
 
 export const useAddFriend = () => {
   const queryClient = useQueryClient()
