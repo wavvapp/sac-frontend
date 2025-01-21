@@ -226,8 +226,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
   const updateUserInfo = async (names: string) => {
     if (!user) return
+    const newUserInfo = { ...user, names: names }
+    await AsyncStorage.setItem("@Auth:user", JSON.stringify(newUserInfo))
     await AsyncStorage.setItem("@Auth:names", names)
-    setUser({ ...user, names: names })
+    setUser(newUserInfo)
   }
 
   useEffect(() => {
