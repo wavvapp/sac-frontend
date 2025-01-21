@@ -18,17 +18,29 @@ import { Friend, Provider, User } from "@/types"
 import { CredentialsScreenProps } from "@/screens/Authentication/SignUp/CreateCredentials"
 import * as AppleAuthentication from "expo-apple-authentication"
 import { handleApiSignIn } from "@/libs/handleApiSignIn"
-import { useQueryClient } from "@tanstack/react-query"
+import {
+  useMutation,
+  UseMutationResult,
+  useQueryClient,
+} from "@tanstack/react-query"
 import api from "@/service"
 import AlertDialog from "@/components/AlertDialog"
 import { useOfflineHandler } from "@/hooks/useOfflineHandler"
+import { AxiosResponse } from "axios"
 
 interface AuthContextData {
   user: User | null
   isLoading: boolean
   signInWithGoogle: (navigation: CredentialsScreenProps) => Promise<void>
   signOut: () => Promise<void>
-  updateUserInfo: (activity: string, time: string) => Promise<void>
+  useUpdateUserInfo: () => UseMutationResult<
+    AxiosResponse<any, any>,
+    Error,
+    {
+      names: string
+    },
+    unknown
+  >
   isAuthenticated: boolean
   isNewUser: boolean
   registerUser: (username: string) => Promise<void>
@@ -221,11 +233,19 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     setUser(null)
   }
 
-  async function updateUserInfo(activity: string, time: string) {
-    if (!user) return
-    const updatedUserInfo: User = { ...user, time, activity }
-    await AsyncStorage.setItem("@Auth:user", JSON.stringify(updatedUserInfo))
-    setUser(updatedUserInfo)
+  const useUpdateUserInfo = () => {
+    return useMutation({
+      mutationFn: ({ names }: { names: string }) =>
+        api.patch("/users", { names: names }),
+      onSuccess: async (_, variables) => {
+        await AsyncStorage.setItem("@Auth:names", variables.names)
+        if (!user) return
+        setUser({ ...user, names: variables.names })
+      },
+      onError: (error) => {
+        console.error("Error patching data:", error)
+      },
+    })
   }
 
   return (
@@ -235,7 +255,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         isLoading,
         signInWithGoogle,
         signOut,
-        updateUserInfo,
+        useUpdateUserInfo,
         isAuthenticated: !!user && !isLoading,
         isNewUser,
         registerUser,

@@ -17,19 +17,19 @@ import EditActivity from "@/screens/EditActivity"
 import { useRef, useState } from "react"
 
 export default function SettingScreen() {
-  const { signOut, user } = useAuth()
+  const { signOut, user, useUpdateUserInfo } = useAuth()
   const [editProfile, setEditProfile] = useState(false)
   const inputRef = useRef<TextInput>(null)
+  const updateUserProfile = useUpdateUserInfo()
 
   const handleSignOut = async () => {
     await signOut()
   }
-  const editUserProfile = () => {
-    console.log("editing")
+  const editUserProfile = (newNames: string) => {
+    updateUserProfile.mutate({ names: newNames })
     setEditProfile(false)
   }
   const toggleEditProfileModal = () => {
-    if (editProfile) return editUserProfile()
     setEditProfile(!editProfile)
   }
   const settingOptions: SettingOption[] = [
