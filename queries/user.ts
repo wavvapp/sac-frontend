@@ -7,8 +7,8 @@ export const useUpdateUserInfo = () => {
   return useMutation({
     mutationFn: ({ names }: { names: string }) =>
       api.patch("/users", { names: names }),
-    onSuccess: (_, variables) => {
-      updateUserInfo(variables.names)
+    onSuccess: async (_, variables) => {
+      await updateUserInfo(variables.names)
     },
     onError: (error) => {
       console.error("Error patching data:", error)
