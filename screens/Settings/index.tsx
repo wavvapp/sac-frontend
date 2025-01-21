@@ -1,4 +1,4 @@
-import { View, StyleSheet, TextInput } from "react-native"
+import { View, StyleSheet } from "react-native"
 import { theme } from "@/theme"
 import { useAuth } from "@/contexts/AuthContext"
 import LogoutIcon from "@/components/vectors/LogoutIcon"
@@ -17,25 +17,17 @@ import { onShare } from "@/utils/share"
 import AlertDialog from "@/components/AlertDialog"
 import BottomModal from "@/components/BottomModal"
 import EditActivity from "@/screens/EditActivity"
-import { useRef, useState } from "react"
-import { useUpdateUserInfo } from "@/queries/user"
+import useUpdateUser from "@/hooks/useUpdateUser"
 
 export default function SettingScreen() {
   const { signOut, user } = useAuth()
-  const [editUserInfo, setEditUserInfo] = useState(false)
-  const inputRef = useRef<TextInput>(null)
-  const updateUser = useUpdateUserInfo()
+  const { editUserInfo, toggleEditInfoModal, updateUserInfo, namesInputRef } =
+    useUpdateUser()
 
   const handleSignOut = async () => {
     await signOut()
   }
-  const updateUserInfo = (newNames: string) => {
-    updateUser.mutate({ names: newNames })
-    setEditUserInfo(false)
-  }
-  const toggleEditInfoModal = () => {
-    setEditUserInfo(!editUserInfo)
-  }
+
   const settingOptions: SettingOption[] = [
     {
       title: "Personal information",
@@ -105,7 +97,7 @@ export default function SettingScreen() {
           buttonText="SAVE"
           initialInputValue={user?.names || ""}
           onPress={updateUserInfo}
-          inputRef={inputRef}
+          inputRef={namesInputRef}
         />
       </BottomModal>
     </SafeAreaView>
