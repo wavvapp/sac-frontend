@@ -181,7 +181,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     if (storedUser && storedToken) {
       setUser(JSON.parse(storedUser))
     }
-    await startPrefetch()
+    if (!isOnline) {
+      AlertDialog.open()
+    } else await startPrefetch()
     setIsLoading(false)
   }
 
