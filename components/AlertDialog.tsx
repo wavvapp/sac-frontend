@@ -14,31 +14,44 @@ interface AlertDialogProps {
   onConfirm?: () => void
   variant?: AlertDialogVariant
   buttonStyles?: ButtonVariant
+  closeAutomatically?: boolean
 }
 
-export default function AlertDialog({
-  title,
-  description,
-  cancelText = "CLOSE",
-  confirmText = "CONFIRM",
-  onClose,
-  onConfirm,
-  variant = "primary",
-  buttonStyles = "primary",
-}: AlertDialogProps): JSX.Element {
+export default function AlertDialog(props: AlertDialogProps): JSX.Element {
   const [isVisible, setIsVisible] = useState(false)
+  const [dialogProps, setDialogProps] = useState(props)
 
+  const {
+    title,
+    description,
+    cancelText = "CLOSE",
+    confirmText = "CONFIRM",
+    onClose,
+    onConfirm,
+    variant = "primary",
+    buttonStyles = "primary",
+    closeAutomatically = true,
+  } = dialogProps
   const close = useCallback(() => {
     setIsVisible(false)
     if (onClose) onClose()
   }, [onClose])
 
   const handleConfirm = useCallback(() => {
-    setIsVisible(false)
+    closeAutomatically && setIsVisible(false)
     if (onConfirm) onConfirm()
-  }, [onConfirm])
+  }, [closeAutomatically, onConfirm])
 
-  const open = () => setIsVisible(true)
+  const open = (props?: AlertDialogProps) => {
+    if (props) setDialogProps(props)
+    else
+      setDialogProps({
+        title: "No connection",
+        description:
+          "Make sure that you are connected to the internet and try again",
+      })
+    setIsVisible(true)
+  }
   AlertDialog.open = open
   AlertDialog.close = close
 
@@ -55,22 +68,28 @@ export default function AlertDialog({
               {title}
             </CustomText>
           )}
-          <CustomText style={styles.description} fontFamily="marfa">
-            {description}
-          </CustomText>
+
+          {typeof description === "string" ? (
+            <CustomText style={styles.description} fontFamily="marfa">
+              {description}
+            </CustomText>
+          ) : (
+            <View style={styles.description}>{description}</View>
+          )}
 
           {variant === "confirm" ? (
             <View style={styles.buttonContainer}>
               <CustomButton
                 variant="outline"
-                onPress={handleConfirm}
+                onPress={close}
                 title={cancelText}
-                containerStyles={styles.halfButton}
+                containerStyles={styles.button}
               />
               <CustomButton
                 variant={buttonStyles === "danger" ? "danger" : "secondary"}
-                onPress={close}
+                onPress={handleConfirm}
                 title={confirmText}
+                containerStyles={styles.button}
               />
             </View>
           ) : (
@@ -86,7 +105,7 @@ export default function AlertDialog({
   )
 }
 
-AlertDialog.open = () => {}
+AlertDialog.open = (_?: AlertDialogProps) => {}
 AlertDialog.close = () => {}
 
 const styles = StyleSheet.create({
@@ -114,6 +133,7 @@ const styles = StyleSheet.create({
     fontSize: theme.fontSize.lg,
     marginBottom: 7,
     fontWeight: Platform.OS === "ios" ? "semibold" : "bold",
+    maxWidth: 210,
   },
   description: {
     marginBottom: 26,
@@ -125,9 +145,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     gap: 12,
   },
-  halfButton: {
-    width: "50%",
+  button: {
+    flex: 1,
     justifyContent: "center",
-    alignItems: "center",
+    paddingHorizontal: 16,
   },
 })
