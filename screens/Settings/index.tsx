@@ -15,9 +15,10 @@ import { SettingOption } from "@/types"
 import BottomModal from "@/components/BottomModal"
 import EditActivity from "@/screens/EditActivity"
 import { useRef, useState } from "react"
+import { useUpdateUserInfo } from "@/queries/user"
 
 export default function SettingScreen() {
-  const { signOut, user, useUpdateUserInfo } = useAuth()
+  const { signOut, user } = useAuth()
   const [editProfile, setEditProfile] = useState(false)
   const inputRef = useRef<TextInput>(null)
   const updateUserProfile = useUpdateUserInfo()
