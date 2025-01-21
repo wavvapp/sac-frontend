@@ -20,6 +20,8 @@ import ActionCard from "@/components/cards/Action"
 import debounce from "lodash.debounce"
 import { useAddFriend, useRemoveFriend } from "@/queries/friends"
 import { FriendsSkeleton } from "@/components/cards/FriendsSkeleton"
+import { CopiableText } from "@/components/cards/CopiableText"
+import AlertDialog from "@/components/AlertDialog"
 
 const FindFriends = () => {
   const [search, setSearch] = useState("")
@@ -141,7 +143,20 @@ const FindFriends = () => {
           <ActionCard
             title="Your friends are not on Wavv?"
             description="Invite them to join you"
-            onPress={() => onShare(user?.username)}
+            onPress={() => {
+              AlertDialog.open({
+                title: "Share this invite code with your friend",
+                description: (
+                  <CopiableText text={user?.verificationCode || ""} />
+                ),
+                variant: "confirm",
+                confirmText: "Share",
+                cancelText: "cancel",
+                onConfirm: () =>
+                  onShare(user?.username, user?.verificationCode),
+                closeAutomatically: false,
+              })
+            }}
             icon={<ShareIcon />}
           />
         </View>

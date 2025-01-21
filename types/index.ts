@@ -19,6 +19,7 @@ export type ButtonVariant =
   | "ghost"
   | "default"
   | "destructive"
+  | "danger"
 export type FontFamilyVariant = "suisse" | "marfa" | "writer-mono"
 export type fontStyleVariant = "normal" | "italic"
 export type BadgeVariant = "default" | "outline" | "primary"
@@ -45,6 +46,7 @@ export interface User {
   selected?: boolean
   profilePictureUrl?: ImageSourcePropType
   isFriend?: boolean
+  verificationCode: string
 }
 export interface Friend {
   id: string
@@ -88,3 +90,12 @@ export enum Provider {
 }
 
 export type StaticPageType = "privacy" | "terms"
+
+export type AlertDialogVariant = "primary" | "confirm"
+export type SettingOption = {
+  title: string
+  description: string
+  icon: React.JSX.Element
+  onPress: () => void | Promise<void>
+  titleStyle?: TextStyle
+}

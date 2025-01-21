@@ -3,30 +3,58 @@ import { Modal, View, StyleSheet, Platform } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import { theme } from "@/theme"
 import { CustomButton } from "@/components/ui/Button"
+import { AlertDialogVariant, ButtonVariant } from "@/types"
 
 interface AlertDialogProps {
-  title: string
-  description: string
-  labelText?: string
+  title?: string
+  description: React.ReactNode
+  cancelText?: string
+  confirmText?: string
   onClose?: () => void
+  onConfirm?: () => void
+  variant?: AlertDialogVariant
+  buttonStyles?: ButtonVariant
+  closeAutomatically?: boolean
 }
 
-export default function AlertDialog({
-  title,
-  description,
-  labelText = "CLOSE",
-  onClose,
-}: AlertDialogProps) {
+export default function AlertDialog(props: AlertDialogProps): JSX.Element {
   const [isVisible, setIsVisible] = useState(false)
+  const [dialogProps, setDialogProps] = useState(props)
 
+  const {
+    title,
+    description,
+    cancelText = "CLOSE",
+    confirmText = "CONFIRM",
+    onClose,
+    onConfirm,
+    variant = "primary",
+    buttonStyles = "primary",
+    closeAutomatically = true,
+  } = dialogProps
   const close = useCallback(() => {
     setIsVisible(false)
     if (onClose) onClose()
   }, [onClose])
 
-  const open = () => setIsVisible(true)
+  const handleConfirm = useCallback(() => {
+    closeAutomatically && setIsVisible(false)
+    if (onConfirm) onConfirm()
+  }, [closeAutomatically, onConfirm])
+
+  const open = (props?: AlertDialogProps) => {
+    if (props) setDialogProps(props)
+    else
+      setDialogProps({
+        title: "No connection",
+        description:
+          "Make sure that you are connected to the internet and try again",
+      })
+    setIsVisible(true)
+  }
   AlertDialog.open = open
   AlertDialog.close = close
+
   return (
     <Modal
       animationType="fade"
@@ -35,26 +63,49 @@ export default function AlertDialog({
       onRequestClose={close}>
       <View style={styles.overlay}>
         <View style={styles.modalView}>
-          <CustomText style={styles.title} size="lg">
-            {title}
-          </CustomText>
-          <CustomText style={styles.description} fontFamily="marfa">
-            {description}
-          </CustomText>
-          <CustomButton
-            variant="secondary"
-            fullWidth
-            containerStyles={{ width: "100%" }}
-            onPress={close}
-            title={labelText}
-          />
+          {title && (
+            <CustomText style={styles.title} size="lg">
+              {title}
+            </CustomText>
+          )}
+
+          {typeof description === "string" ? (
+            <CustomText style={styles.description} fontFamily="marfa">
+              {description}
+            </CustomText>
+          ) : (
+            <View style={styles.description}>{description}</View>
+          )}
+
+          {variant === "confirm" ? (
+            <View style={styles.buttonContainer}>
+              <CustomButton
+                variant="outline"
+                onPress={close}
+                title={cancelText}
+                containerStyles={styles.button}
+              />
+              <CustomButton
+                variant={buttonStyles === "danger" ? "danger" : "secondary"}
+                onPress={handleConfirm}
+                title={confirmText}
+                containerStyles={styles.button}
+              />
+            </View>
+          ) : (
+            <CustomButton
+              variant="secondary"
+              onPress={close}
+              title={cancelText}
+            />
+          )}
         </View>
       </View>
     </Modal>
   )
 }
 
-AlertDialog.open = () => {}
+AlertDialog.open = (_?: AlertDialogProps) => {}
 AlertDialog.close = () => {}
 
 const styles = StyleSheet.create({
@@ -65,11 +116,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   modalView: {
-    width: "80%",
     backgroundColor: theme.colors.white,
     borderRadius: 12,
     padding: 24,
-    alignItems: "flex-start",
+    alignItems: "center",
     shadowOffset: {
       width: 0,
       height: 2,
@@ -79,11 +129,25 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   title: {
+    textAlign: "center",
     fontSize: theme.fontSize.lg,
     marginBottom: 7,
     fontWeight: Platform.OS === "ios" ? "semibold" : "bold",
+    maxWidth: 210,
   },
   description: {
     marginBottom: 26,
+    textAlign: "center",
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    width: "100%",
+    justifyContent: "center",
+    gap: 12,
+  },
+  button: {
+    flex: 1,
+    justifyContent: "center",
+    paddingHorizontal: 16,
   },
 })

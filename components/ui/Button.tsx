@@ -64,6 +64,10 @@ export function CustomButton({
       container: styles.default,
       text: styles.secondaryText,
     },
+    danger: {
+      container: styles.danger,
+      text: styles.dangerText,
+    },
   }
   const { container, text } = variantStyles[variant] || variantStyles.default
 
@@ -142,7 +146,6 @@ const styles = StyleSheet.create({
     paddingVertical: 21,
     paddingHorizontal: 32,
     borderWidth: 1,
-    borderColor: theme.colors.red,
   },
   secondaryFullWidth: {
     width: 350,
@@ -184,5 +187,14 @@ const styles = StyleSheet.create({
   },
   centeredIcon: {
     paddingRight: 8,
+  },
+  danger: {
+    paddingHorizontal: 27,
+    paddingVertical: 21,
+    backgroundColor: theme.colors.red,
+  },
+  dangerText: {
+    color: theme.colors.white,
+    fontWeight: theme.fontWeight.semibold,
   },
 })

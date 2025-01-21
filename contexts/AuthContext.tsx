@@ -68,12 +68,15 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         email,
         username,
         profilePictureUrl: profilePictureUrl,
+        // TODO: Use the code from backend once its available
+        verificationCode: "964 201",
       }
       await AsyncStorage.setItem("@Auth:accessToken", accessToken)
       await AsyncStorage.setItem("@Auth:refreshToken", refreshToken)
       await AsyncStorage.setItem("@Auth:user", JSON.stringify(user))
       await prefetchFriends()
-      setUser(userData)
+      // TODO: use the code from the backend once its available
+      setUser({ ...userData, verificationCode: "964 201" })
     } catch (err) {
       console.error("error with saving user info")
     }
@@ -228,6 +231,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     setUser(updatedUserInfo)
   }
 
+  useEffect(() => {
+    if (isOnline) return
+    AlertDialog.open()
+  }, [isOnline])
+
   return (
     <AuthContext.Provider
       value={{
@@ -243,12 +251,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         isOnline,
       }}>
       {children}
-      {!isOnline && (
-        <AlertDialog
-          title="No connection"
-          description="Make sure that you are connected to the internet and try again"
-        />
-      )}
+      <AlertDialog
+        title="No connection"
+        description="Make sure that you are connected to the internet and try again"
+      />
     </AuthContext.Provider>
   )
 }

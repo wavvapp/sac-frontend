@@ -1,12 +1,12 @@
 import { theme } from "@/theme"
-import Svg, { Path, SvgProps } from "react-native-svg"
+import Svg, { Path } from "react-native-svg"
 
-function LogoutIcon({
+export default function UserIcon({
   width = 24,
   height = 24,
   color = theme.colors.black,
   ...rest
-}: SvgProps) {
+}) {
   return (
     <Svg
       width={width}
@@ -15,7 +15,7 @@ function LogoutIcon({
       fill="none"
       {...rest}>
       <Path
-        d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9M16 17L21 12M21 12L16 7M21 12H9"
+        d="M19 21V19C19 17.9391 18.5786 16.9217 17.8284 16.1716C17.0783 15.4214 16.0609 15 15 15H9C7.93913 15 6.92172 15.4214 6.17157 16.1716C5.42143 16.9217 5 17.9391 5 19V21M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z"
         stroke={color}
         stroke-width="1.5"
         stroke-linecap="round"
@@ -24,5 +24,3 @@ function LogoutIcon({
     </Svg>
   )
 }
-
-export default LogoutIcon
