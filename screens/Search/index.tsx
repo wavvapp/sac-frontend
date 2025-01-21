@@ -18,7 +18,7 @@ import { useAuth } from "@/contexts/AuthContext"
 import Header from "@/components/cards/Header"
 import ActionCard from "@/components/cards/Action"
 import debounce from "lodash.debounce"
-import { useAddFriend } from "@/queries/friends"
+import { useAddFriend, useRemoveFriend } from "@/queries/friends"
 import { FriendsSkeleton } from "@/components/cards/FriendsSkeleton"
 
 const FindFriends = () => {
@@ -26,6 +26,7 @@ const FindFriends = () => {
   const [searchQueryText, setSearchQueryText] = useState("")
   const { user } = useAuth()
   const addFriend = useAddFriend()
+  const removeFriend = useRemoveFriend()
 
   const { data: users = [], isLoading } = useQuery<User[]>({
     queryKey: ["users", searchQueryText],
@@ -66,7 +67,10 @@ const FindFriends = () => {
     if (user.isFriend || addFriend.isPending) return
     addFriend.mutate(user.id)
   }
-  console.log(user)
+  const handleRemoveFriend = (user: User) => {
+    if (!user.isFriend || removeFriend.isPending) return
+    removeFriend.mutate(user.id)
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -104,7 +108,8 @@ const FindFriends = () => {
                   </View>
                   {user.isFriend ? (
                     <TouchableOpacity
-                      onPress={() => console.log("Unfriend a user")}>
+                      onPress={() => handleRemoveFriend(user)}
+                      disabled={removeFriend.isPending}>
                       <CheckIcon color={theme.colors.black} />
                     </TouchableOpacity>
                   ) : (
