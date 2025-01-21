@@ -8,6 +8,7 @@ export default function useUpdateUser() {
   const updateUser = useUpdateUserInfo()
 
   const updateUserInfo = (newNames: string) => {
+    //TODO: Check the validity of the submitted name before updating. To be done when there is a conclusive clear flow
     updateUser.mutate({ names: newNames })
     setEditUserInfo(false)
   }
