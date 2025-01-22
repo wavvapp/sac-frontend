@@ -87,23 +87,27 @@ export const useRemoveFriend = () => {
         }),
         queryClient.cancelQueries({
           queryKey: ["friends"],
-          exact: false,
         }),
       ])
 
-      const previousUsers = queryClient.getQueryData<User[]>(["users"]) ?? []
-      const previousFriends =
-        queryClient.getQueryData<Friend[]>(["friends"]) ?? []
+      const previousUsers =
+        queryClient
+          .getQueriesData({ queryKey: ["users"], exact: false })
+          .slice(-1)[0]?.[1] || []
+      const previousFriends = queryClient.getQueryData(["friends"]) ?? []
 
-      queryClient.setQueryData<User[]>(["users"], (old = []) =>
-        old.map((user) =>
-          user.id === friendId ? { ...user, isFriend: false } : user,
-        ),
+      queryClient.setQueriesData(
+        { queryKey: ["users"], exact: false },
+        (old: User[] = []) =>
+          old.map((user) =>
+            user.id === friendId ? { ...user, isFriend: false } : user,
+          ),
       )
 
-      queryClient.setQueryData<Friend[]>(["friends"], (old = []) =>
+      queryClient.setQueryData(["friends"], (old: Friend[] = []) =>
         old.filter((friend) => friend.id !== friendId),
       )
+
       return { previousUsers, previousFriends }
     },
     onError: (err, friendId, context) => {

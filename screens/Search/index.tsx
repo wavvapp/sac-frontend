@@ -97,8 +97,12 @@ const FindFriends = () => {
                 <TouchableOpacity
                   key={user.id}
                   style={styles.friendItem}
-                  disabled={user.isFriend || addFriend.isPending}
-                  onPress={() => handleAddFriend(user)}>
+                  disabled={removeFriend.isPending || addFriend.isPending}
+                  onPress={() =>
+                    user.isFriend
+                      ? handleRemoveFriend(user)
+                      : handleAddFriend(user)
+                  }>
                   <View style={styles.userDetails}>
                     <UserAvatar imageUrl={user.profilePictureUrl} />
                     <View style={styles.userInfo}>
@@ -109,11 +113,7 @@ const FindFriends = () => {
                     </View>
                   </View>
                   {user.isFriend ? (
-                    <TouchableOpacity
-                      onPress={() => handleRemoveFriend(user)}
-                      disabled={removeFriend.isPending}>
-                      <CheckIcon color={theme.colors.black} />
-                    </TouchableOpacity>
+                    <CheckIcon color={theme.colors.black} />
                   ) : (
                     <CustomButton
                       variant="outline"
