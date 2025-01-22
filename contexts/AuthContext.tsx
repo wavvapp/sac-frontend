@@ -4,7 +4,6 @@ import {
   useEffect,
   useContext,
   ReactNode,
-  useCallback,
 } from "react"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import {
@@ -14,14 +13,14 @@ import {
   statusCodes,
 } from "@react-native-google-signin/google-signin"
 import { Platform } from "react-native"
-import { Friend, Provider, User } from "@/types"
+import { Provider, User } from "@/types"
 import { CredentialsScreenProps } from "@/screens/Authentication/SignUp/CreateCredentials"
 import * as AppleAuthentication from "expo-apple-authentication"
 import { handleApiSignIn } from "@/libs/handleApiSignIn"
 import { useQueryClient } from "@tanstack/react-query"
-import api from "@/service"
 import AlertDialog from "@/components/AlertDialog"
 import { useOfflineHandler } from "@/hooks/useOfflineHandler"
+import { usePrefetch } from "@/hooks/useSplashScreen"
 
 interface AuthContextData {
   user: User | null
@@ -50,6 +49,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const [isNewUser, setIsNewUser] = useState<boolean>(false)
   const { isOnline } = useOfflineHandler()
   const queryClient = useQueryClient()
+  const { startPrefetch } = usePrefetch()
 
   async function completeSignIn(userData: ExtendedUser): Promise<void> {
     try {
@@ -74,7 +74,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       await AsyncStorage.setItem("@Auth:accessToken", accessToken)
       await AsyncStorage.setItem("@Auth:refreshToken", refreshToken)
       await AsyncStorage.setItem("@Auth:user", JSON.stringify(user))
-      await prefetchFriends()
+      await startPrefetch()
       // TODO: use the code from the backend once its available
       setUser({ ...userData, verificationCode: "964 201" })
     } catch (err) {
@@ -143,30 +143,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     }
   }
 
-  const prefetchFriends = useCallback(async () => {
-    await queryClient.prefetchQuery({
-      queryKey: ["friends"],
-      queryFn: async () => {
-        const { data } = await api.get("/friends")
-        return data
-      },
-    })
-  }, [queryClient])
-
-  const prefetchSignal = useCallback(async () => {
-    await queryClient.prefetchQuery({
-      queryKey: ["fetch-my-signal"],
-      queryFn: async () => {
-        const { data } = await api.get("/my-signal")
-        const signal = {
-          ...data,
-          friendIds: data.friends.map((friend: Friend) => friend?.friendId),
-        }
-        return signal
-      },
-    })
-  }, [queryClient])
-
   const signInWithApple = async (navigation: CredentialsScreenProps) => {
     try {
       const credential = await AppleAuthentication.signInAsync({
@@ -208,7 +184,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     if (storedUser && storedToken) {
       setUser(JSON.parse(storedUser))
     }
-    await Promise.all([prefetchSignal(), prefetchFriends()])
+    if (!isOnline) {
+      AlertDialog.open()
+    } else await startPrefetch()
     setIsLoading(false)
   }
 
