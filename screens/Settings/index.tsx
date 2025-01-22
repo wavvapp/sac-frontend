@@ -7,7 +7,6 @@ import { SafeAreaView } from "react-native-safe-area-context"
 import { StatusBar } from "expo-status-bar"
 import ActionCard from "@/components/cards/Action"
 import UserIcon from "@/components/vectors/UserIcon"
-import ShareIcon from "@/components/vectors/ShareIcon"
 import BellIcon from "@/components/vectors/BellIcon"
 import TrashIcon from "@/components/vectors/TrashIcon"
 import UserProfile from "@/components/cards/UserProfile"
@@ -15,13 +14,20 @@ import { SettingOption } from "@/types"
 import { CopiableText } from "@/components/cards/CopiableText"
 import { onShare } from "@/utils/share"
 import AlertDialog from "@/components/AlertDialog"
+import ShareIcon from "@/components/vectors/ShareIcon"
+import { useDeleteUser } from "@/queries/user"
 
 export default function SettingScreen() {
   const { signOut, user } = useAuth()
+  const deleteUserMutation = useDeleteUser()
 
   const handleSignOut = async () => {
     await signOut()
   }
+  const handleDeleteAccount = async () => {
+    await deleteUserMutation.mutateAsync()
+  }
+
   const settingOptions: SettingOption[] = [
     {
       title: "Personal information",
@@ -60,10 +66,21 @@ export default function SettingScreen() {
       title: "Delete Account",
       description: "",
       icon: <TrashIcon />,
-      onPress: () => {},
       titleStyle: { color: theme.colors.red },
+      onPress: () =>
+        AlertDialog.open({
+          title: "Delete account?",
+          description:
+            "This action is permanent and can not be undone. All your data, including profile and username, will be permanently deleted. Do you wish to proceed?",
+          variant: "confirm",
+          confirmText: "yes, delete",
+          cancelText: "cancel",
+          onConfirm: handleDeleteAccount,
+          buttonStyles: "danger",
+        }),
     },
   ]
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="dark" />
