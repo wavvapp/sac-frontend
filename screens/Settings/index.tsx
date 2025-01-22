@@ -98,6 +98,7 @@ export default function SettingScreen() {
           initialInputValue={user?.names || ""}
           onPress={updateUserInfo}
           inputRef={namesInputRef}
+          multiLineInput={false}
         />
       </BottomModal>
     </SafeAreaView>
