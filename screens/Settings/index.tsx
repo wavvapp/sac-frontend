@@ -26,7 +26,6 @@ export default function SettingScreen() {
   }
   const handleDeleteAccount = async () => {
     await deleteUserMutation.mutateAsync()
-    await signOut()
   }
 
   const settingOptions: SettingOption[] = [
