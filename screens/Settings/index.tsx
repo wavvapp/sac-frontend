@@ -71,7 +71,7 @@ export default function SettingScreen() {
         AlertDialog.open({
           title: "Delete account?",
           description:
-            "This action is permanent and cannot be undone. All your data, including profile and username, will be permanently deleted. Do you wish to proceed?",
+            "This action is permanent and can not be undone. All your data, including profile and username, will be permanently deleted. Do you wish to proceed?",
           variant: "confirm",
           confirmText: "yes, delete",
           cancelText: "cancel",
