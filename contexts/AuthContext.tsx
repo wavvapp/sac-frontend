@@ -231,11 +231,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     setUser(updatedUserInfo)
   }
 
-  useEffect(() => {
-    if (isOnline) return
-    AlertDialog.open()
-  }, [isOnline])
-
   return (
     <AuthContext.Provider
       value={{

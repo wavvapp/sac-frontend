@@ -16,6 +16,7 @@ import * as SplashScreen from "expo-splash-screen"
 import { useEffect } from "react"
 import { StaticPageType } from "@/types"
 import StaticContentScreen from "@/screens/StaticContentScreen"
+import AlertDialog from "@/components/AlertDialog"
 export type RootStackParamList = {
   EntryScreen: undefined
   Home: undefined
@@ -30,7 +31,7 @@ export type RootStackParamList = {
 
 export default function AppNavigator() {
   const Stack = createNativeStackNavigator<RootStackParamList>()
-  const { isAuthenticated, isLoading, isNewUser } = useAuth()
+  const { isAuthenticated, isLoading, isNewUser, isOnline } = useAuth()
   const { isFetching: isFriendsLoading } = useFriends()
 
   useEffect(() => {
@@ -38,6 +39,12 @@ export default function AppNavigator() {
       SplashScreen.hideAsync()
     }
   }, [isFriendsLoading, isLoading])
+
+  useEffect(() => {
+    if (!isOnline) {
+      AlertDialog.open()
+    }
+  }, [isOnline])
 
   return (
     <NavigationContainer>
