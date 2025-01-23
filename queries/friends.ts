@@ -72,3 +72,54 @@ export const useAddFriend = () => {
     },
   })
 }
+
+export const useRemoveFriend = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (friendId: string) =>
+      api.post(`/friends/unfriend`, { friendId }),
+
+    onMutate: async (friendId) => {
+      await Promise.all([
+        queryClient.cancelQueries({
+          queryKey: ["users"],
+          exact: false,
+        }),
+        queryClient.cancelQueries({
+          queryKey: ["friends"],
+        }),
+      ])
+
+      const previousUsers =
+        queryClient
+          .getQueriesData({ queryKey: ["users"], exact: false })
+          .slice(-1)[0]?.[1] || []
+      const previousFriends = queryClient.getQueryData(["friends"]) ?? []
+
+      queryClient.setQueriesData(
+        { queryKey: ["users"], exact: false },
+        (old: User[] = []) =>
+          old.map((user) =>
+            user.id === friendId ? { ...user, isFriend: false } : user,
+          ),
+      )
+
+      queryClient.setQueryData(["friends"], (old: Friend[] = []) =>
+        old.filter((friend) => friend.id !== friendId),
+      )
+
+      return { previousUsers, previousFriends }
+    },
+    onError: (err, friendId, context) => {
+      if (context) {
+        queryClient.setQueryData(["users"], context.previousUsers)
+        queryClient.setQueryData(["friends"], context.previousFriends)
+      }
+      console.error("Error removing friend:", friendId, err)
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users"] })
+      queryClient.invalidateQueries({ queryKey: ["friends"] })
+    },
+  })
+}
