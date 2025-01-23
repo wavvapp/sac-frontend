@@ -6,6 +6,7 @@ import Header from "@/components/cards/Header"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { StatusBar } from "expo-status-bar"
 import ActionCard from "@/components/cards/Action"
+import ShareIcon from "@/components/vectors/ShareIcon"
 import UserIcon from "@/components/vectors/UserIcon"
 import BellIcon from "@/components/vectors/BellIcon"
 import TrashIcon from "@/components/vectors/TrashIcon"
@@ -14,11 +15,15 @@ import { SettingOption } from "@/types"
 import { CopiableText } from "@/components/cards/CopiableText"
 import { onShare } from "@/utils/share"
 import AlertDialog from "@/components/AlertDialog"
-import ShareIcon from "@/components/vectors/ShareIcon"
+import BottomModal from "@/components/BottomModal"
+import EditActivity from "@/screens/EditActivity"
+import useUpdateUser from "@/hooks/useUpdateUser"
 import { useDeleteUser } from "@/queries/user"
 
 export default function SettingScreen() {
   const { signOut, user } = useAuth()
+  const { editUserInfo, toggleEditInfoModal, updateUserInfo, namesInputRef } =
+    useUpdateUser()
   const deleteUserMutation = useDeleteUser()
 
   const handleSignOut = async () => {
@@ -33,7 +38,7 @@ export default function SettingScreen() {
       title: "Personal information",
       description: "Update your data",
       icon: <UserIcon />,
-      onPress: () => {},
+      onPress: toggleEditInfoModal,
     },
     {
       title: "Your friends are not on Wavv?",
@@ -100,6 +105,18 @@ export default function SettingScreen() {
           ))}
         </View>
       </View>
+      <BottomModal visible={editUserInfo} onClose={toggleEditInfoModal}>
+        <EditActivity
+          closeModal={toggleEditInfoModal}
+          title="Name"
+          placeholderText="Enter your name to continue"
+          buttonText="SAVE"
+          initialInputValue={user?.names || ""}
+          onPress={updateUserInfo}
+          inputRef={namesInputRef}
+          multiLineInput={false}
+        />
+      </BottomModal>
     </SafeAreaView>
   )
 }

@@ -1,7 +1,6 @@
 import { CustomButton } from "@/components/ui/Button"
 import CustomText from "@/components/ui/CustomText"
 import Input from "@/components/ui/Input"
-import { useStatus } from "@/contexts/StatusContext"
 import { theme } from "@/theme"
 import { Ref, useState } from "react"
 import {
@@ -22,6 +21,7 @@ interface EditActivityProps {
   onPress: (text: string) => void
   closeModal: () => void
   inputRef: Ref<TextInput>
+  multiLineInput?: boolean
 }
 
 export default function EditActivity({
@@ -32,6 +32,7 @@ export default function EditActivity({
   buttonText,
   onPress,
   inputRef,
+  multiLineInput = true,
 }: EditActivityProps) {
   const [text, setText] = useState(initialInputValue)
 
@@ -72,7 +73,7 @@ export default function EditActivity({
             onSubmitEditing={handleEdit}
             variant="ghost"
             containerStyle={styles.inputContainer}
-            multiline
+            multiline={multiLineInput}
             ref={inputRef}
           />
         </KeyboardAvoidingView>
