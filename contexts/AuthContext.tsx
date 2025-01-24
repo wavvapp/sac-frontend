@@ -61,6 +61,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         names,
         username,
         profilePictureUrl,
+        inviteCode,
       } = userData
       const user: User = {
         id,
@@ -68,15 +69,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         email,
         username,
         profilePictureUrl: profilePictureUrl,
-        // TODO: Use the code from backend once its available
-        verificationCode: "964 201",
+        inviteCode,
       }
       await AsyncStorage.setItem("@Auth:accessToken", accessToken)
       await AsyncStorage.setItem("@Auth:refreshToken", refreshToken)
       await AsyncStorage.setItem("@Auth:user", JSON.stringify(user))
       await prefetchFriends()
-      // TODO: use the code from the backend once its available
-      setUser({ ...userData, verificationCode: "964 201" })
+      setUser({ ...userData })
     } catch (err) {
       console.error("error with saving user info")
     }
