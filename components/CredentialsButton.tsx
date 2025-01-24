@@ -11,16 +11,25 @@ interface CredentialsButtonProps {
   isLoading: boolean
   isError: boolean
   handleSubmit: () => void
+  step: number
 }
 export default function CredentialsButton({
   isDisabled,
   isLoading,
   isError,
   handleSubmit,
+  step,
 }: CredentialsButtonProps) {
   const buttonText = useMemo(() => {
     if (!isLoading && !isError) return "NEXT"
   }, [isError, isLoading])
+
+  const buttonStatusText = useMemo(() => {
+    if (isLoading && step === 1) return "checking invitation code"
+    if (isError && step === 1) return "invalid code"
+    if (isLoading && step === 2) return "checking availability"
+    if (isError && step === 2) return "username not available"
+  }, [isError, isLoading, step])
 
   return (
     <CustomButton
@@ -39,7 +48,7 @@ export default function CredentialsButton({
             fontFamily="marfa"
             size="sm"
             style={styles.buttonText}>
-            {isLoading ? "checking availability" : "username not available"}
+            {buttonStatusText}
           </CustomText>
         </View>
       )}
