@@ -28,7 +28,7 @@ interface AuthContextData {
   isLoading: boolean
   signInWithGoogle: (navigation: CredentialsScreenProps) => Promise<void>
   signOut: () => Promise<void>
-  updateUserInfo: (activity: string, time: string) => Promise<void>
+  updateUserInfo: (names: string) => Promise<void>
   isAuthenticated: boolean
   isNewUser: boolean
   registerUser: (username: string) => Promise<void>
@@ -68,12 +68,15 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         email,
         username,
         profilePictureUrl: profilePictureUrl,
+        // TODO: Use the code from backend once its available
+        verificationCode: "964 201",
       }
       await AsyncStorage.setItem("@Auth:accessToken", accessToken)
       await AsyncStorage.setItem("@Auth:refreshToken", refreshToken)
       await AsyncStorage.setItem("@Auth:user", JSON.stringify(user))
       await prefetchFriends()
-      setUser(userData)
+      // TODO: use the code from the backend once its available
+      setUser({ ...userData, verificationCode: "964 201" })
     } catch (err) {
       console.error("error with saving user info")
     }
@@ -221,12 +224,18 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     setUser(null)
   }
 
-  async function updateUserInfo(activity: string, time: string) {
+  const updateUserInfo = async (names: string) => {
     if (!user) return
-    const updatedUserInfo: User = { ...user, time, activity }
-    await AsyncStorage.setItem("@Auth:user", JSON.stringify(updatedUserInfo))
-    setUser(updatedUserInfo)
+    const newUserInfo = { ...user, names: names }
+    await AsyncStorage.setItem("@Auth:user", JSON.stringify(newUserInfo))
+    await AsyncStorage.setItem("@Auth:names", names)
+    setUser(newUserInfo)
   }
+
+  useEffect(() => {
+    if (isOnline) return
+    AlertDialog.open()
+  }, [isOnline])
 
   return (
     <AuthContext.Provider
@@ -243,12 +252,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         isOnline,
       }}>
       {children}
-      {!isOnline && (
-        <AlertDialog
-          title="No connection"
-          description="Make sure that you are connected to the internet and try again"
-        />
-      )}
+      <AlertDialog
+        title="No connection"
+        description="Make sure that you are connected to the internet and try again"
+      />
     </AuthContext.Provider>
   )
 }

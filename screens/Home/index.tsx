@@ -2,7 +2,7 @@ import UserStatus from "@/components/cards/UserStatus"
 // import PerlinNoise from "@/components/PerlinNoise"
 import { RootStackParamList } from "@/navigation"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
-import { StyleSheet, View, Dimensions, StatusBar, Platform } from "react-native"
+import { StyleSheet, View, StatusBar, Platform } from "react-native"
 import { runOnJS, useDerivedValue } from "react-native-reanimated"
 import { AnimatedSwitch } from "@/components/AnimatedSwitch"
 import { useCallback, useRef, useState } from "react"
@@ -25,13 +25,15 @@ import api from "@/service"
 import { useFriends } from "@/queries/friends"
 import { useMySignal } from "@/queries/signal"
 import { useOfflineHandler } from "@/hooks/useOfflineHandler"
+import { height, width } from "@/utils/dimensions"
+import { CopiableText } from "@/components/cards/CopiableText"
+import AlertDialog from "@/components/AlertDialog"
 
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
   "Home"
 >
 
-const { width } = Dimensions.get("window")
 export default function HomeScreen() {
   const [_, setIsVisible] = useState(false)
   const { isOn } = useStatus()
@@ -70,12 +72,12 @@ export default function HomeScreen() {
     }, [isAuthenticated, refetchPoints]),
   )
   const { isPlaceholderData } = useMySignal()
-
   const handleWebsiteOpen = async () => {
-    await WebBrowser.openBrowserAsync(
-      "https://7axab-zyaaa-aaaao-qjv7a-cai.icp0.io/",
-    )
+    if (process.env.POINTS_CANISTER_URL) {
+      await WebBrowser.openBrowserAsync(process.env.POINTS_CANISTER_URL)
+    }
   }
+
   useDerivedValue(() => {
     if (isOn.value) {
       return runOnJS(setIsVisible)(true)
@@ -94,7 +96,21 @@ export default function HomeScreen() {
         <View style={styles.buttonContainer}>
           <CustomButton
             style={styles.iconButton}
-            onPress={() => onShare(user?.username)}>
+            onPress={() =>
+              AlertDialog.open({
+                title: "Share this invite code with your friend",
+                // TODO: change this once BE is ready
+                description: (
+                  <CopiableText text={user?.verificationCode || ""} />
+                ),
+                variant: "confirm",
+                confirmText: "Share",
+                cancelText: "cancel",
+                onConfirm: () =>
+                  onShare(user?.username, user?.verificationCode),
+                closeAutomatically: false,
+              })
+            }>
             <ShareIcon color={theme.colors.white} />
           </CustomButton>
           <CustomButton
@@ -131,7 +147,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingTop:
       Platform.OS === "ios"
-        ? Dimensions.get("window").height >= 812
+        ? height >= 812
           ? 47
           : 27
         : StatusBar.currentHeight || 0,

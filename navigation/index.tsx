@@ -16,7 +16,6 @@ import * as SplashScreen from "expo-splash-screen"
 import { useEffect } from "react"
 import { StaticPageType } from "@/types"
 import StaticContentScreen from "@/screens/StaticContentScreen"
-import AlertDialog from "@/components/AlertDialog"
 export type RootStackParamList = {
   EntryScreen: undefined
   Home: undefined
@@ -26,12 +25,12 @@ export type RootStackParamList = {
   Signaling: undefined
   CreateCredentials: undefined
   Search: undefined
-  StaticContentScreen: { page: StaticPageType }
+  StaticContentScreen: { pageSlug: StaticPageType }
 }
 
 export default function AppNavigator() {
   const Stack = createNativeStackNavigator<RootStackParamList>()
-  const { isAuthenticated, isLoading, isNewUser, isOnline } = useAuth()
+  const { isAuthenticated, isLoading, isNewUser } = useAuth()
   const { isFetching: isFriendsLoading } = useFriends()
 
   useEffect(() => {
@@ -39,12 +38,6 @@ export default function AppNavigator() {
       SplashScreen.hideAsync()
     }
   }, [isFriendsLoading, isLoading])
-
-  useEffect(() => {
-    if (!isOnline) {
-      AlertDialog.open()
-    }
-  }, [isOnline])
 
   return (
     <NavigationContainer>
@@ -85,7 +78,7 @@ export default function AppNavigator() {
             name="StaticContentScreen"
             options={{ presentation: "modal", headerShown: false }}
             component={StaticContentScreen}
-            initialParams={{ page: "privacy" }}
+            initialParams={{ pageSlug: "privacy" }}
           />
           <Stack.Screen
             name="CreateCredentials"
