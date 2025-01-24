@@ -39,6 +39,12 @@ export default function AppNavigator() {
     }
   }, [isFriendsLoading, isLoading])
 
+  // useEffect(() => {
+  //   if (!isOnline) {
+  //     AlertDialog.open()
+  //   }
+  // }, [isOnline])
+
   return (
     <NavigationContainer>
       {isAuthenticated ? (

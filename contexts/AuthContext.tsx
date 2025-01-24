@@ -80,7 +80,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       console.error("error with saving user info")
     }
   }
-
   const registerUser = async (username: string) => {
     try {
       if (!username || !currentToken) return
@@ -212,8 +211,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   }
 
   useEffect(() => {
+    if (!isOnline) {
+      AlertDialog.open()
+    }
     loadStoredData()
-  }, [])
+  }, [isOnline])
 
   async function signOut(): Promise<void> {
     await AsyncStorage.removeItem("@Auth:accessToken")
@@ -230,11 +232,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     await AsyncStorage.setItem("@Auth:names", names)
     setUser(newUserInfo)
   }
-
-  useEffect(() => {
-    if (isOnline) return
-    AlertDialog.open()
-  }, [isOnline])
 
   return (
     <AuthContext.Provider
