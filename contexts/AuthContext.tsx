@@ -75,7 +75,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       await AsyncStorage.setItem("@Auth:refreshToken", refreshToken)
       await AsyncStorage.setItem("@Auth:user", JSON.stringify(user))
       await prefetchFriends()
-      setUser({ ...userData })
+      setUser(userData)
     } catch (err) {
       console.error("error with saving user info")
     }
