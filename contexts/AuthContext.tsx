@@ -29,7 +29,7 @@ interface AuthContextData {
   isLoading: boolean
   signInWithGoogle: (navigation: CredentialsScreenProps) => Promise<void>
   signOut: () => Promise<void>
-  updateUserInfo: (activity: string, time: string) => Promise<void>
+  updateUserInfo: (names: string) => Promise<void>
   isAuthenticated: boolean
   isNewUser: boolean
   registerUser: (username: string) => Promise<void>
@@ -237,11 +237,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     setUser(null)
   }
 
-  async function updateUserInfo(activity: string, time: string) {
+  const updateUserInfo = async (names: string) => {
     if (!user) return
-    const updatedUserInfo: User = { ...user, time, activity }
-    await AsyncStorage.setItem("@Auth:user", JSON.stringify(updatedUserInfo))
-    setUser(updatedUserInfo)
+    const newUserInfo = { ...user, names: names }
+    await AsyncStorage.setItem("@Auth:user", JSON.stringify(newUserInfo))
+    await AsyncStorage.setItem("@Auth:names", names)
+    setUser(newUserInfo)
   }
 
   return (
