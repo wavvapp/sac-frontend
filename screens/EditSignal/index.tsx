@@ -105,7 +105,7 @@ export default function EditSignal() {
         <ActionCard
           title="Your friends are not on Wavv?"
           description="Invite them to join you"
-          onPress={() => onShare(user?.username)}
+          onPress={() => onShare(user?.username, user?.inviteCode)}
           icon={<ShareIcon />}
           style={{ marginHorizontal: 20 }}
         />

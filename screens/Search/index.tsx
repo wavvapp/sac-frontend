@@ -146,14 +146,11 @@ const FindFriends = () => {
             onPress={() => {
               AlertDialog.open({
                 title: "Share this invite code with your friend",
-                description: (
-                  <CopiableText text={user?.verificationCode || ""} />
-                ),
+                description: <CopiableText text={user?.inviteCode || ""} />,
                 variant: "confirm",
                 confirmText: "Share",
                 cancelText: "cancel",
-                onConfirm: () =>
-                  onShare(user?.username, user?.verificationCode),
+                onConfirm: () => onShare(user?.username, user?.inviteCode),
                 closeAutomatically: false,
               })
             }}
