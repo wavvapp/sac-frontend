@@ -1,9 +1,10 @@
-import { useCallback, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { Modal, View, StyleSheet, Platform } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import { theme } from "@/theme"
 import { CustomButton } from "@/components/ui/Button"
 import { AlertDialogVariant, ButtonVariant } from "@/types"
+import { useAuth } from "@/contexts/AuthContext"
 
 interface AlertDialogProps {
   title?: string
@@ -18,6 +19,7 @@ interface AlertDialogProps {
 }
 
 export default function AlertDialog(props: AlertDialogProps): JSX.Element {
+  const { isOnline } = useAuth()
   const [isVisible, setIsVisible] = useState(false)
   const [dialogProps, setDialogProps] = useState(props)
 
@@ -47,11 +49,17 @@ export default function AlertDialog(props: AlertDialogProps): JSX.Element {
     else
       setDialogProps({
         title: "No connection",
+        variant: "primary",
+        confirmText: "close",
         description:
           "Make sure that you are connected to the internet and try again",
       })
     setIsVisible(true)
   }
+
+  useEffect(() => {
+    setIsVisible(!isOnline)
+  }, [isOnline])
   AlertDialog.open = open
   AlertDialog.close = close
 

@@ -22,7 +22,6 @@ import { useQueryClient } from "@tanstack/react-query"
 import api from "@/service"
 import AlertDialog from "@/components/AlertDialog"
 import { useOfflineHandler } from "@/hooks/useOfflineHandler"
-import { fetch } from "@react-native-community/netinfo"
 
 interface AuthContextData {
   user: User | null
@@ -82,12 +81,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       console.error("error with saving user info")
     }
   }
-
-  const getNetworkState = async () => {
-    const state = await fetch()
-    return state.isConnected
-  }
-
   const registerUser = async (username: string) => {
     try {
       if (!username || !currentToken) return
@@ -209,13 +202,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   async function loadStoredData(): Promise<void> {
     setIsLoading(true)
 
-    const isConnected = await getNetworkState()
-
-    if (!isConnected) {
-      AlertDialog.open()
-      setIsLoading(false)
-      return
-    }
     const storedUser = await AsyncStorage.getItem("@Auth:user")
     const storedToken = await AsyncStorage.getItem("@Auth:accessToken")
     if (storedUser && storedToken) {
@@ -226,6 +212,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   }
 
   useEffect(() => {
+    if (!isOnline) {
+      AlertDialog.open()
+    }
     loadStoredData()
   }, [isOnline])
 
