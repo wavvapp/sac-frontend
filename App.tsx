@@ -7,9 +7,20 @@ import { StatusBar } from "expo-status-bar"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { useFont } from "@/hooks/useFont"
 import { SafeAreaProvider } from "react-native-safe-area-context"
+import { NotificationProvider } from "./contexts/NotificationContext"
+import * as Notifications from "expo-notifications"
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync()
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: false,
+    priority: Notifications.AndroidNotificationPriority.MAX,
+  }),
+})
 
 const queryClient = new QueryClient()
 
@@ -21,14 +32,16 @@ export default function App() {
   }
   return (
     <QueryClientProvider client={queryClient}>
-      <SafeAreaProvider>
-        <StatusBar style="inverted" />
-        <AuthProvider>
-          <GestureHandlerRootView>
-            <AppNavigator />
-          </GestureHandlerRootView>
-        </AuthProvider>
-      </SafeAreaProvider>
+      <NotificationProvider>
+        <SafeAreaProvider>
+          <StatusBar style="inverted" />
+          <AuthProvider>
+            <GestureHandlerRootView>
+              <AppNavigator />
+            </GestureHandlerRootView>
+          </AuthProvider>
+        </SafeAreaProvider>
+      </NotificationProvider>
     </QueryClientProvider>
   )
 }

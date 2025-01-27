@@ -7,7 +7,14 @@
           "iosUrlScheme": "com.googleusercontent.apps.351310982043-28dk2k254o76heo1d4pr3uftmgsjmihh"
         }
       ],
-       "expo-apple-authentication"
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/images/icon.png",
+          "color": "#bada55"
+        }
+      ],
+      "expo-apple-authentication"
     ],
     "name": "Wavv",
     "slug": "Wavv",
@@ -20,7 +27,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#000000"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "usesAppleSignIn": true,
       "supportsTablet": true,
@@ -45,10 +54,18 @@
         "foregroundImage": "./assets/images/icon.png",
         "backgroundColor": "#000000"
       },
-      "package": "com.apeunit.socialapp"
+      "package": "com.apeunit.socialapp",
+      "googleServicesFile": "./google-services.json",
+      "useNextNotificationsApi": true
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "979c6008-7f9c-461f-a2e7-723ad8c8d734"
+      }
+    },
+    "owner": "symplifideveloper"
   }
 }
