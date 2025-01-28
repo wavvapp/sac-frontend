@@ -9,11 +9,10 @@ export async function registerForPushNotificationsAsync() {
       name: "default",
       importance: Notifications.AndroidImportance.MAX,
       vibrationPattern: [0, 250, 250, 250],
-      lightColor: "#FF231F7C",
+      lightColor: "#000000", // color for the around of the notification icon
     })
   }
 
-  console.log("device", Device)
   if (Device.isDevice) {
     const { status: existingStatus } = await Notifications.getPermissionsAsync()
     let finalStatus = existingStatus
@@ -38,7 +37,7 @@ export async function registerForPushNotificationsAsync() {
           projectId,
         })
       ).data
-      console.log("-----------", pushTokenString)
+      console.log("----------- token: -----", pushTokenString)
       return pushTokenString
     } catch (e: unknown) {
       throw new Error(`${e}`)

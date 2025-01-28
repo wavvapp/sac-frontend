@@ -16,9 +16,7 @@ interface NotificationContextType {
   error: Error | null
 }
 
-const NotificationContext = createContext<NotificationContextType | undefined>(
-  undefined,
-)
+const NotificationContext = createContext<NotificationContextType | null>(null)
 
 export const useNotification = () => {
   const context = useContext(NotificationContext)
@@ -43,7 +41,6 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
   const [error, setError] = useState<Error | null>(null)
 
   const notificationListener = useRef<Subscription>()
-  const responseListener = useRef<Subscription>()
 
   useEffect(() => {
     registerForPushNotificationsAsync().then(
@@ -53,18 +50,7 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
 
     notificationListener.current =
       Notifications.addNotificationReceivedListener((notification) => {
-        console.log("🔔 Notification Received: ", notification)
         setNotification(notification)
-      })
-
-    responseListener.current =
-      Notifications.addNotificationResponseReceivedListener((response) => {
-        console.log(
-          "🔔 Notification Response: ",
-          JSON.stringify(response, null, 2),
-          JSON.stringify(response.notification.request.content.data, null, 2),
-        )
-        // Handle the notification response here
       })
 
     return () => {
@@ -72,9 +58,6 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
         Notifications.removeNotificationSubscription(
           notificationListener.current,
         )
-      }
-      if (responseListener.current) {
-        Notifications.removeNotificationSubscription(responseListener.current)
       }
     }
   }, [])

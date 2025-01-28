@@ -10,8 +10,8 @@
       [
         "expo-notifications",
         {
-          "icon": "./assets/images/icon.png",
-          "color": "#bada55"
+          "icon": "./assets/images/favicon.png",
+          "color": "#cecece"
         }
       ],
       "expo-apple-authentication"
