@@ -1,3 +1,4 @@
+import { VALIDATION_PATTERNS } from "@/constants/patterns"
 import { theme } from "@/theme"
 import { useCallback } from "react"
 import { StyleSheet, TextInput, View } from "react-native"
@@ -25,8 +26,7 @@ export const ConfirmationCode = ({
 
   const validateCodeInput = useCallback(
     (code: string) => {
-      // regex to check if the code is numeric
-      const numbericValues = code.replace(/[^0-9]/g, "")
+      const numbericValues = code.replace(VALIDATION_PATTERNS.numericValues, "")
       handleTextChange(numbericValues)
     },
     [handleTextChange],
