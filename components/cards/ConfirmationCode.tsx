@@ -32,7 +32,7 @@ export const ConfirmationCode = ({
     [handleTextChange],
   )
   return (
-    <View>
+    <View style={styles.container}>
       <CodeField
         ref={ref}
         {...props}
@@ -58,8 +58,10 @@ export const ConfirmationCode = ({
 
 const styles = StyleSheet.create({
   cell: {
-    width: 49,
-    height: 56,
+    flex: 1,
+    aspectRatio: 1,
+    maxWidth: 50,
+    minHeight: 35,
     paddingHorizontal: 16,
     paddingVertical: 14,
     borderWidth: 1,
@@ -73,5 +75,8 @@ const styles = StyleSheet.create({
   },
   focusCell: {
     borderColor: theme.colors.white_500,
+  },
+  container: {
+    width: "100%",
   },
 })
