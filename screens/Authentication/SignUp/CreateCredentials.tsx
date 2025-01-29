@@ -133,7 +133,10 @@ export default function CreateCredentials() {
           </View>
           <TouchableOpacity
             style={styles.crossMarkContainer}
-            onPress={() => navigation.push("EntryScreen")}>
+            onPress={() => {
+              setUserInput("")
+              navigation.push("EntryScreen")
+            }}>
             <CrossMark color={theme.colors.white} />
           </TouchableOpacity>
         </View>
