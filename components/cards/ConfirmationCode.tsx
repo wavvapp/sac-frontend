@@ -1,4 +1,5 @@
 import { theme } from "@/theme"
+import { useCallback } from "react"
 import { StyleSheet, TextInput, View } from "react-native"
 import {
   CodeField,
@@ -21,20 +22,30 @@ export const ConfirmationCode = ({
     value,
     setValue: handleTextChange,
   })
+
+  const validateCodeInput = useCallback(
+    (code: string) => {
+      // regex to check if the code is numeric
+      const numbericValues = code.replace(/[^0-9]/g, "")
+      handleTextChange(numbericValues)
+    },
+    [handleTextChange],
+  )
   return (
     <View>
       <CodeField
         ref={ref}
         {...props}
         value={value}
-        onChangeText={handleTextChange}
+        autoFocus={true}
+        onChangeText={validateCodeInput}
         cellCount={CELL_COUNT}
         keyboardType="number-pad"
         textContentType="oneTimeCode"
         renderCell={({ index, symbol, isFocused }) => (
           <TextInput
             key={index}
-            onChangeText={handleTextChange}
+            onChangeText={validateCodeInput}
             style={[styles.cell, isFocused && styles.focusCell]}
             onLayout={getCellOnLayoutHandler(index)}>
             {symbol || (isFocused && <Cursor />)}
