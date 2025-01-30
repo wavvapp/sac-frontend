@@ -1,3 +1,4 @@
+import { ConfirmationCode } from "@/components/cards/ConfirmationCode"
 import CredentialsButton from "@/components/CredentialsButton"
 import Badge from "@/components/ui/Badge"
 import CustomText from "@/components/ui/CustomText"
@@ -132,7 +133,10 @@ export default function CreateCredentials() {
           </View>
           <TouchableOpacity
             style={styles.crossMarkContainer}
-            onPress={() => navigation.push("EntryScreen")}>
+            onPress={() => {
+              setUserInput("")
+              navigation.push("EntryScreen")
+            }}>
             <CrossMark color={theme.colors.white} />
           </TouchableOpacity>
         </View>
@@ -140,14 +144,21 @@ export default function CreateCredentials() {
           <CustomText style={styles.title} size="lg">
             {ACCOUNT_SETUP_STEPS[step].titleText}
           </CustomText>
-          <Input
-            handleTextChange={setUserInput}
-            variant="secondary"
-            placeholder={ACCOUNT_SETUP_STEPS[step].inputPlaceholder}
-            value={userInput}
-            onSubmitEditing={handleSubmit}
-            autoFocus
-          />
+          {step === 1 ? (
+            <ConfirmationCode
+              handleTextChange={setUserInput}
+              value={userInput}
+            />
+          ) : (
+            <Input
+              handleTextChange={setUserInput}
+              variant="secondary"
+              placeholder={ACCOUNT_SETUP_STEPS[step].inputPlaceholder}
+              value={userInput}
+              onSubmitEditing={handleSubmit}
+              autoFocus
+            />
+          )}
           <CustomText size="base" style={styles.description}>
             {ACCOUNT_SETUP_STEPS[step].descriptionText}
           </CustomText>
