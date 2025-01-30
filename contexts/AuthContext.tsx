@@ -61,7 +61,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         names,
         username,
         profilePictureUrl,
-        inviteCode = userData?.inviteCode?.toString(),
+        inviteCode,
       } = userData
       const user: User = {
         id,
@@ -69,7 +69,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         email,
         username,
         profilePictureUrl: profilePictureUrl,
-        inviteCode,
+        inviteCode: inviteCode?.toString(),
       }
       await AsyncStorage.setItem("@Auth:accessToken", accessToken)
       await AsyncStorage.setItem("@Auth:refreshToken", refreshToken)
