@@ -1,18 +1,17 @@
 import { View, StyleSheet } from "react-native"
-import UserAvatar from "@/components/ui/UserAvatar"
 import { useAuth } from "@/contexts/AuthContext"
 import UserInfo from "@/components/UserInfo"
+import UserIcon from "../vectors/UserIcon"
+import { theme } from "@/theme"
 
 export default function UserProfile() {
   const { user } = useAuth()
   const { names, username } = user || {}
   return (
     <View style={styles.container}>
-      <UserAvatar
-        imageUrl={user?.profilePictureUrl}
-        size="medium"
-        style={{ alignSelf: "center" }}
-      />
+      <View style={styles.iconContainer}>
+        <UserIcon color={theme.colors.black_200} height={96} width={96} />
+      </View>
       {names && username && (
         <UserInfo
           fullName={names}
@@ -32,5 +31,11 @@ const styles = StyleSheet.create({
   },
   userInfoStyles: {
     alignItems: "center",
+  },
+  iconContainer: {
+    borderWidth: 1,
+    borderRadius: 80,
+    borderColor: theme.colors.black_200,
+    padding: 24,
   },
 })
