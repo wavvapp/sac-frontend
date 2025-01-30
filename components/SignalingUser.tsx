@@ -1,6 +1,5 @@
 import { User } from "@/types"
 import { View, StyleSheet } from "react-native"
-import UserAvatar from "@/components/ui/UserAvatar"
 import UserAvailability from "@/components/cards/UserAvailability"
 import UserInfo from "@/components/UserInfo"
 import { theme } from "@/theme"
