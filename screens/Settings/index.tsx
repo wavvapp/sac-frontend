@@ -127,7 +127,7 @@ export default function SettingScreen() {
       <BottomModal
         visible={isNotificationPreferencesOpen}
         onClose={toggleNotificationPreferences}
-        transparent={false}>
+        height={"90%"}>
         <NotificationPreferences />
       </BottomModal>
     </SafeAreaView>
