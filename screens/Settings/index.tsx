@@ -19,16 +19,21 @@ import BottomModal from "@/components/BottomModal"
 import EditActivity from "@/screens/EditActivity"
 import useUpdateUser from "@/hooks/useUpdateUser"
 import { useDeleteUser } from "@/queries/user"
-import { useState } from "react"
+import { useRef, useState } from "react"
 import NotificationPreferences from "@/screens/NotificationPreferences"
+import BottomDrawer, { BottomDrawerRef } from "@/components/BottomDrawer"
 
 export default function SettingScreen() {
-  const [isNotificationPreferencesOpen, setNotificationPreferencesOpen] =
-    useState(false)
+  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false)
   const { signOut, user } = useAuth()
   const { editUserInfo, toggleEditInfoModal, updateUserInfo, namesInputRef } =
     useUpdateUser()
   const deleteUserMutation = useDeleteUser()
+  const bottomDrawerRef = useRef<BottomDrawerRef>(null)
+
+  const handleOpenNotificationPreferences = () => {
+    bottomDrawerRef.current?.openBottomSheet()
+  }
 
   const handleSignOut = async () => {
     await signOut()
@@ -36,9 +41,6 @@ export default function SettingScreen() {
   const handleDeleteAccount = async () => {
     await deleteUserMutation.mutateAsync()
   }
-
-  const toggleNotificationPreferences = () =>
-    setNotificationPreferencesOpen(!isNotificationPreferencesOpen)
 
   const settingOptions: SettingOption[] = [
     {
@@ -66,7 +68,7 @@ export default function SettingScreen() {
       title: "Push notifications",
       description: "Manage preferences",
       icon: <BellIcon />,
-      onPress: toggleNotificationPreferences,
+      onPress: handleOpenNotificationPreferences,
     },
     {
       title: "Log out",
@@ -124,12 +126,12 @@ export default function SettingScreen() {
           multiLineInput={false}
         />
       </BottomModal>
-      <BottomModal
-        visible={isNotificationPreferencesOpen}
-        onClose={toggleNotificationPreferences}
-        height={"90%"}>
+      <BottomDrawer
+        ref={bottomDrawerRef}
+        setIsBottomSheetOpen={setIsBottomSheetOpen}
+        fullyHiddenOnClose={true}>
         <NotificationPreferences />
-      </BottomModal>
+      </BottomDrawer>
     </SafeAreaView>
   )
 }

@@ -54,8 +54,6 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     backgroundColor: theme.colors.white,
-    paddingHorizontal: 20,
-    paddingTop: 32,
     borderTopLeftRadius: 12,
     borderTopRightRadius: 12,
   },

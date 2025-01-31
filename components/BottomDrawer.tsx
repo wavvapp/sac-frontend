@@ -12,19 +12,20 @@ import {
   useRef,
 } from "react"
 
-interface BottomDrawerRef {
+export interface BottomDrawerRef {
   openBottomSheet: () => void
 }
 
 interface DrawerProps {
   children: React.ReactNode
   setIsBottomSheetOpen: Dispatch<SetStateAction<boolean>>
+  fullyHiddenOnClose?: boolean
 }
 
 const BottomDrawer = forwardRef<BottomDrawerRef, DrawerProps>((props, ref) => {
   const snapPoints = useMemo(() => ["20%", "88%"], [])
   const bottomSheetRef = useRef<BottomSheet>(null)
-  const { children, setIsBottomSheetOpen } = props
+  const { children, setIsBottomSheetOpen, fullyHiddenOnClose = false } = props
   useImperativeHandle(ref, () => ({
     openBottomSheet: () => {
       bottomSheetRef.current?.expand()
@@ -42,9 +43,9 @@ const BottomDrawer = forwardRef<BottomDrawerRef, DrawerProps>((props, ref) => {
   return (
     <BottomSheet
       ref={bottomSheetRef}
-      index={0}
+      index={fullyHiddenOnClose ? -1 : 0}
       snapPoints={snapPoints}
-      enablePanDownToClose={false}
+      enablePanDownToClose={fullyHiddenOnClose}
       onChange={handleSheetChanges}
       backdropComponent={renderBackdrop}>
       {children}

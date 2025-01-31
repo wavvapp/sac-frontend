@@ -4,8 +4,9 @@ import CustomText from "@/components/ui/CustomText"
 import UserInfo from "@/components/UserInfo"
 import { useFriends } from "@/queries/friends"
 import { theme } from "@/theme"
+import { BottomSheetScrollView } from "@gorhom/bottom-sheet"
 import { useState } from "react"
-import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native"
+import { StyleSheet, TouchableOpacity, View } from "react-native"
 
 export default function NotificationPreferences() {
   const { data: allFriends, isLoading } = useFriends(true)
@@ -25,11 +26,13 @@ export default function NotificationPreferences() {
         </CustomText>
       </View>
 
-      <ScrollView style={styles.friendsList}>
+      <BottomSheetScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.friendsList}>
         {isLoading ? (
           <FriendsSkeleton />
         ) : allFriends && allFriends.length !== 0 ? (
-          allFriends.map((friend) => (
+          [...allFriends, ...allFriends, ...allFriends].map((friend) => (
             <TouchableOpacity
               key={friend.id}
               style={styles.friendContainer}
@@ -55,13 +58,15 @@ export default function NotificationPreferences() {
         ) : (
           <CustomText size="sm">You currently have no friends!</CustomText>
         )}
-      </ScrollView>
+      </BottomSheetScrollView>
     </View>
   )
 }
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingHorizontal: 20,
+    paddingTop: 32,
   },
   header: { gap: 6 },
   friendsList: {
