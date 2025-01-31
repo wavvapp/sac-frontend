@@ -20,7 +20,7 @@ import EditActivity from "@/screens/EditActivity"
 import useUpdateUser from "@/hooks/useUpdateUser"
 import { useDeleteUser } from "@/queries/user"
 import { useState } from "react"
-import NotificationPreferences from "../NotificationPreferences"
+import NotificationPreferences from "@/screens/NotificationPreferences"
 
 export default function SettingScreen() {
   const [isNotificationPreferencesOpen, setNotificationPreferencesOpen] =
