@@ -9,7 +9,7 @@ import AlertDialog from "@/components/AlertDialog"
 
 // Create an Axios instance
 const api = axios.create({
-  baseURL: process.env.API_BASE_URL,
+  baseURL: "http://localhost:3000/api",
   timeout: 10000,
   headers: {
     "Content-Type": "application/json",
@@ -18,7 +18,7 @@ const api = axios.create({
 
 // Function to refresh the access token
 const refreshAccessToken = async (refreshToken: string) => {
-  const url = `${process.env.API_BASE_URL}/auth/refresh-token`
+  const url = `http://localhost:3000/api/auth/refresh-token`
   const body = { refresh_token: refreshToken }
   const { data } = await axios.post(url, body)
 
@@ -38,6 +38,7 @@ api.interceptors.request.use(
     }
     const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
     const token = await AsyncStorage.getItem("@Auth:accessToken")
+    console.log(process.env.API_BASE_URL)
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
     }
