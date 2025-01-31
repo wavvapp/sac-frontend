@@ -1,4 +1,3 @@
-import UserAvatar from "@/components/ui/UserAvatar"
 import UserInfo from "@/components/UserInfo"
 import { User } from "@/types"
 import { StyleSheet, TouchableOpacity } from "react-native"
@@ -17,7 +16,6 @@ export default function FriendCard({
     <TouchableOpacity
       style={styles.container}
       onPress={() => handleChange(user.id)}>
-      <UserAvatar imageUrl={user?.profilePictureUrl} />
       <UserInfo
         fullName={user?.names}
         username={user.username}

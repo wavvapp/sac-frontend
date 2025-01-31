@@ -3,7 +3,6 @@ import Input from "@/components/ui/Input"
 import UserInfo from "@/components/UserInfo"
 import { CustomButton } from "@/components/ui/Button"
 import { useCallback, useMemo, useState } from "react"
-import UserAvatar from "@/components/ui/UserAvatar"
 import CustomText from "@/components/ui/CustomText"
 import { User } from "@/types"
 import { theme } from "@/theme"
@@ -104,7 +103,6 @@ const FindFriends = () => {
                       : handleAddFriend(user)
                   }>
                   <View style={styles.userDetails}>
-                    <UserAvatar imageUrl={user.profilePictureUrl} />
                     <View style={styles.userInfo}>
                       <UserInfo
                         fullName={user.names}
