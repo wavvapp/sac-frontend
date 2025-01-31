@@ -1,7 +1,7 @@
 import { View, StyleSheet } from "react-native"
 import { useAuth } from "@/contexts/AuthContext"
 import UserInfo from "@/components/UserInfo"
-import UserIcon from "../vectors/UserIcon"
+import UserIcon from "@/components/vectors/UserIcon"
 import { theme } from "@/theme"
 
 export default function UserProfile() {
