@@ -19,8 +19,12 @@ import BottomModal from "@/components/BottomModal"
 import EditActivity from "@/screens/EditActivity"
 import useUpdateUser from "@/hooks/useUpdateUser"
 import { useDeleteUser } from "@/queries/user"
+import NotificationPreferences from "@/screens/NotificationPreferences"
+import { useState } from "react"
 
 export default function SettingScreen() {
+  const [isNotificationPreferencesOpen, setNotificationPreferencesOpen] =
+    useState(false)
   const { signOut, user } = useAuth()
   const { editUserInfo, toggleEditInfoModal, updateUserInfo, namesInputRef } =
     useUpdateUser()
@@ -32,6 +36,8 @@ export default function SettingScreen() {
   const handleDeleteAccount = async () => {
     await deleteUserMutation.mutateAsync()
   }
+  const toggleNotificationPreferences = () =>
+    setNotificationPreferencesOpen(!isNotificationPreferencesOpen)
 
   const settingOptions: SettingOption[] = [
     {
@@ -59,7 +65,7 @@ export default function SettingScreen() {
       title: "Push notifications",
       description: "Manage preferences",
       icon: <BellIcon />,
-      onPress: () => {},
+      onPress: toggleNotificationPreferences,
     },
     {
       title: "Log out",
@@ -116,6 +122,12 @@ export default function SettingScreen() {
           inputRef={namesInputRef}
           multiLineInput={false}
         />
+      </BottomModal>
+      <BottomModal
+        visible={isNotificationPreferencesOpen}
+        onClose={toggleNotificationPreferences}
+        height={"90%"}>
+        <NotificationPreferences />
       </BottomModal>
     </SafeAreaView>
   )
