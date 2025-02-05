@@ -33,7 +33,7 @@
     "ios": {
       "usesAppleSignIn": true,
       "supportsTablet": true,
-      "bundleIdentifier": "com.apeunit.social.app",
+      "bundleIdentifier": "com.apeunit.wavv.app",
       "buildNumber": "1.0.0",
       "infoPlist": {
         "NSCameraUsageDescription": "This app uses the camera to scan barcodes on event tickets.",
@@ -54,7 +54,7 @@
         "foregroundImage": "./assets/images/icon.png",
         "backgroundColor": "#000000"
       },
-      "package": "com.apeunit.socialapp",
+      "package": "com.apeunit.wavv.app",
       "googleServicesFile": "./google-services.json",
       "useNextNotificationsApi": true
     },
@@ -63,9 +63,9 @@
     },
     "extra": {
       "eas": {
-        "projectId": "979c6008-7f9c-461f-a2e7-723ad8c8d734"
+        "projectId": "bef736cd-7f43-44a8-8a8b-a71d84223238"
       }
     },
-    "owner": "symplifideveloper"
+    "owner": "unit8"
   }
 }

@@ -9,6 +9,7 @@ import React, {
 import * as Notifications from "expo-notifications"
 import { Subscription } from "expo-modules-core"
 import { registerForPushNotificationsAsync } from "@/utils/registerForNotifications"
+import { useRegisterExpoNotificationToken } from "@/queries/user"
 
 interface NotificationContextType {
   expoPushToken: string | null
@@ -39,12 +40,16 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
   const [notification, setNotification] =
     useState<Notifications.Notification | null>(null)
   const [error, setError] = useState<Error | null>(null)
+  const submitNotificationToken = useRegisterExpoNotificationToken()
 
   const notificationListener = useRef<Subscription>()
 
   useEffect(() => {
     registerForPushNotificationsAsync().then(
-      (token) => setExpoPushToken(token),
+      (token) => {
+        submitNotificationToken.mutate(token)
+        setExpoPushToken(token)
+      },
       (error) => setError(error),
     )
 

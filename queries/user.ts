@@ -36,3 +36,21 @@ export const useUpdateUserInfo = () => {
     },
   })
 }
+
+export const useRegisterExpoNotificationToken = () => {
+  return useMutation({
+    mutationFn: async (token: string) => {
+      console.log("patching,....", token)
+      const results = await api.patch("/users", {
+        preferances: { allowNotification: true },
+        notificationToken: token,
+      })
+
+      console.log(JSON.stringify(results, null, 2))
+      return results
+    },
+    onError: (error) => {
+      console.error("Error updating user info: ", error)
+    },
+  })
+}
