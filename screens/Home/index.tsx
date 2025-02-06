@@ -2,7 +2,7 @@ import UserStatus from "@/components/cards/UserStatus"
 import PerlinNoise from "@/components/PerlinNoise"
 import { RootStackParamList } from "@/navigation"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
-import { StyleSheet, View, Dimensions, StatusBar, Platform } from "react-native"
+import { StyleSheet, View, StatusBar, Platform } from "react-native"
 import { runOnJS, useDerivedValue } from "react-native-reanimated"
 import { AnimatedSwitch } from "@/components/AnimatedSwitch"
 import { useCallback, useRef, useState } from "react"
@@ -16,57 +16,68 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native"
 import { onShare } from "@/utils/share"
 import NoFriends from "@/components/cards/NoFriends"
 import { useAuth } from "@/contexts/AuthContext"
-import { useSignal } from "@/hooks/useSignal"
-import { useFriends } from "@/hooks/useFriends"
-import { useQuery, useMutation } from "@tanstack/react-query"
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { fetchPoints } from "@/libs/fetchPoints"
 import * as WebBrowser from "expo-web-browser"
 import { TouchableOpacity } from "react-native-gesture-handler"
+import { useStatus } from "@/contexts/StatusContext"
+import api from "@/service"
+import { useFriends } from "@/queries/friends"
+import { useMySignal } from "@/queries/signal"
+import { useOfflineHandler } from "@/hooks/useOfflineHandler"
+import { height, width } from "@/utils/dimensions"
+import { CopiableText } from "@/components/cards/CopiableText"
+import AlertDialog from "@/components/AlertDialog"
 
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
   "Home"
 >
 
-const { width } = Dimensions.get("window")
 export default function HomeScreen() {
   const [_, setIsVisible] = useState(false)
-  const { isOn, turnOffSignalStatus, turnOnSignalStatus } = useSignal()
+  const { isOn } = useStatus()
   const signalingRef = useRef<SignalingRef>(null)
   const navigation = useNavigation<HomeScreenProps>()
-  const { hasFriends } = useFriends()
+  const { data: allFriends } = useFriends()
   const { user, isAuthenticated } = useAuth()
-  const {
-    data,
-    refetch: refetchPoints,
-    isLoading,
-  } = useQuery({
+  const queryClient = useQueryClient()
+  const { handleOfflineAction } = useOfflineHandler()
+
+  const { data, refetch: refetchPoints } = useQuery({
     queryKey: ["points"],
     queryFn: fetchPoints,
   })
-
   const handlePress = useMutation({
-    mutationFn: isOn.value ? turnOffSignalStatus : turnOnSignalStatus,
+    mutationKey: ["toggle-signal-change"],
+    mutationFn: isOn.value
+      ? () => api.post("/my-signal/turn-off")
+      : () => api.post("/my-signal/turn-on"),
+    networkMode: "online",
     onMutate: () => {
-      isOn.value = !isOn.value
+      handleOfflineAction(() => (isOn.value = !isOn.value))
     },
     onError: () => {
       isOn.value = !isOn.value
     },
+    onSettled() {
+      queryClient.refetchQueries({ queryKey: ["points"] })
+      queryClient.refetchQueries({ queryKey: ["fetch-my-signal"] })
+    },
   })
-
   useFocusEffect(
     useCallback(() => {
       if (!isAuthenticated) return
       refetchPoints()
-    }, [refetchPoints, isAuthenticated]),
+    }, [isAuthenticated, refetchPoints]),
   )
-
+  const { isPlaceholderData } = useMySignal()
   const handleWebsiteOpen = async () => {
-    await WebBrowser.openBrowserAsync(
-      "https://7axab-zyaaa-aaaao-qjv7a-cai.icp0.io/",
-    )
+    if (process.env.POINTS_CANISTER_URL) {
+      await WebBrowser.openBrowserAsync(process.env.POINTS_CANISTER_URL)
+    }
   }
+
   useDerivedValue(() => {
     if (isOn.value) {
       return runOnJS(setIsVisible)(true)
@@ -78,13 +89,24 @@ export default function HomeScreen() {
     <View style={styles.container}>
       <PerlinNoise isOn={isOn} color1="#281713" color2="blue" />
       <View style={styles.header}>
-        <TouchableOpacity onPress={handleWebsiteOpen}>
-          <Badge variant="primary" name={data?.points?.toFixed(1)} />
+        <TouchableOpacity
+          onPress={() => handleOfflineAction(handleWebsiteOpen)}>
+          <Badge variant="primary" name={data?.points?.toFixed(1) || 0} />
         </TouchableOpacity>
         <View style={styles.buttonContainer}>
           <CustomButton
             style={styles.iconButton}
-            onPress={() => onShare(user?.username || "me")}>
+            onPress={() =>
+              AlertDialog.open({
+                title: "Share this invite code with your friend",
+                description: <CopiableText text={user?.inviteCode || ""} />,
+                variant: "confirm",
+                confirmText: "Share",
+                cancelText: "cancel",
+                onConfirm: () => onShare(user?.username, user?.inviteCode),
+                closeAutomatically: false,
+              })
+            }>
             <ShareIcon color={theme.colors.white} />
           </CustomButton>
           <CustomButton
@@ -94,7 +116,7 @@ export default function HomeScreen() {
           </CustomButton>
         </View>
       </View>
-      {!hasFriends ? (
+      {!allFriends?.length ? (
         <NoFriends />
       ) : (
         <>
@@ -103,7 +125,7 @@ export default function HomeScreen() {
           </View>
           <AnimatedSwitch
             isOn={isOn}
-            isLoading={isLoading}
+            isLoading={isPlaceholderData}
             onPress={() => handlePress.mutate()}
             style={styles.switch}
           />
@@ -121,7 +143,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingTop:
       Platform.OS === "ios"
-        ? Dimensions.get("window").height >= 812
+        ? height >= 812
           ? 47
           : 27
         : StatusBar.currentHeight || 0,

@@ -1,6 +1,5 @@
 import { User } from "@/types"
 import { View, StyleSheet } from "react-native"
-import UserAvatar from "@/components/ui/UserAvatar"
 import UserAvailability from "@/components/cards/UserAvailability"
 import UserInfo from "@/components/UserInfo"
 import { theme } from "@/theme"
@@ -25,7 +24,6 @@ export default function SignalingUser({
         isFirst && styles.firstCardInTheListStyles,
         online && styles.availableUserContainer,
       ]}>
-      <UserAvatar imageUrl={user.profilePictureUrl} />
       <View style={{ flex: 1 }}>
         {online ? (
           <UserAvailability

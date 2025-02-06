@@ -4,6 +4,8 @@ import axios, {
   InternalAxiosRequestConfig,
 } from "axios"
 import AsyncStorage from "@react-native-async-storage/async-storage"
+import NetInfo from "@react-native-community/netinfo"
+import AlertDialog from "@/components/AlertDialog"
 
 // Create an Axios instance
 const api = axios.create({
@@ -23,16 +25,23 @@ const refreshAccessToken = async (refreshToken: string) => {
   await AsyncStorage.setItem("@Auth:accessToken", data.access_token)
   await AsyncStorage.setItem("@Auth:refreshToken", data.refresh_token)
 
-  return data.access_token // Return the new access token
+  return data.access_token
 }
 
 // Request Interceptor
 api.interceptors.request.use(
   async (config: InternalAxiosRequestConfig) => {
+    const netInfo = await NetInfo.fetch()
+    if (!netInfo.isConnected) {
+      AlertDialog.open()
+      return Promise.reject(new Error("No internet connection"))
+    }
+    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
     const token = await AsyncStorage.getItem("@Auth:accessToken")
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
     }
+    config.headers["x-timezone"] = timezone
     return config
   },
   (error: AxiosError) => {

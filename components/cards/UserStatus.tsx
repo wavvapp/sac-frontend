@@ -1,7 +1,7 @@
 import { StyleSheet, TouchableOpacity, View, ViewStyle } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import { theme } from "@/theme"
-import { User } from "@/types"
+import { Friend, User } from "@/types"
 import { useNavigation } from "@react-navigation/native"
 import { HomeScreenProps } from "@/screens/Home"
 import Animated, {
@@ -11,8 +11,9 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated"
 import UserAvailability from "@/components/cards/UserAvailability"
-import { useStatus } from "@/contexts/StatusContext"
-import { useFriends } from "@/hooks/useFriends"
+import { useFriends } from "@/queries/friends"
+import { useMySignal } from "@/queries/signal"
+import { useMemo } from "react"
 
 const MAX_VISIBLE_FRIENDS = 3
 
@@ -27,27 +28,44 @@ export default function UserStatus({
   isOn,
   ...rest
 }: UserStatusProps) {
-  const { friendIds, statusMessage, timeSlot } = useStatus()
-  const { friends: signalFriends } = useFriends()
+  const { data: signal } = useMySignal()
+
+  const { data: allFriends } = useFriends()
   const navigation = useNavigation<HomeScreenProps>()
 
-  const friends = signalFriends.filter((friend) =>
-    friendIds.includes(friend.id),
-  )
-  const visibleFriends = friends.slice(0, MAX_VISIBLE_FRIENDS)
-  const remainingCount = Math.max(friends.length - MAX_VISIBLE_FRIENDS, 0)
-  const fullFriendsList = visibleFriends
-    .map((friend) => {
-      const firstName = friend.names?.split(" ")[0]
-      const lastName = friend.names?.split(" ").slice(1).join(" ")
-      return `${firstName} ${lastName?.charAt(0)}`
-    })
-    .join(", ")
+  const friends = useMemo(() => {
+    if (!allFriends) return []
+    const filteredFriends = allFriends.filter((friend: Friend) =>
+      signal?.friendIds?.includes(friend.id || ""),
+    )
+    return filteredFriends.sort((a, b) =>
+      (a.names || "").localeCompare(b.names || ""),
+    )
+  }, [signal, allFriends])
 
-  const visibleFriendsList =
-    remainingCount > 0
+  const visibleFriends = useMemo(
+    () => friends.slice(0, MAX_VISIBLE_FRIENDS),
+    [friends],
+  )
+  const remainingCount = useMemo(
+    () => Math.max(friends.length - MAX_VISIBLE_FRIENDS, 0),
+    [friends.length],
+  )
+  const fullFriendsList = useMemo(() => {
+    return visibleFriends
+      .map((friend: User) => {
+        const firstName = friend.names?.split(" ")[0]
+        const lastName = friend.names?.split(" ").slice(1).join(" ")
+        return `${firstName} ${lastName?.trim().charAt(0)}`.trim()
+      })
+      .join(", ")
+  }, [visibleFriends])
+
+  const visibleFriendsList = useMemo(() => {
+    return remainingCount > 0
       ? `${fullFriendsList}, +${remainingCount} more`
       : fullFriendsList
+  }, [remainingCount, fullFriendsList])
 
   const cardAnimatedStyle = useAnimatedStyle(() => {
     const moveValue = interpolate(Number(isOn.value), [0, 1], [0, 1])
@@ -72,14 +90,14 @@ export default function UserStatus({
         style={[styles.animationContainer, style, cardAnimatedStyle]}
         {...rest}>
         <View style={styles.userContainer}>
-          {user && (
+          {user && signal && (
             <UserAvailability
               fullName={user.names}
-              time={timeSlot}
-              activity={statusMessage}
+              time={signal.when}
+              activity={signal.status_message}
             />
           )}
-          <View>
+          <View style={{ opacity: 0.5 }}>
             <CustomText size="sm" fontFamily="writer-mono">
               {friends.length
                 ? `Visible to ${friends.length} friends`
@@ -131,6 +149,7 @@ const styles = StyleSheet.create({
     color: theme.colors.white,
     textAlign: "center",
     padding: 10,
+    textTransform: "uppercase",
   },
   headlineTextContainer: {
     maxWidth: 277,

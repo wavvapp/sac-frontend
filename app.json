@@ -6,11 +6,12 @@
         {
           "iosUrlScheme": "com.googleusercontent.apps.351310982043-28dk2k254o76heo1d4pr3uftmgsjmihh"
         }
-      ]
+      ],
+       "expo-apple-authentication"
     ],
     "name": "Wavv",
     "slug": "Wavv",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "userInterfaceStyle": "light",
@@ -21,6 +22,7 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
+      "usesAppleSignIn": true,
       "supportsTablet": true,
       "bundleIdentifier": "com.apeunit.social.app",
       "buildNumber": "1.0.0",

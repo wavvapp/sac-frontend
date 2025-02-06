@@ -1,11 +1,11 @@
-import React, {
+import {
   createContext,
   useState,
   useEffect,
   useContext,
   ReactNode,
+  useCallback,
 } from "react"
-import * as SplashScreen from "expo-splash-screen"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import {
   GoogleSignin,
@@ -14,18 +14,26 @@ import {
   statusCodes,
 } from "@react-native-google-signin/google-signin"
 import { Platform } from "react-native"
-import { User } from "@/types"
+import { Friend, Provider, User } from "@/types"
+import { CredentialsScreenProps } from "@/screens/Authentication/SignUp/CreateCredentials"
+import * as AppleAuthentication from "expo-apple-authentication"
+import { handleApiSignIn } from "@/libs/handleApiSignIn"
+import { useQueryClient } from "@tanstack/react-query"
 import api from "@/service"
+import AlertDialog from "@/components/AlertDialog"
+import { useOfflineHandler } from "@/hooks/useOfflineHandler"
 
 interface AuthContextData {
   user: User | null
   isLoading: boolean
-  signInWithGoogle: () => Promise<void>
+  signInWithGoogle: (navigation: CredentialsScreenProps) => Promise<void>
   signOut: () => Promise<void>
-  updateUserInfo: (activity: string, time: string) => Promise<void>
+  updateUserInfo: (names: string) => Promise<void>
   isAuthenticated: boolean
-  isAccountComplete: boolean
-  signUp: (username: string) => Promise<void>
+  isNewUser: boolean
+  registerUser: (username: string) => Promise<void>
+  signInWithApple: (navigation: CredentialsScreenProps) => Promise<void>
+  isOnline: boolean
 }
 interface ExtendedUser extends User {
   access_token: string
@@ -38,12 +46,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const [user, setUser] = useState<User | null>(null)
   const [isLoading, setIsLoading] = useState(true)
-  const [googleToken, setGoogleToken] = useState<string | null>(null)
-  const [isAccountComplete, setIsAccountComplete] = useState<boolean>(true)
-  useEffect(() => {
-    loadStoredData()
-  }, [])
-  async function signIn(userData: ExtendedUser): Promise<void> {
+  const [currentToken, setCurrentToken] = useState<string | null>(null)
+  const [isNewUser, setIsNewUser] = useState<boolean>(false)
+  const { isOnline } = useOfflineHandler()
+  const queryClient = useQueryClient()
+
+  async function completeSignIn(userData: ExtendedUser): Promise<void> {
     try {
       const {
         access_token: accessToken,
@@ -53,6 +61,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         names,
         username,
         profilePictureUrl,
+        inviteCode,
       } = userData
       const user: User = {
         id,
@@ -60,44 +69,60 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         email,
         username,
         profilePictureUrl: profilePictureUrl,
+        inviteCode,
       }
       await AsyncStorage.setItem("@Auth:accessToken", accessToken)
       await AsyncStorage.setItem("@Auth:refreshToken", refreshToken)
       await AsyncStorage.setItem("@Auth:user", JSON.stringify(user))
+      await prefetchFriends()
       setUser(userData)
     } catch (err) {
-      console.log("error with saving user info")
+      console.error("error with saving user info")
     }
   }
 
-  const signUp = async (username: string) => {
-    if (!username || !googleToken) return
-    const { data } = await api.post("/auth/google-signin", {
-      token: googleToken,
-      username,
-      platform: Platform.OS === "ios" ? "web" : "android",
-    })
-    setIsAccountComplete(true)
-    await signIn(data)
+  const registerUser = async (username: string) => {
+    try {
+      if (!username || !currentToken) return
+      const provider = await AsyncStorage.getItem("@Auth:provider")
+      const names = await AsyncStorage.getItem("@Auth:names")
+      if (!provider) return
+      const { data } = await handleApiSignIn({
+        token: currentToken,
+        username,
+        provider,
+        names,
+        platform: Platform.OS === "ios" ? "web" : "android",
+      })
+      setIsNewUser(false)
+      queryClient.setQueryData(["friends"], [])
+      await completeSignIn(data)
+    } catch (error) {
+      console.error("Error when signing up: ", error)
+    }
   }
 
-  const signInWithGoogle = async () => {
+  const signInWithGoogle = async (navigation: CredentialsScreenProps) => {
     try {
       await GoogleSignin.hasPlayServices()
       const response = await GoogleSignin.signIn()
       if (isSuccessResponse(response)) {
         setIsLoading(true)
         const idToken = response.data.idToken
-        const { data, status } = await api.post("/auth/google-signin", {
+        const payload = {
           token: idToken,
           platform: Platform.OS === "ios" ? "web" : "android",
-        })
-        setGoogleToken(idToken)
+          provider: Provider.GOOGLE,
+        }
+        await AsyncStorage.setItem("@Auth:provider", payload.provider)
+        const { data, status } = await handleApiSignIn(payload)
+        setCurrentToken(idToken)
         if (status === 202) {
-          setIsAccountComplete(false)
+          setIsNewUser(true)
+          navigation.navigate("CreateCredentials")
           return
         }
-        await signIn(data)
+        await completeSignIn(data)
       }
     } catch (error) {
       if (isErrorWithCode(error)) {
@@ -117,34 +142,100 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     }
   }
 
+  const prefetchFriends = useCallback(async () => {
+    await queryClient.prefetchQuery({
+      queryKey: ["friends"],
+      queryFn: async () => {
+        const { data } = await api.get("/friends")
+        return data
+      },
+    })
+  }, [queryClient])
+
+  const prefetchSignal = useCallback(async () => {
+    await queryClient.prefetchQuery({
+      queryKey: ["fetch-my-signal"],
+      queryFn: async () => {
+        const { data } = await api.get("/my-signal")
+        const signal = {
+          ...data,
+          friendIds: data.friends.map((friend: Friend) => friend?.friendId),
+        }
+        return signal
+      },
+    })
+  }, [queryClient])
+
+  const signInWithApple = async (navigation: CredentialsScreenProps) => {
+    try {
+      const credential = await AppleAuthentication.signInAsync({
+        requestedScopes: [
+          AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+          AppleAuthentication.AppleAuthenticationScope.EMAIL,
+        ],
+      })
+
+      if (credential.identityToken) {
+        const payload = {
+          token: credential.identityToken,
+          platform: Platform.OS === "ios" ? "web" : "android",
+          provider: Provider.APPLE,
+          email: credential.email,
+          names:
+            `${credential.fullName?.familyName ?? ""} ${credential.fullName?.middleName ?? ""} ${credential.fullName?.givenName ?? ""}`.trim(),
+        }
+        await AsyncStorage.setItem("@Auth:provider", payload.provider)
+        const { data, status } = await handleApiSignIn(payload)
+        setCurrentToken(payload.token)
+        if (status === 202) {
+          setIsNewUser(true)
+          navigation.navigate("CreateCredentials")
+          return
+        }
+        await completeSignIn(data)
+      }
+    } catch (error) {
+      console.error("Error while signing in: ", error)
+    }
+  }
+
   async function loadStoredData(): Promise<void> {
     setIsLoading(true)
 
     const storedUser = await AsyncStorage.getItem("@Auth:user")
     const storedToken = await AsyncStorage.getItem("@Auth:accessToken")
-
     if (storedUser && storedToken) {
       setUser(JSON.parse(storedUser))
     }
-
-    await SplashScreen.hideAsync()
+    await Promise.all([prefetchSignal(), prefetchFriends()])
     setIsLoading(false)
   }
+
+  useEffect(() => {
+    loadStoredData()
+  }, [])
 
   async function signOut(): Promise<void> {
     await AsyncStorage.removeItem("@Auth:accessToken")
     await AsyncStorage.removeItem("@Auth:user")
     await AsyncStorage.removeItem("@Auth:refreshToken")
-
+    queryClient.clear()
     setUser(null)
   }
 
-  async function updateUserInfo(activity: string, time: string) {
+  const updateUserInfo = async (names: string) => {
     if (!user) return
-    const updatedUserInfo: User = { ...user, time, activity }
-    await AsyncStorage.setItem("@Auth:user", JSON.stringify(updatedUserInfo))
-    setUser(updatedUserInfo)
+    const newUserInfo = { ...user, names: names }
+    await AsyncStorage.setItem("@Auth:user", JSON.stringify(newUserInfo))
+    await AsyncStorage.setItem("@Auth:names", names)
+    setUser(newUserInfo)
   }
+
+  useEffect(() => {
+    if (isOnline) return
+    AlertDialog.open()
+  }, [isOnline])
+
   return (
     <AuthContext.Provider
       value={{
@@ -153,11 +244,17 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         signInWithGoogle,
         signOut,
         updateUserInfo,
-        isAuthenticated: !!user,
-        isAccountComplete,
-        signUp,
+        isAuthenticated: !!user && !isLoading,
+        isNewUser,
+        registerUser,
+        signInWithApple,
+        isOnline,
       }}>
       {children}
+      <AlertDialog
+        title="No connection"
+        description="Make sure that you are connected to the internet and try again"
+      />
     </AuthContext.Provider>
   )
 }

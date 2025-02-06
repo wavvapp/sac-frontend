@@ -11,9 +11,11 @@ import { theme } from "@/theme"
 import EntryScreen from "@/screens/Authentication"
 import CreateCredentials from "@/screens/Authentication/SignUp/CreateCredentials"
 import { StatusProvider } from "@/contexts/StatusContext"
-import { useFriends } from "@/hooks/useFriends"
+import { useFriends } from "@/queries/friends"
 import * as SplashScreen from "expo-splash-screen"
 import { useEffect } from "react"
+import { StaticPageType } from "@/types"
+import StaticContentScreen from "@/screens/StaticContentScreen"
 export type RootStackParamList = {
   EntryScreen: undefined
   Home: undefined
@@ -23,12 +25,13 @@ export type RootStackParamList = {
   Signaling: undefined
   CreateCredentials: undefined
   Search: undefined
+  StaticContentScreen: { pageSlug: StaticPageType }
 }
 
 export default function AppNavigator() {
   const Stack = createNativeStackNavigator<RootStackParamList>()
-  const { isAuthenticated, isLoading, isAccountComplete } = useAuth()
-  const { isLoading: isFriendsLoading } = useFriends()
+  const { isAuthenticated, isLoading, isNewUser } = useAuth()
+  const { isFetching: isFriendsLoading } = useFriends()
 
   useEffect(() => {
     if (!isLoading && !isFriendsLoading) {
@@ -45,36 +48,38 @@ export default function AppNavigator() {
               headerTransparent: true,
               headerTitleStyle: { color: theme.colors.white },
             }}
-            initialRouteName={"Home"}>
-            <>
-              <Stack.Screen
-                name="Home"
-                options={{ headerShown: false }}
-                component={HomeScreen}
-              />
-              <Stack.Screen
-                name="Settings"
-                options={{ headerShown: false }}
-                component={Settings}
-              />
-              <Stack.Screen
-                name="EditSignal"
-                options={{ headerShown: false, presentation: "modal" }}
-                component={EditSignal}
-              />
-              <Stack.Screen
-                name="Search"
-                options={{ headerShown: false }}
-                component={Search}
-              />
-            </>
+            initialRouteName="Home">
+            <Stack.Screen
+              name="Home"
+              options={{ headerShown: false }}
+              component={HomeScreen}
+            />
+            <Stack.Screen
+              name="Settings"
+              options={{ headerShown: false }}
+              component={Settings}
+            />
+            <Stack.Screen
+              name="EditSignal"
+              options={{ headerShown: false }}
+              component={EditSignal}
+            />
+            <Stack.Screen
+              name="Search"
+              options={{ headerShown: false }}
+              component={Search}
+            />
           </Stack.Navigator>
         </StatusProvider>
       ) : (
         <Stack.Navigator
-          initialRouteName={
-            !isAccountComplete ? "CreateCredentials" : "EntryScreen"
-          }>
+          initialRouteName={isNewUser ? "CreateCredentials" : "EntryScreen"}>
+          <Stack.Screen
+            name="StaticContentScreen"
+            options={{ presentation: "modal", headerShown: false }}
+            component={StaticContentScreen}
+            initialParams={{ pageSlug: "privacy" }}
+          />
           <Stack.Screen
             name="CreateCredentials"
             options={{ headerShown: false }}

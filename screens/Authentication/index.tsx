@@ -2,22 +2,36 @@ import { View, StyleSheet, Text } from "react-native"
 // import PerlinNoise from "@/components/PerlinNoise"
 import { CustomButton } from "@/components/ui/Button"
 import { theme } from "@/theme"
-import LogoIcon from "@/components/vectors/LogoIcon"
 import CustomText from "@/components/ui/CustomText"
 import { useAuth } from "@/contexts/AuthContext"
 import { GoogleSignin } from "@react-native-google-signin/google-signin"
+import { useNavigation } from "@react-navigation/native"
+import { CredentialsScreenProps } from "./SignUp/CreateCredentials"
+import AppleIcon from "@/components/vectors/AppleIcon"
+import GoogleIcon from "@/components/vectors/GoogleIcon"
+import { StaticPageType } from "@/types"
+import { height } from "@/utils/dimensions"
+import WavvLogo from "@/components/vectors/WavvLogo"
 
 GoogleSignin.configure({
   webClientId: process.env.WEB_CLIENT_ID,
   iosClientId: process.env.IOS_CLIENT_ID,
   offlineAccess: false,
 })
-
 export default function EntryScreen() {
-  const { signInWithGoogle } = useAuth()
+  const { signInWithGoogle, signInWithApple } = useAuth()
+  const navigation = useNavigation<CredentialsScreenProps>()
 
   const handleGoogleLogin = async () => {
-    await signInWithGoogle()
+    await signInWithGoogle(navigation)
+  }
+
+  const handleAppleSignIn = async () => {
+    await signInWithApple(navigation)
+  }
+
+  const navigateToStaticScreen = (screen: StaticPageType) => {
+    navigation.navigate("StaticContentScreen", { pageSlug: screen })
   }
 
   return (
@@ -25,24 +39,28 @@ export default function EntryScreen() {
       {/* <PerlinNoise isOn={noise} color1="#281713" color2="blue" /> */}
       <View style={styles.content}>
         <View style={styles.logoContainer}>
-          <LogoIcon />
+          <WavvLogo width={390} height={80} />
           <CustomText fontFamily="writer-mono" style={styles.description}>
             Signal friends your availability
           </CustomText>
         </View>
         <View style={styles.subContainer}>
           <CustomButton
-            variant="primary"
-            title="Create Account"
-            onPress={handleGoogleLogin}
-            textStyles={styles.buttonText}
-          />
-          <CustomButton
             variant="destructive"
-            title="Sign In"
+            title="Sign In with Google"
             onPress={handleGoogleLogin}
             textStyles={styles.buttonText}
-          />
+            hasCenteredIcon>
+            <GoogleIcon />
+          </CustomButton>
+          <CustomButton
+            variant="primary"
+            title="Sign in with Apple"
+            onPress={handleAppleSignIn}
+            textStyles={styles.buttonText}
+            hasCenteredIcon>
+            <AppleIcon />
+          </CustomButton>
           <CustomText
             fontFamily="writer-mono"
             size="sm"
@@ -50,8 +68,17 @@ export default function EntryScreen() {
             By clicking on
             <Text> Sign In / Create an account </Text>
             you agree to our{" "}
-            <Text style={styles.underline}>Terms of Services</Text>. Learn more
-            about our <Text style={styles.underline}>Privacy Policy</Text> and{" "}
+            <Text
+              onPress={() => navigateToStaticScreen("terms")}
+              style={styles.underline}>
+              Terms of Services
+            </Text>
+            . Learn more about our{" "}
+            <Text
+              onPress={() => navigateToStaticScreen("privacy")}
+              style={styles.underline}>
+              Privacy Policy
+            </Text>{" "}
             <Text style={styles.underline}>Cookies Policy</Text>.
           </CustomText>
         </View>
@@ -67,12 +94,13 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    paddingVertical: 70,
+    paddingTop: height * 0.4,
+    paddingBottom: 70,
     justifyContent: "space-between",
   },
   logoContainer: {
-    paddingTop: 227,
     alignItems: "center",
+    alignSelf: "center",
     marginBottom: 20,
   },
   description: {
@@ -87,6 +115,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 12,
     flex: 0,
+    paddingHorizontal: 2,
   },
 
   agreementText: {

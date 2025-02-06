@@ -20,6 +20,7 @@ interface ButtonProps extends TouchableOpacityProps {
   disabled?: boolean
   fullWidth?: boolean
   children?: React.ReactNode
+  hasCenteredIcon?: boolean
 }
 
 export function CustomButton({
@@ -32,6 +33,7 @@ export function CustomButton({
   children,
   fullWidth,
   title,
+  hasCenteredIcon = false,
   ...rest
 }: ButtonProps): JSX.Element {
   const variantStyles = {
@@ -62,6 +64,10 @@ export function CustomButton({
       container: styles.default,
       text: styles.secondaryText,
     },
+    danger: {
+      container: styles.danger,
+      text: styles.dangerText,
+    },
   }
   const { container, text } = variantStyles[variant] || variantStyles.default
 
@@ -76,7 +82,13 @@ export function CustomButton({
       ]}
       disabled={disabled}
       {...rest}>
-      <View style={children && title ? [styles.childrenContainer] : {}}>
+      <View
+        style={[
+          children && title && !hasCenteredIcon
+            ? [styles.childrenContainer]
+            : {},
+          hasCenteredIcon && [styles.centeredIcon],
+        ]}>
         {children}
       </View>
       {title && (
@@ -115,11 +127,11 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.white,
     borderColor: theme.colors.white,
     borderWidth: 1,
-    height: 56,
     width: 350,
     justifyContent: "center",
     alignContent: "center",
     alignItems: "center",
+    paddingVertical: 21,
   },
   primaryText: {
     color: theme.colors.black,
@@ -134,7 +146,6 @@ const styles = StyleSheet.create({
     paddingVertical: 21,
     paddingHorizontal: 32,
     borderWidth: 1,
-    borderColor: theme.colors.red,
   },
   secondaryFullWidth: {
     width: 350,
@@ -173,5 +184,17 @@ const styles = StyleSheet.create({
   },
   disabled: {
     opacity: 0.3,
+  },
+  centeredIcon: {
+    paddingRight: 8,
+  },
+  danger: {
+    paddingHorizontal: 27,
+    paddingVertical: 21,
+    backgroundColor: theme.colors.red,
+  },
+  dangerText: {
+    color: theme.colors.white,
+    fontWeight: theme.fontWeight.semibold,
   },
 })

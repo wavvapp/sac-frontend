@@ -19,6 +19,7 @@ export type ButtonVariant =
   | "ghost"
   | "default"
   | "destructive"
+  | "danger"
 export type FontFamilyVariant = "suisse" | "marfa" | "writer-mono"
 export type fontStyleVariant = "normal" | "italic"
 export type BadgeVariant = "default" | "outline" | "primary"
@@ -45,13 +46,15 @@ export interface User {
   selected?: boolean
   profilePictureUrl?: ImageSourcePropType
   isFriend?: boolean
+  inviteCode: string
 }
 export interface Friend {
   id: string
   friendId: string
   username: string
   user: User
-  name: string
+  names: string
+  email: string
   time?: string
   activity?: string
   selected?: boolean
@@ -61,12 +64,14 @@ export interface Friend {
 
 export interface Signal {
   id?: string
-  status?: string
+  hasEnded?: boolean
   when: string
   status_message: string
   createdAt?: string
   updatedAt?: string
-  friends: string[]
+  friends: Friend[]
+  friendIds: string[]
+  status?: string
 }
 
 export type FriendSignal = {
@@ -78,3 +83,19 @@ export type FriendSignal = {
   signal: Signal
 }
 export type AccountCreationStep = 1 | 2
+
+export enum Provider {
+  GOOGLE = "google",
+  APPLE = "apple",
+}
+
+export type StaticPageType = "privacy" | "terms"
+
+export type AlertDialogVariant = "primary" | "confirm"
+export type SettingOption = {
+  title: string
+  description: string
+  icon: React.JSX.Element
+  onPress: () => void | Promise<void>
+  titleStyle?: TextStyle
+}

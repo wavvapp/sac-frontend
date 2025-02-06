@@ -1,10 +1,8 @@
 import { CustomButton } from "@/components/ui/Button"
 import CustomText from "@/components/ui/CustomText"
 import Input from "@/components/ui/Input"
-import CheckIcon from "@/components/vectors/CheckIcon"
-import { useStatus } from "@/contexts/StatusContext"
 import { theme } from "@/theme"
-import { useState } from "react"
+import { Ref, useState } from "react"
 import {
   View,
   StyleSheet,
@@ -12,19 +10,35 @@ import {
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
+  TextInput,
 } from "react-native"
 
 interface EditActivityProps {
+  title: string
+  placeholderText: string
+  initialInputValue: string
+  buttonText: string
+  onPress: (text: string) => void
   closeModal: () => void
+  inputRef: Ref<TextInput>
+  multiLineInput?: boolean
 }
 
-export default function EditActivity({ closeModal }: EditActivityProps) {
-  const { setStatusMessage, statusMessage } = useStatus()
-  const [text, setText] = useState(statusMessage)
+export default function EditActivity({
+  closeModal,
+  title,
+  placeholderText,
+  initialInputValue,
+  buttonText,
+  onPress,
+  inputRef,
+  multiLineInput = true,
+}: EditActivityProps) {
+  const [text, setText] = useState(initialInputValue)
 
   const handleEdit = () => {
     if (text.trim()) {
-      setStatusMessage(text.trim())
+      onPress(text)
       Keyboard.dismiss()
     }
     closeModal()
@@ -37,33 +51,31 @@ export default function EditActivity({ closeModal }: EditActivityProps) {
           behavior={Platform.OS === "ios" ? "padding" : "height"}
           style={styles.modalContainer}
           onStartShouldSetResponder={() => true}>
-          <CustomText fontWeight="normal" fontFamily="suisse" size="lg">
-            Status
-          </CustomText>
-          <View style={styles.formContainer}>
-            <Input
-              textSize="lg"
-              placeholder="Status message"
-              handleTextChange={setText}
-              value={text}
-              onSubmitEditing={handleEdit}
-              variant="ghost"
-              containerStyle={styles.inputContainer}
-              multiline
-              autoFocus
-            />
+          <View style={styles.formHeader}>
+            <CustomText>{title}</CustomText>
             <CustomButton
+              variant="default"
+              textSize="sm"
+              title={buttonText}
+              textStyles={styles.button}
+              containerStyles={{
+                opacity: !text.trim() ? 0.5 : 1,
+              }}
+              onPress={handleEdit}
               disabled={!text.trim()}
-              style={styles.button}
-              onPress={handleEdit}>
-              <CheckIcon
-                color={theme.colors.black}
-                width={50}
-                height={50}
-                opacity={!text.trim() ? 0.3 : 1}
-              />
-            </CustomButton>
+            />
           </View>
+          <Input
+            textSize="lg"
+            placeholder={placeholderText}
+            handleTextChange={setText}
+            value={text}
+            onSubmitEditing={handleEdit}
+            variant="ghost"
+            containerStyle={styles.inputContainer}
+            multiline={multiLineInput}
+            ref={inputRef}
+          />
         </KeyboardAvoidingView>
       </View>
     </TouchableWithoutFeedback>
@@ -83,16 +95,18 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 12,
     borderTopRightRadius: 12,
   },
-  formContainer: {
+  formHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     gap: 4,
+    alignItems: "flex-end",
   },
   inputContainer: {
     flex: 1,
+    paddingVertical: 0,
+    marginVertical: 10,
   },
   button: {
-    marginRight: -12,
-    alignSelf: "flex-start",
+    fontWeight: theme.fontWeight.semibold,
   },
 })

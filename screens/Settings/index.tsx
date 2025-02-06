@@ -1,68 +1,140 @@
 import { View, StyleSheet } from "react-native"
-import { CustomButton } from "@/components/ui/Button"
 import { theme } from "@/theme"
-import LogoIcon from "@/components/vectors/LogoIcon"
-import CustomText from "@/components/ui/CustomText"
 import { useAuth } from "@/contexts/AuthContext"
+import LogoutIcon from "@/components/vectors/LogoutIcon"
+import Header from "@/components/cards/Header"
+import { SafeAreaView } from "react-native-safe-area-context"
+import { StatusBar } from "expo-status-bar"
+import ActionCard from "@/components/cards/Action"
+import ShareIcon from "@/components/vectors/ShareIcon"
+import UserIcon from "@/components/vectors/UserIcon"
+import BellIcon from "@/components/vectors/BellIcon"
+import TrashIcon from "@/components/vectors/TrashIcon"
+import UserProfile from "@/components/cards/UserProfile"
+import { SettingOption } from "@/types"
+import { CopiableText } from "@/components/cards/CopiableText"
+import { onShare } from "@/utils/share"
+import AlertDialog from "@/components/AlertDialog"
+import BottomModal from "@/components/BottomModal"
+import EditActivity from "@/screens/EditActivity"
+import useUpdateUser from "@/hooks/useUpdateUser"
+import { useDeleteUser } from "@/queries/user"
 
-export default function EntryScreen() {
-  const { signOut } = useAuth()
+export default function SettingScreen() {
+  const { signOut, user } = useAuth()
+  const { editUserInfo, toggleEditInfoModal, updateUserInfo, namesInputRef } =
+    useUpdateUser()
+  const deleteUserMutation = useDeleteUser()
 
   const handleSignOut = async () => {
     await signOut()
   }
+  const handleDeleteAccount = async () => {
+    await deleteUserMutation.mutateAsync()
+  }
+
+  const settingOptions: SettingOption[] = [
+    {
+      title: "Personal information",
+      description: "Update your data",
+      icon: <UserIcon />,
+      onPress: toggleEditInfoModal,
+    },
+    {
+      title: "Your friends are not on Wavv?",
+      description: "Invite them to join you",
+      icon: <ShareIcon />,
+      onPress: () =>
+        AlertDialog.open({
+          title: "Share this invite code with your friend",
+          description: <CopiableText text={user?.inviteCode || ""} />,
+          variant: "confirm",
+          confirmText: "Share",
+          cancelText: "cancel",
+          onConfirm: () => onShare(user?.username, user?.inviteCode),
+          closeAutomatically: false,
+        }),
+    },
+    {
+      title: "Push notifications",
+      description: "Manage preferences",
+      icon: <BellIcon />,
+      onPress: () => {},
+    },
+    {
+      title: "Log out",
+      description: "",
+      icon: <LogoutIcon />,
+      onPress: handleSignOut,
+    },
+    {
+      title: "Delete Account",
+      description: "",
+      icon: <TrashIcon />,
+      titleStyle: { color: theme.colors.red },
+      onPress: () =>
+        AlertDialog.open({
+          title: "Delete account?",
+          description:
+            "This action is permanent and can not be undone. All your data, including profile and username, will be permanently deleted. Do you wish to proceed?",
+          variant: "confirm",
+          confirmText: "yes, delete",
+          cancelText: "cancel",
+          onConfirm: handleDeleteAccount,
+          buttonStyles: "danger",
+        }),
+    },
+  ]
 
   return (
-    <View style={styles.container}>
-      <View style={styles.content}>
-        <View style={styles.logoContainer}>
-          <LogoIcon />
-          <CustomText fontFamily="writer-mono" style={styles.description}>
-            Settings screen
-          </CustomText>
-        </View>
-        <View style={styles.subContainer}>
-          <CustomButton
-            variant="primary"
-            title="Sign Out"
-            onPress={handleSignOut}
-            textStyles={styles.buttonText}
-          />
+    <SafeAreaView style={styles.container}>
+      <StatusBar style="dark" />
+      <Header title="Settings" />
+      <View style={styles.contentContainer}>
+        <UserProfile />
+        <View style={styles.optionsContainer}>
+          {settingOptions?.map((option, index) => (
+            <ActionCard
+              key={index}
+              title={option.title}
+              description={option.description}
+              icon={option.icon}
+              titleStyle={option.titleStyle || {}}
+              onPress={option.onPress}
+            />
+          ))}
         </View>
       </View>
-    </View>
+      <BottomModal visible={editUserInfo} onClose={toggleEditInfoModal}>
+        <EditActivity
+          closeModal={toggleEditInfoModal}
+          title="Name"
+          placeholderText="Enter your name to continue"
+          buttonText="SAVE"
+          initialInputValue={user?.names || ""}
+          onPress={updateUserInfo}
+          inputRef={namesInputRef}
+          multiLineInput={false}
+        />
+      </BottomModal>
+    </SafeAreaView>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.black,
+    paddingTop: 20,
+    backgroundColor: theme.colors.white,
+    paddingBottom: 32,
   },
-  content: {
+  contentContainer: {
     flex: 1,
-    paddingVertical: 70,
     justifyContent: "space-between",
+    paddingTop: 10,
   },
-  logoContainer: {
-    paddingTop: 227,
-    alignItems: "center",
-    marginBottom: 20,
-  },
-  description: {
-    textAlign: "center",
-    color: theme.colors.white,
-    marginTop: 10,
-  },
-  subContainer: {
-    paddingBottom: 10,
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
+  optionsContainer: {
+    paddingHorizontal: 20,
     gap: 12,
-    flex: 0,
-  },
-  buttonText: {
-    fontWeight: theme.fontWeight.bold,
   },
 })

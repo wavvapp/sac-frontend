@@ -3,6 +3,7 @@ import { Theme } from "@/types"
 export const theme: Theme = {
   colors: {
     black: "#000000",
+    black_30: "#000000BF",
     black_50: "#1A1A1D",
     black_100: "#0000000D",
     black_200: "#00000033",
@@ -12,8 +13,9 @@ export const theme: Theme = {
     white_200: "#FFFFFF33",
     white_500: "#FFFFFF80",
     gray: "#E3E3E3",
+    gray_100: "#cccccc",
     light_gray: "#898989",
-    red: "#6B2222",
+    red: "#EA4335",
   },
   fontSize: {
     sm: 13,
