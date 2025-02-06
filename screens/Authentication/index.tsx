@@ -2,7 +2,6 @@ import { View, StyleSheet, Text } from "react-native"
 // import PerlinNoise from "@/components/PerlinNoise"
 import { CustomButton } from "@/components/ui/Button"
 import { theme } from "@/theme"
-import LogoIcon from "@/components/vectors/LogoIcon"
 import CustomText from "@/components/ui/CustomText"
 import { useAuth } from "@/contexts/AuthContext"
 import { GoogleSignin } from "@react-native-google-signin/google-signin"
@@ -12,6 +11,7 @@ import AppleIcon from "@/components/vectors/AppleIcon"
 import GoogleIcon from "@/components/vectors/GoogleIcon"
 import { StaticPageType } from "@/types"
 import { height } from "@/utils/dimensions"
+import WavvLogo from "@/components/vectors/WavvLogo"
 
 GoogleSignin.configure({
   webClientId: process.env.WEB_CLIENT_ID,
@@ -39,7 +39,7 @@ export default function EntryScreen() {
       {/* <PerlinNoise isOn={noise} color1="#281713" color2="blue" /> */}
       <View style={styles.content}>
         <View style={styles.logoContainer}>
-          <LogoIcon />
+          <WavvLogo width={390} height={80} />
           <CustomText fontFamily="writer-mono" style={styles.description}>
             Signal friends your availability
           </CustomText>
