@@ -10,6 +10,7 @@ import {
   Platform,
   Keyboard,
   TextInput,
+  TouchableWithoutFeedback,
 } from "react-native"
 
 interface EditActivityProps {
@@ -44,44 +45,55 @@ export default function EditActivity({
   }
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={styles.container}
-      onStartShouldSetResponder={() => true}>
-      <View style={styles.formHeader}>
-        <CustomText>{title}</CustomText>
-        <CustomButton
-          variant="default"
-          textSize="sm"
-          title={buttonText}
-          textStyles={styles.button}
-          containerStyles={{
-            opacity: !text.trim() ? 0.5 : 1,
-          }}
-          onPress={handleEdit}
-          disabled={!text.trim()}
-        />
+    <TouchableWithoutFeedback onPress={closeModal}>
+      <View style={styles.overlay}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          style={styles.modalContainer}
+          onStartShouldSetResponder={() => true}>
+          <View style={styles.formHeader}>
+            <CustomText>{title}</CustomText>
+            <CustomButton
+              variant="default"
+              textSize="sm"
+              title={buttonText}
+              textStyles={styles.button}
+              containerStyles={{
+                opacity: !text.trim() ? 0.5 : 1,
+              }}
+              onPress={handleEdit}
+              disabled={!text.trim()}
+            />
+          </View>
+          <Input
+            textSize="lg"
+            placeholder={placeholderText}
+            handleTextChange={setText}
+            value={text}
+            onSubmitEditing={handleEdit}
+            variant="ghost"
+            containerStyle={styles.inputContainer}
+            multiline={multiLineInput}
+            ref={inputRef}
+          />
+        </KeyboardAvoidingView>
       </View>
-      <Input
-        textSize="lg"
-        placeholder={placeholderText}
-        handleTextChange={setText}
-        value={text}
-        onSubmitEditing={handleEdit}
-        variant="ghost"
-        containerStyle={styles.inputContainer}
-        multiline={multiLineInput}
-        ref={inputRef}
-      />
-    </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   )
 }
 
 const styles = StyleSheet.create({
-  container: {
+  overlay: {
     flex: 1,
-    paddingHorizontal: 20,
-    paddingTop: 32,
+    justifyContent: "flex-end",
+    backgroundColor: theme.colors.black_500,
+  },
+  modalContainer: {
+    height: "60%",
+    backgroundColor: theme.colors.white,
+    padding: 16,
+    borderTopLeftRadius: 12,
+    borderTopRightRadius: 12,
   },
   formHeader: {
     flexDirection: "row",
