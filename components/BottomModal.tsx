@@ -3,7 +3,6 @@ import { Modal } from "react-native"
 
 interface BottomModalProps {
   visible: boolean
-
   onClose: () => void
   onShow?: () => void
   children: ReactNode
@@ -11,7 +10,6 @@ interface BottomModalProps {
 
 export default function BottomModal({
   visible,
-
   onClose,
   onShow,
   children,
