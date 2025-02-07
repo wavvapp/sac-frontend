@@ -1,7 +1,6 @@
 import { StyleSheet } from "react-native"
 import Status from "@/components/cards/Status"
 import { CustomButton } from "@/components/ui/Button"
-import UserAvatar from "@/components/ui/UserAvatar"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import FriendsList from "@/components/lists/Friends"
@@ -92,11 +91,6 @@ export default function EditSignal() {
           paddingTop: 62,
           paddingBottom: 122,
         }}>
-        <UserAvatar
-          imageUrl={user?.profilePictureUrl}
-          size="large"
-          style={{ alignSelf: "center" }}
-        />
         <Activity isLoading={isLoading} />
         <Status
           timeSlots={["NOW", "MORNING", "LUNCH", "AFTERNOON", "EVENING"]}
@@ -105,7 +99,7 @@ export default function EditSignal() {
         <ActionCard
           title="Your friends are not on Wavv?"
           description="Invite them to join you"
-          onPress={() => onShare(user?.username)}
+          onPress={() => onShare(user?.username, user?.inviteCode)}
           icon={<ShareIcon />}
           style={{ marginHorizontal: 20 }}
         />

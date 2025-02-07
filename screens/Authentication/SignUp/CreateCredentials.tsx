@@ -1,8 +1,10 @@
+import { ConfirmationCode } from "@/components/cards/ConfirmationCode"
 import CredentialsButton from "@/components/CredentialsButton"
 import Badge from "@/components/ui/Badge"
 import CustomText from "@/components/ui/CustomText"
 import Input from "@/components/ui/Input"
 import CrossMark from "@/components/vectors/CrossMark"
+import { ACCOUNT_SETUP_STEPS } from "@/constants/account-setup-steps"
 import { VALIDATION_PATTERNS } from "@/constants/patterns"
 import { useAuth } from "@/contexts/AuthContext"
 import { RootStackParamList } from "@/navigation"
@@ -11,6 +13,7 @@ import { theme } from "@/theme"
 import { AccountCreationStep } from "@/types"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
+import { useMutation } from "@tanstack/react-query"
 import { useEffect, useMemo, useState } from "react"
 import {
   StyleSheet,
@@ -28,83 +31,88 @@ export type CredentialsScreenProps = NativeStackNavigationProp<
 
 export default function CreateCredentials() {
   const navigation = useNavigation<CredentialsScreenProps>()
-  const [step, setStep] = useState<AccountCreationStep>(2)
-  const [text, setText] = useState("")
+  const [step, setStep] = useState<AccountCreationStep>(1)
+  const [userInput, setUserInput] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [isError, setIsError] = useState(false)
   const { registerUser } = useAuth()
 
   const isInputValid = useMemo(() => {
-    if (text.trim().length < 5) return false
-
-    if (step === 1 && VALIDATION_PATTERNS.fullName.test(text)) return true
-    if (step === 2 && VALIDATION_PATTERNS.username.test(text)) return true
+    if (userInput.trim().length < 5) return false
+    if (step === 1 && VALIDATION_PATTERNS.verificationCode.test(userInput))
+      return true
+    if (step === 2 && VALIDATION_PATTERNS.username.test(userInput)) return true
 
     return false
-  }, [step, text])
+  }, [step, userInput])
 
   const isDisabled = useMemo(() => {
     if (isLoading || isError) return true
     return !isInputValid
   }, [isError, isInputValid, isLoading])
 
-  const stepsData: Record<
-    AccountCreationStep,
-    {
-      badgeName: string
-      titleText: string
-      inputPlaceholder: string
-      descriptionText: string
-    }
-  > = {
-    1: {
-      badgeName: "1/2",
-      titleText: "What is your name?",
-      inputPlaceholder: "Full name",
-      descriptionText: "Add your name so friends can find you.",
-    },
-    2: {
-      badgeName: "2/2",
-      titleText: "Add your username",
-      inputPlaceholder: "Username",
-      descriptionText:
-        "Usernames can only contain letters, numbers, underscores, and periods.",
-    },
-  }
-
-  const handleUsernameSubmit = async () => {
-    try {
+  const handleUsernameSubmit = useMutation({
+    mutationFn: async () => {
       if (!isInputValid) return
-      setIsLoading(true)
-      const { data } = await api.get(`/users/${text}`)
+      const { data } = await api.get(`/users/${userInput}`)
       if (data.message.toLowerCase() === "username already exist") {
-        setIsError(true)
-        return
-      } else registerUser(text)
-    } catch (error) {
+        throw new Error("Username already exists")
+      }
+      registerUser(userInput)
+    },
+    onMutate: () => {
+      setIsLoading(true)
+    },
+    onError: (error) => {
       console.error("Error fetching user data:", error)
-    } finally {
+      setIsError(true)
+    },
+    onSettled: () => {
       setIsLoading(false)
-    }
-  }
+    },
+  })
+  // TODO: logic for name submission.
+  // const handleNameSubmit = () => {
+  //   // TODO: logic for name submission.
+  //   setText("")
+  //   setStep(3)
+  // }
 
-  const handleNameSubmit = () => {
-    // TODO: logic for name submission.
-    setText("")
-    setStep(2)
-  }
+  const handleVerificationCode = useMutation({
+    mutationFn: async () => {
+      const { data } = await api.post("/invitations/verify", {
+        invitationCode: Number(userInput),
+      })
+      if (!data.isValid) throw new Error("Invalid invitation code")
+      return data
+    },
+    onMutate: () => {
+      setIsLoading(true)
+    },
+    onSuccess: () => {
+      setUserInput("")
+      setStep(2)
+      setIsError(false)
+    },
+    onError: (error) => {
+      console.error("Error fetching verification code:", error)
+      setIsError(true)
+    },
+    onSettled: () => {
+      setIsLoading(false)
+    },
+  })
 
   const handleSubmit = async () => {
     if (!isInputValid) return
-
-    if (step === 1) handleNameSubmit()
-    else await handleUsernameSubmit()
+    if (step === 1) handleVerificationCode.mutate()
+    if (step === 2) handleUsernameSubmit.mutate()
   }
 
   useEffect(() => {
     setIsLoading(false)
     setIsError(false)
-  }, [text])
+  }, [userInput])
 
   return (
     <SafeAreaView style={styles.container}>
@@ -119,33 +127,44 @@ export default function CreateCredentials() {
             }}>
             <Badge
               variant="primary"
-              name={stepsData[step].badgeName}
+              name={ACCOUNT_SETUP_STEPS[step].badgeName}
               style={[isDisabled && styles.disabledBadge]}
             />
           </View>
           <TouchableOpacity
             style={styles.crossMarkContainer}
-            onPress={() => navigation.push("EntryScreen")}>
+            onPress={() => {
+              setUserInput("")
+              navigation.goBack()
+            }}>
             <CrossMark color={theme.colors.white} />
           </TouchableOpacity>
         </View>
         <View style={styles.mainContent}>
           <CustomText style={styles.title} size="lg">
-            {stepsData[step].titleText}
+            {ACCOUNT_SETUP_STEPS[step].titleText}
           </CustomText>
-          <Input
-            handleTextChange={setText}
-            variant="secondary"
-            placeholder={stepsData[step].inputPlaceholder}
-            value={text}
-            onSubmitEditing={handleSubmit}
-            autoFocus
-          />
+          {step === 1 ? (
+            <ConfirmationCode
+              handleTextChange={setUserInput}
+              value={userInput}
+            />
+          ) : (
+            <Input
+              handleTextChange={setUserInput}
+              variant="secondary"
+              placeholder={ACCOUNT_SETUP_STEPS[step].inputPlaceholder}
+              value={userInput}
+              onSubmitEditing={handleSubmit}
+              autoFocus
+            />
+          )}
           <CustomText size="base" style={styles.description}>
-            {stepsData[step].descriptionText}
+            {ACCOUNT_SETUP_STEPS[step].descriptionText}
           </CustomText>
         </View>
         <CredentialsButton
+          step={step}
           isDisabled={isDisabled}
           isLoading={isLoading}
           isError={isError}

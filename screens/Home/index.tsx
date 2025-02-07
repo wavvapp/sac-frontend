@@ -26,6 +26,8 @@ import { useFriends } from "@/queries/friends"
 import { useMySignal } from "@/queries/signal"
 import { useOfflineHandler } from "@/hooks/useOfflineHandler"
 import { height, width } from "@/utils/dimensions"
+import { CopiableText } from "@/components/cards/CopiableText"
+import AlertDialog from "@/components/AlertDialog"
 
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -94,7 +96,17 @@ export default function HomeScreen() {
         <View style={styles.buttonContainer}>
           <CustomButton
             style={styles.iconButton}
-            onPress={() => onShare(user?.username)}>
+            onPress={() =>
+              AlertDialog.open({
+                title: "Share this invite code with your friend",
+                description: <CopiableText text={user?.inviteCode || ""} />,
+                variant: "confirm",
+                confirmText: "Share",
+                cancelText: "cancel",
+                onConfirm: () => onShare(user?.username, user?.inviteCode),
+                closeAutomatically: false,
+              })
+            }>
             <ShareIcon color={theme.colors.white} />
           </CustomButton>
           <CustomButton

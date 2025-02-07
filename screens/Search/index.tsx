@@ -3,7 +3,6 @@ import Input from "@/components/ui/Input"
 import UserInfo from "@/components/UserInfo"
 import { CustomButton } from "@/components/ui/Button"
 import { useCallback, useMemo, useState } from "react"
-import UserAvatar from "@/components/ui/UserAvatar"
 import CustomText from "@/components/ui/CustomText"
 import { User } from "@/types"
 import { theme } from "@/theme"
@@ -18,14 +17,17 @@ import { useAuth } from "@/contexts/AuthContext"
 import Header from "@/components/cards/Header"
 import ActionCard from "@/components/cards/Action"
 import debounce from "lodash.debounce"
-import { useAddFriend } from "@/queries/friends"
+import { useAddFriend, useRemoveFriend } from "@/queries/friends"
 import { FriendsSkeleton } from "@/components/cards/FriendsSkeleton"
+import { CopiableText } from "@/components/cards/CopiableText"
+import AlertDialog from "@/components/AlertDialog"
 
 const FindFriends = () => {
   const [search, setSearch] = useState("")
   const [searchQueryText, setSearchQueryText] = useState("")
   const { user } = useAuth()
   const addFriend = useAddFriend()
+  const removeFriend = useRemoveFriend()
 
   const { data: users = [], isLoading } = useQuery<User[]>({
     queryKey: ["users", searchQueryText],
@@ -66,6 +68,10 @@ const FindFriends = () => {
     if (user.isFriend || addFriend.isPending) return
     addFriend.mutate(user.id)
   }
+  const handleRemoveFriend = (user: User) => {
+    if (!user.isFriend || removeFriend.isPending) return
+    removeFriend.mutate(user.id)
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -90,10 +96,13 @@ const FindFriends = () => {
                 <TouchableOpacity
                   key={user.id}
                   style={styles.friendItem}
-                  disabled={user.isFriend || addFriend.isPending}
-                  onPress={() => handleAddFriend(user)}>
+                  disabled={removeFriend.isPending || addFriend.isPending}
+                  onPress={() =>
+                    user.isFriend
+                      ? handleRemoveFriend(user)
+                      : handleAddFriend(user)
+                  }>
                   <View style={styles.userDetails}>
-                    <UserAvatar imageUrl={user.profilePictureUrl} />
                     <View style={styles.userInfo}>
                       <UserInfo
                         fullName={user.names}
@@ -132,7 +141,17 @@ const FindFriends = () => {
           <ActionCard
             title="Your friends are not on Wavv?"
             description="Invite them to join you"
-            onPress={() => onShare(user?.username)}
+            onPress={() => {
+              AlertDialog.open({
+                title: "Share this invite code with your friend",
+                description: <CopiableText text={user?.inviteCode || ""} />,
+                variant: "confirm",
+                confirmText: "Share",
+                cancelText: "cancel",
+                onConfirm: () => onShare(user?.username, user?.inviteCode),
+                closeAutomatically: false,
+              })
+            }}
             icon={<ShareIcon />}
           />
         </View>

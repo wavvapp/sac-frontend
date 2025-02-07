@@ -28,7 +28,7 @@ interface AuthContextData {
   isLoading: boolean
   signInWithGoogle: (navigation: CredentialsScreenProps) => Promise<void>
   signOut: () => Promise<void>
-  updateUserInfo: (activity: string, time: string) => Promise<void>
+  updateUserInfo: (names: string) => Promise<void>
   isAuthenticated: boolean
   isNewUser: boolean
   registerUser: (username: string) => Promise<void>
@@ -61,6 +61,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         names,
         username,
         profilePictureUrl,
+        inviteCode,
       } = userData
       const user: User = {
         id,
@@ -68,6 +69,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         email,
         username,
         profilePictureUrl: profilePictureUrl,
+        inviteCode,
       }
       await AsyncStorage.setItem("@Auth:accessToken", accessToken)
       await AsyncStorage.setItem("@Auth:refreshToken", refreshToken)
@@ -221,12 +223,18 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     setUser(null)
   }
 
-  async function updateUserInfo(activity: string, time: string) {
+  const updateUserInfo = async (names: string) => {
     if (!user) return
-    const updatedUserInfo: User = { ...user, time, activity }
-    await AsyncStorage.setItem("@Auth:user", JSON.stringify(updatedUserInfo))
-    setUser(updatedUserInfo)
+    const newUserInfo = { ...user, names: names }
+    await AsyncStorage.setItem("@Auth:user", JSON.stringify(newUserInfo))
+    await AsyncStorage.setItem("@Auth:names", names)
+    setUser(newUserInfo)
   }
+
+  useEffect(() => {
+    if (isOnline) return
+    AlertDialog.open()
+  }, [isOnline])
 
   return (
     <AuthContext.Provider
@@ -243,12 +251,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         isOnline,
       }}>
       {children}
-      {!isOnline && (
-        <AlertDialog
-          title="No connection"
-          description="Make sure that you are connected to the internet and try again"
-        />
-      )}
+      <AlertDialog
+        title="No connection"
+        description="Make sure that you are connected to the internet and try again"
+      />
     </AuthContext.Provider>
   )
 }

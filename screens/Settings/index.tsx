@@ -6,31 +6,54 @@ import Header from "@/components/cards/Header"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { StatusBar } from "expo-status-bar"
 import ActionCard from "@/components/cards/Action"
-import UserIcon from "@/components/vectors/UserIcon"
 import ShareIcon from "@/components/vectors/ShareIcon"
+import UserIcon from "@/components/vectors/UserIcon"
 import BellIcon from "@/components/vectors/BellIcon"
 import TrashIcon from "@/components/vectors/TrashIcon"
 import UserProfile from "@/components/cards/UserProfile"
 import { SettingOption } from "@/types"
+import { CopiableText } from "@/components/cards/CopiableText"
+import { onShare } from "@/utils/share"
+import AlertDialog from "@/components/AlertDialog"
+import BottomModal from "@/components/BottomModal"
+import EditActivity from "@/screens/EditActivity"
+import useUpdateUser from "@/hooks/useUpdateUser"
+import { useDeleteUser } from "@/queries/user"
 
 export default function SettingScreen() {
-  const { signOut } = useAuth()
+  const { signOut, user } = useAuth()
+  const { editUserInfo, toggleEditInfoModal, updateUserInfo, namesInputRef } =
+    useUpdateUser()
+  const deleteUserMutation = useDeleteUser()
 
   const handleSignOut = async () => {
     await signOut()
   }
+  const handleDeleteAccount = async () => {
+    await deleteUserMutation.mutateAsync()
+  }
+
   const settingOptions: SettingOption[] = [
     {
       title: "Personal information",
       description: "Update your data",
       icon: <UserIcon />,
-      onPress: () => {},
+      onPress: toggleEditInfoModal,
     },
     {
       title: "Your friends are not on Wavv?",
       description: "Invite them to join you",
       icon: <ShareIcon />,
-      onPress: () => {},
+      onPress: () =>
+        AlertDialog.open({
+          title: "Share this invite code with your friend",
+          description: <CopiableText text={user?.inviteCode || ""} />,
+          variant: "confirm",
+          confirmText: "Share",
+          cancelText: "cancel",
+          onConfirm: () => onShare(user?.username, user?.inviteCode),
+          closeAutomatically: false,
+        }),
     },
     {
       title: "Push notifications",
@@ -39,19 +62,30 @@ export default function SettingScreen() {
       onPress: () => {},
     },
     {
-      title: "Push notifications",
+      title: "Log out",
       description: "",
       icon: <LogoutIcon />,
-      onPress: () => {},
+      onPress: handleSignOut,
     },
     {
       title: "Delete Account",
       description: "",
       icon: <TrashIcon />,
-      onPress: handleSignOut,
       titleStyle: { color: theme.colors.red },
+      onPress: () =>
+        AlertDialog.open({
+          title: "Delete account?",
+          description:
+            "This action is permanent and can not be undone. All your data, including profile and username, will be permanently deleted. Do you wish to proceed?",
+          variant: "confirm",
+          confirmText: "yes, delete",
+          cancelText: "cancel",
+          onConfirm: handleDeleteAccount,
+          buttonStyles: "danger",
+        }),
     },
   ]
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="dark" />
@@ -71,6 +105,18 @@ export default function SettingScreen() {
           ))}
         </View>
       </View>
+      <BottomModal visible={editUserInfo} onClose={toggleEditInfoModal}>
+        <EditActivity
+          closeModal={toggleEditInfoModal}
+          title="Name"
+          placeholderText="Enter your name to continue"
+          buttonText="SAVE"
+          initialInputValue={user?.names || ""}
+          onPress={updateUserInfo}
+          inputRef={namesInputRef}
+          multiLineInput={false}
+        />
+      </BottomModal>
     </SafeAreaView>
   )
 }
