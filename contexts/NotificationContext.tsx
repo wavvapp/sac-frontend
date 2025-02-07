@@ -14,10 +14,12 @@ import { useRegisterExpoNotificationToken } from "@/queries/user"
 interface NotificationContextType {
   expoPushToken: string | null
   notification: Notifications.Notification | null
-  error: Error | null
+  registerForNotifications: () => Promise<void>
 }
 
-const NotificationContext = createContext<NotificationContextType | null>(null)
+const NotificationContext = createContext<NotificationContextType>(
+  {} as NotificationContextType,
+)
 
 export const useNotification = () => {
   const context = useContext(NotificationContext)
@@ -39,20 +41,22 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
   const [expoPushToken, setExpoPushToken] = useState<string | null>(null)
   const [notification, setNotification] =
     useState<Notifications.Notification | null>(null)
-  const [error, setError] = useState<Error | null>(null)
   const submitNotificationToken = useRegisterExpoNotificationToken()
-
   const notificationListener = useRef<Subscription>()
 
-  useEffect(() => {
-    registerForPushNotificationsAsync().then(
-      (token) => {
-        submitNotificationToken.mutate(token)
+  const registerForNotifications = async () => {
+    try {
+      const token = await registerForPushNotificationsAsync()
+      if (token) {
+        await submitNotificationToken.mutateAsync(token)
         setExpoPushToken(token)
-      },
-      (error) => setError(error),
-    )
+      }
+    } catch (error) {
+      console.error("Error while registering for notifications: ", error)
+    }
+  }
 
+  useEffect(() => {
     notificationListener.current =
       Notifications.addNotificationReceivedListener((notification) => {
         setNotification(notification)
@@ -69,7 +73,7 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
 
   return (
     <NotificationContext.Provider
-      value={{ expoPushToken, notification, error }}>
+      value={{ expoPushToken, notification, registerForNotifications }}>
       {children}
     </NotificationContext.Provider>
   )

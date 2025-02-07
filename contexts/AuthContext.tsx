@@ -22,6 +22,8 @@ import { useQueryClient } from "@tanstack/react-query"
 import api from "@/service"
 import AlertDialog from "@/components/AlertDialog"
 import { useOfflineHandler } from "@/hooks/useOfflineHandler"
+import { useNotification } from "@/contexts/NotificationContext"
+import * as Notifications from "expo-notifications"
 
 interface AuthContextData {
   user: User | null
@@ -50,6 +52,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const [isNewUser, setIsNewUser] = useState<boolean>(false)
   const { isOnline } = useOfflineHandler()
   const queryClient = useQueryClient()
+  const { registerForNotifications } = useNotification()
 
   async function completeSignIn(userData: ExtendedUser): Promise<void> {
     try {
@@ -76,6 +79,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       await AsyncStorage.setItem("@Auth:user", JSON.stringify(user))
       await prefetchFriends()
       setUser(userData)
+      await registerForNotifications?.()
     } catch (err) {
       console.error("error with saving user info")
     }
@@ -220,6 +224,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     await AsyncStorage.removeItem("@Auth:user")
     await AsyncStorage.removeItem("@Auth:refreshToken")
     queryClient.clear()
+    await Notifications.cancelAllScheduledNotificationsAsync()
     setUser(null)
   }
 
