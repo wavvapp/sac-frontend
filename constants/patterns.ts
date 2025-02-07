@@ -3,4 +3,5 @@ export const VALIDATION_PATTERNS = {
   email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
   fullName: /^[a-zA-Z ]{1,50}$/,
   verificationCode: /^\d{6}$/,
+  numericValues: /[^0-9]/g,
 }
