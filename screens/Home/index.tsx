@@ -116,7 +116,7 @@ export default function HomeScreen() {
           </CustomButton>
         </View>
       </View>
-      {!allFriends?.length ? (
+      {/* {!allFriends?.length ? (
         <NoFriends />
       ) : (
         <>
@@ -131,7 +131,7 @@ export default function HomeScreen() {
           />
           <Signaling ref={signalingRef} />
         </>
-      )}
+      )} */}
     </View>
   )
 }

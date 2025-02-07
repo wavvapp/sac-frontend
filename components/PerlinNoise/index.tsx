@@ -88,43 +88,156 @@ half4 main(float2 fragCoord) {
 const shaderCode = Skia.RuntimeEffect.Make(`
 uniform float u_time;
 uniform vec2 u_resolution;
+uniform float u_brightness;
+uniform float u_flashness;
 
-// Perlin Noise Function
+// Basic noise for subtle variation
 float noise(vec2 p) {
-    vec2 i = floor(p);
-    vec2 f = fract(p);
-    vec2 u = f * f * (3.0 - 2.0 * f);
-
-    float a = dot(i, vec2(127.1, 311.7));
-    float b = dot(i + vec2(1.0, 0.0), vec2(127.1, 311.7));
-    float c = dot(i + vec2(0.0, 1.0), vec2(127.1, 311.7));
-    float d = dot(i + vec2(1.0, 1.0), vec2(127.1, 311.7));
-
-    return mix(mix(fract(sin(a) * 43758.5453123), fract(sin(b) * 43758.5453123), u.x),
-               mix(fract(sin(c) * 43758.5453123), fract(sin(d) * 43758.5453123), u.x), u.y);
+    return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453);
 }
 
-// Smooth Perlin Noise
-float perlinNoise(vec2 p) {
-    return noise(p) * 0.5 + noise(p * 2.0) * 0.25 + noise(p * 4.0) * 0.125;
+// Single wave function
+float createWave(vec2 p, float t, float offset, float speed, float scale) {
+    float diagonal = (p.x + p.y) * scale;
+    float curve = sin(diagonal * 0.5 + offset) * 0.3;
+    
+    float wave = sin(diagonal - t * speed + curve + offset) * 0.5;
+    wave += sin(diagonal * 1.5 - t * (speed * 0.6) + curve * 2.0 + offset) * 0.2;
+    wave += sin(diagonal * 0.7 + t * (speed * 0.4) + offset) * 0.15;
+    
+    vec2 curveDir = normalize(vec2(1.0 + curve, 1.0 - curve));
+    float distFromCurve = dot(p - vec2(wave), vec2(-curveDir.y, curveDir.x));
+    
+    float thickness = 0.04 + 0.02 * sin(diagonal * 2.0 - t * 0.6 + offset);
+    
+    return smoothstep(thickness, 0.0, abs(distFromCurve));
+}
+
+// Multiple waves
+float signalWave(vec2 p, float t) {
+    float waves = 0.0;
+    
+    // Create 5 waves with different offsets and speeds
+    waves += createWave(p, t, 0.0, 1.2, 1.4) * 0.5;
+    waves += createWave(p, t, 2.0, 1.0, 1.2) * 0.4;
+    waves += createWave(p, t, 4.0, 1.4, 1.6) * 0.3;
+    waves += createWave(p, t, 6.0, 0.8, 1.0) * 0.4;
+    waves += createWave(p, t, 8.0, 1.6, 1.8) * 0.3;
+    
+    return waves;
+}
+
+// Enhanced particle effect for multiple waves
+float particles(vec2 p, float t) {
+    float dots = 0.0;
+    
+    // Create particles for each wave
+    for(float i = 0.0; i < 5.0; i++) {
+        float offset = i * 2.0;
+        float speed = 1.0 + i * 0.2;
+        float scale = 1.2 + i * 0.2;
+        
+        float diagonal = (p.x + p.y) * scale;
+        float curve = sin(diagonal * 0.5 + offset) * 0.3;
+        vec2 pos = p;
+        
+        float wave = sin(diagonal - t * speed + curve + offset) * 0.5;
+        vec2 curveDir = normalize(vec2(1.0 + curve, 1.0 - curve));
+        pos += curveDir * wave * 0.6;
+        
+        float particleLayer = noise(pos * 8.0 + t * 0.7 + offset);
+        float distFromWave = dot(p - vec2(wave), vec2(-curveDir.y, curveDir.x));
+        particleLayer *= smoothstep(0.08, 0.0, abs(distFromWave));
+        
+        dots = max(dots, particleLayer * (1.0 - i * 0.15));
+    }
+    
+    return dots;
+}
+
+// Layered noise for textured background
+float texturedNoise(vec2 p, float t) {
+    float noise1 = noise(p * 4.0 + t * 0.15);    // Increased frequency and speed
+    float noise2 = noise(p * 8.0 - t * 0.2);     // Increased frequency
+    float noise3 = noise(p * 16.0 + t * 0.25);   // Increased frequency
+    float noise4 = noise(p * 32.0 - t * 0.1);    // Added higher frequency layer
+    
+    return noise1 * 0.4 + noise2 * 0.3 + noise3 * 0.2 + noise4 * 0.1;
+}
+
+// Cellular noise for grainy effect
+float cellular(vec2 p) {
+    vec2 i = floor(p);
+    vec2 f = fract(p);
+    
+    float minDist = 1.0;
+    
+    for(int y = -1; y <= 1; y++) {
+        for(int x = -1; x <= 1; x++) {
+            vec2 neighbor = vec2(float(x), float(y));
+            // Generate a random offset using our noise function
+            float noiseVal = noise(i + neighbor);
+            vec2 point = vec2(noiseVal, fract(noiseVal * 34.233));
+            vec2 diff = neighbor + point - f;
+            float dist = length(diff);
+            minDist = min(minDist, dist);
+        }
+    }
+    return minDist;
 }
 
 half4 main(vec2 fragCoord) {
-    vec2 uv = fragCoord / u_resolution.xy; // Normalize coordinates
-    uv.x -= u_time * 0.1;                  // Animate right to left
-
-    // Scale and translate the noise pattern
-    vec2 scaledUV = uv * 5.0 - vec2(2.5, 2.5); // Increase scaling factor to reduce blurriness
-    float n = perlinNoise(scaledUV);
-
-    // Create soft bubble-like shapes
-    float bubbles = smoothstep(0.4, 0.6, n) - smoothstep(0.6, 0.8, n); // Adjust thresholds to sharpen edges
-
-    // Add translucency and glowing effect
-    vec3 color = vec3(1.0) * bubbles * (0.8 + 0.2 * sin(u_time)); // Pulsing luminance
-    float alpha = bubbles * 0.9; // Increase opacity for sharper edges
-
-    return half4(color, alpha); // Return final color with alpha
+    vec2 uv = fragCoord/u_resolution.xy;
+    vec2 p = (uv * 2.0 - 1.0) * 2.0;
+    p.x *= u_resolution.x/u_resolution.y;
+    
+    float t = u_time * 0.5;
+    
+    // Create textured background with more intensity
+    float background = texturedNoise(p * 2.0, t);  // Increased overall scale
+    background += cellular(p * 12.0 + t * 0.15) * 0.3;  // Increased cellular noise scale and intensity
+    background = smoothstep(0.2, 0.8, background);  // Increased contrast
+    
+    float signal = signalWave(p, t);
+    float parts = particles(p, t);
+    
+    float final = signal * 0.9 + parts * 0.3;
+    
+    float brightness = u_brightness + u_flashness * sin(t * 1.2);
+    final *= brightness;
+    
+    // Mix background with signal
+    vec3 bgColor = mix(
+        vec3(0.06, 0.06, 0.08),   // Slightly darker background
+        vec3(0.18, 0.18, 0.2),    // Slightly lighter background
+        background * 0.8          // Increased background intensity
+    );
+    
+    vec3 signalColor = mix(
+        bgColor,
+        vec3(0.7, 0.7, 0.75),    // Signal color
+        final
+    );
+    
+    // Add more pronounced color variation to background
+    float colorVar = noise(p * 6.0 + t * 0.3);  // Increased frequency and speed
+    bgColor += vec3(colorVar * 0.05);  // Increased color variation intensity
+    
+    // Combine background and signal
+    vec3 color = signalColor;
+    
+    float pulse = 1.0 + 0.25 * sin(t * 2.0);
+    color *= pulse;
+    
+    float glow = signal * (0.6 + 0.1 * sin(t * 1.5));
+    color += vec3(glow * 0.4);
+    
+    // Enhanced vignette with more noise
+    float vignette = 1.0 - length(uv - 0.5) * 0.5;
+    vignette *= (1.0 + noise(p * 15.0) * 0.15); // Increased noise frequency and intensity
+    color *= smoothstep(0.0, 0.6, vignette);
+    
+    return half4(color, 1.0);
 }`)!;
 
 
