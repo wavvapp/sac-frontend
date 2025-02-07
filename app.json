@@ -4,10 +4,10 @@
       [
         "@react-native-google-signin/google-signin",
         {
-          "iosUrlScheme": "com.googleusercontent.apps.351310982043-28dk2k254o76heo1d4pr3uftmgsjmihh"
+          "iosUrlScheme": "com.googleusercontent.apps.298782621487-l1sa5idjo8oo0cnu6h7l8libb2rp4ib4"
         }
       ],
-       "expo-apple-authentication"
+      "expo-apple-authentication"
     ],
     "name": "Wavv",
     "slug": "Wavv",
@@ -20,11 +20,13 @@
       "resizeMode": "contain",
       "backgroundColor": "#000000"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "usesAppleSignIn": true,
       "supportsTablet": true,
-      "bundleIdentifier": "com.apeunit.social.app",
+      "bundleIdentifier": "com.apeunit.wavv.app",
       "buildNumber": "1.0.0",
       "infoPlist": {
         "NSCameraUsageDescription": "This app uses the camera to scan barcodes on event tickets.",
@@ -45,10 +47,16 @@
         "foregroundImage": "./assets/images/icon.png",
         "backgroundColor": "#000000"
       },
-      "package": "com.apeunit.socialapp"
+      "package": "com.apeunit.wavv.app"
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "bef736cd-7f43-44a8-8a8b-a71d84223238"
+      }
+    },
+    "owner": "wavvteam"
   }
 }
