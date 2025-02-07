@@ -16,6 +16,7 @@ import * as SplashScreen from "expo-splash-screen"
 import { useEffect } from "react"
 import { StaticPageType } from "@/types"
 import StaticContentScreen from "@/screens/StaticContentScreen"
+import NotificationPreferences from "@/screens/NotificationPreferences"
 export type RootStackParamList = {
   EntryScreen: undefined
   Home: undefined
@@ -25,6 +26,7 @@ export type RootStackParamList = {
   Signaling: undefined
   CreateCredentials: undefined
   Search: undefined
+  NotificationPreferences: undefined
   StaticContentScreen: { pageSlug: StaticPageType }
 }
 
@@ -68,6 +70,11 @@ export default function AppNavigator() {
               name="Search"
               options={{ headerShown: false }}
               component={Search}
+            />
+            <Stack.Screen
+              name="NotificationPreferences"
+              options={{ headerShown: false }}
+              component={NotificationPreferences}
             />
           </Stack.Navigator>
         </StatusProvider>
