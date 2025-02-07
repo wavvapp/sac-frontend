@@ -14,7 +14,7 @@ export default function NotificationPreferences() {
   const [enabledFriends, setEnabledFriends] = useState<Friend[]>([])
 
   //TODO: Once allFriends data BE from the backend has a notificationEnabled field, change the logic to update that field
-  const handleSwitchPress = (friend: Friend) => {
+  const handleToggleSwitch = (friend: Friend) => {
     setEnabledFriends((prev) => {
       const isEnabled = prev.find((f) => f.id === friend.id)
       if (isEnabled) {
@@ -48,14 +48,14 @@ export default function NotificationPreferences() {
               key={friend.id}
               style={styles.friendContainer}
               disabled={false}
-              onPress={() => handleSwitchPress(friend)}>
+              onPress={() => handleToggleSwitch(friend)}>
               <UserInfo
                 fullName={friend.names}
                 username={friend.username}
                 style={styles.friendInfo}
               />
               <CustomSwitch
-                onPress={() => handleSwitchPress(friend)}
+                onPress={() => handleToggleSwitch(friend)}
                 //TODO: Once allFriends data BE from the backend has a notificationEnabled field, use that field instead of enabledFriends[friend.id]
                 switchTrackBackground={
                   enabledFriends.find((f) => f.id === friend.id)
