@@ -4,14 +4,14 @@
       [
         "@react-native-google-signin/google-signin",
         {
-          "iosUrlScheme": "com.googleusercontent.apps.351310982043-28dk2k254o76heo1d4pr3uftmgsjmihh"
+          "iosUrlScheme": "com.googleusercontent.apps.298782621487-l1sa5idjo8oo0cnu6h7l8libb2rp4ib4"
         }
       ],
       [
         "expo-notifications",
         {
           "icon": "./assets/images/favicon.png",
-          "color": "#cecece"
+          "color": "#000000"
         }
       ],
       "expo-apple-authentication"
