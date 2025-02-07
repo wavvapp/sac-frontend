@@ -81,6 +81,8 @@ const Signaling = forwardRef<SignalingRef>((_, ref) => {
                 online: true,
                 isLast: index === availableFriends.length - 1,
                 isFirst: index === 0,
+                //TODO: replace with the value from BE once it's implemented
+                notificationEnabled: true,
               }),
           },
           {
@@ -95,6 +97,8 @@ const Signaling = forwardRef<SignalingRef>((_, ref) => {
                 online: false,
                 isLast: index === offlineFriends.length - 1,
                 isFirst: index === 0,
+                //TODO: replace with the value from BE once it's implemented
+                notificationEnabled: false,
               }),
           },
         ]}
