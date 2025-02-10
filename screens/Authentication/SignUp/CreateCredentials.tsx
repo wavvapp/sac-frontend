@@ -14,7 +14,8 @@ import { AccountCreationStep } from "@/types"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { useMutation } from "@tanstack/react-query"
-import { useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
+import AsyncStorage from "@react-native-async-storage/async-storage"
 import {
   StyleSheet,
   View,
@@ -41,7 +42,8 @@ export default function CreateCredentials() {
     if (userInput.trim().length < 5) return false
     if (step === 1 && VALIDATION_PATTERNS.verificationCode.test(userInput))
       return true
-    if (step === 2 && VALIDATION_PATTERNS.username.test(userInput)) return true
+    if (step === 2 && VALIDATION_PATTERNS.fullName.test(userInput)) return true
+    if (step === 3 && VALIDATION_PATTERNS.username.test(userInput)) return true
 
     return false
   }, [step, userInput])
@@ -50,33 +52,6 @@ export default function CreateCredentials() {
     if (isLoading || isError) return true
     return !isInputValid
   }, [isError, isInputValid, isLoading])
-
-  const handleUsernameSubmit = useMutation({
-    mutationFn: async () => {
-      if (!isInputValid) return
-      const { data } = await api.get(`/users/${userInput}`)
-      if (data.message.toLowerCase() === "username already exist") {
-        throw new Error("Username already exists")
-      }
-      registerUser(userInput)
-    },
-    onMutate: () => {
-      setIsLoading(true)
-    },
-    onError: (error) => {
-      console.error("Error fetching user data:", error)
-      setIsError(true)
-    },
-    onSettled: () => {
-      setIsLoading(false)
-    },
-  })
-  // TODO: logic for name submission.
-  // const handleNameSubmit = () => {
-  //   // TODO: logic for name submission.
-  //   setText("")
-  //   setStep(3)
-  // }
 
   const handleVerificationCode = useMutation({
     mutationFn: async () => {
@@ -103,10 +78,60 @@ export default function CreateCredentials() {
     },
   })
 
+  const handleUsernameSubmit = useMutation({
+    mutationFn: async () => {
+      if (!isInputValid) return
+      const { data } = await api.get(`/users/${userInput}`)
+      if (data.message.toLowerCase() === "username already exist") {
+        throw new Error("Username already exists")
+      }
+      registerUser(userInput)
+    },
+    onMutate: () => {
+      setIsLoading(true)
+    },
+    onError: (error) => {
+      console.error("Error fetching user data:", error)
+      setIsError(true)
+    },
+    onSettled: () => {
+      setIsLoading(false)
+    },
+  })
+
+  const getUserNames = useCallback(async () => {
+    try {
+      const storedNames = await AsyncStorage.getItem("@Auth:names")
+      console.log(storedNames, "storedNames")
+      if (step !== 2) return
+      if (storedNames) {
+        const swappedNames = storedNames.trim().split(/\s+/).reverse().join(" ")
+        setUserInput(swappedNames)
+      }
+    } catch (error) {
+      console.error("Error fetching user names:", error)
+    }
+  }, [step])
+
+  useEffect(() => {
+    getUserNames()
+  }, [getUserNames])
+
+  const handleNameSubmit = async () => {
+    try {
+      await AsyncStorage.setItem("@Auth:names", userInput)
+      setUserInput("")
+      setStep(3)
+    } catch (error) {
+      console.error("Error saving edited names:", error)
+    }
+  }
+
   const handleSubmit = async () => {
     if (!isInputValid) return
     if (step === 1) handleVerificationCode.mutate()
-    if (step === 2) handleUsernameSubmit.mutate()
+    if (step === 2) await handleNameSubmit()
+    if (step === 3) handleUsernameSubmit.mutate()
   }
 
   useEffect(() => {

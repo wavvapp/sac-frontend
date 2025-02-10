@@ -11,9 +11,9 @@ interface Payload {
 }
 
 export const handleApiSignIn = async (payload: Payload) => {
-  if (payload.names) {
-    await AsyncStorage.setItem("@Auth:names", payload.names)
-  }
+  // if (payload.names) {
+  //   await AsyncStorage.setItem("@Auth:names", payload.names)
+  // }
 
   return api.post("/auth/signin", payload)
 }

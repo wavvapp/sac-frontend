@@ -109,12 +109,14 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       if (isSuccessResponse(response)) {
         setIsLoading(true)
         const idToken = response.data.idToken
+        const name = response?.data?.user.name ?? ""
         const payload = {
           token: idToken,
           platform: Platform.OS === "ios" ? "web" : "android",
           provider: Provider.GOOGLE,
         }
         await AsyncStorage.setItem("@Auth:provider", payload.provider)
+        await AsyncStorage.setItem("@Auth:names", name)
         const { data, status } = await handleApiSignIn(payload)
         setCurrentToken(idToken)
         if (status === 202) {
