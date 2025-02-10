@@ -5,7 +5,6 @@ export const onShare = (
   inviteCode: string = "000 000",
 ) => {
   Share.share({
-    message: `Hey! Join me using Wavv and keep up to date with things I do!
-Use my invite code ${inviteCode} to sign up and connect with me. You can find me as: ${username}  once you’re in!`,
+    message: `I’m on Wavv—let’s hang. ${inviteCode} is the code. My username is: @${username}.`,
   })
 }
