@@ -1,5 +1,4 @@
 import UserStatus from "@/components/cards/UserStatus"
-// import PerlinNoise from "@/components/PerlinNoise"
 import { RootStackParamList } from "@/navigation"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { StyleSheet, View, StatusBar, Platform } from "react-native"
@@ -28,6 +27,7 @@ import { useOfflineHandler } from "@/hooks/useOfflineHandler"
 import { height, width } from "@/utils/dimensions"
 import { CopiableText } from "@/components/cards/CopiableText"
 import AlertDialog from "@/components/AlertDialog"
+import NoiseVideo from "@/components/lists/NoiseVideo"
 
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -87,7 +87,7 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      {/* <PerlinNoise isOn={isOn} color1="#281713" color2="blue" /> */}
+      <NoiseVideo />
       <View style={styles.header}>
         <TouchableOpacity
           onPress={() => handleOfflineAction(handleWebsiteOpen)}>
