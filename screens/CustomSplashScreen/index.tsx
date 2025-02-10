@@ -1,4 +1,4 @@
-import NoiseVideo from "@/components/lists/NoiseVideo"
+import NoiseVideo from "@/components/NoiseVideo"
 import CustomText from "@/components/ui/CustomText"
 import WavvLogo from "@/components/vectors/WavvLogo"
 import { theme } from "@/theme"

@@ -11,7 +11,7 @@ import GoogleIcon from "@/components/vectors/GoogleIcon"
 import { StaticPageType } from "@/types"
 import { height } from "@/utils/dimensions"
 import WavvLogo from "@/components/vectors/WavvLogo"
-import NoiseVideo from "@/components/lists/NoiseVideo"
+import NoiseVideo from "@/components/NoiseVideo"
 
 GoogleSignin.configure({
   webClientId: process.env.WEB_CLIENT_ID,

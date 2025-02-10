@@ -27,7 +27,7 @@ import { useOfflineHandler } from "@/hooks/useOfflineHandler"
 import { height, width } from "@/utils/dimensions"
 import { CopiableText } from "@/components/cards/CopiableText"
 import AlertDialog from "@/components/AlertDialog"
-import NoiseVideo from "@/components/lists/NoiseVideo"
+import NoiseVideo from "@/components/NoiseVideo"
 
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,

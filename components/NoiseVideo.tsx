@@ -6,17 +6,15 @@ export default function NoiseVideo() {
   const videoRef = useRef<Video>(null)
 
   return (
-    <>
-      <Video
-        videoStyle={{ backgroundColor: "green", padding: 3 }}
-        ref={videoRef}
-        source={require("@/assets/videos/signal_background.mp4")}
-        style={styles.video}
-        resizeMode={ResizeMode.COVER}
-        shouldPlay
-        isLooping
-      />
-    </>
+    <Video
+      videoStyle={{ backgroundColor: "green", padding: 3 }}
+      ref={videoRef}
+      source={require("@/assets/videos/signal_background.mp4")}
+      style={styles.video}
+      resizeMode={ResizeMode.COVER}
+      shouldPlay
+      isLooping
+    />
   )
 }
 
