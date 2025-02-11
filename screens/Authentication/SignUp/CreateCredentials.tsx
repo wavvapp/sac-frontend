@@ -102,7 +102,6 @@ export default function CreateCredentials() {
   const getUserNames = useCallback(async () => {
     try {
       const storedNames = await AsyncStorage.getItem("@Auth:names")
-      console.log(storedNames, "storedNames")
       if (step !== 2) return
       if (storedNames) {
         const swappedNames = storedNames.trim().split(/\s+/).reverse().join(" ")

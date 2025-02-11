@@ -91,7 +91,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         token: currentToken,
         username,
         provider,
-        names,
+        names: names ?? "",
         platform: Platform.OS === "ios" ? "web" : "android",
       })
       setIsNewUser(false)
@@ -114,6 +114,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
           token: idToken,
           platform: Platform.OS === "ios" ? "web" : "android",
           provider: Provider.GOOGLE,
+          names: name,
         }
         await AsyncStorage.setItem("@Auth:provider", payload.provider)
         await AsyncStorage.setItem("@Auth:names", name)
