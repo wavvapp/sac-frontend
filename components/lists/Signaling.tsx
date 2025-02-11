@@ -57,7 +57,7 @@ const Signaling = forwardRef<SignalingRef>((_, ref) => {
       </View>
       {!availableFriends.length && (
         <CustomText style={styles.noUsers}>
-          None of your friends wavv’d yet :(
+          None of your friends wavv'd yet :(
         </CustomText>
       )}
       <BottomSheetSectionList
@@ -72,7 +72,7 @@ const Signaling = forwardRef<SignalingRef>((_, ref) => {
               item: user,
               index,
             }: {
-              item: User
+              item: Friend
               index: number
             }) =>
               SignalingUser({
@@ -80,8 +80,7 @@ const Signaling = forwardRef<SignalingRef>((_, ref) => {
                 online: true,
                 isLast: index === availableFriends.length - 1,
                 isFirst: index === 0,
-                //TODO: replace with the value from BE once it's implemented
-                notificationEnabled: true,
+                hasNotificationEnabled: !!user?.hasNotificationEnabled,
               }),
           },
           {
@@ -90,14 +89,13 @@ const Signaling = forwardRef<SignalingRef>((_, ref) => {
             ItemSeparatorComponent: () => (
               <View style={styles.offlineItemSeparator} />
             ),
-            renderItem: ({ item, index }) =>
+            renderItem: ({ item: user, index }) =>
               SignalingUser({
-                user: item,
+                user,
                 online: false,
                 isLast: index === offlineFriends.length - 1,
                 isFirst: index === 0,
-                //TODO: replace with the value from BE once it's implemented
-                notificationEnabled: false,
+                hasNotificationEnabled: !!user?.hasNotificationEnabled,
               }),
           },
         ]}

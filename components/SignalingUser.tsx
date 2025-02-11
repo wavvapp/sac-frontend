@@ -10,7 +10,7 @@ interface SignalingUserProps {
   online: boolean
   isLast: boolean
   isFirst: boolean
-  notificationEnabled: boolean
+  hasNotificationEnabled: boolean
 }
 
 export default function SignalingUser({
@@ -18,9 +18,9 @@ export default function SignalingUser({
   online,
   isLast,
   isFirst,
-  notificationEnabled,
+  hasNotificationEnabled,
 }: SignalingUserProps) {
-  const bellColor = notificationEnabled
+  const bellColor = hasNotificationEnabled
     ? theme.colors.black
     : theme.colors.black_200
   return (
