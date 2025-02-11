@@ -12,7 +12,6 @@ import { RootStackParamList } from "@/navigation"
 import { useFriends, useSignalingFriends } from "@/queries/friends"
 import { Friend, User } from "@/types"
 import { useQueryClient } from "@tanstack/react-query"
-import { width } from "@/utils/dimensions"
 
 export interface SignalingRef {
   openBottomSheet: () => void
@@ -58,7 +57,7 @@ const Signaling = forwardRef<SignalingRef>((_, ref) => {
       </View>
       {!availableFriends.length && (
         <CustomText style={styles.noUsers}>
-          None of your friends on Wavv are available today
+          None of your friends wavv’d yet :(
         </CustomText>
       )}
       <BottomSheetSectionList
@@ -123,7 +122,6 @@ const styles = StyleSheet.create({
   noUsers: {
     paddingHorizontal: 20,
     marginBottom: 20,
-    width: width * 0.6,
   },
   sectionListContainer: {
     backgroundColor: theme.colors.black_100,
