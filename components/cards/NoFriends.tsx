@@ -19,7 +19,7 @@ export default function NoFriends() {
       <View style={styles.contentContainer}>
         <Image
           style={styles.image}
-          source={require("@/assets/images/noise-sm.png")}
+          source={require("@/assets/images/no-friends.png")}
         />
         <View style={styles.content}>
           <CustomText size="lg" fontWeight="semibold">
@@ -59,7 +59,8 @@ const styles = StyleSheet.create({
     paddingVertical: 32,
   },
   image: {
-    resizeMode: "cover",
+    height: 350,
+    width: 350,
   },
   descriptionText: {
     marginBottom: 24,
