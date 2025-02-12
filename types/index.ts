@@ -82,7 +82,7 @@ export type FriendSignal = {
   names: string
   signal: Signal
 }
-export type AccountCreationStep = 1 | 2
+export type AccountCreationStep = 1 | 2 | 3
 
 export enum Provider {
   GOOGLE = "google",
