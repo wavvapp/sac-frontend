@@ -12,10 +12,8 @@ import { registerForPushNotificationsAsync } from "@/utils/registerForNotificati
 import { useRegisterExpoNotificationToken } from "@/queries/notifications"
 
 interface NotificationContextType {
-  expoPushToken: string | null
   notification: Notifications.Notification | null
   registerForNotifications: () => Promise<void>
-  error: Error | null
 }
 
 const NotificationContext = createContext<NotificationContextType>(
@@ -39,8 +37,6 @@ interface NotificationProviderProps {
 export const NotificationProvider: React.FC<NotificationProviderProps> = ({
   children,
 }) => {
-  const [expoPushToken, setExpoPushToken] = useState<string | null>(null)
-  const [error, setError] = useState<Error | null>(null)
   const [notification, setNotification] =
     useState<Notifications.Notification | null>(null)
   const submitNotificationToken = useRegisterExpoNotificationToken()
@@ -51,7 +47,6 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
       const token = await registerForPushNotificationsAsync()
       if (token) {
         await submitNotificationToken.mutateAsync(token)
-        setExpoPushToken(token)
       }
     } catch (error) {
       console.error("Error while registering for notifications: ", error)
@@ -59,10 +54,6 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
   }
 
   useEffect(() => {
-    registerForPushNotificationsAsync().then(
-      (token) => setExpoPushToken(token ?? null),
-      (error) => setError(error),
-    )
     notificationListener.current =
       Notifications.addNotificationReceivedListener((notification) => {
         setNotification(notification)
@@ -78,7 +69,7 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
 
   return (
     <NotificationContext.Provider
-      value={{ expoPushToken, notification, registerForNotifications, error }}>
+      value={{ notification, registerForNotifications }}>
       {children}
     </NotificationContext.Provider>
   )
