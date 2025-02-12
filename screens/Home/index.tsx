@@ -133,7 +133,7 @@ export default function HomeScreen() {
           </View>
         )}
       </View>
-      <Signaling ref={signalingRef} />
+      {!!allFriends?.length && <Signaling ref={signalingRef} />}
     </View>
   )
 }
