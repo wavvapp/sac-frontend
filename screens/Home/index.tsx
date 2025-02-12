@@ -88,66 +88,68 @@ export default function HomeScreen() {
   return (
     <View style={styles.container}>
       <NoiseVideo />
-      <View style={styles.header}>
-        <TouchableOpacity
-          onPress={() => handleOfflineAction(handleWebsiteOpen)}>
-          <Badge variant="primary" name={data?.points?.toFixed(1) || 0} />
-        </TouchableOpacity>
-        <View style={styles.buttonContainer}>
-          <CustomButton
-            style={styles.iconButton}
-            onPress={() =>
-              AlertDialog.open({
-                title: "Share this invite code with your friend",
-                description: <CopiableText text={user?.inviteCode || ""} />,
-                variant: "confirm",
-                confirmText: "Share",
-                cancelText: "cancel",
-                onConfirm: () => onShare(user?.username, user?.inviteCode),
-                closeAutomatically: false,
-              })
-            }>
-            <ShareIcon color={theme.colors.white} />
-          </CustomButton>
-          <CustomButton
-            style={styles.iconButton}
-            onPress={() => navigation.push("Settings")}>
-            <Settings color={theme.colors.white} />
-          </CustomButton>
-        </View>
-      </View>
-      {!allFriends?.length ? (
-        <NoFriends />
-      ) : (
-        <>
-          <View style={styles.UserStatus}>
-            <UserStatus isOn={isOn} user={user} />
+      <View style={styles.content}>
+        <View style={styles.header}>
+          <TouchableOpacity
+            onPress={() => handleOfflineAction(handleWebsiteOpen)}>
+            <Badge variant="primary" name={data?.points?.toFixed(1) || 0} />
+          </TouchableOpacity>
+          <View style={styles.buttonContainer}>
+            <CustomButton
+              style={styles.iconButton}
+              onPress={() =>
+                AlertDialog.open({
+                  title: "Share this invite code with your friend",
+                  description: <CopiableText text={user?.inviteCode || ""} />,
+                  variant: "confirm",
+                  confirmText: "Share",
+                  cancelText: "cancel",
+                  onConfirm: () => onShare(user?.username, user?.inviteCode),
+                  closeAutomatically: false,
+                })
+              }>
+              <ShareIcon color={theme.colors.white} />
+            </CustomButton>
+            <CustomButton
+              style={styles.iconButton}
+              onPress={() => navigation.push("Settings")}>
+              <Settings color={theme.colors.white} />
+            </CustomButton>
           </View>
-          <AnimatedSwitch
-            isOn={isOn}
-            isLoading={isPlaceholderData}
-            onPress={() => handlePress.mutate()}
-            style={styles.switch}
-          />
-          <Signaling ref={signalingRef} />
-        </>
-      )}
+        </View>
+        {!allFriends?.length ? (
+          <NoFriends />
+        ) : (
+          <View>
+            <View style={styles.UserStatus}>
+              <UserStatus isOn={isOn} user={user} />
+            </View>
+            <AnimatedSwitch
+              isOn={isOn}
+              isLoading={isPlaceholderData}
+              onPress={() => handlePress.mutate()}
+              style={styles.switch}
+            />
+            <Signaling ref={signalingRef} />
+          </View>
+        )}
+      </View>
     </View>
   )
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     position: "relative",
-    alignItems: "center",
+  },
+  content: {
+    flex: 1,
     paddingTop:
       Platform.OS === "ios"
         ? height >= 812
           ? 47
           : 27
         : StatusBar.currentHeight || 0,
-    backgroundColor: theme.colors.black_50,
   },
   header: {
     flexDirection: "row",

@@ -1,7 +1,6 @@
 import { ResizeMode, Video } from "expo-av"
 import { useRef } from "react"
-import { Dimensions, StyleSheet } from "react-native"
-const { width, height } = Dimensions.get("window")
+import { StyleSheet } from "react-native"
 export default function NoiseVideo() {
   const videoRef = useRef<Video>(null)
 
@@ -20,9 +19,11 @@ export default function NoiseVideo() {
 const styles = StyleSheet.create({
   video: {
     position: "absolute",
-    top: 0,
     left: 0,
-    width,
-    height,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    width: "100%",
+    height: "100%",
   },
 })
