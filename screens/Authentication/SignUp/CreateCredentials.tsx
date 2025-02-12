@@ -24,6 +24,7 @@ import {
   Platform,
 } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
+import { swapFullNames } from "@/utils"
 
 export type CredentialsScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -99,12 +100,12 @@ export default function CreateCredentials() {
     },
   })
 
-  const getUserNames = useCallback(async () => {
+  const getUserFullNames = useCallback(async () => {
     try {
       const storedNames = await AsyncStorage.getItem("@Auth:names")
       if (step !== 2) return
       if (storedNames) {
-        const swappedNames = storedNames.trim().split(/\s+/).reverse().join(" ")
+        const swappedNames = swapFullNames(storedNames)
         setUserInput(swappedNames)
       }
     } catch (error) {
@@ -113,10 +114,10 @@ export default function CreateCredentials() {
   }, [step])
 
   useEffect(() => {
-    getUserNames()
-  }, [getUserNames])
+    getUserFullNames()
+  }, [getUserFullNames])
 
-  const handleNameSubmit = async () => {
+  const handleFullNamesSubmit = async () => {
     try {
       await AsyncStorage.setItem("@Auth:names", userInput)
       setUserInput("")
@@ -129,7 +130,7 @@ export default function CreateCredentials() {
   const handleSubmit = async () => {
     if (!isInputValid) return
     if (step === 1) handleVerificationCode.mutate()
-    if (step === 2) await handleNameSubmit()
+    if (step === 2) await handleFullNamesSubmit()
     if (step === 3) handleUsernameSubmit.mutate()
   }
 
