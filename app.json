@@ -35,8 +35,13 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.apeunit.wavv.app",
       "buildNumber": "1.0.0",
+      "teamId": "CZ6DRS2DW4",
       "infoPlist": {
         "NSCameraUsageDescription": "This app uses the camera to scan barcodes on event tickets.",
+        "UIBackgroundModes": [
+          "remote-notification",
+          "remote-notification"
+        ],
         "NSAppTransportSecurity": {
           "NSExceptionDomains": {
             "local.hey.bild.de": {
@@ -46,7 +51,8 @@
               "NSTemporaryExceptionRequiresForwardSecrecy": false
             }
           }
-        }
+        },
+        "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {

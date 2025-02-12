@@ -15,6 +15,7 @@ interface NotificationContextType {
   expoPushToken: string | null
   notification: Notifications.Notification | null
   registerForNotifications: () => Promise<void>
+  error: Error | null
 }
 
 const NotificationContext = createContext<NotificationContextType>(
@@ -39,6 +40,7 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
   children,
 }) => {
   const [expoPushToken, setExpoPushToken] = useState<string | null>(null)
+  const [error, setError] = useState<Error | null>(null)
   const [notification, setNotification] =
     useState<Notifications.Notification | null>(null)
   const submitNotificationToken = useRegisterExpoNotificationToken()
@@ -57,11 +59,14 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
   }
 
   useEffect(() => {
+    registerForPushNotificationsAsync().then(
+      (token) => setExpoPushToken(token ?? null),
+      (error) => setError(error),
+    )
     notificationListener.current =
       Notifications.addNotificationReceivedListener((notification) => {
         setNotification(notification)
       })
-
     return () => {
       if (notificationListener.current) {
         Notifications.removeNotificationSubscription(
@@ -73,7 +78,7 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
 
   return (
     <NotificationContext.Provider
-      value={{ expoPushToken, notification, registerForNotifications }}>
+      value={{ expoPushToken, notification, registerForNotifications, error }}>
       {children}
     </NotificationContext.Provider>
   )
