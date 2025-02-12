@@ -25,6 +25,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: theme.colors.black,
+    position: "relative",
   },
   content: {
     gap: 4,

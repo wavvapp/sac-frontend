@@ -130,10 +130,10 @@ export default function HomeScreen() {
               onPress={() => handlePress.mutate()}
               style={styles.switch}
             />
-            <Signaling ref={signalingRef} />
           </View>
         )}
       </View>
+      <Signaling ref={signalingRef} />
     </View>
   )
 }
@@ -144,6 +144,7 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
+    alignItems: "center",
     paddingTop:
       Platform.OS === "ios"
         ? height >= 812
