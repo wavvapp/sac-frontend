@@ -123,3 +123,35 @@ export const useRemoveFriend = () => {
     },
   })
 }
+
+export const useSetNotificationPreferences = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async (payload: {
+      enableNotification: boolean
+      friendId: string
+    }) => {
+      return await api.patch("/friends/notification/settings", payload)
+    },
+    onMutate: async (payload) => {
+      await queryClient.cancelQueries({
+        queryKey: ["friends"],
+      })
+      const oldFriends = queryClient.getQueryData<Friend[]>(["friends"]) || []
+      await queryClient.setQueryData(
+        ["friends"],
+        oldFriends.map((friend) =>
+          friend.id === payload.friendId
+            ? {
+                ...friend,
+                hasNotificationEnabled: payload.enableNotification,
+              }
+            : friend,
+        ),
+      )
+    },
+    onSettled: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["friends"] })
+    },
+  })
+}

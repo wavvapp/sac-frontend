@@ -2,26 +2,21 @@ import { FriendsSkeleton } from "@/components/cards/FriendsSkeleton"
 import CustomSwitch from "@/components/ui/CustomSwitch"
 import CustomText from "@/components/ui/CustomText"
 import UserInfo from "@/components/UserInfo"
-import { useFriends } from "@/queries/friends"
+import { useFriends, useSetNotificationPreferences } from "@/queries/friends"
 import { theme } from "@/theme"
 import { Friend } from "@/types"
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet"
-import { useState } from "react"
 import { StyleSheet, TouchableOpacity, View } from "react-native"
 
 export default function NotificationPreferences() {
   const { data: allFriends, isLoading } = useFriends(true)
-  const [enabledFriends, setEnabledFriends] = useState<Friend[]>([])
+  const setNotificationPreferences = useSetNotificationPreferences()
 
-  //TODO: Once allFriends data BE from the backend has a notificationEnabled field, change the logic to update that field
-  const handleToggleSwitch = (friend: Friend) => {
-    setEnabledFriends((prev) => {
-      const isEnabled = prev.find((f) => f.id === friend.id)
-      if (isEnabled) {
-        return prev.filter((f) => f.id !== friend.id)
-      } else {
-        return [...prev, friend]
-      }
+  const handleToggleSwitch = async (friend: Friend) => {
+    if (setNotificationPreferences.isPending) return
+    setNotificationPreferences.mutate({
+      enableNotification: !friend.hasNotificationEnabled,
+      friendId: friend.id,
     })
   }
 
@@ -58,13 +53,13 @@ export default function NotificationPreferences() {
                 onPress={() => handleToggleSwitch(friend)}
                 //TODO: Once allFriends data BE from the backend has a notificationEnabled field, use that field instead of enabledFriends[friend.id]
                 switchTrackBackground={
-                  enabledFriends.find((f) => f.id === friend.id)
+                  friend.hasNotificationEnabled
                     ? theme.colors.black
                     : theme.colors.black_200
                 }
                 thumbBackground={theme.colors.white}
                 //TODO: Once allFriends data BE from the backend has a notificationEnabled field, use that field instead of enabledFriends[friend.id]
-                isOn={!!enabledFriends.find((f) => f.id === friend.id)}
+                isOn={friend.hasNotificationEnabled}
               />
             </TouchableOpacity>
           ))
