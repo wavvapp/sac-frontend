@@ -7,7 +7,6 @@ export default function NoiseVideo() {
 
   return (
     <Video
-      videoStyle={{ backgroundColor: "green", padding: 3 }}
       ref={videoRef}
       source={require("@/assets/videos/signal_background.mp4")}
       style={styles.video}
