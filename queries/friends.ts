@@ -36,8 +36,18 @@ export const useSignalingFriends = (shouldRefetch?: boolean) => {
 export const useAddFriend = () => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: (friendId: string) => api.post("/friends", { friendId }),
-    onMutate: async (friendId) => {
+    mutationFn: ({
+      friendId,
+      hasNotificationEnabled,
+    }: {
+      friendId: string
+      hasNotificationEnabled: boolean
+    }) =>
+      api.post("/friends", {
+        friendId,
+        hasNotificationEnabled,
+      }),
+    onMutate: async ({ friendId }) => {
       await queryClient.cancelQueries({
         queryKey: ["users"],
         exact: false,
@@ -120,6 +130,38 @@ export const useRemoveFriend = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] })
       queryClient.invalidateQueries({ queryKey: ["friends"] })
+    },
+  })
+}
+
+export const useSetNotificationPreferences = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async (payload: {
+      enableNotification: boolean
+      friendId: string
+    }) => {
+      return await api.patch("/friends/notification/settings", payload)
+    },
+    onMutate: async (payload) => {
+      await queryClient.cancelQueries({
+        queryKey: ["friends"],
+      })
+      const oldFriends = queryClient.getQueryData<Friend[]>(["friends"]) || []
+      await queryClient.setQueryData(
+        ["friends"],
+        oldFriends.map((friend) =>
+          friend.id === payload.friendId
+            ? {
+                ...friend,
+                hasNotificationEnabled: payload.enableNotification,
+              }
+            : friend,
+        ),
+      )
+    },
+    onSettled: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["friends"] })
     },
   })
 }

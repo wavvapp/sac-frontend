@@ -1,12 +1,13 @@
-import { User } from "@/types"
+import { Friend } from "@/types"
 import { View, StyleSheet, TouchableOpacity } from "react-native"
 import UserAvailability from "@/components/cards/UserAvailability"
 import UserInfo from "@/components/UserInfo"
 import { theme } from "@/theme"
 import BellIcon from "@/components/vectors/BellIcon"
+import { useEnableFriendNotification } from "@/hooks/useEnableFriendNotification"
 
 interface SignalingUserProps {
-  user: User
+  user: Friend
   online: boolean
   isLast: boolean
   isFirst: boolean
@@ -23,6 +24,8 @@ export default function SignalingUser({
   const bellColor = hasNotificationEnabled
     ? theme.colors.black
     : theme.colors.black_200
+
+  const { changePreferences } = useEnableFriendNotification()
   return (
     <View
       style={[
@@ -42,7 +45,7 @@ export default function SignalingUser({
           <UserInfo fullName={user.names} username={user.username} />
         )}
       </View>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => changePreferences(user)}>
         <BellIcon width={16} height={16} color={bellColor} />
       </TouchableOpacity>
     </View>

@@ -66,7 +66,17 @@ const FindFriends = () => {
 
   const handleAddFriend = (user: User) => {
     if (user.isFriend || addFriend.isPending) return
-    addFriend.mutate(user.id)
+    AlertDialog.open({
+      title: `Stay updated with ${user.username}?`,
+      description: `Do you want to get notified whenever ${user.names} shares updates? You can adjust this preference later.`,
+      variant: "confirm",
+      confirmText: "yes",
+      cancelText: "no",
+      onConfirm: () =>
+        addFriend.mutate({ friendId: user.id, hasNotificationEnabled: true }),
+      onClose: () =>
+        addFriend.mutate({ friendId: user.id, hasNotificationEnabled: false }),
+    })
   }
   const handleRemoveFriend = (user: User) => {
     if (!user.isFriend || removeFriend.isPending) return
