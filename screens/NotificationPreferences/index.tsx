@@ -1,42 +1,16 @@
-import AlertDialog from "@/components/AlertDialog"
 import { FriendsSkeleton } from "@/components/cards/FriendsSkeleton"
 import CustomSwitch from "@/components/ui/CustomSwitch"
 import CustomText from "@/components/ui/CustomText"
 import UserInfo from "@/components/UserInfo"
-import { useFriends, useSetNotificationPreferences } from "@/queries/friends"
+import { useEnableFriendNotification } from "@/hooks/useEnableFriendNotification"
+import { useFriends } from "@/queries/friends"
 import { theme } from "@/theme"
-import { Friend } from "@/types"
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet"
 import { StyleSheet, TouchableOpacity, View } from "react-native"
 
 export default function NotificationPreferences() {
   const { data: allFriends, isLoading } = useFriends(true)
-  const setNotificationPreferences = useSetNotificationPreferences()
-
-  const updatePreferences = async (friend: Friend) => {
-    setNotificationPreferences.mutate({
-      enableNotification: !friend.hasNotificationEnabled,
-      friendId: friend.id,
-    })
-  }
-
-  const handleToggleSwitch = async (friend: Friend) => {
-    if (setNotificationPreferences.isPending) return
-    if (friend.hasNotificationEnabled) {
-      updatePreferences(friend)
-      return
-    }
-
-    AlertDialog.open({
-      title: `Stay updated with ${friend.username}?`,
-      description: `Do you want to get notified whenever ${friend.names} shares updates? You can adjust this preference later.`,
-      variant: "confirm",
-      confirmText: "yes",
-      cancelText: "no",
-      onConfirm: () => updatePreferences(friend),
-    })
-  }
-
+  const { changePreferences } = useEnableFriendNotification()
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -60,21 +34,21 @@ export default function NotificationPreferences() {
               key={friend.id}
               style={styles.friendContainer}
               disabled={false}
-              onPress={() => handleToggleSwitch(friend)}>
+              onPress={() => changePreferences(friend)}>
               <UserInfo
                 fullName={friend.names}
                 username={friend.username}
                 style={styles.friendInfo}
               />
               <CustomSwitch
-                onPress={() => handleToggleSwitch(friend)}
+                onPress={() => changePreferences(friend)}
                 switchTrackBackground={
                   friend.hasNotificationEnabled
                     ? theme.colors.black
                     : theme.colors.black_200
                 }
                 thumbBackground={theme.colors.white}
-                isOn={friend.hasNotificationEnabled}
+                isOn={friend?.hasNotificationEnabled}
               />
             </TouchableOpacity>
           ))

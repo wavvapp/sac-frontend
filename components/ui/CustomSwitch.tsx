@@ -10,13 +10,13 @@ interface CustomSwitchProp {
   onPress: () => void
   switchTrackBackground: string
   thumbBackground: string
-  isOn: boolean
+  isOn?: boolean
 }
 export default function CustomSwitch({
   onPress,
   switchTrackBackground,
   thumbBackground,
-  isOn,
+  isOn = false,
 }: CustomSwitchProp) {
   const translateX = useMemo(() => new Animated.Value(isOn ? 24 : 0), [isOn])
 
