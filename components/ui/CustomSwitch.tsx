@@ -1,3 +1,4 @@
+import { useEffect, useMemo } from "react"
 import {
   Animated,
   StyleSheet,
@@ -17,16 +18,18 @@ export default function CustomSwitch({
   thumbBackground,
   isOn,
 }: CustomSwitchProp) {
-  const translateX = new Animated.Value(isOn ? 24 : 0)
-  const toggleSwitch2 = () => {
+  const translateX = useMemo(() => new Animated.Value(isOn ? 24 : 0), [isOn])
+
+  useEffect(() => {
     Animated.timing(translateX, {
-      toValue: isOn ? 0 : 24,
-      duration: 200,
+      toValue: isOn ? 24 : 0,
+      duration: 2000,
       useNativeDriver: true,
-    }).start(() => onPress())
-  }
+    }).start()
+  }, [isOn, translateX])
+
   return (
-    <TouchableWithoutFeedback onPress={toggleSwitch2}>
+    <TouchableWithoutFeedback onPress={onPress}>
       <View
         style={[
           styles.switchTrack,

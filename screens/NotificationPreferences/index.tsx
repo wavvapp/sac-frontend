@@ -1,3 +1,4 @@
+import AlertDialog from "@/components/AlertDialog"
 import { FriendsSkeleton } from "@/components/cards/FriendsSkeleton"
 import CustomSwitch from "@/components/ui/CustomSwitch"
 import CustomText from "@/components/ui/CustomText"
@@ -12,11 +13,27 @@ export default function NotificationPreferences() {
   const { data: allFriends, isLoading } = useFriends(true)
   const setNotificationPreferences = useSetNotificationPreferences()
 
-  const handleToggleSwitch = async (friend: Friend) => {
-    if (setNotificationPreferences.isPending) return
+  const updatePreferences = async (friend: Friend) => {
     setNotificationPreferences.mutate({
       enableNotification: !friend.hasNotificationEnabled,
       friendId: friend.id,
+    })
+  }
+
+  const handleToggleSwitch = async (friend: Friend) => {
+    if (setNotificationPreferences.isPending) return
+    if (friend.hasNotificationEnabled) {
+      updatePreferences(friend)
+      return
+    }
+
+    AlertDialog.open({
+      title: `Stay updated with ${friend.username}?`,
+      description: `Do you want to get notified whenever ${friend.names} shares updates? You can adjust this preference later.`,
+      variant: "confirm",
+      confirmText: "yes",
+      cancelText: "no",
+      onConfirm: () => updatePreferences(friend),
     })
   }
 
@@ -46,19 +63,17 @@ export default function NotificationPreferences() {
               onPress={() => handleToggleSwitch(friend)}>
               <UserInfo
                 fullName={friend.names}
-                username={friend.username}
+                username={`${friend.username}- ${friend.hasNotificationEnabled}`}
                 style={styles.friendInfo}
               />
               <CustomSwitch
                 onPress={() => handleToggleSwitch(friend)}
-                //TODO: Once allFriends data BE from the backend has a notificationEnabled field, use that field instead of enabledFriends[friend.id]
                 switchTrackBackground={
                   friend.hasNotificationEnabled
                     ? theme.colors.black
                     : theme.colors.black_200
                 }
                 thumbBackground={theme.colors.white}
-                //TODO: Once allFriends data BE from the backend has a notificationEnabled field, use that field instead of enabledFriends[friend.id]
                 isOn={friend.hasNotificationEnabled}
               />
             </TouchableOpacity>

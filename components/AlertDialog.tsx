@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
     fontSize: theme.fontSize.lg,
     marginBottom: 7,
     fontWeight: Platform.OS === "ios" ? "semibold" : "bold",
-    maxWidth: 210,
+    width: "100%",
   },
   description: {
     marginBottom: 26,
