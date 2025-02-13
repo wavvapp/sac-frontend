@@ -60,7 +60,8 @@ export interface Friend {
   selected?: boolean
   profilePictureUrl?: ImageSourcePropType
   isFriend?: boolean
-  hasNotificationEnabled: boolean
+  inviteCode: string
+  hasNotificationEnabled?: boolean
 }
 
 export interface Signal {

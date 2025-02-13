@@ -16,7 +16,7 @@ export const useFriends = (shouldRefetch?: boolean) => {
 }
 
 export const useSignalingFriends = (shouldRefetch?: boolean) => {
-  return useQuery<User[], Error>({
+  return useQuery<Friend[], Error>({
     queryKey: ["friend-signals"],
     queryFn: async () => {
       const { data } = await api.get("/friend-signals")

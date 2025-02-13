@@ -3,7 +3,7 @@ import CustomText from "@/components/ui/CustomText"
 import FriendCard from "@/components/Friend"
 import { TemporaryStatusType, useStatus } from "@/contexts/StatusContext"
 import { FriendsSkeleton } from "@/components/cards/FriendsSkeleton"
-import { User } from "@/types"
+import { Friend } from "@/types"
 import { useCallback } from "react"
 import { useFriends } from "@/queries/friends"
 
@@ -32,7 +32,7 @@ export default function FriendsList() {
       {isLoading ? (
         <FriendsSkeleton />
       ) : (
-        allFriends?.map((friend: User) => (
+        allFriends?.map((friend: Friend) => (
           <FriendCard
             selected={friendIds?.includes(friend.id)}
             key={friend.id}
