@@ -63,7 +63,7 @@ export default function NotificationPreferences() {
               onPress={() => handleToggleSwitch(friend)}>
               <UserInfo
                 fullName={friend.names}
-                username={`${friend.username}- ${friend.hasNotificationEnabled}`}
+                username={friend.username}
                 style={styles.friendInfo}
               />
               <CustomSwitch
