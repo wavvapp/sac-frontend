@@ -1,5 +1,4 @@
 import { View, StyleSheet, Text } from "react-native"
-// import PerlinNoise from "@/components/PerlinNoise"
 import { CustomButton } from "@/components/ui/Button"
 import { theme } from "@/theme"
 import CustomText from "@/components/ui/CustomText"
@@ -12,6 +11,7 @@ import GoogleIcon from "@/components/vectors/GoogleIcon"
 import { StaticPageType } from "@/types"
 import { height } from "@/utils/dimensions"
 import WavvLogo from "@/components/vectors/WavvLogo"
+import NoiseVideo from "@/components/NoiseVideo"
 
 GoogleSignin.configure({
   webClientId: process.env.WEB_CLIENT_ID,
@@ -36,7 +36,7 @@ export default function EntryScreen() {
 
   return (
     <View style={styles.container}>
-      {/* <PerlinNoise isOn={noise} color1="#281713" color2="blue" /> */}
+      <NoiseVideo />
       <View style={styles.content}>
         <View style={styles.logoContainer}>
           <WavvLogo width={390} height={80} />
@@ -91,6 +91,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: theme.colors.black,
+    position: "relative",
   },
   content: {
     flex: 1,

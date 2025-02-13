@@ -1,4 +1,4 @@
-// import PerlinNoise from "@/components/PerlinNoise"
+import NoiseVideo from "@/components/NoiseVideo"
 import CustomText from "@/components/ui/CustomText"
 import WavvLogo from "@/components/vectors/WavvLogo"
 import { theme } from "@/theme"
@@ -7,7 +7,7 @@ import { StyleSheet, View } from "react-native"
 export default function CustomSplashScreen() {
   return (
     <View style={styles.container}>
-      {/* <PerlinNoise isOn={isOn} color1="#281713" color2="blue" /> */}
+      <NoiseVideo />
 
       <View style={styles.content}>
         <WavvLogo width={390} height={80} />
@@ -25,6 +25,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: theme.colors.black,
+    position: "relative",
   },
   content: {
     gap: 4,

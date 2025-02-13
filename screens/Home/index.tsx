@@ -1,5 +1,4 @@
 import UserStatus from "@/components/cards/UserStatus"
-// import PerlinNoise from "@/components/PerlinNoise"
 import { RootStackParamList } from "@/navigation"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { StyleSheet, View, StatusBar, Platform } from "react-native"
@@ -28,6 +27,7 @@ import { useOfflineHandler } from "@/hooks/useOfflineHandler"
 import { height, width } from "@/utils/dimensions"
 import { CopiableText } from "@/components/cards/CopiableText"
 import AlertDialog from "@/components/AlertDialog"
+import NoiseVideo from "@/components/NoiseVideo"
 
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -87,59 +87,63 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      {/* <PerlinNoise isOn={isOn} color1="#281713" color2="blue" /> */}
-      <View style={styles.header}>
-        <TouchableOpacity
-          onPress={() => handleOfflineAction(handleWebsiteOpen)}>
-          <Badge variant="primary" name={data?.points?.toFixed(1) || 0} />
-        </TouchableOpacity>
-        <View style={styles.buttonContainer}>
-          <CustomButton
-            style={styles.iconButton}
-            onPress={() =>
-              AlertDialog.open({
-                title: "Share this invite code with your friend",
-                description: <CopiableText text={user?.inviteCode || ""} />,
-                variant: "confirm",
-                confirmText: "Share",
-                cancelText: "cancel",
-                onConfirm: () => onShare(user?.username, user?.inviteCode),
-                closeAutomatically: false,
-              })
-            }>
-            <ShareIcon color={theme.colors.white} />
-          </CustomButton>
-          <CustomButton
-            style={styles.iconButton}
-            onPress={() => navigation.push("Settings")}>
-            <Settings color={theme.colors.white} />
-          </CustomButton>
-        </View>
-      </View>
-      {!allFriends?.length ? (
-        <NoFriends />
-      ) : (
-        <>
-          <View style={styles.UserStatus}>
-            <UserStatus isOn={isOn} user={user} />
+      <NoiseVideo />
+      <View style={styles.content}>
+        <View style={styles.header}>
+          <TouchableOpacity
+            onPress={() => handleOfflineAction(handleWebsiteOpen)}>
+            <Badge variant="primary" name={data?.points?.toFixed(1) || 0} />
+          </TouchableOpacity>
+          <View style={styles.buttonContainer}>
+            <CustomButton
+              style={styles.iconButton}
+              onPress={() =>
+                AlertDialog.open({
+                  title: "Share this invite code with your friend",
+                  description: <CopiableText text={user?.inviteCode || ""} />,
+                  variant: "confirm",
+                  confirmText: "Share",
+                  cancelText: "cancel",
+                  onConfirm: () => onShare(user?.username, user?.inviteCode),
+                  closeAutomatically: false,
+                })
+              }>
+              <ShareIcon color={theme.colors.white} />
+            </CustomButton>
+            <CustomButton
+              style={styles.iconButton}
+              onPress={() => navigation.push("Settings")}>
+              <Settings color={theme.colors.white} />
+            </CustomButton>
           </View>
-          <AnimatedSwitch
-            isOn={isOn}
-            isLoading={isPlaceholderData}
-            onPress={() => handlePress.mutate()}
-            style={styles.switch}
-          />
-          <Signaling ref={signalingRef} />
-        </>
-      )}
+        </View>
+        {!allFriends?.length ? (
+          <NoFriends />
+        ) : (
+          <View>
+            <View style={styles.UserStatus}>
+              <UserStatus isOn={isOn} user={user} />
+            </View>
+            <AnimatedSwitch
+              isOn={isOn}
+              isLoading={isPlaceholderData}
+              onPress={() => handlePress.mutate()}
+              style={styles.switch}
+            />
+          </View>
+        )}
+      </View>
+      {!!allFriends?.length && <Signaling ref={signalingRef} />}
     </View>
   )
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     position: "relative",
+  },
+  content: {
+    flex: 1,
     alignItems: "center",
     paddingTop:
       Platform.OS === "ios"
@@ -147,7 +151,6 @@ const styles = StyleSheet.create({
           ? 47
           : 27
         : StatusBar.currentHeight || 0,
-    backgroundColor: theme.colors.black_50,
   },
   header: {
     flexDirection: "row",
