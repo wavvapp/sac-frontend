@@ -36,8 +36,18 @@ export const useSignalingFriends = (shouldRefetch?: boolean) => {
 export const useAddFriend = () => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: (friendId: string) => api.post("/friends", { friendId }),
-    onMutate: async (friendId) => {
+    mutationFn: ({
+      friendId,
+      hasNotificationEnabled,
+    }: {
+      friendId: string
+      hasNotificationEnabled: boolean
+    }) =>
+      api.post("/friends", {
+        friendId,
+        hasNotificationEnabled,
+      }),
+    onMutate: async ({ friendId }) => {
       await queryClient.cancelQueries({
         queryKey: ["users"],
         exact: false,
