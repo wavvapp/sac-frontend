@@ -32,7 +32,7 @@
     ],
     "ios": {
       "usesAppleSignIn": true,
-      "supportsTablet": false,
+      "supportsTablet": true,
       "bundleIdentifier": "com.apeunit.social.app",
       "buildNumber": "1.1.0",
       "teamId": "CZ6DRS2DW4",
