@@ -60,7 +60,7 @@
         "foregroundImage": "./assets/images/icon.png",
         "backgroundColor": "#000000"
       },
-      "package": "com.apeunit.social.app",
+      "package": "com.apeunit.wavv.app",
       "googleServicesFile": "./google-services.json",
       "useNextNotificationsApi": true
     },
