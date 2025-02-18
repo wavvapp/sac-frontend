@@ -162,6 +162,7 @@ const styles = StyleSheet.create({
     width: "100%",
     paddingHorizontal: 20,
     paddingVertical: 25,
+    zIndex: 1,
   },
   buttonContainer: {
     flexDirection: "row",
@@ -187,5 +188,6 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
+    // opacity: 0.5,
   },
 })
