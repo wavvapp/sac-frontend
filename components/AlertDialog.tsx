@@ -70,9 +70,7 @@ export default function AlertDialog(props: AlertDialogProps): JSX.Element {
           )}
 
           {typeof description === "string" ? (
-            <CustomText style={styles.description} fontFamily="marfa">
-              {description}
-            </CustomText>
+            <CustomText style={styles.description}>{description}</CustomText>
           ) : (
             <View style={styles.description}>{description}</View>
           )}
@@ -139,6 +137,8 @@ const styles = StyleSheet.create({
   description: {
     marginBottom: 26,
     textAlign: "center",
+    lineHeight: 20,
+    fontSize: theme.fontSize.base,
   },
   buttonContainer: {
     flexDirection: "row",
