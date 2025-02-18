@@ -20,7 +20,7 @@ export const Status: React.FC<StatusProps> = ({ timeSlots }) => {
 
   return (
     <View style={styles.container}>
-      <CustomText size="base" style={styles.title} fontWeight="medium">
+      <CustomText size="base" style={styles.title}>
         When
       </CustomText>
       <View style={styles.scrollContainer}>

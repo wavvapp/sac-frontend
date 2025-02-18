@@ -32,9 +32,7 @@ export default function Activity({ isLoading }: { isLoading: boolean }) {
   }
   return (
     <View style={styles.container}>
-      <CustomText size="base" fontWeight="medium">
-        Status
-      </CustomText>
+      <CustomText size="base">Status</CustomText>
       <TouchableOpacity onPress={openModal} style={styles.statusContainer}>
         {isLoading ? (
           <ActivityIndicator
