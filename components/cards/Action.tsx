@@ -1,5 +1,4 @@
 import {
-  Platform,
   StyleSheet,
   TextStyle,
   TouchableOpacity,
@@ -51,7 +50,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   title: {
-    fontWeight: Platform.OS === "ios" ? "semibold" : "bold",
+    fontWeight: "semibold",
   },
   iconContainer: {
     borderWidth: 1,
