@@ -167,9 +167,10 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   statusText: {
-    lineHeight: 17,
+    lineHeight: 16.9,
   },
   secondaryText: {
     marginTop: 4,
+    lineHeight: 16.9,
   },
 })

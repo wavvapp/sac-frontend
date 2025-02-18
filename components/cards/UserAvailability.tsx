@@ -29,6 +29,7 @@ export default function UserAvailability({
         </CustomText>
       </View>
       <CustomText
+        style={styles.activity}
         fontFamily="writer-mono"
         numberOfLines={2}
         ellipsizeMode="tail">
@@ -60,5 +61,8 @@ const styles = StyleSheet.create({
     width: 2,
     borderRadius: 2,
     marginTop: 12,
+  },
+  activity: {
+    lineHeight: 20,
   },
 })
