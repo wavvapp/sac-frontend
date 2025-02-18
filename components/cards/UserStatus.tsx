@@ -98,12 +98,18 @@ export default function UserStatus({
             />
           )}
           <View style={{ opacity: 0.5 }}>
-            <CustomText size="sm" fontFamily="writer-mono">
+            <CustomText
+              size="sm"
+              fontFamily="writer-mono"
+              style={styles.statusText}>
               {friends.length
                 ? `Visible to ${friends.length} friends`
-                : "This status is not visible to anyone"}
+                : "This status is not visible to anyone."}
             </CustomText>
-            <CustomText size="sm" fontFamily="writer-mono">
+            <CustomText
+              size="sm"
+              fontFamily="writer-mono"
+              style={styles.secondaryText}>
               {visibleFriendsList
                 ? `${visibleFriendsList}.`
                 : "Tap to edit your preferences."}
@@ -159,5 +165,11 @@ const styles = StyleSheet.create({
   headlineText: {
     color: theme.colors.white,
     textAlign: "center",
+  },
+  statusText: {
+    lineHeight: 17,
+  },
+  secondaryText: {
+    marginTop: 4,
   },
 })
