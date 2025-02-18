@@ -28,7 +28,7 @@ export default function FriendsList() {
 
   return (
     <View style={styles.container}>
-      <CustomText size="sm">Who can see it</CustomText>
+      <CustomText size="base">Who can see it</CustomText>
       {isLoading ? (
         <FriendsSkeleton />
       ) : (
