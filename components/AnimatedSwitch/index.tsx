@@ -114,6 +114,6 @@ const switchStyles = StyleSheet.create({
     position: "absolute",
     alignSelf: "center",
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: theme.fontWeight.bold,
   },
 })

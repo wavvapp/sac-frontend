@@ -1,4 +1,4 @@
-import { View, StyleSheet, Platform } from "react-native"
+import { View, StyleSheet } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import { TouchableOpacity } from "react-native"
 import { theme } from "@/theme"
@@ -32,6 +32,6 @@ const styles = StyleSheet.create({
     width: 24,
   },
   title: {
-    fontWeight: Platform.OS === "ios" ? "semibold" : "bold",
+    fontWeight: theme.fontWeight.semibold,
   },
 })
