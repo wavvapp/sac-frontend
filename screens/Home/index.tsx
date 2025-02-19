@@ -143,6 +143,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     position: "relative",
+    backgroundColor: theme.colors.black,
   },
   content: {
     position: "relative",
