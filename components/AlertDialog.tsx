@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react"
-import { Modal, View, StyleSheet, Platform } from "react-native"
+import { Modal, View, StyleSheet } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import { theme } from "@/theme"
 import { CustomButton } from "@/components/ui/Button"
@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: theme.fontSize.lg,
     marginBottom: 7,
-    fontWeight: Platform.OS === "ios" ? "semibold" : "bold",
+    fontWeight: theme.fontWeight.semibold,
     width: "100%",
   },
   description: {

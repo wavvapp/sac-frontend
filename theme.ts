@@ -1,4 +1,5 @@
 import { Theme } from "@/types"
+import { Platform } from "react-native"
 
 export const theme: Theme = {
   colors: {
@@ -30,7 +31,7 @@ export const theme: Theme = {
   fontWeight: {
     black: "900",
     bold: "700",
-    semibold: "600",
+    semibold: Platform.OS === "ios" ? "600" : "700",
     medium: "500",
     normal: "400",
     light: "300",
