@@ -63,17 +63,18 @@ export default function AlertDialog(props: AlertDialogProps): JSX.Element {
       onRequestClose={close}>
       <View style={styles.overlay}>
         <View style={styles.modalView}>
-          {title && (
-            <CustomText style={styles.title} size="lg">
-              {title}
-            </CustomText>
-          )}
-
-          {typeof description === "string" ? (
-            <CustomText style={styles.description}>{description}</CustomText>
-          ) : (
-            <View style={styles.description}>{description}</View>
-          )}
+          <View style={styles.contentContainer}>
+            {title && (
+              <CustomText style={styles.title} size="lg">
+                {title}
+              </CustomText>
+            )}
+            {typeof description === "string" ? (
+              <CustomText style={styles.description}>{description}</CustomText>
+            ) : (
+              <View style={styles.description}>{description}</View>
+            )}
+          </View>
 
           {variant === "confirm" ? (
             <View style={styles.buttonContainer}>
@@ -109,7 +110,7 @@ AlertDialog.close = () => {}
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: theme.colors.black_30,
+    backgroundColor: theme.colors.black_250,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -117,7 +118,7 @@ const styles = StyleSheet.create({
     width: "80%",
     backgroundColor: theme.colors.white,
     borderRadius: 12,
-    padding: 24,
+    paddingVertical: 32,
     alignItems: "center",
     shadowOffset: {
       width: 0,
@@ -127,28 +128,32 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
+  contentContainer: {
+    paddingHorizontal: 20,
+    alignItems: "center",
+  },
   title: {
     textAlign: "center",
     fontSize: theme.fontSize.lg,
-    marginBottom: 7,
+    marginBottom: 8,
     fontWeight: theme.fontWeight.semibold,
-    width: "100%",
   },
   description: {
-    marginBottom: 26,
+    marginBottom: 24,
     textAlign: "center",
-    lineHeight: 20,
-    fontSize: theme.fontSize.base,
   },
   buttonContainer: {
     flexDirection: "row",
     width: "100%",
     justifyContent: "center",
-    gap: 12,
+    gap: 4,
+    paddingHorizontal: 32,
   },
   button: {
     flex: 1,
     justifyContent: "center",
     paddingHorizontal: 16,
+    height: 56,
+    paddingVertical: 0,
   },
 })
