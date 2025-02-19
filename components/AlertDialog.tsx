@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: theme.fontSize.lg,
     marginBottom: 7,
-    fontWeight: "semibold",
+    fontWeight: theme.fontWeight.semibold,
     width: "100%",
   },
   description: {

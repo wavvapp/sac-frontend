@@ -51,7 +51,7 @@ const Signaling = forwardRef<SignalingRef>((_, ref) => {
           variant="default"
           textSize="sm"
           title="FIND"
-          textStyles={{ fontWeight: 600 }}
+          textStyles={{ fontWeight: theme.fontWeight.semibold }}
           onPress={() => openSearch()}
         />
       </View>

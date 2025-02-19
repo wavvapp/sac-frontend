@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   title: {
-    fontWeight: "semibold",
+    fontWeight: theme.fontWeight.semibold,
   },
   iconContainer: {
     borderWidth: 1,

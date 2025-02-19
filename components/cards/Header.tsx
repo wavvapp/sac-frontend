@@ -32,6 +32,6 @@ const styles = StyleSheet.create({
     width: 24,
   },
   title: {
-    fontWeight: "semibold",
+    fontWeight: theme.fontWeight.semibold,
   },
 })
