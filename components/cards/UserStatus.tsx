@@ -98,10 +98,7 @@ export default function UserStatus({
             />
           )}
           <View style={{ opacity: 0.5 }}>
-            <CustomText
-              size="sm"
-              fontFamily="writer-mono"
-              style={styles.statusText}>
+            <CustomText size="sm" fontFamily="writer-mono">
               {friends.length
                 ? `Visible to ${friends.length} friends`
                 : "This status is not visible to anyone."}
@@ -166,11 +163,7 @@ const styles = StyleSheet.create({
     color: theme.colors.white,
     textAlign: "center",
   },
-  statusText: {
-    lineHeight: 16.9,
-  },
   secondaryText: {
     marginTop: 4,
-    lineHeight: 16.9,
   },
 })
