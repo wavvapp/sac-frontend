@@ -110,7 +110,7 @@ AlertDialog.close = () => {}
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: theme.colors.black_30,
+    backgroundColor: theme.colors.black_250,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -130,13 +130,13 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     paddingHorizontal: 20,
+    alignItems: "center",
   },
   title: {
-    alignSelf: "center",
+    textAlign: "center",
     fontSize: theme.fontSize.lg,
     marginBottom: 8,
     fontWeight: Platform.OS === "ios" ? "semibold" : "bold",
-    width: "100%",
   },
   description: {
     marginBottom: 24,
