@@ -19,7 +19,7 @@ export const ACCOUNT_SETUP_STEPS: Record<
   2: {
     badgeName: "2/3",
     titleText: "What is your name?",
-    inputPlaceholder: "Full name",
+    inputPlaceholder: "Name",
     descriptionText:
       "Go by whatever name you like—your friends will see this. You can always tweak it later in settings.",
   },
