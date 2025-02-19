@@ -118,7 +118,9 @@ export default function HomeScreen() {
           </View>
         </View>
         {!allFriends?.length ? (
-          <NoFriends />
+          <View style={styles.noFriendsContainer}>
+            <NoFriends />
+          </View>
         ) : (
           <View>
             <View style={styles.UserStatus}>
@@ -143,6 +145,7 @@ const styles = StyleSheet.create({
     position: "relative",
   },
   content: {
+    position: "relative",
     flex: 1,
     alignItems: "center",
     paddingTop:
@@ -159,6 +162,7 @@ const styles = StyleSheet.create({
     width: "100%",
     paddingHorizontal: 20,
     paddingVertical: 25,
+    zIndex: 1,
   },
   buttonContainer: {
     flexDirection: "row",
@@ -177,5 +181,12 @@ const styles = StyleSheet.create({
     height: width * 0.35,
     padding: 10,
     marginHorizontal: "auto",
+  },
+  noFriendsContainer: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
   },
 })
