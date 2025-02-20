@@ -31,7 +31,7 @@ export const theme: Theme = {
   fontWeight: {
     black: "900",
     bold: "700",
-    semibold: Platform.OS === "ios" ? "600" : "700",
+    semibold: Platform.OS === "ios" ? "semibold" : "700",
     medium: "500",
     normal: "400",
     light: "300",
