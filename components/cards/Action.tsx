@@ -22,13 +22,13 @@ export default function ActionCard({
   titleStyle?: TextStyle
   title: string
   description?: string
-  icon: ReactNode
+  icon?: ReactNode
   onPress: () => void
 }) {
   return (
     <TouchableOpacity onPress={onPress}>
       <View style={[styles.container, style]}>
-        <View style={styles.iconContainer}>{icon}</View>
+        {icon && <View style={styles.iconContainer}>{icon}</View>}
         <View style={styles.textContainer}>
           <CustomText style={[styles.title, titleStyle]}>{title}</CustomText>
           {description && (

@@ -50,8 +50,8 @@ export default function SettingScreen() {
       onPress: toggleEditInfoModal,
     },
     {
-      title: "Your friends are not on Wavv?",
-      description: "Invite them to join you",
+      title: "Your friends are not here?",
+      description: "Find/Invite friends on Wavv",
       icon: <ShareIcon />,
       onPress: () =>
         AlertDialog.open({
