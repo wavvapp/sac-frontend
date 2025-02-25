@@ -89,7 +89,9 @@ export default function UserStatus({
       <Animated.View
         style={[styles.animationContainer, style, cardAnimatedStyle]}
         {...rest}>
-        <View style={styles.userContainer}>
+        <TouchableOpacity
+          style={styles.userContainer}
+          onPress={() => navigation.push("EditSignal")}>
           {user && signal && (
             <UserAvailability
               fullName={user.names}
@@ -112,15 +114,6 @@ export default function UserStatus({
                 : "Tap to edit your preferences."}
             </CustomText>
           </View>
-        </View>
-        <TouchableOpacity style={styles.editButton}>
-          <CustomText
-            onPress={() => navigation.push("EditSignal")}
-            size="sm"
-            fontWeight="semibold"
-            style={styles.editButtonText}>
-            Tap to edit
-          </CustomText>
         </TouchableOpacity>
       </Animated.View>
     </View>
@@ -140,19 +133,6 @@ const styles = StyleSheet.create({
     gap: 24,
     padding: 20,
     justifyContent: "space-between",
-    flexGrow: 1,
-  },
-  editButton: {
-    backgroundColor: theme.colors.black,
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 12,
-    marginBottom: -1,
-  },
-  editButtonText: {
-    color: theme.colors.white,
-    textAlign: "center",
-    padding: 10,
-    textTransform: "uppercase",
   },
   headlineTextContainer: {
     maxWidth: 277,
