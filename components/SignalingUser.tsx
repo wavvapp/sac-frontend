@@ -10,7 +10,8 @@ interface SignalingUserProps {
   user: Friend
   online: boolean
   isLast: boolean
-  isFirst: boolean
+  isFirstAvailable?: boolean
+  isFirstOffline?: boolean
   hasNotificationEnabled: boolean
 }
 
@@ -18,7 +19,8 @@ export default function SignalingUser({
   user,
   online,
   isLast,
-  isFirst,
+  isFirstAvailable,
+  isFirstOffline,
   hasNotificationEnabled,
 }: SignalingUserProps) {
   const bellColor = hasNotificationEnabled
@@ -31,7 +33,8 @@ export default function SignalingUser({
       style={[
         styles.userCard,
         isLast && styles.lastCardInTheListStyles,
-        isFirst && styles.firstCardInTheListStyles,
+        isFirstAvailable && styles.firstAvailableFriend,
+        isFirstOffline && styles.firstOfflineFriend,
         online && styles.availableUserContainer,
       ]}>
       <View style={{ flex: 1 }}>
@@ -61,7 +64,10 @@ const styles = StyleSheet.create({
   lastCardInTheListStyles: {
     paddingBottom: 20,
   },
-  firstCardInTheListStyles: {
+  firstAvailableFriend: {
+    paddingTop: 8,
+  },
+  firstOfflineFriend: {
     paddingTop: 20,
   },
   availableUserContainer: {
