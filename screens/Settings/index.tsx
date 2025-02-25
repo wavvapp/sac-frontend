@@ -100,21 +100,19 @@ export default function SettingScreen() {
     <SafeAreaView style={styles.container}>
       <StatusBar style="dark" />
       <Header title="Settings" />
-      <ScrollView>
-        <View style={styles.contentContainer}>
-          <UserProfile />
-          <View style={styles.optionsContainer}>
-            {settingOptions?.map((option, index) => (
-              <ActionCard
-                key={index}
-                title={option.title}
-                description={option.description}
-                icon={option.icon}
-                titleStyle={option.titleStyle || {}}
-                onPress={option.onPress}
-              />
-            ))}
-          </View>
+      <ScrollView contentContainerStyle={styles.contentContainer}>
+        <UserProfile />
+        <View style={styles.optionsContainer}>
+          {settingOptions?.map((option, index) => (
+            <ActionCard
+              key={index}
+              title={option.title}
+              description={option.description}
+              icon={option.icon}
+              titleStyle={option.titleStyle || {}}
+              onPress={option.onPress}
+            />
+          ))}
         </View>
       </ScrollView>
       <BottomModal visible={editUserInfo} onClose={toggleEditInfoModal}>
@@ -146,7 +144,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.white,
   },
   contentContainer: {
-    flex: 1,
+    flexGrow: 1,
     justifyContent: "space-between",
     gap: 20,
     paddingTop: 10,
