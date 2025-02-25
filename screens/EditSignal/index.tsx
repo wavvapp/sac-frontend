@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native"
+import { StyleSheet, View } from "react-native"
 import Status from "@/components/cards/Status"
 import { CustomButton } from "@/components/ui/Button"
 import { useNavigation } from "@react-navigation/native"
@@ -104,16 +104,30 @@ export default function EditSignal() {
           style={{ marginHorizontal: 20 }}
         />
       </ScrollView>
-      <CustomButton
-        activeOpacity={0.8}
-        containerStyles={{ ...style.saveButton, opacity: isLoading ? 0.8 : 1 }}
-        variant="secondary"
-        fullWidth
-        title={isLoading ? "Saving..." : "Save"}
-        textSize="sm"
-        onPress={handleSaveStatus}
-        disabled={isLoading}
-      />
+      <View style={style.buttonsContainer}>
+        <CustomButton
+          activeOpacity={0.8}
+          containerStyles={{
+            ...style.button,
+            opacity: isLoading ? 0.8 : 1,
+          }}
+          variant="secondary"
+          fullWidth
+          title={isLoading ? "Saving..." : "Save"}
+          textSize="sm"
+          onPress={handleSaveStatus}
+          disabled={isLoading}
+        />
+        <CustomButton
+          containerStyles={style.button}
+          variant="ghost"
+          fullWidth
+          title="turn off your wavv"
+          textSize="sm"
+          onPress={handleSaveStatus}
+          disabled={isLoading}
+        />
+      </View>
     </SafeAreaView>
   )
 }
@@ -125,11 +139,15 @@ const style = StyleSheet.create({
     position: "relative",
     paddingTop: 20,
   },
-  saveButton: {
+  buttonsContainer: {
     position: "absolute",
     bottom: 20,
     zIndex: 10,
     width: "90%",
     marginHorizontal: 20,
+    gap: 8,
+  },
+  button: {
+    width: "100%",
   },
 })
