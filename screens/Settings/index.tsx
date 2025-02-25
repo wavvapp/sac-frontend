@@ -22,6 +22,7 @@ import { useDeleteUser } from "@/queries/user"
 import { useRef, useState } from "react"
 import NotificationPreferences from "@/screens/NotificationPreferences"
 import BottomDrawer, { BottomDrawerRef } from "@/components/BottomDrawer"
+import { ScrollView } from "react-native-gesture-handler"
 
 export default function SettingScreen() {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false)
@@ -99,21 +100,23 @@ export default function SettingScreen() {
     <SafeAreaView style={styles.container}>
       <StatusBar style="dark" />
       <Header title="Settings" />
-      <View style={styles.contentContainer}>
-        <UserProfile />
-        <View style={styles.optionsContainer}>
-          {settingOptions?.map((option, index) => (
-            <ActionCard
-              key={index}
-              title={option.title}
-              description={option.description}
-              icon={option.icon}
-              titleStyle={option.titleStyle || {}}
-              onPress={option.onPress}
-            />
-          ))}
+      <ScrollView>
+        <View style={styles.contentContainer}>
+          <UserProfile />
+          <View style={styles.optionsContainer}>
+            {settingOptions?.map((option, index) => (
+              <ActionCard
+                key={index}
+                title={option.title}
+                description={option.description}
+                icon={option.icon}
+                titleStyle={option.titleStyle || {}}
+                onPress={option.onPress}
+              />
+            ))}
+          </View>
         </View>
-      </View>
+      </ScrollView>
       <BottomModal visible={editUserInfo} onClose={toggleEditInfoModal}>
         <EditActivity
           closeModal={toggleEditInfoModal}
@@ -141,12 +144,13 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 20,
     backgroundColor: theme.colors.white,
-    paddingBottom: 32,
   },
   contentContainer: {
     flex: 1,
     justifyContent: "space-between",
+    gap: 20,
     paddingTop: 10,
+    paddingBottom: 32,
   },
   optionsContainer: {
     paddingHorizontal: 20,
