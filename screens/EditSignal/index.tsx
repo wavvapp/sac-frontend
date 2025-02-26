@@ -37,7 +37,7 @@ export default function EditSignal() {
   const { handleOfflineAction } = useOfflineHandler()
   const queryclient = useQueryClient()
 
-  const mutation = useMutation({
+  const saveStatus = useMutation({
     mutationFn: () => {
       return api.put("/my-signal", {
         friends: temporaryStatus.friendIds,
@@ -68,8 +68,23 @@ export default function EditSignal() {
     },
   })
 
+  const turnOffSignal = useMutation({
+    mutationKey: ["toggle-signal-change"],
+    mutationFn: () => api.post("/my-signal/turn-on"),
+    networkMode: "online",
+    onMutate: () => navigation.goBack(),
+    onSettled() {
+      queryclient.refetchQueries({ queryKey: ["points"] })
+      queryclient.refetchQueries({ queryKey: ["fetch-my-signal"] })
+    },
+  })
+
   const handleSaveStatus = async () => {
-    handleOfflineAction(() => mutation.mutate())
+    handleOfflineAction(() => saveStatus.mutate())
+  }
+
+  const handleTurnOffSignal = async () => {
+    handleOfflineAction(() => turnOffSignal.mutate())
   }
   useEffect(() => {
     if (!signal) return
@@ -89,7 +104,7 @@ export default function EditSignal() {
           flexGrow: 1,
           gap: 20,
           paddingTop: 62,
-          paddingBottom: 122,
+          paddingBottom: 170,
         }}>
         <Activity isLoading={isLoading} />
         <Status
@@ -124,8 +139,7 @@ export default function EditSignal() {
           fullWidth
           title="turn off your wavv"
           textSize="sm"
-          onPress={handleSaveStatus}
-          disabled={isLoading}
+          onPress={handleTurnOffSignal}
         />
       </View>
     </SafeAreaView>
@@ -137,11 +151,13 @@ const style = StyleSheet.create({
     flex: 1,
     backgroundColor: theme.colors.white,
     position: "relative",
-    paddingTop: 20,
+    // paddingTop: 20,
   },
   buttonsContainer: {
+    backgroundColor: theme.colors.white,
     position: "absolute",
-    bottom: 20,
+    bottom: 0,
+    paddingBottom: 20,
     zIndex: 10,
     width: "90%",
     marginHorizontal: 20,
