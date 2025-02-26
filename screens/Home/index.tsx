@@ -28,6 +28,8 @@ import { height, width } from "@/utils/dimensions"
 import { CopiableText } from "@/components/cards/CopiableText"
 import AlertDialog from "@/components/AlertDialog"
 import NoiseVideo from "@/components/NoiseVideo"
+import TapWavv from "@/components/cards/TapWavv"
+import CustomText from "@/components/ui/CustomText"
 
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -117,21 +119,21 @@ export default function HomeScreen() {
             </CustomButton>
           </View>
         </View>
+        {/* TODO: Remove this once the implementation is done */}
+        {/* <TouchableOpacity
+          style={{ padding: 20 }}
+          onPress={() => handlePress.mutate()}>
+          <CustomText style={{ color: theme.colors.white }}>
+            Tap anywhere to Wavv
+          </CustomText>
+        </TouchableOpacity> */}
         {!allFriends?.length ? (
           <View style={styles.noFriendsContainer}>
             <NoFriends />
           </View>
         ) : (
-          <View>
-            <View style={styles.UserStatus}>
-              <UserStatus isOn={isOn} user={user} />
-            </View>
-            <AnimatedSwitch
-              isOn={isOn}
-              isLoading={isPlaceholderData}
-              onPress={() => handlePress.mutate()}
-              style={styles.switch}
-            />
+          <View style={styles.StatusContainer}>
+            {isOn.value ? <UserStatus isOn={isOn} user={user} /> : <TapWavv />}
           </View>
         )}
       </View>
@@ -172,16 +174,13 @@ const styles = StyleSheet.create({
   iconButton: {
     borderRadius: 100,
   },
-  UserStatus: {
-    marginHorizontal: 20,
-    height: 220,
+  StatusContainer: {
     marginBottom: 52,
-  },
-  switch: {
-    width: width * 0.18,
-    height: width * 0.35,
-    padding: 10,
-    marginHorizontal: "auto",
+    position: "relative",
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "flex-start",
+    width: "100%",
   },
   noFriendsContainer: {
     position: "absolute",
