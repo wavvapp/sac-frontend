@@ -1,8 +1,7 @@
 import { StyleSheet } from "react-native"
 import Status from "@/components/cards/Status"
 import { CustomButton } from "@/components/ui/Button"
-import { useNavigation } from "@react-navigation/native"
-import { NativeStackNavigationProp } from "@react-navigation/native-stack"
+import { NativeStackScreenProps } from "react-native-screens/lib/typescript/native-stack/types"
 import FriendsList from "@/components/lists/Friends"
 import Activity from "@/components/Activity"
 import { ScrollView } from "react-native-gesture-handler"
@@ -23,13 +22,15 @@ import ActionCard from "@/components/cards/Action"
 import { useOfflineHandler } from "@/hooks/useOfflineHandler"
 import { SafeAreaView } from "react-native-safe-area-context"
 
-type EditSignalScreenProps = NativeStackNavigationProp<
+type EditSignalScreenProps = NativeStackScreenProps<
   RootStackParamList,
   "EditSignal"
 >
 
-export default function EditSignal() {
-  const navigation = useNavigation<EditSignalScreenProps>()
+export default function EditSignal({
+  route,
+  navigation,
+}: EditSignalScreenProps) {
   const { temporaryStatus, setTemporaryStatus } = useStatus()
   const { data: signal } = useMySignal()
   const { user } = useAuth()
@@ -37,6 +38,7 @@ export default function EditSignal() {
   const { handleOfflineAction } = useOfflineHandler()
   const queryclient = useQueryClient()
 
+  const isNewSignal = route.params?.isNewSignal || true
   const mutation = useMutation({
     mutationFn: () => {
       return api.put("/my-signal", {
@@ -82,7 +84,7 @@ export default function EditSignal() {
   return (
     <SafeAreaView style={style.container}>
       <StatusBar style="dark" />
-      <Header title="Set your Wavv" />
+      <Header title={isNewSignal ? "Set your Wavv" : "Edit your Wavv"} />
       <ScrollView
         keyboardShouldPersistTaps="always"
         contentContainerStyle={{
