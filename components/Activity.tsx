@@ -73,7 +73,7 @@ export default function Activity({ isLoading }: { isLoading: boolean }) {
 
 const styles = StyleSheet.create({
   container: {
-    gap: 10,
+    gap: 15,
     width: "100%",
     paddingHorizontal: 20,
     paddingVertical: 5,

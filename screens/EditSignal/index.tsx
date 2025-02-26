@@ -89,8 +89,8 @@ export default function EditSignal({
         keyboardShouldPersistTaps="always"
         contentContainerStyle={{
           flexGrow: 1,
-          gap: 32,
-          paddingTop: 24,
+          gap: 20,
+          paddingTop: 62,
           paddingBottom: 122,
         }}>
         <Activity isLoading={isLoading} />

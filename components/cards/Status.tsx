@@ -54,7 +54,7 @@ export default Status
 
 const styles = StyleSheet.create({
   container: {
-    gap: 12,
+    gap: 18,
   },
   title: {
     paddingHorizontal: 20,
