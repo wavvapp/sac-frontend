@@ -108,7 +108,9 @@ export default function HomeScreen() {
                   closeAutomatically: false,
                 })
               }>
-              <ShareIcon color={theme.colors.white} />
+              <TouchableOpacity style={styles.share}>
+                <ShareIcon color={theme.colors.white} />
+              </TouchableOpacity>
             </CustomButton>
             <CustomButton
               style={styles.iconButton}
@@ -167,10 +169,13 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: "row",
-    gap: 12,
+    gap: 4,
   },
   iconButton: {
-    borderRadius: 100,
+    height: 48,
+    width: 48,
+    alignItems: "center",
+    justifyContent: "center",
   },
   UserStatus: {
     marginHorizontal: 20,
@@ -189,5 +194,11 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
+  },
+  share: {
+    height: 48,
+    width: 48,
+    alignItems: "center",
+    justifyContent: "center",
   },
 })

@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
     lineHeight: 28,
   },
   noUsers: {
-    paddingHorizontal: 4,
+    paddingHorizontal: 20,
     marginBottom: 20,
   },
   sectionListContainer: {
