@@ -24,7 +24,7 @@ import NotificationPreferences from "@/screens/NotificationPreferences"
 import BottomDrawer, { BottomDrawerRef } from "@/components/BottomDrawer"
 
 export default function SettingScreen() {
-  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false)
+  const [_, setIsBottomSheetOpen] = useState(false)
   const { signOut, user } = useAuth()
   const { editUserInfo, toggleEditInfoModal, updateUserInfo, namesInputRef } =
     useUpdateUser()
