@@ -48,7 +48,6 @@ const styles = StyleSheet.create({
   name: {
     textTransform: "capitalize",
     maxWidth: "70%",
-    backgroundColor:"red",
   },
   time: {
     opacity: 0.5,
