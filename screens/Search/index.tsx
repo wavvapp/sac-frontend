@@ -126,6 +126,7 @@ const FindFriends = () => {
                     <CustomButton
                       variant="outline"
                       title="Add"
+                      fontWeight="semibold"
                       onPress={() => handleAddFriend(user)}
                       disabled={user.isFriend || addFriend.isPending}
                     />
