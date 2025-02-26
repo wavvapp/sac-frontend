@@ -30,7 +30,9 @@ export default function ActionCard({
       <View style={[styles.container, style]}>
         {icon && <View style={styles.iconContainer}>{icon}</View>}
         <View style={styles.textContainer}>
-          <CustomText style={[styles.title, titleStyle]}>{title}</CustomText>
+          <CustomText style={titleStyle} fontWeight="semibold">
+            {title}
+          </CustomText>
           {description && (
             <CustomText style={styles.inviteButtonText}>
               {description}
@@ -48,9 +50,6 @@ const styles = StyleSheet.create({
     gap: 6,
     flexDirection: "row",
     alignItems: "center",
-  },
-  title: {
-    fontWeight: theme.fontWeight.semibold,
   },
   iconContainer: {
     borderWidth: 1,
