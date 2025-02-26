@@ -17,7 +17,6 @@ import api from "@/service"
 import { Signal } from "@/types"
 import { useMySignal } from "@/queries/signal"
 import { onShare } from "@/utils/share"
-import ShareIcon from "@/components/vectors/ShareIcon"
 import Header from "@/components/cards/Header"
 import ActionCard from "@/components/cards/Action"
 import { useOfflineHandler } from "@/hooks/useOfflineHandler"
@@ -97,10 +96,9 @@ export default function EditSignal() {
         />
         <FriendsList />
         <ActionCard
-          title="Your friends are not on Wavv?"
-          description="Invite them to join you"
+          title="Your friends are not here?"
+          description="Find/Invite friends on Wavv"
           onPress={() => onShare(user?.username, user?.inviteCode)}
-          icon={<ShareIcon />}
           style={{ marginHorizontal: 20 }}
         />
       </ScrollView>
