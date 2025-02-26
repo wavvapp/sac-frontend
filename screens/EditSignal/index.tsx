@@ -82,13 +82,13 @@ export default function EditSignal() {
   return (
     <SafeAreaView style={style.container}>
       <StatusBar style="dark" />
-      <Header title="Edit status" />
+      <Header title="Set your Wavv" />
       <ScrollView
         keyboardShouldPersistTaps="always"
         contentContainerStyle={{
           flexGrow: 1,
-          gap: 20,
-          paddingTop: 62,
+          gap: 32,
+          paddingTop: 24,
           paddingBottom: 122,
         }}>
         <Activity isLoading={isLoading} />
@@ -109,7 +109,7 @@ export default function EditSignal() {
         containerStyles={{ ...style.saveButton, opacity: isLoading ? 0.8 : 1 }}
         variant="secondary"
         fullWidth
-        title={isLoading ? "Saving..." : "Save"}
+        title={isLoading ? "Wavving..." : "Wavv your friends"}
         textSize="sm"
         onPress={handleSaveStatus}
         disabled={isLoading}
