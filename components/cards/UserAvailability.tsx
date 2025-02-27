@@ -26,7 +26,8 @@ export default function UserAvailability({
         <CustomText
           fontFamily="writer-mono"
           numberOfLines={2}
-          ellipsizeMode="tail">
+          ellipsizeMode="tail"
+          style={styles.status}>
           {capitalizeFirstLetter(activity)}
         </CustomText>
         <View style={styles.dot} />
@@ -52,6 +53,9 @@ const styles = StyleSheet.create({
   time: {
     opacity: 0.5,
     textTransform: "capitalize",
+  },
+  status: {
+    maxWidth: "80%",
   },
   dot: {
     backgroundColor: theme.colors.black,
