@@ -101,7 +101,7 @@ export default function UserStatus({
           <View style={{ opacity: 0.5 }}>
             <CustomText size="sm" fontFamily="writer-mono">
               {friends.length
-                ? `Visible to ${friends.length} friends`
+                ? `Visible to ${friends.length} ${friends.length === 1 ? "friend" : "friends"}`
                 : "This status is not visible to anyone."}
             </CustomText>
             <CustomText

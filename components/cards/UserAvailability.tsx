@@ -2,7 +2,6 @@ import { StyleSheet, View, ViewProps } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import { theme } from "@/theme"
 import { User } from "@/types"
-import { capitalizeFirstLetter } from "@/utils"
 
 interface UserAvailabilityProps extends ViewProps {
   fullName: User["names"]
@@ -28,7 +27,7 @@ export default function UserAvailability({
           numberOfLines={2}
           ellipsizeMode="tail"
           style={styles.status}>
-          {capitalizeFirstLetter(activity)}
+          {activity}
         </CustomText>
         <View style={styles.dot} />
         <CustomText style={styles.time} fontFamily="writer-mono">
@@ -47,7 +46,6 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   name: {
-    textTransform: "capitalize",
     maxWidth: "70%",
   },
   time: {
