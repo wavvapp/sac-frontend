@@ -29,7 +29,7 @@ type EditSignalScreenProps = NativeStackNavigationProp<
 
 export default function EditSignal() {
   const navigation = useNavigation<EditSignalScreenProps>()
-  const { temporaryStatus, setTemporaryStatus } = useStatus()
+  const { temporaryStatus, setTemporaryStatus, isOn } = useStatus()
   const { data: signal } = useMySignal()
   const { user } = useAuth()
   const [isLoading, setIsLoading] = useState(false)
@@ -69,9 +69,15 @@ export default function EditSignal() {
 
   const turnOffSignal = useMutation({
     mutationKey: ["toggle-signal-change"],
-    mutationFn: () => api.post("/my-signal/turn-on"),
+    mutationFn: () => api.post("/my-signal/turn-off"),
     networkMode: "online",
-    onMutate: () => navigation.goBack(),
+    onMutate: async () => {
+      await handleOfflineAction(() => (isOn.value = !isOn.value))
+      navigation.goBack()
+    },
+    onError: () => {
+      isOn.value = !isOn.value
+    },
     onSettled() {
       queryclient.refetchQueries({ queryKey: ["points"] })
       queryclient.refetchQueries({ queryKey: ["fetch-my-signal"] })
