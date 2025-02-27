@@ -2,7 +2,6 @@ import { forwardRef, useMemo, useState } from "react"
 import { View, StyleSheet } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import BottomDrawer from "@/components/BottomDrawer"
-import { CustomButton } from "@/components/ui/Button"
 import { BottomSheetSectionList } from "@gorhom/bottom-sheet"
 import { theme } from "@/theme"
 import SignalingUser from "@/components/SignalingUser"
@@ -12,6 +11,8 @@ import { RootStackParamList } from "@/navigation"
 import { useFriends, useSignalingFriends } from "@/queries/friends"
 import { Friend, User } from "@/types"
 import { useQueryClient } from "@tanstack/react-query"
+import SearchIcon from "../vectors/SearchIcon"
+import { TouchableOpacity } from "react-native-gesture-handler"
 
 export interface SignalingRef {
   openBottomSheet: () => void
@@ -47,13 +48,11 @@ const Signaling = forwardRef<SignalingRef>((_, ref) => {
         <CustomText size="lg" fontWeight="semibold" style={styles.headerText}>
           Friends
         </CustomText>
-        <CustomButton
-          variant="default"
-          textSize="sm"
-          title="FIND"
-          textStyles={{ fontWeight: theme.fontWeight.semibold }}
-          onPress={() => openSearch()}
-        />
+        <TouchableOpacity
+          style={styles.SearchIcon}
+          onPress={() => openSearch()}>
+          <SearchIcon />
+        </TouchableOpacity>
       </View>
       {!availableFriends.length && (
         <CustomText style={styles.noUsers}>
@@ -130,6 +129,12 @@ const styles = StyleSheet.create({
   },
   offlineItemSeparator: {
     height: 12,
+  },
+  SearchIcon: {
+    height: 48,
+    width: 48,
+    justifyContent: "center",
+    alignItems: "center",
   },
 })
 
