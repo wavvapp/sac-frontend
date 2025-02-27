@@ -12,7 +12,6 @@ import { SafeAreaView } from "react-native-safe-area-context"
 import { StatusBar } from "expo-status-bar"
 import { useQuery } from "@tanstack/react-query"
 import { onShare } from "@/utils/share"
-import ShareIcon from "@/components/vectors/ShareIcon"
 import { useAuth } from "@/contexts/AuthContext"
 import Header from "@/components/cards/Header"
 import ActionCard from "@/components/cards/Action"
@@ -150,8 +149,8 @@ const FindFriends = () => {
 
         <View style={styles.share}>
           <ActionCard
-            title="Your friends are not on Wavv?"
-            description="Invite them to join you"
+            title="Your friends are not here?"
+            description="Find/Invite friends on Wavv"
             onPress={() => {
               AlertDialog.open({
                 title: "Share this invite code with your friend",
@@ -163,7 +162,6 @@ const FindFriends = () => {
                 closeAutomatically: false,
               })
             }}
-            icon={<ShareIcon />}
           />
         </View>
       </ScrollView>
@@ -204,7 +202,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   notFoundText: { color: theme.colors.black_500 },
-  userInfo: { marginLeft: 8, flex: 1 },
+  userInfo: { flex: 1 },
 })
 
 export default FindFriends

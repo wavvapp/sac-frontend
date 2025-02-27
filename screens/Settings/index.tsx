@@ -22,6 +22,7 @@ import { useDeleteUser } from "@/queries/user"
 import { useRef, useState } from "react"
 import NotificationPreferences from "@/screens/NotificationPreferences"
 import BottomDrawer, { BottomDrawerRef } from "@/components/BottomDrawer"
+import { ScrollView } from "react-native-gesture-handler"
 
 export default function SettingScreen() {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false)
@@ -50,8 +51,8 @@ export default function SettingScreen() {
       onPress: toggleEditInfoModal,
     },
     {
-      title: "Your friends are not on Wavv?",
-      description: "Invite them to join you",
+      title: "Your friends are not here?",
+      description: "Find/Invite friends on Wavv",
       icon: <ShareIcon />,
       onPress: () =>
         AlertDialog.open({
@@ -99,7 +100,7 @@ export default function SettingScreen() {
     <SafeAreaView style={styles.container}>
       <StatusBar style="dark" />
       <Header title="Settings" />
-      <View style={styles.contentContainer}>
+      <ScrollView contentContainerStyle={styles.contentContainer}>
         <UserProfile />
         <View style={styles.optionsContainer}>
           {settingOptions?.map((option, index) => (
@@ -113,7 +114,7 @@ export default function SettingScreen() {
             />
           ))}
         </View>
-      </View>
+      </ScrollView>
       <BottomModal visible={editUserInfo} onClose={toggleEditInfoModal}>
         <EditActivity
           closeModal={toggleEditInfoModal}
@@ -141,12 +142,13 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 20,
     backgroundColor: theme.colors.white,
-    paddingBottom: 32,
   },
   contentContainer: {
-    flex: 1,
+    flexGrow: 1,
     justifyContent: "space-between",
+    gap: 20,
     paddingTop: 10,
+    paddingBottom: 32,
   },
   optionsContainer: {
     paddingHorizontal: 20,

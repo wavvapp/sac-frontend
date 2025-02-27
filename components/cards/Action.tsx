@@ -22,15 +22,17 @@ export default function ActionCard({
   titleStyle?: TextStyle
   title: string
   description?: string
-  icon: ReactNode
+  icon?: ReactNode
   onPress: () => void
 }) {
   return (
     <TouchableOpacity onPress={onPress}>
       <View style={[styles.container, style]}>
-        <View style={styles.iconContainer}>{icon}</View>
+        {icon && <View style={styles.iconContainer}>{icon}</View>}
         <View style={styles.textContainer}>
-          <CustomText style={[styles.title, titleStyle]}>{title}</CustomText>
+          <CustomText style={titleStyle} fontWeight="semibold">
+            {title}
+          </CustomText>
           {description && (
             <CustomText style={styles.inviteButtonText}>
               {description}
@@ -48,9 +50,6 @@ const styles = StyleSheet.create({
     gap: 6,
     flexDirection: "row",
     alignItems: "center",
-  },
-  title: {
-    fontWeight: theme.fontWeight.semibold,
   },
   iconContainer: {
     borderWidth: 1,
