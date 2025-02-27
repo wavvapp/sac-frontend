@@ -48,7 +48,9 @@ export default function Activity({ isLoading }: { isLoading: boolean }) {
               style={styles.statusText}>
               {capitalizeFirstLetter(temporaryStatus.activity)}
             </CustomText>
-            <EditIcon />
+            <View style={styles.EditIcon}>
+              <EditIcon />
+            </View>
           </>
         )}
       </TouchableOpacity>
@@ -79,13 +81,20 @@ const styles = StyleSheet.create({
   },
   statusContainer: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    alignItems: "center",
   },
   statusText: {
     flex: 1,
+    alignItems: "center",
   },
   loaderIcon: {
     marginVertical: 4,
     marginHorizontal: "auto",
+  },
+  EditIcon: {
+    height: 48,
+    width: 48,
+    justifyContent: "center",
+    alignItems: "center",
   },
 })
