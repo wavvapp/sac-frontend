@@ -3,7 +3,6 @@ import { RootStackParamList } from "@/navigation"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { StyleSheet, View, StatusBar, Platform } from "react-native"
 import { runOnJS, useDerivedValue } from "react-native-reanimated"
-import { AnimatedSwitch } from "@/components/AnimatedSwitch"
 import { useCallback, useRef, useState } from "react"
 import Signaling, { SignalingRef } from "@/components/lists/Signaling"
 import Settings from "@/components/vectors/Settings"
@@ -15,21 +14,18 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native"
 import { onShare } from "@/utils/share"
 import NoFriends from "@/components/cards/NoFriends"
 import { useAuth } from "@/contexts/AuthContext"
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
+import { useQuery } from "@tanstack/react-query"
 import { fetchPoints } from "@/libs/fetchPoints"
 import * as WebBrowser from "expo-web-browser"
 import { TouchableOpacity } from "react-native-gesture-handler"
 import { useStatus } from "@/contexts/StatusContext"
-import api from "@/service"
 import { useFriends } from "@/queries/friends"
-import { useMySignal } from "@/queries/signal"
 import { useOfflineHandler } from "@/hooks/useOfflineHandler"
-import { height, width } from "@/utils/dimensions"
+import { height } from "@/utils/dimensions"
 import { CopiableText } from "@/components/cards/CopiableText"
 import AlertDialog from "@/components/AlertDialog"
 import NoiseVideo from "@/components/NoiseVideo"
 import TapWavv from "@/components/cards/TapWavv"
-import CustomText from "@/components/ui/CustomText"
 
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -43,37 +39,36 @@ export default function HomeScreen() {
   const navigation = useNavigation<HomeScreenProps>()
   const { data: allFriends } = useFriends()
   const { user, isAuthenticated } = useAuth()
-  const queryClient = useQueryClient()
   const { handleOfflineAction } = useOfflineHandler()
 
   const { data, refetch: refetchPoints } = useQuery({
     queryKey: ["points"],
     queryFn: fetchPoints,
   })
-  const handlePress = useMutation({
-    mutationKey: ["toggle-signal-change"],
-    mutationFn: isOn.value
-      ? () => api.post("/my-signal/turn-off")
-      : () => api.post("/my-signal/turn-on"),
-    networkMode: "online",
-    onMutate: () => {
-      handleOfflineAction(() => (isOn.value = !isOn.value))
-    },
-    onError: () => {
-      isOn.value = !isOn.value
-    },
-    onSettled() {
-      queryClient.refetchQueries({ queryKey: ["points"] })
-      queryClient.refetchQueries({ queryKey: ["fetch-my-signal"] })
-    },
-  })
+  // TODO: Remove this once they are implemented in new buttons
+  // const handlePress = useMutation({
+  //   mutationKey: ["toggle-signal-change"],
+  //   mutationFn: isOn.value
+  //     ? () => api.post("/my-signal/turn-off")
+  //     : () => api.post("/my-signal/turn-on"),
+  //   networkMode: "online",
+  //   onMutate: () => {
+  //     handleOfflineAction(() => (isOn.value = !isOn.value))
+  //   },
+  //   onError: () => {
+  //     isOn.value = !isOn.value
+  //   },
+  //   onSettled() {
+  //     queryClient.refetchQueries({ queryKey: ["points"] })
+  //     queryClient.refetchQueries({ queryKey: ["fetch-my-signal"] })
+  //   },
+  // })
   useFocusEffect(
     useCallback(() => {
       if (!isAuthenticated) return
       refetchPoints()
     }, [isAuthenticated, refetchPoints]),
   )
-  const { isPlaceholderData } = useMySignal()
   const handleWebsiteOpen = async () => {
     if (process.env.POINTS_CANISTER_URL) {
       await WebBrowser.openBrowserAsync(process.env.POINTS_CANISTER_URL)
@@ -119,14 +114,6 @@ export default function HomeScreen() {
             </CustomButton>
           </View>
         </View>
-        {/* TODO: Remove this once the implementation is done */}
-        {/* <TouchableOpacity
-          style={{ padding: 20 }}
-          onPress={() => handlePress.mutate()}>
-          <CustomText style={{ color: theme.colors.white }}>
-            Tap anywhere to Wavv
-          </CustomText>
-        </TouchableOpacity> */}
         {!allFriends?.length ? (
           <View style={styles.noFriendsContainer}>
             <NoFriends />
@@ -175,7 +162,7 @@ const styles = StyleSheet.create({
     borderRadius: 100,
   },
   StatusContainer: {
-    marginBottom: 52,
+    marginBottom: height * 0.2,
     position: "relative",
     flex: 1,
     alignItems: "center",

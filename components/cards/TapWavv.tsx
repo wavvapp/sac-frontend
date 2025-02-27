@@ -1,14 +1,19 @@
-import { StyleSheet, View } from "react-native"
+import { StyleSheet, TouchableOpacity } from "react-native"
 import CustomText from "../ui/CustomText"
 import { theme } from "@/theme"
+import { useNavigation } from "@react-navigation/native"
+import { HomeScreenProps } from "@/screens/Home"
 
 export default function TapWavv() {
+  const navigation = useNavigation<HomeScreenProps>()
   return (
-    <View style={styles.headlineTextContainer}>
+    <TouchableOpacity
+      style={styles.headlineTextContainer}
+      onPress={() => navigation.push("EditSignal")}>
       <CustomText fontFamily="writer-mono" style={styles.headlineText}>
         Tap anywhere to Wavv
       </CustomText>
-    </View>
+    </TouchableOpacity>
   )
 }
 const styles = StyleSheet.create({
