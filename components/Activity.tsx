@@ -11,7 +11,6 @@ import EditIcon from "@/components/vectors/EditIcon"
 import EditActivity from "@/screens/EditActivity"
 import { TemporaryStatusType, useStatus } from "@/contexts/StatusContext"
 import { theme } from "@/theme"
-import { capitalizeFirstLetter } from "@/utils"
 import BottomModal from "@/components/BottomModal"
 
 export default function Activity({ isLoading }: { isLoading: boolean }) {
@@ -46,7 +45,7 @@ export default function Activity({ isLoading }: { isLoading: boolean }) {
               size="lg"
               fontWeight="semibold"
               style={styles.statusText}>
-              {capitalizeFirstLetter(temporaryStatus.activity)}
+              {temporaryStatus.activity}
             </CustomText>
             <EditIcon />
           </>
