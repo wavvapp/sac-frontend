@@ -32,6 +32,7 @@ export default function NoFriends() {
             title="FIND FRIENDS"
             variant="secondary"
             textSize="sm"
+            fontWeight="semibold"
             textStyles={styles.button}
             onPress={() => navigation.push("Search")}
           />
