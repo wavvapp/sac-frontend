@@ -36,7 +36,6 @@ api.interceptors.request.use(
       AlertDialog.open()
       return Promise.reject(new Error("No internet connection"))
     }
-    console.log(process.env.API_BASE_URL)
     const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
     const token = await AsyncStorage.getItem("@Auth:accessToken")
     if (token) {
