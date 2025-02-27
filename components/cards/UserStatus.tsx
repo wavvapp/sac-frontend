@@ -15,7 +15,7 @@ import { useFriends } from "@/queries/friends"
 import { useMySignal } from "@/queries/signal"
 import { useMemo } from "react"
 
-const MAX_VISIBLE_FRIENDS = 3
+const MAX_VISIBLE_FRIENDS = 4
 
 interface UserStatusProps extends ViewStyle {
   user: User | null
@@ -62,9 +62,8 @@ export default function UserStatus({
   }, [visibleFriends])
 
   const visibleFriendsList = useMemo(() => {
-    return remainingCount > 0
-      ? `${fullFriendsList}, +${remainingCount} more`
-      : fullFriendsList
+    if (!fullFriendsList) return ""
+    return remainingCount > 0 ? `${fullFriendsList}...` : `${fullFriendsList}.`
   }, [remainingCount, fullFriendsList])
 
   const cardAnimatedStyle = useAnimatedStyle(() => {
@@ -110,7 +109,7 @@ export default function UserStatus({
               fontFamily="writer-mono"
               style={styles.secondaryText}>
               {visibleFriendsList
-                ? `${visibleFriendsList}.`
+                ? `${visibleFriendsList}`
                 : "Tap to edit your preferences."}
             </CustomText>
           </View>
