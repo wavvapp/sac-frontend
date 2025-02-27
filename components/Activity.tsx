@@ -12,6 +12,7 @@ import EditActivity from "@/screens/EditActivity"
 import { TemporaryStatusType, useStatus } from "@/contexts/StatusContext"
 import { theme } from "@/theme"
 import BottomModal from "@/components/BottomModal"
+import { CustomTitle } from "@/components/ui/CustomTitle"
 
 export default function Activity({ isLoading }: { isLoading: boolean }) {
   const [isModalVisible, setIsModalVisible] = useState(false)
@@ -31,7 +32,7 @@ export default function Activity({ isLoading }: { isLoading: boolean }) {
   }
   return (
     <View style={styles.container}>
-      <CustomText size="base">Status</CustomText>
+      <CustomTitle text="your wavv" />
       <TouchableOpacity onPress={openModal} style={styles.statusContainer}>
         {isLoading ? (
           <ActivityIndicator
@@ -59,7 +60,7 @@ export default function Activity({ isLoading }: { isLoading: boolean }) {
         onClose={closeModal}>
         <EditActivity
           closeModal={closeModal}
-          title="Status"
+          title="Your wavv"
           placeholderText="Status message"
           buttonText="Done"
           initialInputValue={temporaryStatus.activity}

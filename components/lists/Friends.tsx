@@ -1,5 +1,5 @@
 import { View, StyleSheet } from "react-native"
-import CustomText from "@/components/ui/CustomText"
+import { CustomTitle } from "@/components/ui/CustomTitle"
 import FriendCard from "@/components/Friend"
 import { TemporaryStatusType, useStatus } from "@/contexts/StatusContext"
 import { FriendsSkeleton } from "@/components/cards/FriendsSkeleton"
@@ -28,7 +28,7 @@ export default function FriendsList() {
 
   return (
     <View style={styles.container}>
-      <CustomText size="base">Who can see it</CustomText>
+      <CustomTitle text="with whom" />
       {isLoading ? (
         <FriendsSkeleton />
       ) : (

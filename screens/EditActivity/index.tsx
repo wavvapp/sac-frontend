@@ -1,5 +1,5 @@
 import { CustomButton } from "@/components/ui/Button"
-import CustomText from "@/components/ui/CustomText"
+import { CustomTitle } from "@/components/ui/CustomTitle"
 import Input from "@/components/ui/Input"
 import { theme } from "@/theme"
 import { Ref, useState } from "react"
@@ -52,7 +52,7 @@ export default function EditActivity({
           style={styles.modalContainer}
           onStartShouldSetResponder={() => true}>
           <View style={styles.formHeader}>
-            <CustomText>{title}</CustomText>
+            <CustomTitle text={title} />
             <CustomButton
               variant="default"
               textSize="sm"
