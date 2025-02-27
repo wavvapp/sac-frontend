@@ -28,8 +28,7 @@ export const FriendsSkeleton = () => {
   return (
     <View style={styles.friendItem}>
       <View style={styles.userDetails}>
-        <Animated.View style={[styles.avatarSkeleton, animatedStyle]} />
-        <View style={{ marginLeft: 8, flex: 1 }}>
+        <View style={{ flex: 1 }}>
           <Animated.View style={[styles.nameSkeleton, animatedStyle]} />
           <Animated.View style={[styles.usernameSkeleton, animatedStyle]} />
         </View>
@@ -50,12 +49,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     flex: 1,
-  },
-  avatarSkeleton: {
-    width: 56,
-    height: 56,
-    borderRadius: 40,
-    backgroundColor: theme.colors.gray,
   },
   nameSkeleton: {
     width: 150,
