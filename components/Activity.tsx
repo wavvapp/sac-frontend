@@ -61,7 +61,7 @@ export default function Activity({ isLoading }: { isLoading: boolean }) {
         <EditActivity
           closeModal={closeModal}
           title="Your wavv"
-          placeholderText="Status message"
+          placeholderText="Let's hang"
           buttonText="Done"
           initialInputValue={temporaryStatus.activity}
           onPress={updateStatus}

@@ -14,7 +14,7 @@ export const CustomTitle = ({
     <CustomText
       fontFamily="writer-mono"
       size="sm"
-      fontWeight="medium"
+      fontWeight="semibold"
       style={[style, styles.textStyles, isUnderline && styles.underLinedText]}>
       {text}
     </CustomText>
@@ -23,7 +23,7 @@ export const CustomTitle = ({
 
 const styles = StyleSheet.create({
   textStyles: {
-    letterSpacing: 0.03,
+    letterSpacing: 0.05,
     textTransform: "uppercase",
   },
   underLinedText: {
