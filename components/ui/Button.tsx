@@ -7,17 +7,12 @@ import {
   ViewStyle,
 } from "react-native"
 import CustomText from "@/components/ui/CustomText"
-import {
-  ButtonVariant,
-  FontWeightVariant,
-  TypographySizeVariant,
-} from "@/types"
+import { ButtonVariant, TypographySizeVariant } from "@/types"
 import { theme } from "@/theme"
 
 interface ButtonProps extends TouchableOpacityProps {
   variant?: ButtonVariant
   textSize?: TypographySizeVariant
-  fontWeight?: FontWeightVariant
   title?: string
   active?: boolean
   containerStyles?: ViewStyle
@@ -33,7 +28,6 @@ export function CustomButton({
   onPress,
   textSize = "sm",
   textStyles = {},
-  fontWeight = "bold",
   containerStyles = {},
   disabled,
   children,
@@ -100,7 +94,6 @@ export function CustomButton({
       {title && (
         <CustomText
           size={textSize}
-          fontWeight={fontWeight}
           fontFamily="writer-mono"
           style={[text, styles.buttonText, textStyles]}>
           {title}
@@ -160,6 +153,7 @@ const styles = StyleSheet.create({
   },
   secondaryText: {
     color: theme.colors.white,
+    fontWeight: theme.fontWeight.bold,
   },
   outline: {
     backgroundColor: theme.colors.white,

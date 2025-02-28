@@ -31,6 +31,7 @@ const refreshAccessToken = async (refreshToken: string) => {
 // Request Interceptor
 api.interceptors.request.use(
   async (config: InternalAxiosRequestConfig) => {
+    console.log(process.env.API_BASE_URL)
     const netInfo = await NetInfo.fetch()
     if (!netInfo.isConnected) {
       AlertDialog.open()
