@@ -1,5 +1,5 @@
 import { StyleSheet, TouchableOpacity } from "react-native"
-import CustomText from "../ui/CustomText"
+import CustomText from "@/components/ui/CustomText"
 import { theme } from "@/theme"
 import { useNavigation } from "@react-navigation/native"
 import { HomeScreenProps } from "@/screens/Home"

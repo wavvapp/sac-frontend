@@ -45,24 +45,6 @@ export default function HomeScreen() {
     queryKey: ["points"],
     queryFn: fetchPoints,
   })
-  // TODO: Remove this once they are implemented in new buttons
-  // const handlePress = useMutation({
-  //   mutationKey: ["toggle-signal-change"],
-  //   mutationFn: isOn.value
-  //     ? () => api.post("/my-signal/turn-off")
-  //     : () => api.post("/my-signal/turn-on"),
-  //   networkMode: "online",
-  //   onMutate: () => {
-  //     handleOfflineAction(() => (isOn.value = !isOn.value))
-  //   },
-  //   onError: () => {
-  //     isOn.value = !isOn.value
-  //   },
-  //   onSettled() {
-  //     queryClient.refetchQueries({ queryKey: ["points"] })
-  //     queryClient.refetchQueries({ queryKey: ["fetch-my-signal"] })
-  //   },
-  // })
   useFocusEffect(
     useCallback(() => {
       if (!isAuthenticated) return
