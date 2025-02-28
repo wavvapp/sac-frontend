@@ -10,7 +10,10 @@ export default function TapWavv() {
     <TouchableOpacity
       style={styles.headlineTextContainer}
       onPress={() => navigation.push("EditSignal")}>
-      <CustomText fontFamily="writer-mono" style={styles.headlineText}>
+      <CustomText
+        fontFamily="writer-mono"
+        size="sm"
+        style={styles.headlineText}>
         Tap anywhere to Wavv
       </CustomText>
     </TouchableOpacity>
