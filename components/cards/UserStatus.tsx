@@ -15,7 +15,7 @@ import { useFriends } from "@/queries/friends"
 import { useMySignal } from "@/queries/signal"
 import { useMemo } from "react"
 
-const MAX_VISIBLE_FRIENDS = 3
+const MAX_VISIBLE_FRIENDS = 4
 
 interface UserStatusProps extends ViewStyle {
   user: User | null
@@ -62,9 +62,8 @@ export default function UserStatus({
   }, [visibleFriends])
 
   const visibleFriendsList = useMemo(() => {
-    return remainingCount > 0
-      ? `${fullFriendsList}, +${remainingCount} more`
-      : fullFriendsList
+    if (!fullFriendsList) return ""
+    return remainingCount > 0 ? `${fullFriendsList}...` : `${fullFriendsList}.`
   }, [remainingCount, fullFriendsList])
 
   const cardAnimatedStyle = useAnimatedStyle(() => {
@@ -82,7 +81,9 @@ export default function UserStatus({
       <Animated.View
         style={[styles.animationContainer, style, cardAnimatedStyle]}
         {...rest}>
-        <View style={styles.userContainer}>
+        <TouchableOpacity
+          style={styles.userContainer}
+          onPress={() => navigation.push("EditSignal")}>
           {user && signal && (
             <UserAvailability
               fullName={user.names}
@@ -96,24 +97,12 @@ export default function UserStatus({
                 ? `Visible to ${friends.length} ${friends.length === 1 ? "friend" : "friends"}`
                 : "This status is not visible to anyone."}
             </CustomText>
-            <CustomText
-              size="sm"
-              fontFamily="writer-mono"
-              style={styles.secondaryText}>
+            <CustomText size="sm" fontFamily="writer-mono">
               {visibleFriendsList
-                ? `${visibleFriendsList}.`
+                ? `${visibleFriendsList}`
                 : "Tap to edit your preferences."}
             </CustomText>
           </View>
-        </View>
-        <TouchableOpacity style={styles.editButton}>
-          <CustomText
-            onPress={() => navigation.push("EditSignal")}
-            size="sm"
-            fontWeight="semibold"
-            style={styles.editButtonText}>
-            Tap to edit
-          </CustomText>
         </TouchableOpacity>
       </Animated.View>
     </View>
@@ -136,21 +125,5 @@ const styles = StyleSheet.create({
     gap: 24,
     padding: 20,
     justifyContent: "space-between",
-    flexGrow: 1,
-  },
-  editButton: {
-    backgroundColor: theme.colors.black,
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 12,
-    marginBottom: -1,
-  },
-  editButtonText: {
-    color: theme.colors.white,
-    textAlign: "center",
-    padding: 10,
-    textTransform: "uppercase",
-  },
-  secondaryText: {
-    marginTop: 4,
   },
 })

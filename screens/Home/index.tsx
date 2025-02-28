@@ -93,7 +93,7 @@ export default function HomeScreen() {
           </TouchableOpacity>
           <View style={styles.buttonContainer}>
             <CustomButton
-              style={styles.iconButton}
+              style={styles.settingsButton}
               onPress={() =>
                 AlertDialog.open({
                   title: "Share this invite code with your friend",
@@ -105,10 +105,12 @@ export default function HomeScreen() {
                   closeAutomatically: false,
                 })
               }>
-              <ShareIcon color={theme.colors.white} />
+              <TouchableOpacity style={styles.shareButton}>
+                <ShareIcon color={theme.colors.white} />
+              </TouchableOpacity>
             </CustomButton>
             <CustomButton
-              style={styles.iconButton}
+              style={styles.settingsButton}
               onPress={() => navigation.push("Settings")}>
               <Settings color={theme.colors.white} />
             </CustomButton>
@@ -156,10 +158,13 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: "row",
-    gap: 12,
+    gap: 4,
   },
-  iconButton: {
-    borderRadius: 100,
+  settingsButton: {
+    height: 48,
+    width: 48,
+    alignItems: "center",
+    justifyContent: "center",
   },
   StatusContainer: {
     marginBottom: height * 0.2,
@@ -175,5 +180,11 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
+  },
+  shareButton: {
+    height: 48,
+    width: 48,
+    alignItems: "center",
+    justifyContent: "center",
   },
 })

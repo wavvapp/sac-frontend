@@ -18,21 +18,22 @@ export default function UserAvailability({
 }: UserAvailabilityProps) {
   return (
     <View style={(styles.container, style)} {...rest}>
+      <CustomText style={styles.name} fontWeight="semibold">
+        {fullName}
+      </CustomText>
       <View style={styles.header}>
-        <CustomText style={styles.name} fontWeight="semibold">
-          {fullName}
+        <CustomText
+          fontFamily="writer-mono"
+          numberOfLines={2}
+          ellipsizeMode="tail"
+          style={styles.status}>
+          {activity}
         </CustomText>
         <View style={styles.dot} />
         <CustomText style={styles.time} fontFamily="writer-mono">
           {time}
         </CustomText>
       </View>
-      <CustomText
-        fontFamily="writer-mono"
-        numberOfLines={2}
-        ellipsizeMode="tail">
-        {activity}
-      </CustomText>
     </View>
   )
 }
@@ -42,7 +43,7 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: "row",
-    gap: 4,
+    gap: 6,
   },
   name: {
     maxWidth: "70%",
@@ -50,6 +51,9 @@ const styles = StyleSheet.create({
   time: {
     opacity: 0.5,
     textTransform: "capitalize",
+  },
+  status: {
+    maxWidth: "80%",
   },
   dot: {
     backgroundColor: theme.colors.black,
