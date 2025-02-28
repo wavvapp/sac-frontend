@@ -160,6 +160,7 @@ const styles = StyleSheet.create({
   },
   secondaryText: {
     color: theme.colors.white,
+    fontWeight: theme.fontWeight.semibold,
   },
   outline: {
     backgroundColor: theme.colors.white,
