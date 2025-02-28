@@ -13,7 +13,9 @@ export default function Header({ title }: { title: string }) {
       <CustomText size="lg" style={styles.title}>
         {title}
       </CustomText>
-      <TouchableOpacity onPress={() => navigation.goBack()}>
+      <TouchableOpacity
+        style={styles.close}
+        onPress={() => navigation.goBack()}>
         <CloseIcon color={theme.colors.black} />
       </TouchableOpacity>
     </View>
@@ -33,5 +35,11 @@ const styles = StyleSheet.create({
   },
   title: {
     fontWeight: theme.fontWeight.semibold,
+  },
+  close: {
+    height: 48,
+    width: 48,
+    alignItems: "center",
+    justifyContent: "center",
   },
 })
