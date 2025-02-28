@@ -75,6 +75,7 @@ export default function EditActivity({
             containerStyle={styles.inputContainer}
             multiline={multiLineInput}
             ref={inputRef}
+            autoCapitalize="none"
           />
         </KeyboardAvoidingView>
       </View>

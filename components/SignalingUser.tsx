@@ -45,7 +45,9 @@ export default function SignalingUser({
           <UserInfo fullName={user.names} username={user.username} />
         )}
       </View>
-      <TouchableOpacity onPress={() => changePreferences(user)}>
+      <TouchableOpacity
+        style={styles.BellIcon}
+        onPress={() => changePreferences(user)}>
         <BellIcon width={16} height={16} color={bellColor} />
       </TouchableOpacity>
     </View>
@@ -66,5 +68,11 @@ const styles = StyleSheet.create({
   },
   availableUserContainer: {
     backgroundColor: theme.colors.white,
+  },
+  BellIcon: {
+    height: 48,
+    width: 48,
+    justifyContent: "center",
+    alignItems: "center",
   },
 })

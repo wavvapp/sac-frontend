@@ -11,7 +11,6 @@ import EditIcon from "@/components/vectors/EditIcon"
 import EditActivity from "@/screens/EditActivity"
 import { TemporaryStatusType, useStatus } from "@/contexts/StatusContext"
 import { theme } from "@/theme"
-import { capitalizeFirstLetter } from "@/utils"
 import BottomModal from "@/components/BottomModal"
 import { CustomTitle } from "@/components/ui/CustomTitle"
 
@@ -47,9 +46,11 @@ export default function Activity({ isLoading }: { isLoading: boolean }) {
               size="lg"
               fontWeight="semibold"
               style={styles.statusText}>
-              {capitalizeFirstLetter(temporaryStatus.activity)}
+              {temporaryStatus.activity}
             </CustomText>
-            <EditIcon />
+            <View style={styles.EditIcon}>
+              <EditIcon />
+            </View>
           </>
         )}
       </TouchableOpacity>
@@ -80,13 +81,20 @@ const styles = StyleSheet.create({
   },
   statusContainer: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    alignItems: "center",
   },
   statusText: {
     flex: 1,
+    alignItems: "center",
   },
   loaderIcon: {
     marginVertical: 4,
     marginHorizontal: "auto",
+  },
+  EditIcon: {
+    height: 48,
+    width: 48,
+    justifyContent: "center",
+    alignItems: "center",
   },
 })
