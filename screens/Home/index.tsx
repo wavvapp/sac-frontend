@@ -3,7 +3,6 @@ import { RootStackParamList } from "@/navigation"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { StyleSheet, View, StatusBar, Platform } from "react-native"
 import { runOnJS, useDerivedValue } from "react-native-reanimated"
-import { AnimatedSwitch } from "@/components/AnimatedSwitch"
 import { useCallback, useRef, useState } from "react"
 import Signaling, { SignalingRef } from "@/components/lists/Signaling"
 import Settings from "@/components/vectors/Settings"
@@ -15,19 +14,18 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native"
 import { onShare } from "@/utils/share"
 import NoFriends from "@/components/cards/NoFriends"
 import { useAuth } from "@/contexts/AuthContext"
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
+import { useQuery } from "@tanstack/react-query"
 import { fetchPoints } from "@/libs/fetchPoints"
 import * as WebBrowser from "expo-web-browser"
 import { TouchableOpacity } from "react-native-gesture-handler"
 import { useStatus } from "@/contexts/StatusContext"
-import api from "@/service"
 import { useFriends } from "@/queries/friends"
-import { useMySignal } from "@/queries/signal"
 import { useOfflineHandler } from "@/hooks/useOfflineHandler"
-import { height, width } from "@/utils/dimensions"
+import { height } from "@/utils/dimensions"
 import { CopiableText } from "@/components/cards/CopiableText"
 import AlertDialog from "@/components/AlertDialog"
 import NoiseVideo from "@/components/NoiseVideo"
+import TapWavv from "@/components/cards/TapWavv"
 
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -41,29 +39,11 @@ export default function HomeScreen() {
   const navigation = useNavigation<HomeScreenProps>()
   const { data: allFriends } = useFriends()
   const { user, isAuthenticated } = useAuth()
-  const queryClient = useQueryClient()
   const { handleOfflineAction } = useOfflineHandler()
 
   const { data, refetch: refetchPoints } = useQuery({
     queryKey: ["points"],
     queryFn: fetchPoints,
-  })
-  const handlePress = useMutation({
-    mutationKey: ["toggle-signal-change"],
-    mutationFn: isOn.value
-      ? () => api.post("/my-signal/turn-off")
-      : () => api.post("/my-signal/turn-on"),
-    networkMode: "online",
-    onMutate: () => {
-      handleOfflineAction(() => (isOn.value = !isOn.value))
-    },
-    onError: () => {
-      isOn.value = !isOn.value
-    },
-    onSettled() {
-      queryClient.refetchQueries({ queryKey: ["points"] })
-      queryClient.refetchQueries({ queryKey: ["fetch-my-signal"] })
-    },
   })
   useFocusEffect(
     useCallback(() => {
@@ -71,7 +51,6 @@ export default function HomeScreen() {
       refetchPoints()
     }, [isAuthenticated, refetchPoints]),
   )
-  const { isPlaceholderData } = useMySignal()
   const handleWebsiteOpen = async () => {
     if (process.env.POINTS_CANISTER_URL) {
       await WebBrowser.openBrowserAsync(process.env.POINTS_CANISTER_URL)
@@ -124,16 +103,8 @@ export default function HomeScreen() {
             <NoFriends />
           </View>
         ) : (
-          <View>
-            <View style={styles.UserStatus}>
-              <UserStatus isOn={isOn} user={user} />
-            </View>
-            <AnimatedSwitch
-              isOn={isOn}
-              isLoading={isPlaceholderData}
-              onPress={() => handlePress.mutate()}
-              style={styles.switch}
-            />
+          <View style={styles.StatusContainer}>
+            {isOn.value ? <UserStatus isOn={isOn} user={user} /> : <TapWavv />}
           </View>
         )}
       </View>
@@ -177,16 +148,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  UserStatus: {
-    marginHorizontal: 20,
-    height: 220,
-    marginBottom: 52,
-  },
-  switch: {
-    width: width * 0.18,
-    height: width * 0.35,
-    padding: 10,
-    marginHorizontal: "auto",
+  StatusContainer: {
+    marginBottom: height * 0.2,
+    position: "relative",
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "flex-start",
+    width: "100%",
   },
   noFriendsContainer: {
     position: "absolute",
