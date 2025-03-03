@@ -57,7 +57,7 @@ export default function EditSignal({
       }
       queryclient.setQueryData(["fetch-my-signal"], optimisticStatus)
       setIsLoading(true)
-      navigation.goBack()
+      navigation.navigate("Home")
     },
     onError: (error) => {
       // TODO: add toaster
@@ -69,12 +69,22 @@ export default function EditSignal({
     },
   })
 
+  const turnOnSignal = useMutation({
+    mutationKey: ["toggle-signal-change"],
+    mutationFn: () => api.post("/my-signal/turn-on"),
+    onMutate: () => {
+      handleOfflineAction(() => (isOn.value = !isOn.value))
+      navigation.navigate("Home")
+    },
+    onSuccess: () => saveStatus.mutate(),
+  })
+
   const turnOffSignal = useMutation({
     mutationKey: ["toggle-signal-change"],
     mutationFn: () => api.post("/my-signal/turn-off"),
     networkMode: "online",
     onMutate: async () => {
-      await handleOfflineAction(() => (isOn.value = !isOn.value))
+      handleOfflineAction(() => (isOn.value = !isOn.value))
       navigation.goBack()
     },
     onError: () => {
@@ -87,7 +97,9 @@ export default function EditSignal({
   })
 
   const handleSaveStatus = async () => {
-    handleOfflineAction(() => saveStatus.mutate())
+    handleOfflineAction(() =>
+      isNewSignal ? turnOnSignal.mutate() : saveStatus.mutate(),
+    )
   }
 
   const handleTurnOffSignal = async () => {
@@ -131,7 +143,7 @@ export default function EditSignal({
           containerStyles={style.button}
           variant="secondary"
           fullWidth
-          title={isNewSignal ? "Wavv your friends" : "save"}
+          title={isNewSignal ? "Wavv" : "save"}
           textSize="sm"
           onPress={handleSaveStatus}
         />

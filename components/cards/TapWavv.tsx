@@ -3,37 +3,13 @@ import CustomText from "@/components/ui/CustomText"
 import { theme } from "@/theme"
 import { useNavigation } from "@react-navigation/native"
 import { HomeScreenProps } from "@/screens/Home"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { useStatus } from "@/contexts/StatusContext"
-import api from "@/service"
-import { useOfflineHandler } from "@/hooks/useOfflineHandler"
 
 export default function TapWavv() {
   const navigation = useNavigation<HomeScreenProps>()
-  const { handleOfflineAction } = useOfflineHandler()
-  const queryClient = useQueryClient()
-  const { isOn } = useStatus()
-  const turnOnSignal = useMutation({
-    mutationKey: ["toggle-signal-change"],
-    mutationFn: () => api.post("/my-signal/turn-on"),
-    networkMode: "online",
-    onMutate: () => {
-      navigation.push("EditSignal", { isNewSignal: true })
-    },
-    onError: () => {
-      isOn.value = !isOn.value
-    },
-    onSettled() {
-      queryClient.refetchQueries({ queryKey: ["points"] })
-      queryClient.refetchQueries({ queryKey: ["fetch-my-signal"] })
-      handleOfflineAction(() => (isOn.value = !isOn.value))
-    },
-  })
-
   return (
     <TouchableOpacity
       style={styles.headlineTextContainer}
-      onPress={() => turnOnSignal.mutate()}>
+      onPress={() => navigation.push("EditSignal", { isNewSignal: true })}>
       <CustomText
         fontFamily="writer-mono"
         size="sm"
