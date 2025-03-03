@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native"
+import { StyleSheet, View } from "react-native"
 import Status from "@/components/cards/Status"
 import { CustomButton } from "@/components/ui/Button"
 import { NativeStackScreenProps } from "react-native-screens/lib/typescript/native-stack/types"
@@ -30,7 +30,7 @@ export default function EditSignal({
   route,
   navigation,
 }: EditSignalScreenProps) {
-  const { temporaryStatus, setTemporaryStatus } = useStatus()
+  const { temporaryStatus, setTemporaryStatus, isOn } = useStatus()
   const { data: signal } = useMySignal()
   const { user } = useAuth()
   const [isLoading, setIsLoading] = useState(false)
@@ -38,7 +38,7 @@ export default function EditSignal({
   const queryclient = useQueryClient()
 
   const isNewSignal = route.params?.isNewSignal || true
-  const mutation = useMutation({
+  const saveStatus = useMutation({
     mutationFn: () => {
       return api.put("/my-signal", {
         friends: temporaryStatus.friendIds,
@@ -69,8 +69,29 @@ export default function EditSignal({
     },
   })
 
+  const turnOffSignal = useMutation({
+    mutationKey: ["toggle-signal-change"],
+    mutationFn: () => api.post("/my-signal/turn-off"),
+    networkMode: "online",
+    onMutate: async () => {
+      await handleOfflineAction(() => (isOn.value = !isOn.value))
+      navigation.goBack()
+    },
+    onError: () => {
+      isOn.value = !isOn.value
+    },
+    onSettled() {
+      queryclient.refetchQueries({ queryKey: ["points"] })
+      queryclient.refetchQueries({ queryKey: ["fetch-my-signal"] })
+    },
+  })
+
   const handleSaveStatus = async () => {
-    handleOfflineAction(() => mutation.mutate())
+    handleOfflineAction(() => saveStatus.mutate())
+  }
+
+  const handleTurnOffSignal = async () => {
+    handleOfflineAction(() => turnOffSignal.mutate())
   }
   useEffect(() => {
     if (!signal) return
@@ -90,7 +111,7 @@ export default function EditSignal({
           flexGrow: 1,
           gap: 20,
           paddingTop: 62,
-          paddingBottom: 122,
+          paddingBottom: 170,
         }}>
         <Activity isLoading={isLoading} />
         <Status
@@ -104,16 +125,29 @@ export default function EditSignal({
           style={{ marginHorizontal: 20 }}
         />
       </ScrollView>
-      <CustomButton
-        activeOpacity={0.8}
-        containerStyles={{ ...style.saveButton, opacity: isLoading ? 0.8 : 1 }}
-        variant="secondary"
-        fullWidth
-        title={isLoading ? "Wavving..." : "Wavv your friends"}
-        textSize="sm"
-        onPress={handleSaveStatus}
-        disabled={isLoading}
-      />
+      <View style={style.buttonsContainer}>
+        <CustomButton
+          activeOpacity={0.8}
+          containerStyles={{
+            ...style.button,
+            opacity: isLoading ? 0.8 : 1,
+          }}
+          variant="secondary"
+          fullWidth
+          title={isLoading ? "Wavving..." : "Wavv your friends"}
+          textSize="sm"
+          onPress={handleSaveStatus}
+          disabled={isLoading}
+        />
+        <CustomButton
+          containerStyles={style.button}
+          variant="ghost"
+          fullWidth
+          title="turn off your wavv"
+          textSize="sm"
+          onPress={handleTurnOffSignal}
+        />
+      </View>
     </SafeAreaView>
   )
 }
@@ -123,13 +157,18 @@ const style = StyleSheet.create({
     flex: 1,
     backgroundColor: theme.colors.white,
     position: "relative",
-    paddingTop: 20,
   },
-  saveButton: {
+  buttonsContainer: {
+    backgroundColor: theme.colors.white,
     position: "absolute",
-    bottom: 20,
+    bottom: 0,
+    paddingBottom: 20,
     zIndex: 10,
     width: "90%",
     marginHorizontal: 20,
+    gap: 8,
+  },
+  button: {
+    width: "100%",
   },
 })

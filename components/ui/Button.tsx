@@ -7,12 +7,17 @@ import {
   ViewStyle,
 } from "react-native"
 import CustomText from "@/components/ui/CustomText"
-import { ButtonVariant, TypographySizeVariant } from "@/types"
+import {
+  ButtonVariant,
+  FontWeightVariant,
+  TypographySizeVariant,
+} from "@/types"
 import { theme } from "@/theme"
 
 interface ButtonProps extends TouchableOpacityProps {
   variant?: ButtonVariant
   textSize?: TypographySizeVariant
+  fontWeight?: FontWeightVariant
   title?: string
   active?: boolean
   containerStyles?: ViewStyle
@@ -28,6 +33,7 @@ export function CustomButton({
   onPress,
   textSize = "sm",
   textStyles = {},
+  fontWeight = "bold",
   containerStyles = {},
   disabled,
   children,
@@ -58,7 +64,7 @@ export function CustomButton({
     },
     ghost: {
       container: styles.ghost,
-      text: {},
+      text: styles.ghostText,
     },
     default: {
       container: styles.default,
@@ -94,8 +100,8 @@ export function CustomButton({
       {title && (
         <CustomText
           size={textSize}
-          fontWeight="semibold"
-          fontFamily="marfa"
+          fontWeight={fontWeight}
+          fontFamily="writer-mono"
           style={[text, styles.buttonText, textStyles]}>
           {title}
         </CustomText>
@@ -154,6 +160,7 @@ const styles = StyleSheet.create({
   },
   secondaryText: {
     color: theme.colors.white,
+    fontWeight: theme.fontWeight.semibold,
   },
   outline: {
     backgroundColor: theme.colors.white,
@@ -177,10 +184,12 @@ const styles = StyleSheet.create({
     color: theme.colors.white,
   },
   ghost: {
-    width: 48,
-    height: 48,
+    paddingVertical: 20,
     justifyContent: "center",
     alignItems: "center",
+  },
+  ghostText: {
+    color: theme.colors.red,
   },
   disabled: {
     opacity: 0.3,
