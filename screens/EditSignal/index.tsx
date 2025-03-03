@@ -128,16 +128,12 @@ export default function EditSignal({
       <View style={style.buttonsContainer}>
         <CustomButton
           activeOpacity={0.8}
-          containerStyles={{
-            ...style.button,
-            opacity: isLoading ? 0.8 : 1,
-          }}
+          containerStyles={style.button}
           variant="secondary"
           fullWidth
-          title={isLoading ? "Wavving..." : "Wavv your friends"}
+          title={isNewSignal ? "Wavv your friends" : "save"}
           textSize="sm"
           onPress={handleSaveStatus}
-          disabled={isLoading}
         />
         {!isNewSignal && (
           <CustomButton
