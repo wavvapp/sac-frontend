@@ -18,7 +18,6 @@ export default function TapWavv() {
     mutationFn: () => api.post("/my-signal/turn-on"),
     networkMode: "online",
     onMutate: () => {
-      handleOfflineAction(() => (isOn.value = !isOn.value))
       navigation.push("EditSignal", { isNewSignal: true })
     },
     onError: () => {
@@ -27,6 +26,7 @@ export default function TapWavv() {
     onSettled() {
       queryClient.refetchQueries({ queryKey: ["points"] })
       queryClient.refetchQueries({ queryKey: ["fetch-my-signal"] })
+      handleOfflineAction(() => (isOn.value = !isOn.value))
     },
   })
 
