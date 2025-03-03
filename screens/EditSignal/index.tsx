@@ -37,7 +37,7 @@ export default function EditSignal({
   const { handleOfflineAction } = useOfflineHandler()
   const queryclient = useQueryClient()
 
-  const isNewSignal = route.params?.isNewSignal || true
+  const isNewSignal = route.params?.isNewSignal
   const saveStatus = useMutation({
     mutationFn: () => {
       return api.put("/my-signal", {
@@ -139,14 +139,16 @@ export default function EditSignal({
           onPress={handleSaveStatus}
           disabled={isLoading}
         />
-        <CustomButton
-          containerStyles={style.button}
-          variant="ghost"
-          fullWidth
-          title="turn off your wavv"
-          textSize="sm"
-          onPress={handleTurnOffSignal}
-        />
+        {!isNewSignal && (
+          <CustomButton
+            containerStyles={style.button}
+            variant="ghost"
+            fullWidth
+            title="turn off your wavv"
+            textSize="sm"
+            onPress={handleTurnOffSignal}
+          />
+        )}
       </View>
     </SafeAreaView>
   )
