@@ -6,7 +6,7 @@ import { FriendsSkeleton } from "@/components/cards/FriendsSkeleton"
 import { Friend } from "@/types"
 import { useCallback, useEffect, useState } from "react"
 import { useFriends } from "@/queries/friends"
-import { CustomButton } from "../ui/Button"
+import { CustomButton } from "@/components/ui/Button"
 
 export default function FriendsList() {
   const [canSelectAll, setCanSelectAll] = useState<boolean>(true)
