@@ -84,11 +84,9 @@ export const theme: Theme = {
         normal: "iAWriterMonoS-Regular",
         italic: "iAWriterMonoS-Italic",
       },
-    },
-    marfa: {
-      normal: {
-        normal: "ABCMarfaVariable-MonoRegularItalic",
-        italic: "ABCMarfaVariable-MonoRegularItalic",
+      semibold: {
+        normal: "iAWriterMonoV",
+        italic: "iAWriterMonoV-Italic",
       },
     },
   },
