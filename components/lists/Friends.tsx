@@ -34,7 +34,7 @@ export default function FriendsList() {
       )
       setCanSelectAll(!allSelected)
     }
-    console.log("dfgfg")
+
   }, [allFriends, friendIds])
 
   const ToggleSelectAll = () => {
