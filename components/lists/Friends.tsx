@@ -4,10 +4,12 @@ import FriendCard from "@/components/Friend"
 import { TemporaryStatusType, useStatus } from "@/contexts/StatusContext"
 import { FriendsSkeleton } from "@/components/cards/FriendsSkeleton"
 import { Friend } from "@/types"
-import { useCallback } from "react"
+import { useCallback, useState } from "react"
 import { useFriends } from "@/queries/friends"
+import { CustomButton } from "../ui/Button"
 
 export default function FriendsList() {
+  const [canSelectAll, setCanSelectAll] = useState<boolean>(true)
   const { temporaryStatus, setTemporaryStatus } = useStatus()
   const { data: allFriends, isLoading } = useFriends()
   const { friendIds } = temporaryStatus
@@ -26,9 +28,34 @@ export default function FriendsList() {
     [friendIds, setTemporaryStatus],
   )
 
+  const ToggleSelectAll = () => {
+    if (!allFriends) return
+
+    const allFriendsIds = allFriends?.map((friend) => friend.id)
+
+    setTemporaryStatus((prev: TemporaryStatusType) => ({
+      ...prev,
+      friendIds: canSelectAll ? [] : allFriendsIds,
+    }))
+
+    setCanSelectAll(!canSelectAll)
+  }
+
   return (
     <View style={styles.container}>
-      <CustomTitle text="with whom" />
+      <View style={styles.header}>
+        <CustomTitle text="with whom" />
+        <CustomButton
+          onPress={ToggleSelectAll}
+          disabled={!allFriends}
+          variant="ghost"
+          containerStyles={styles.selectButton}>
+          <CustomTitle
+            text={canSelectAll ? "SELECT ALL" : "SELECT NONE"}
+            isUnderline
+          />
+        </CustomButton>
+      </View>
       {isLoading ? (
         <FriendsSkeleton />
       ) : (
@@ -51,5 +78,12 @@ const styles = StyleSheet.create({
     gap: 12,
     width: "100%",
     paddingHorizontal: 20,
+  },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  selectButton: {
+    paddingVertical: 0,
   },
 })

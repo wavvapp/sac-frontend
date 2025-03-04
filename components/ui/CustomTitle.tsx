@@ -27,6 +27,7 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
   },
   underLinedText: {
+    textDecorationLine: "underline",
     textDecorationStyle: "solid",
   },
 })
