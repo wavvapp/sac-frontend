@@ -4,7 +4,7 @@ import FriendCard from "@/components/Friend"
 import { TemporaryStatusType, useStatus } from "@/contexts/StatusContext"
 import { FriendsSkeleton } from "@/components/cards/FriendsSkeleton"
 import { Friend } from "@/types"
-import { useCallback, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { useFriends } from "@/queries/friends"
 import { CustomButton } from "../ui/Button"
 
@@ -27,6 +27,15 @@ export default function FriendsList() {
     },
     [friendIds, setTemporaryStatus],
   )
+  const checkAllSelected = useCallback(() => {
+    if (allFriends && friendIds) {
+      const allSelected = allFriends.every((friend) =>
+        friendIds.includes(friend.id),
+      )
+      setCanSelectAll(!allSelected)
+    }
+    console.log("dfgfg")
+  }, [allFriends, friendIds])
 
   const ToggleSelectAll = () => {
     if (!allFriends) return
@@ -35,11 +44,15 @@ export default function FriendsList() {
 
     setTemporaryStatus((prev: TemporaryStatusType) => ({
       ...prev,
-      friendIds: canSelectAll ? [] : allFriendsIds,
+      friendIds: canSelectAll ? allFriendsIds : [],
     }))
 
     setCanSelectAll(!canSelectAll)
   }
+
+  useEffect(() => {
+    checkAllSelected()
+  }, [])
 
   return (
     <View style={styles.container}>
