@@ -9,7 +9,7 @@ export default function TapWavv() {
   return (
     <TouchableOpacity
       style={styles.headlineTextContainer}
-      onPress={() => navigation.push("EditSignal")}>
+      onPress={() => navigation.push("EditSignal", { isNewSignal: true })}>
       <CustomText
         fontFamily="writer-mono"
         size="sm"

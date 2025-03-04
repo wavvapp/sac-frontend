@@ -83,7 +83,7 @@ export default function UserStatus({
         {...rest}>
         <TouchableOpacity
           style={styles.userContainer}
-          onPress={() => navigation.push("EditSignal")}>
+          onPress={() => navigation.push("EditSignal", { isNewSignal: false })}>
           {user && signal && (
             <UserAvailability
               fullName={user.names}

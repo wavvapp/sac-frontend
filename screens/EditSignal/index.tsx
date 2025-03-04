@@ -1,8 +1,7 @@
 import { StyleSheet, View } from "react-native"
 import Status from "@/components/cards/Status"
 import { CustomButton } from "@/components/ui/Button"
-import { useNavigation } from "@react-navigation/native"
-import { NativeStackNavigationProp } from "@react-navigation/native-stack"
+import { NativeStackScreenProps } from "react-native-screens/lib/typescript/native-stack/types"
 import FriendsList from "@/components/lists/Friends"
 import Activity from "@/components/Activity"
 import { ScrollView } from "react-native-gesture-handler"
@@ -22,13 +21,15 @@ import ActionCard from "@/components/cards/Action"
 import { useOfflineHandler } from "@/hooks/useOfflineHandler"
 import { SafeAreaView } from "react-native-safe-area-context"
 
-type EditSignalScreenProps = NativeStackNavigationProp<
+type EditSignalScreenProps = NativeStackScreenProps<
   RootStackParamList,
   "EditSignal"
 >
 
-export default function EditSignal() {
-  const navigation = useNavigation<EditSignalScreenProps>()
+export default function EditSignal({
+  route,
+  navigation,
+}: EditSignalScreenProps) {
   const { temporaryStatus, setTemporaryStatus, isOn } = useStatus()
   const { data: signal } = useMySignal()
   const { user } = useAuth()
@@ -36,6 +37,7 @@ export default function EditSignal() {
   const { handleOfflineAction } = useOfflineHandler()
   const queryclient = useQueryClient()
 
+  const isNewSignal = route.params?.isNewSignal
   const saveStatus = useMutation({
     mutationFn: () => {
       return api.put("/my-signal", {
@@ -55,7 +57,7 @@ export default function EditSignal() {
       }
       queryclient.setQueryData(["fetch-my-signal"], optimisticStatus)
       setIsLoading(true)
-      navigation.goBack()
+      navigation.navigate("Home")
     },
     onError: (error) => {
       // TODO: add toaster
@@ -67,12 +69,22 @@ export default function EditSignal() {
     },
   })
 
+  const turnOnSignal = useMutation({
+    mutationKey: ["toggle-signal-change"],
+    mutationFn: () => api.post("/my-signal/turn-on"),
+    onMutate: () => {
+      handleOfflineAction(() => (isOn.value = !isOn.value))
+      navigation.navigate("Home")
+    },
+    onSuccess: () => saveStatus.mutate(),
+  })
+
   const turnOffSignal = useMutation({
     mutationKey: ["toggle-signal-change"],
     mutationFn: () => api.post("/my-signal/turn-off"),
     networkMode: "online",
     onMutate: async () => {
-      await handleOfflineAction(() => (isOn.value = !isOn.value))
+      handleOfflineAction(() => (isOn.value = !isOn.value))
       navigation.goBack()
     },
     onError: () => {
@@ -85,7 +97,9 @@ export default function EditSignal() {
   })
 
   const handleSaveStatus = async () => {
-    handleOfflineAction(() => saveStatus.mutate())
+    handleOfflineAction(() =>
+      isNewSignal ? turnOnSignal.mutate() : saveStatus.mutate(),
+    )
   }
 
   const handleTurnOffSignal = async () => {
@@ -102,7 +116,7 @@ export default function EditSignal() {
   return (
     <SafeAreaView style={style.container}>
       <StatusBar style="dark" />
-      <Header title="Edit status" />
+      <Header title={isNewSignal ? "Set your Wavv" : "Edit your Wavv"} />
       <ScrollView
         keyboardShouldPersistTaps="always"
         contentContainerStyle={{
@@ -126,25 +140,23 @@ export default function EditSignal() {
       <View style={style.buttonsContainer}>
         <CustomButton
           activeOpacity={0.8}
-          containerStyles={{
-            ...style.button,
-            opacity: isLoading ? 0.8 : 1,
-          }}
+          containerStyles={style.button}
           variant="secondary"
           fullWidth
-          title={isLoading ? "Saving..." : "Save"}
+          title={isNewSignal ? "Wavv" : "save"}
           textSize="sm"
           onPress={handleSaveStatus}
-          disabled={isLoading}
         />
-        <CustomButton
-          containerStyles={style.button}
-          variant="ghost"
-          fullWidth
-          title="turn off your wavv"
-          textSize="sm"
-          onPress={handleTurnOffSignal}
-        />
+        {!isNewSignal && (
+          <CustomButton
+            containerStyles={style.button}
+            variant="ghost"
+            fullWidth
+            title="turn off your wavv"
+            textSize="sm"
+            onPress={handleTurnOffSignal}
+          />
+        )}
       </View>
     </SafeAreaView>
   )
