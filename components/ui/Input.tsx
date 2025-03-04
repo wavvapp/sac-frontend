@@ -83,7 +83,6 @@ export default forwardRef(Input)
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 16,
-    paddingVertical: 14,
     borderWidth: 1,
     borderRadius: 5,
   },
