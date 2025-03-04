@@ -1,6 +1,12 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import {
+  QueryClient,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query"
 import api from "@/service"
 import { Friend, FriendSignal, User } from "@/types"
+import { useCallback } from "react"
 
 export const useFriends = (shouldRefetch?: boolean) => {
   return useQuery<Friend[], Error>({
@@ -164,4 +170,40 @@ export const useSetNotificationPreferences = () => {
       await queryClient.invalidateQueries({ queryKey: ["friends"] })
     },
   })
+}
+
+export const usePrefetchFriend = ({
+  queryClient,
+}: {
+  queryClient: QueryClient
+}) => {
+  return useCallback(async () => {
+    await queryClient.prefetchQuery({
+      queryKey: ["friends"],
+      queryFn: async () => {
+        const { data } = await api.get("/friends")
+        return data
+      },
+    })
+  }, [queryClient])
+}
+
+export const usePrefetchSignal = ({
+  queryClient,
+}: {
+  queryClient: QueryClient
+}) => {
+  return useCallback(async () => {
+    await queryClient.prefetchQuery({
+      queryKey: ["fetch-my-signal"],
+      queryFn: async () => {
+        const { data } = await api.get("/my-signal")
+        const signal = {
+          ...data,
+          friendIds: data.friends.map((friend: Friend) => friend?.friendId),
+        }
+        return signal
+      },
+    })
+  }, [queryClient])
 }
