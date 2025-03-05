@@ -1,7 +1,13 @@
 import { TemporaryStatusType } from "./../contexts/StatusContext"
 import api from "@/service"
 import { Friend, Signal } from "@/types"
-import { useMutation, useQuery, MutationOptions } from "@tanstack/react-query"
+import {
+  useMutation,
+  useQuery,
+  MutationOptions,
+  QueryClient,
+} from "@tanstack/react-query"
+import { useCallback } from "react"
 
 export const useMySignal = () => {
   return useQuery<Signal, Error>({
@@ -51,4 +57,24 @@ export const useTurnOffSignal = (args: MutationOptions) => {
     networkMode: "online",
     ...args,
   })
+}
+
+export const usePrefetchSignal = ({
+  queryClient,
+}: {
+  queryClient: QueryClient
+}) => {
+  return useCallback(async () => {
+    await queryClient.prefetchQuery({
+      queryKey: ["fetch-my-signal"],
+      queryFn: async () => {
+        const { data } = await api.get("/my-signal")
+        const signal = {
+          ...data,
+          friendIds: data.friends.map((friend: Friend) => friend?.friendId),
+        }
+        return signal
+      },
+    })
+  }, [queryClient])
 }

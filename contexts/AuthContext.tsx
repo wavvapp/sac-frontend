@@ -22,7 +22,8 @@ import AlertDialog from "@/components/AlertDialog"
 import { useOfflineHandler } from "@/hooks/useOfflineHandler"
 import { useNotification } from "@/contexts/NotificationContext"
 import * as Notifications from "expo-notifications"
-import { usePrefetchFriend, usePrefetchSignal } from "@/queries/friends"
+import { usePrefetchFriend } from "@/queries/friends"
+import { usePrefetchSignal } from "@/queries/signal"
 
 interface AuthContextData {
   user: User | null

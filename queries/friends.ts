@@ -187,23 +187,3 @@ export const usePrefetchFriend = ({
     })
   }, [queryClient])
 }
-
-export const usePrefetchSignal = ({
-  queryClient,
-}: {
-  queryClient: QueryClient
-}) => {
-  return useCallback(async () => {
-    await queryClient.prefetchQuery({
-      queryKey: ["fetch-my-signal"],
-      queryFn: async () => {
-        const { data } = await api.get("/my-signal")
-        const signal = {
-          ...data,
-          friendIds: data.friends.map((friend: Friend) => friend?.friendId),
-        }
-        return signal
-      },
-    })
-  }, [queryClient])
-}
