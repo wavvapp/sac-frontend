@@ -4,12 +4,11 @@ import FriendCard from "@/components/Friend"
 import { TemporaryStatusType, useStatus } from "@/contexts/StatusContext"
 import { FriendsSkeleton } from "@/components/cards/FriendsSkeleton"
 import { Friend } from "@/types"
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useMemo } from "react"
 import { useFriends } from "@/queries/friends"
 import { CustomButton } from "@/components/ui/Button"
 
 export default function FriendsList() {
-  const [canSelectAll, setCanSelectAll] = useState<boolean>(true)
   const { temporaryStatus, setTemporaryStatus } = useStatus()
   const { data: allFriends, isLoading } = useFriends()
   const { friendIds } = temporaryStatus
@@ -27,17 +26,16 @@ export default function FriendsList() {
     },
     [friendIds, setTemporaryStatus],
   )
-  const checkAllSelected = useCallback(() => {
-    if (allFriends && friendIds) {
-      const allSelected = allFriends.every((friend) =>
-        friendIds.includes(friend.id),
-      )
-      setCanSelectAll(!allSelected)
-    }
 
+  const canSelectAll = useMemo(() => {
+    if (!allFriends) return true
+    const allSelected = allFriends.every((friend) =>
+      friendIds.includes(friend.id),
+    )
+    return !allSelected
   }, [allFriends, friendIds])
 
-  const ToggleSelectAll = () => {
+  const toggleSelectAll = useCallback(() => {
     if (!allFriends) return
 
     const allFriendsIds = allFriends?.map((friend) => friend.id)
@@ -46,20 +44,14 @@ export default function FriendsList() {
       ...prev,
       friendIds: canSelectAll ? allFriendsIds : [],
     }))
-
-    setCanSelectAll(!canSelectAll)
-  }
-
-  useEffect(() => {
-    checkAllSelected()
-  }, [])
+  }, [allFriends, canSelectAll, setTemporaryStatus])
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <CustomTitle text="with whom" />
         <CustomButton
-          onPress={ToggleSelectAll}
+          onPress={toggleSelectAll}
           disabled={!allFriends}
           variant="ghost"
           containerStyles={styles.selectButton}>
