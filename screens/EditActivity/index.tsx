@@ -60,6 +60,7 @@ export default function EditActivity({
               textStyles={styles.button}
               containerStyles={{
                 opacity: !text.trim() ? 0.5 : 1,
+                height: 32,
               }}
               onPress={handleEdit}
               disabled={!text.trim()}
@@ -88,11 +89,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "flex-end",
     backgroundColor: theme.colors.black_500,
+    paddingTop: 244,
   },
   modalContainer: {
-    height: "60%",
+    height: "100%",
     backgroundColor: theme.colors.white,
-    padding: 16,
+    padding: 20,
     borderTopLeftRadius: 12,
     borderTopRightRadius: 12,
   },
@@ -109,5 +111,7 @@ const styles = StyleSheet.create({
   },
   button: {
     fontWeight: theme.fontWeight.semibold,
+    fontSize: 13,
+    lineHeight: 14,
   },
 })

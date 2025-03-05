@@ -6,10 +6,14 @@ import { FriendsSkeleton } from "@/components/cards/FriendsSkeleton"
 import { Friend } from "@/types"
 import { useCallback } from "react"
 import { useFriends } from "@/queries/friends"
+import ActionCard from "../cards/Action"
+import { onShare } from "@/utils/share"
+import { useAuth } from "@/contexts/AuthContext"
 
 export default function FriendsList() {
   const { temporaryStatus, setTemporaryStatus } = useStatus()
   const { data: allFriends, isLoading } = useFriends()
+  const { user } = useAuth()
   const { friendIds } = temporaryStatus
 
   const updateFriendsList = useCallback(
@@ -41,6 +45,11 @@ export default function FriendsList() {
           />
         ))
       )}
+      <ActionCard
+        title="Your friends are not here?"
+        description="Find/Invite friends on Wavv"
+        onPress={() => onShare(user?.username, user?.inviteCode)}
+      />
     </View>
   )
 }
@@ -51,5 +60,6 @@ const styles = StyleSheet.create({
     gap: 12,
     width: "100%",
     paddingHorizontal: 20,
+    paddingTop: 10,
   },
 })
