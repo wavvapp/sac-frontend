@@ -35,5 +35,6 @@ const styles = StyleSheet.create({
   },
   checkedContainer: {
     backgroundColor: theme.colors.black,
+    borderColor: theme.colors.black,
   },
 })

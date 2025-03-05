@@ -6,7 +6,6 @@ import FriendsList from "@/components/lists/Friends"
 import Activity from "@/components/Activity"
 import { ScrollView } from "react-native-gesture-handler"
 import { theme } from "@/theme"
-import { useAuth } from "@/contexts/AuthContext"
 import { useStatus } from "@/contexts/StatusContext"
 import { RootStackParamList } from "@/navigation"
 import { useEffect, useState } from "react"
@@ -19,9 +18,7 @@ import {
   useTurnOffSignal,
   useTurnOnSignal,
 } from "@/queries/signal"
-import { onShare } from "@/utils/share"
 import Header from "@/components/cards/Header"
-import ActionCard from "@/components/cards/Action"
 import { useOfflineHandler } from "@/hooks/useOfflineHandler"
 import { SafeAreaView } from "react-native-safe-area-context"
 
@@ -36,7 +33,6 @@ export default function EditSignal({
 }: EditSignalScreenProps) {
   const { temporaryStatus, setTemporaryStatus, isOn } = useStatus()
   const { data: signal } = useMySignal()
-  const { user } = useAuth()
   const [isLoading, setIsLoading] = useState(false)
   const { handleOfflineAction } = useOfflineHandler()
   const queryclient = useQueryClient()
@@ -114,8 +110,8 @@ export default function EditSignal({
         keyboardShouldPersistTaps="always"
         contentContainerStyle={{
           flexGrow: 1,
-          gap: 20,
-          paddingTop: 62,
+          gap: 24,
+          paddingTop: 24,
           paddingBottom: 170,
         }}>
         <Activity isLoading={isLoading} />
@@ -123,12 +119,6 @@ export default function EditSignal({
           timeSlots={["NOW", "MORNING", "LUNCH", "AFTERNOON", "EVENING"]}
         />
         <FriendsList />
-        <ActionCard
-          title="Your friends are not here?"
-          description="Find/Invite friends on Wavv"
-          onPress={() => onShare(user?.username, user?.inviteCode)}
-          style={{ marginHorizontal: 20 }}
-        />
       </ScrollView>
       <View style={style.buttonsContainer}>
         <CustomButton
