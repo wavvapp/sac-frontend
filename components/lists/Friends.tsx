@@ -1,4 +1,4 @@
-import { View, StyleSheet } from "react-native"
+import { View, StyleSheet, TouchableWithoutFeedback } from "react-native"
 import { CustomTitle } from "@/components/ui/CustomTitle"
 import FriendCard from "@/components/Friend"
 import { TemporaryStatusType, useStatus } from "@/contexts/StatusContext"
@@ -6,7 +6,6 @@ import { FriendsSkeleton } from "@/components/cards/FriendsSkeleton"
 import { Friend } from "@/types"
 import { useCallback, useMemo } from "react"
 import { useFriends } from "@/queries/friends"
-import { CustomButton } from "@/components/ui/Button"
 
 export default function FriendsList() {
   const { temporaryStatus, setTemporaryStatus } = useStatus()
@@ -50,16 +49,16 @@ export default function FriendsList() {
     <View style={styles.container}>
       <View style={styles.header}>
         <CustomTitle text="with whom" />
-        <CustomButton
+        <TouchableWithoutFeedback
           onPress={toggleSelectAll}
-          disabled={!allFriends}
-          variant="ghost"
-          containerStyles={styles.selectButton}>
-          <CustomTitle
-            text={canSelectAll ? "SELECT ALL" : "SELECT NONE"}
-            isUnderline
-          />
-        </CustomButton>
+          disabled={!allFriends}>
+          <View>
+            <CustomTitle
+              text={canSelectAll ? "SELECT ALL" : "SELECT NONE"}
+              isUnderline
+            />
+          </View>
+        </TouchableWithoutFeedback>
       </View>
       {isLoading ? (
         <FriendsSkeleton />
@@ -87,8 +86,5 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
-  },
-  selectButton: {
-    paddingVertical: 0,
   },
 })
