@@ -1,6 +1,7 @@
 import { useAuth } from "@/contexts/AuthContext"
 import api from "@/service"
-import { useMutation } from "@tanstack/react-query"
+import { User } from "@/types"
+import { QueryOptions, useMutation, useQuery } from "@tanstack/react-query"
 
 export const useDeleteUser = () => {
   const { signOut } = useAuth()
@@ -34,5 +35,27 @@ export const useUpdateUserInfo = () => {
     onError: (error) => {
       console.error("Error patching data:", error)
     },
+  })
+}
+
+export const useSearchFriend = (
+  args: QueryOptions<User[]> & { searchQueryText: string },
+) => {
+  const { searchQueryText, ...rest } = args
+  return useQuery<User[]>({
+    queryKey: ["users", searchQueryText],
+    enabled: searchQueryText.trim().length > 0,
+    queryFn: async () => {
+      const response = await api.get(`/users?q=${searchQueryText}`)
+      return response.data.map((user: User) => ({
+        id: user.id,
+        names: user.names,
+        username: user.username,
+        profilePictureUrl: user.profilePictureUrl,
+        isFriend: user.isFriend,
+      }))
+    },
+    networkMode: "offlineFirst",
+    ...rest,
   })
 }

@@ -14,8 +14,6 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native"
 import { onShare } from "@/utils/share"
 import NoFriends from "@/components/cards/NoFriends"
 import { useAuth } from "@/contexts/AuthContext"
-import { useQuery } from "@tanstack/react-query"
-import { fetchPoints } from "@/libs/fetchPoints"
 import * as WebBrowser from "expo-web-browser"
 import { TouchableOpacity } from "react-native-gesture-handler"
 import { useStatus } from "@/contexts/StatusContext"
@@ -26,6 +24,7 @@ import { CopiableText } from "@/components/cards/CopiableText"
 import AlertDialog from "@/components/AlertDialog"
 import NoiseVideo from "@/components/NoiseVideo"
 import TapWavv from "@/components/cards/TapWavv"
+import { useFetchPoints } from "@/queries/points"
 
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -41,10 +40,8 @@ export default function HomeScreen() {
   const { user, isAuthenticated } = useAuth()
   const { handleOfflineAction } = useOfflineHandler()
 
-  const { data, refetch: refetchPoints } = useQuery({
-    queryKey: ["points"],
-    queryFn: fetchPoints,
-  })
+  const { data, refetch: refetchPoints } = useFetchPoints()
+
   useFocusEffect(
     useCallback(() => {
       if (!isAuthenticated) return
@@ -71,7 +68,10 @@ export default function HomeScreen() {
         <View style={styles.header}>
           <TouchableOpacity
             onPress={() => handleOfflineAction(handleWebsiteOpen)}>
-            <Badge variant="primary" name={data?.points?.toFixed(1) || 0} />
+            <Badge
+              variant="primary"
+              name={(data as any)?.points?.toFixed(1) || 0}
+            />
           </TouchableOpacity>
           <View style={styles.buttonContainer}>
             <CustomButton

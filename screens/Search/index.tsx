@@ -7,10 +7,8 @@ import CustomText from "@/components/ui/CustomText"
 import { User } from "@/types"
 import { theme } from "@/theme"
 import CheckIcon from "@/components/vectors/CheckIcon"
-import api from "@/service"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { StatusBar } from "expo-status-bar"
-import { useQuery } from "@tanstack/react-query"
 import { onShare } from "@/utils/share"
 import { useAuth } from "@/contexts/AuthContext"
 import Header from "@/components/cards/Header"
@@ -20,6 +18,7 @@ import { useAddFriend, useRemoveFriend } from "@/queries/friends"
 import { FriendsSkeleton } from "@/components/cards/FriendsSkeleton"
 import { CopiableText } from "@/components/cards/CopiableText"
 import AlertDialog from "@/components/AlertDialog"
+import { useSearchFriend } from "@/queries/user"
 
 const FindFriends = () => {
   const [search, setSearch] = useState("")
@@ -28,21 +27,7 @@ const FindFriends = () => {
   const addFriend = useAddFriend()
   const removeFriend = useRemoveFriend()
 
-  const { data: users = [], isLoading } = useQuery<User[]>({
-    queryKey: ["users", searchQueryText],
-    enabled: searchQueryText.trim().length > 0,
-    queryFn: async () => {
-      const response = await api.get(`/users?q=${searchQueryText}`)
-      return response.data.map((user: User) => ({
-        id: user.id,
-        names: user.names,
-        username: user.username,
-        profilePictureUrl: user.profilePictureUrl,
-        isFriend: user.isFriend,
-      }))
-    },
-    networkMode: "offlineFirst",
-  })
+  const { data: users = [], isLoading } = useSearchFriend({ searchQueryText })
 
   const createDebouncedSearch = (callback: (value: string) => void) =>
     debounce(callback, 200, { leading: true, trailing: true })

@@ -9,11 +9,15 @@ import { theme } from "@/theme"
 import { useStatus } from "@/contexts/StatusContext"
 import { RootStackParamList } from "@/navigation"
 import { useEffect, useState } from "react"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useQueryClient } from "@tanstack/react-query"
 import { StatusBar } from "expo-status-bar"
-import api from "@/service"
 import { Signal } from "@/types"
-import { useMySignal } from "@/queries/signal"
+import {
+  useMySignal,
+  useSaveStatus,
+  useTurnOffSignal,
+  useTurnOnSignal,
+} from "@/queries/signal"
 import Header from "@/components/cards/Header"
 import { useOfflineHandler } from "@/hooks/useOfflineHandler"
 import { SafeAreaView } from "react-native-safe-area-context"
@@ -34,14 +38,8 @@ export default function EditSignal({
   const queryclient = useQueryClient()
 
   const isNewSignal = route.params?.isNewSignal
-  const saveStatus = useMutation({
-    mutationFn: () => {
-      return api.put("/my-signal", {
-        friends: temporaryStatus.friendIds,
-        status_message: temporaryStatus.activity,
-        when: temporaryStatus.timeSlot,
-      })
-    },
+  const saveStatus = useSaveStatus({
+    data: temporaryStatus,
     onMutate: () => {
       queryclient.cancelQueries({ queryKey: ["fetch-my-signal"] })
       const optimisticStatus: Signal = {
@@ -65,9 +63,7 @@ export default function EditSignal({
     },
   })
 
-  const turnOnSignal = useMutation({
-    mutationKey: ["toggle-signal-change"],
-    mutationFn: () => api.post("/my-signal/turn-on"),
+  const turnOnSignal = useTurnOnSignal({
     onMutate: () => {
       handleOfflineAction(() => (isOn.value = !isOn.value))
       navigation.navigate("Home")
@@ -75,10 +71,7 @@ export default function EditSignal({
     onSuccess: () => saveStatus.mutate(),
   })
 
-  const turnOffSignal = useMutation({
-    mutationKey: ["toggle-signal-change"],
-    mutationFn: () => api.post("/my-signal/turn-off"),
-    networkMode: "online",
+  const turnOffSignal = useTurnOffSignal({
     onMutate: async () => {
       handleOfflineAction(() => (isOn.value = !isOn.value))
       navigation.goBack()
