@@ -92,12 +92,12 @@ export default function UserStatus({
             />
           )}
           <View style={{ opacity: 0.5 }}>
-            <CustomText size="sm" fontFamily="writer-mono">
+            <CustomText size="sm" fontFamily="writer-monos">
               {friends.length
                 ? `Visible to ${friends.length} ${friends.length === 1 ? "friend" : "friends"}`
                 : "This status is not visible to anyone."}
             </CustomText>
-            <CustomText size="sm" fontFamily="writer-mono">
+            <CustomText size="sm" fontFamily="writer-monos">
               {visibleFriendsList
                 ? `${visibleFriendsList}`
                 : "Tap to edit your preferences."}
