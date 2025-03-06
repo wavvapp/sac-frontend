@@ -6,11 +6,11 @@ import { FriendsSkeleton } from "@/components/cards/FriendsSkeleton"
 import { Friend } from "@/types"
 import { useCallback, useMemo } from "react"
 import { useFriends } from "@/queries/friends"
-import ActionCard from "../cards/Action"
+import ActionCard from "@/components/cards/Action"
 import { onShare } from "@/utils/share"
 import { useAuth } from "@/contexts/AuthContext"
-import CustomText from "../ui/CustomText"
-import CheckBox from "../ui/CheckBox"
+import CustomText from "@/components/ui/CustomText"
+import CheckBox from "@/components/ui/CheckBox"
 
 export default function FriendsList() {
   const { temporaryStatus, setTemporaryStatus } = useStatus()
