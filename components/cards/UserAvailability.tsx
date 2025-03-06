@@ -2,7 +2,6 @@ import { StyleSheet, View, ViewProps } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import { theme } from "@/theme"
 import { User } from "@/types"
-import { capitalizeFirstLetter } from "@/utils"
 
 interface UserAvailabilityProps extends ViewProps {
   fullName: User["names"]
@@ -19,21 +18,22 @@ export default function UserAvailability({
 }: UserAvailabilityProps) {
   return (
     <View style={(styles.container, style)} {...rest}>
+      <CustomText style={styles.name} fontWeight="semibold">
+        {fullName}
+      </CustomText>
       <View style={styles.header}>
-        <CustomText style={styles.name} fontWeight="semibold">
-          {fullName}
+        <CustomText
+          fontFamily="writer-monos"
+          numberOfLines={2}
+          ellipsizeMode="tail"
+          style={styles.status}>
+          {activity}
         </CustomText>
         <View style={styles.dot} />
-        <CustomText style={styles.time} fontFamily="writer-mono">
+        <CustomText style={styles.time} fontFamily="writer-monos">
           {time}
         </CustomText>
       </View>
-      <CustomText
-        fontFamily="writer-mono"
-        numberOfLines={2}
-        ellipsizeMode="tail">
-        {capitalizeFirstLetter(activity)}
-      </CustomText>
     </View>
   )
 }
@@ -43,15 +43,17 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: "row",
-    gap: 4,
+    gap: 6,
   },
   name: {
-    textTransform: "capitalize",
     maxWidth: "70%",
   },
   time: {
     opacity: 0.5,
     textTransform: "capitalize",
+  },
+  status: {
+    maxWidth: "80%",
   },
   dot: {
     backgroundColor: theme.colors.black,

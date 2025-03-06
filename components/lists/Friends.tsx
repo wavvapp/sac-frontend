@@ -1,15 +1,19 @@
-import { View, StyleSheet } from "react-native"
-import CustomText from "@/components/ui/CustomText"
+import { View, StyleSheet, TouchableWithoutFeedback } from "react-native"
+import { CustomTitle } from "@/components/ui/CustomTitle"
 import FriendCard from "@/components/Friend"
 import { TemporaryStatusType, useStatus } from "@/contexts/StatusContext"
 import { FriendsSkeleton } from "@/components/cards/FriendsSkeleton"
 import { Friend } from "@/types"
-import { useCallback } from "react"
+import { useCallback, useMemo } from "react"
 import { useFriends } from "@/queries/friends"
+import ActionCard from "../cards/Action"
+import { onShare } from "@/utils/share"
+import { useAuth } from "@/contexts/AuthContext"
 
 export default function FriendsList() {
   const { temporaryStatus, setTemporaryStatus } = useStatus()
   const { data: allFriends, isLoading } = useFriends()
+  const { user } = useAuth()
   const { friendIds } = temporaryStatus
 
   const updateFriendsList = useCallback(
@@ -26,9 +30,40 @@ export default function FriendsList() {
     [friendIds, setTemporaryStatus],
   )
 
+  const canSelectAll = useMemo(() => {
+    if (!allFriends) return true
+    const allSelected = allFriends.every((friend) =>
+      friendIds.includes(friend.id),
+    )
+    return !allSelected
+  }, [allFriends, friendIds])
+
+  const toggleSelectAll = useCallback(() => {
+    if (!allFriends) return
+
+    const allFriendsIds = allFriends?.map((friend) => friend.id)
+
+    setTemporaryStatus((prev: TemporaryStatusType) => ({
+      ...prev,
+      friendIds: canSelectAll ? allFriendsIds : [],
+    }))
+  }, [allFriends, canSelectAll, setTemporaryStatus])
+
   return (
     <View style={styles.container}>
-      <CustomText size="base">Who can see it</CustomText>
+      <View style={styles.header}>
+        <CustomTitle text="with whom" />
+        <TouchableWithoutFeedback
+          onPress={toggleSelectAll}
+          disabled={!allFriends}>
+          <View>
+            <CustomTitle
+              text={canSelectAll ? "SELECT ALL" : "SELECT NONE"}
+              isUnderline
+            />
+          </View>
+        </TouchableWithoutFeedback>
+      </View>
       {isLoading ? (
         <FriendsSkeleton />
       ) : (
@@ -41,6 +76,11 @@ export default function FriendsList() {
           />
         ))
       )}
+      <ActionCard
+        title="Your friends are not here?"
+        description="Find/Invite friends on Wavv"
+        onPress={() => onShare(user?.username, user?.inviteCode)}
+      />
     </View>
   )
 }
@@ -51,5 +91,10 @@ const styles = StyleSheet.create({
     gap: 12,
     width: "100%",
     paddingHorizontal: 20,
+    paddingTop: 10,
+  },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
 })

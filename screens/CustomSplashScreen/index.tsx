@@ -11,7 +11,7 @@ export default function CustomSplashScreen() {
 
       <View style={styles.content}>
         <WavvLogo width={390} height={80} />
-        <CustomText size="sm" fontFamily="marfa" style={styles.subText}>
+        <CustomText size="sm" fontFamily="writer-monos" style={styles.subText}>
           Signal friends your availability
         </CustomText>
       </View>

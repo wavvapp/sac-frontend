@@ -2,7 +2,6 @@ import { useFonts } from "expo-font"
 
 export const useFont = () => {
   const [loaded, error] = useFonts({
-    "ABCMarfaVariable-MonoRegularItalic": require("../assets/fonts/ABC Marfa Variable/ABCMarfaVariableVF-Trial.ttf"),
     "Suisse Int'l Black Italic": require("../assets/fonts/Suisse Int'l/Suisse Int'l Black Italic.otf"),
     "Suisse Int'l Black": require("../assets/fonts/Suisse Int'l/Suisse Int'l Black.otf"),
     "Suisse Int'l Bold": require("../assets/fonts/Suisse Int'l/Suisse Int'l Bold.otf"),
@@ -21,10 +20,12 @@ export const useFont = () => {
     "Suisse Int'l Thin Italic": require("../assets/fonts/Suisse Int'l/Suisse Int'l Thin Italic.otf"),
     "Suisse Int'l Ultralight": require("../assets/fonts/Suisse Int'l/Suisse Int'l Ultralight.otf"),
     "Suisse Int'l Ultralight Italic": require("../assets/fonts/Suisse Int'l/Suisse Int'l Ultralight Italic.otf"),
-    "iAWriterMonoS-Italic": require("../assets/fonts/ia-writer-mono_5.1.0/ia-writer-mono-latin-400-italic.ttf"),
-    "iAWriterMonoS-Regular": require("../assets/fonts/ia-writer-mono_5.1.0/ia-writer-mono-latin-400-normal.ttf"),
-    "iAWriterMonoS-BoldItalic": require("../assets/fonts/ia-writer-mono_5.1.0/ia-writer-mono-latin-700-italic.ttf"),
-    "iAWriterMonoS-Bold": require("../assets/fonts/ia-writer-mono_5.1.0/ia-writer-mono-latin-700-normal.ttf"),
+    "iAWriterMonoS-Italic": require("../assets/fonts/iA Writer Mono/iAWriterMonoS-Italic.ttf"),
+    "iAWriterMonoS-Regular": require("../assets/fonts/iA Writer Mono/iAWriterMonoS-Regular.ttf"),
+    "iAWriterMonoS-BoldItalic": require("../assets/fonts/iA Writer Mono/iAWriterMonoS-BoldItalic.ttf"),
+    "iAWriterMonoS-Bold": require("../assets/fonts/iA Writer Mono/iAWriterMonoS-Bold.ttf"),
+    iAWriterMonoV: require("../assets/fonts/iA Writer Mono/iAWriterMonoV.ttf"),
+    "iAWriterMonoV-Italic": require("../assets/fonts/iA Writer Mono/iAWriterMonoV-Italic.ttf"),
   })
 
   return { loaded, error }

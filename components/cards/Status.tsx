@@ -1,5 +1,5 @@
 import { View, ScrollView, StyleSheet, TouchableOpacity } from "react-native"
-import CustomText from "@/components/ui/CustomText"
+import { CustomTitle } from "@/components/ui/CustomTitle"
 import Badge from "@/components/ui/Badge"
 import { theme } from "@/theme"
 import { TemporaryStatusType, useStatus } from "@/contexts/StatusContext"
@@ -20,9 +20,7 @@ export const Status: React.FC<StatusProps> = ({ timeSlots }) => {
 
   return (
     <View style={styles.container}>
-      <CustomText size="base" style={styles.title}>
-        When
-      </CustomText>
+      <CustomTitle text="When" style={styles.title} />
       <View style={styles.scrollContainer}>
         <ScrollView
           horizontal={true}
@@ -56,7 +54,7 @@ export default Status
 
 const styles = StyleSheet.create({
   container: {
-    gap: 18,
+    gap: 12,
   },
   title: {
     paddingHorizontal: 20,
@@ -72,7 +70,6 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   badge: {
-    fontFamily: theme.fontFamily["writer-mono"].normal?.normal,
     paddingVertical: 7.5,
     paddingHorizontal: 16,
     fontSize: theme.fontSize.sm,
