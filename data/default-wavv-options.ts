@@ -5,7 +5,6 @@ export const options: string[] = [
   "clup",
   "cinema",
   "club",
-  "cinmena",
   "feeling spicy",
   "deep talk",
   "play",

@@ -2,7 +2,7 @@ import { CustomButton } from "@/components/ui/Button"
 import { CustomTitle } from "@/components/ui/CustomTitle"
 import Input from "@/components/ui/Input"
 import { theme } from "@/theme"
-import { ReactNode, Ref, useState } from "react"
+import { ReactNode, Ref, useMemo, useState } from "react"
 import {
   View,
   StyleSheet,
@@ -20,6 +20,7 @@ interface EditActivityProps extends ViewProps {
   initialInputValue: string
   buttonText: string
   onPress: (text: string) => void
+  onTextChange?: (text: string) => void
   closeModal: () => void
   inputRef: Ref<TextInput>
   multiLineInput?: boolean
@@ -33,13 +34,14 @@ export default function EditActivity({
   initialInputValue,
   buttonText,
   onPress,
+  onTextChange,
   inputRef,
   multiLineInput = true,
   children,
 }: EditActivityProps) {
   const [text, setText] = useState(initialInputValue)
-
   const [inputHeigt, setInputHeight] = useState<number>(42)
+
   const handleEdit = () => {
     if (text.trim()) {
       onPress(text)
@@ -47,6 +49,17 @@ export default function EditActivity({
     }
     closeModal()
   }
+  const isExternallyControlled = !!onTextChange
+
+  const inputValue = useMemo(() => {
+    if (isExternallyControlled) return initialInputValue
+    else return text
+  }, [initialInputValue, isExternallyControlled, text])
+
+  const isEmpty = useMemo(() => {
+    if (isExternallyControlled) return !initialInputValue.trim()
+    return !text.trim()
+  }, [initialInputValue, isExternallyControlled, text])
 
   return (
     <TouchableWithoutFeedback onPress={closeModal}>
@@ -63,7 +76,7 @@ export default function EditActivity({
               title={buttonText}
               textStyles={styles.button}
               containerStyles={{
-                opacity: !text.trim() ? 0.5 : 1,
+                opacity: isEmpty ? 0.5 : 1,
                 height: 32,
               }}
               onPress={handleEdit}
@@ -73,13 +86,13 @@ export default function EditActivity({
           <Input
             textSize="lg"
             placeholder={placeholderText}
-            handleTextChange={setText}
-            value={text}
+            handleTextChange={isExternallyControlled ? onTextChange : setText}
+            value={inputValue}
             onSubmitEditing={handleEdit}
             variant="ghost"
             style={[
               styles.inputContainer,
-              { height: Math.max(42, inputHeigt) },
+              isExternallyControlled && { height: Math.max(42, inputHeigt) },
             ]}
             onContentSizeChange={(event) => {
               setInputHeight(event.nativeEvent.contentSize.height)

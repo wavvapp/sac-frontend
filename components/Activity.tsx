@@ -20,6 +20,7 @@ import { ScrollView } from "react-native-gesture-handler"
 export default function Activity({ isLoading }: { isLoading: boolean }) {
   const [isModalVisible, setIsModalVisible] = useState(false)
   const { temporaryStatus, setTemporaryStatus } = useStatus()
+  const [activity, setActivity] = useState(temporaryStatus.activity)
   const inputRef = useRef<TextInput>(null)
 
   const openModal = () => setIsModalVisible(true)
@@ -66,18 +67,18 @@ export default function Activity({ isLoading }: { isLoading: boolean }) {
           title="whats your wavv"
           placeholderText="Enter your plan or pick an option"
           buttonText="Save"
-          initialInputValue={temporaryStatus.activity}
+          initialInputValue={activity}
+          onTextChange={setActivity}
           onPress={updateStatus}
           inputRef={inputRef}>
           <View style={styles.line} />
           <ScrollView contentContainerStyle={styles.badgesContainer}>
             {options.map((slot) => (
-              <TouchableOpacity onPress={() => updateStatus(slot)} key={slot}>
+              <TouchableOpacity onPress={() => setActivity(slot)} key={slot}>
                 <Badge
                   name={slot}
                   variant={
-                    temporaryStatus.activity.toLowerCase() ===
-                    slot.toLowerCase()
+                    activity.toLowerCase() === slot.toLowerCase()
                       ? "default"
                       : "outline"
                   }
