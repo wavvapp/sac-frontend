@@ -46,7 +46,6 @@ const styles = StyleSheet.create({
   },
   text: {
     textTransform: "uppercase",
-    fontWeight: theme.fontWeight.bold,
   },
   defaultText: {
     color: theme.colors.white,
