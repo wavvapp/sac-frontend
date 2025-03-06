@@ -2,7 +2,7 @@ import { CustomButton } from "@/components/ui/Button"
 import { CustomTitle } from "@/components/ui/CustomTitle"
 import Input from "@/components/ui/Input"
 import { theme } from "@/theme"
-import { Ref, useState } from "react"
+import { ReactNode, Ref, useState } from "react"
 import {
   View,
   StyleSheet,
@@ -11,9 +11,10 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   TextInput,
+  ViewProps,
 } from "react-native"
 
-interface EditActivityProps {
+interface EditActivityProps extends ViewProps {
   title: string
   placeholderText: string
   initialInputValue: string
@@ -22,6 +23,7 @@ interface EditActivityProps {
   closeModal: () => void
   inputRef: Ref<TextInput>
   multiLineInput?: boolean
+  children?: ReactNode
 }
 
 export default function EditActivity({
@@ -33,9 +35,11 @@ export default function EditActivity({
   onPress,
   inputRef,
   multiLineInput = true,
+  children,
 }: EditActivityProps) {
   const [text, setText] = useState(initialInputValue)
 
+  const [inputHeigt, setInputHeight] = useState<number>(42)
   const handleEdit = () => {
     if (text.trim()) {
       onPress(text)
@@ -73,11 +77,18 @@ export default function EditActivity({
             value={text}
             onSubmitEditing={handleEdit}
             variant="ghost"
-            containerStyle={styles.inputContainer}
+            style={[
+              styles.inputContainer,
+              { height: Math.max(42, inputHeigt) },
+            ]}
+            onContentSizeChange={(event) => {
+              setInputHeight(event.nativeEvent.contentSize.height)
+            }}
             multiline={multiLineInput}
             ref={inputRef}
             autoCapitalize="none"
           />
+          {children}
         </KeyboardAvoidingView>
       </View>
     </TouchableWithoutFeedback>
@@ -94,7 +105,7 @@ const styles = StyleSheet.create({
   modalContainer: {
     height: "100%",
     backgroundColor: theme.colors.white,
-    padding: 20,
+    paddingVertical: 20,
     borderTopLeftRadius: 12,
     borderTopRightRadius: 12,
   },
@@ -103,11 +114,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     gap: 4,
     alignItems: "flex-end",
+    paddingHorizontal: 20,
   },
   inputContainer: {
-    flex: 1,
-    paddingVertical: 0,
-    marginVertical: 10,
+    paddingHorizontal: 20,
   },
   button: {
     fontWeight: theme.fontWeight.semibold,

@@ -1,0 +1,15 @@
+export const options: string[] = [
+  "let's meet",
+  "drinks",
+  "dinner",
+  "clup",
+  "cinema",
+  "club",
+  "cinmena",
+  "feeling spicy",
+  "deep talk",
+  "play",
+  "gossip",
+  "hug",
+  "walk in forest",
+]
