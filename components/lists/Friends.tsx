@@ -9,6 +9,8 @@ import { useFriends } from "@/queries/friends"
 import ActionCard from "../cards/Action"
 import { onShare } from "@/utils/share"
 import { useAuth } from "@/contexts/AuthContext"
+import CustomText from "../ui/CustomText"
+import CheckBox from "../ui/CheckBox"
 
 export default function FriendsList() {
   const { temporaryStatus, setTemporaryStatus } = useStatus()
@@ -51,16 +53,17 @@ export default function FriendsList() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <CustomTitle text="with whom" />
+      <CustomTitle text="with whom" style={styles.title} />
+      <View style={styles.selectContainer}>
+        <View>
+          <CustomText fontWeight="semibold">Select All</CustomText>
+          <CustomText>Wavv all your friends</CustomText>
+        </View>
         <TouchableWithoutFeedback
           onPress={toggleSelectAll}
           disabled={!allFriends}>
           <View>
-            <CustomTitle
-              text={canSelectAll ? "SELECT ALL" : "SELECT NONE"}
-              isUnderline
-            />
+            <CheckBox isChecked={!canSelectAll} />
           </View>
         </TouchableWithoutFeedback>
       </View>
@@ -93,8 +96,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 10,
   },
-  header: {
+  title: {
+    marginBottom: 24,
+  },
+  selectContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 16,
   },
 })
