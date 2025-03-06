@@ -30,8 +30,7 @@ export default function Badge({
       <CustomText
         size="sm"
         style={[styles.text, customTextStyle[variant]]}
-        fontFamily="writer-mono"
-        fontWeight="semibold">
+        fontFamily="writer-monov">
         {name}
       </CustomText>
     </View>

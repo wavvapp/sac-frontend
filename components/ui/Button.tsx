@@ -95,7 +95,7 @@ export function CustomButton({
         <CustomText
           size={textSize}
           fontWeight="bold"
-          fontFamily="writer-mono"
+          fontFamily="writer-monos"
           style={[text, styles.buttonText, textStyles]}>
           {title}
         </CustomText>

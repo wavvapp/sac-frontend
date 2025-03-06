@@ -45,7 +45,7 @@ export default function CredentialsButton({
           {isError ? <InfoIcon /> : <LoaderIcon />}
           <CustomText
             fontWeight="bold"
-            fontFamily="writer-mono"
+            fontFamily="writer-monos"
             size="sm"
             style={styles.buttonText}>
             {buttonStatusText}

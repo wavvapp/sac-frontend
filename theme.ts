@@ -75,7 +75,7 @@ export const theme: Theme = {
       },
       thin: { normal: "Suisse Int'l Thin", italic: "Suisse Int'l Thin Italic" },
     },
-    "writer-mono": {
+    "writer-monos": {
       bold: {
         normal: "iAWriterMonoS-Bold",
         italic: "iAWriterMonoS-BoldItalic",
@@ -84,7 +84,9 @@ export const theme: Theme = {
         normal: "iAWriterMonoS-Regular",
         italic: "iAWriterMonoS-Italic",
       },
-      semibold: {
+    },
+    "writer-monov": {
+      normal: {
         normal: "iAWriterMonoV",
         italic: "iAWriterMonoV-Italic",
       },

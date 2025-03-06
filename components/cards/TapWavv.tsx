@@ -11,7 +11,7 @@ export default function TapWavv() {
       style={styles.headlineTextContainer}
       onPress={() => navigation.push("EditSignal", { isNewSignal: true })}>
       <CustomText
-        fontFamily="writer-mono"
+        fontFamily="writer-monos"
         size="sm"
         style={styles.headlineText}>
         Tap anywhere to Wavv

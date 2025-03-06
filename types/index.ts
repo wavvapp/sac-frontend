@@ -20,7 +20,7 @@ export type ButtonVariant =
   | "default"
   | "destructive"
   | "danger"
-export type FontFamilyVariant = "suisse" | "writer-mono"
+export type FontFamilyVariant = "suisse" | "writer-monos" | "writer-monov"
 export type fontStyleVariant = "normal" | "italic"
 export type BadgeVariant = "default" | "outline" | "primary"
 export type InputVariant = "primary" | "secondary" | "ghost"

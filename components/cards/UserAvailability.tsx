@@ -23,14 +23,14 @@ export default function UserAvailability({
       </CustomText>
       <View style={styles.header}>
         <CustomText
-          fontFamily="writer-mono"
+          fontFamily="writer-monos"
           numberOfLines={2}
           ellipsizeMode="tail"
           style={styles.status}>
           {activity}
         </CustomText>
         <View style={styles.dot} />
-        <CustomText style={styles.time} fontFamily="writer-mono">
+        <CustomText style={styles.time} fontFamily="writer-monos">
           {time}
         </CustomText>
       </View>
