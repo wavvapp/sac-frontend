@@ -21,7 +21,10 @@ export default function UserInfo({
       <CustomText fontWeight="semibold" size={size}>
         {fullName}
       </CustomText>
-      <CustomText fontFamily="writer-mono" style={styles.username}>
+      <CustomText
+        fontFamily="writer-mono"
+        fontWeight="semibold"
+        style={styles.username}>
         @{username}
       </CustomText>
     </View>
