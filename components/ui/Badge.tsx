@@ -30,7 +30,7 @@ export default function Badge({
       <CustomText
         size="sm"
         style={[styles.text, customTextStyle[variant]]}
-        fontFamily="writer-mono">
+        fontFamily="writer-monov">
         {name}
       </CustomText>
     </View>
@@ -46,7 +46,6 @@ const styles = StyleSheet.create({
   },
   text: {
     textTransform: "uppercase",
-    fontWeight: theme.fontWeight.bold,
   },
   defaultText: {
     color: theme.colors.white,

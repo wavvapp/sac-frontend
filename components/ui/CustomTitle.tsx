@@ -12,9 +12,8 @@ export const CustomTitle = ({
 }: CustomTitleProps) => {
   return (
     <CustomText
-      fontFamily="writer-mono"
+      fontFamily="writer-monov"
       size="sm"
-      fontWeight="semibold"
       style={[style, styles.textStyles, isUnderline && styles.underLinedText]}>
       {text}
     </CustomText>
