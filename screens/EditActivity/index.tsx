@@ -2,7 +2,7 @@ import { CustomButton } from "@/components/ui/Button"
 import { CustomTitle } from "@/components/ui/CustomTitle"
 import Input from "@/components/ui/Input"
 import { theme } from "@/theme"
-import { Ref, useState } from "react"
+import { ReactNode, Ref, useMemo, useState } from "react"
 import {
   View,
   StyleSheet,
@@ -11,17 +11,21 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   TextInput,
+  ViewProps,
 } from "react-native"
 
-interface EditActivityProps {
+interface EditActivityProps extends ViewProps {
   title: string
   placeholderText: string
   initialInputValue: string
   buttonText: string
   onPress: (text: string) => void
+  onTextChange?: (text: string) => void
+  isFullSceen?: boolean
   closeModal: () => void
   inputRef: Ref<TextInput>
   multiLineInput?: boolean
+  children?: ReactNode
 }
 
 export default function EditActivity({
@@ -31,22 +35,37 @@ export default function EditActivity({
   initialInputValue,
   buttonText,
   onPress,
+  onTextChange,
+  isFullSceen = true,
   inputRef,
   multiLineInput = true,
+  children,
 }: EditActivityProps) {
   const [text, setText] = useState(initialInputValue)
+  const [inputHeigt, setInputHeight] = useState<number>(42)
+
+  const isExternallyControlled = !!onTextChange
+
+  const inputValue = useMemo(() => {
+    if (isExternallyControlled) return initialInputValue
+    else return text
+  }, [initialInputValue, isExternallyControlled, text])
+
+  const isEmpty = useMemo(() => {
+    if (isExternallyControlled) return !initialInputValue.trim()
+    return !text.trim()
+  }, [initialInputValue, isExternallyControlled, text])
 
   const handleEdit = () => {
-    if (text.trim()) {
-      onPress(text)
+    if (inputValue.trim()) {
+      onPress(inputValue)
       Keyboard.dismiss()
     }
     closeModal()
   }
-
   return (
     <TouchableWithoutFeedback onPress={closeModal}>
-      <View style={styles.overlay}>
+      <View style={[styles.overlay, isFullSceen && styles.fullScreenOverlay]}>
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
           style={styles.modalContainer}
@@ -59,25 +78,32 @@ export default function EditActivity({
               title={buttonText}
               textStyles={styles.button}
               containerStyles={{
-                opacity: !text.trim() ? 0.5 : 1,
+                opacity: isEmpty ? 0.5 : 1,
                 height: 32,
               }}
               onPress={handleEdit}
-              disabled={!text.trim()}
+              disabled={isEmpty}
             />
           </View>
           <Input
             textSize="lg"
             placeholder={placeholderText}
-            handleTextChange={setText}
-            value={text}
+            handleTextChange={isExternallyControlled ? onTextChange : setText}
+            value={inputValue}
             onSubmitEditing={handleEdit}
             variant="ghost"
-            containerStyle={styles.inputContainer}
+            style={[
+              styles.inputContainer,
+              isExternallyControlled && { height: Math.max(42, inputHeigt) },
+            ]}
+            onContentSizeChange={(event) => {
+              setInputHeight(event.nativeEvent.contentSize.height)
+            }}
             multiline={multiLineInput}
             ref={inputRef}
             autoCapitalize="none"
           />
+          {children}
         </KeyboardAvoidingView>
       </View>
     </TouchableWithoutFeedback>
@@ -91,10 +117,13 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.black_500,
     paddingTop: 244,
   },
+  fullScreenOverlay: {
+    paddingTop: 0,
+  },
   modalContainer: {
     height: "100%",
     backgroundColor: theme.colors.white,
-    padding: 20,
+    paddingVertical: 20,
     borderTopLeftRadius: 12,
     borderTopRightRadius: 12,
   },
@@ -103,11 +132,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     gap: 4,
     alignItems: "flex-end",
+    paddingHorizontal: 20,
   },
   inputContainer: {
-    flex: 1,
-    paddingVertical: 0,
-    marginVertical: 10,
+    paddingHorizontal: 20,
   },
   button: {
     fontWeight: theme.fontWeight.semibold,
