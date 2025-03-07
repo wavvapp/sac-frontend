@@ -66,7 +66,6 @@ export default function EditSignal({
   const turnOnSignal = useTurnOnSignal({
     onMutate: () => {
       handleOfflineAction(() => (isOn.value = !isOn.value))
-      navigation.navigate("Home")
     },
     onSuccess: () => saveStatus.mutate(),
   })
