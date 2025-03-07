@@ -21,6 +21,7 @@ interface EditActivityProps extends ViewProps {
   buttonText: string
   onPress: (text: string) => void
   onTextChange?: (text: string) => void
+  isFullSceen?: boolean
   closeModal: () => void
   inputRef: Ref<TextInput>
   multiLineInput?: boolean
@@ -35,6 +36,7 @@ export default function EditActivity({
   buttonText,
   onPress,
   onTextChange,
+  isFullSceen = true,
   inputRef,
   multiLineInput = true,
   children,
@@ -42,13 +44,6 @@ export default function EditActivity({
   const [text, setText] = useState(initialInputValue)
   const [inputHeigt, setInputHeight] = useState<number>(42)
 
-  const handleEdit = () => {
-    if (text.trim()) {
-      onPress(text)
-      Keyboard.dismiss()
-    }
-    closeModal()
-  }
   const isExternallyControlled = !!onTextChange
 
   const inputValue = useMemo(() => {
@@ -61,9 +56,16 @@ export default function EditActivity({
     return !text.trim()
   }, [initialInputValue, isExternallyControlled, text])
 
+  const handleEdit = () => {
+    if (inputValue.trim()) {
+      onPress(inputValue)
+      Keyboard.dismiss()
+    }
+    closeModal()
+  }
   return (
     <TouchableWithoutFeedback onPress={closeModal}>
-      <View style={styles.overlay}>
+      <View style={[styles.overlay, isFullSceen && styles.fullScreenOverlay]}>
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
           style={styles.modalContainer}
@@ -80,7 +82,7 @@ export default function EditActivity({
                 height: 32,
               }}
               onPress={handleEdit}
-              disabled={!text.trim()}
+              disabled={isEmpty}
             />
           </View>
           <Input
@@ -114,6 +116,9 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     backgroundColor: theme.colors.black_500,
     paddingTop: 244,
+  },
+  fullScreenOverlay: {
+    paddingTop: 0,
   },
   modalContainer: {
     height: "100%",

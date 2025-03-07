@@ -15,7 +15,7 @@ import BottomModal from "@/components/BottomModal"
 import { CustomTitle } from "@/components/ui/CustomTitle"
 import { options } from "@/data/default-wavv-options"
 import Badge from "@/components/ui/Badge"
-import { ScrollView } from "react-native-gesture-handler"
+import { FlatList } from "react-native-gesture-handler"
 
 export default function Activity({ isLoading }: { isLoading: boolean }) {
   const [isModalVisible, setIsModalVisible] = useState(false)
@@ -69,11 +69,15 @@ export default function Activity({ isLoading }: { isLoading: boolean }) {
           buttonText="Save"
           initialInputValue={activity}
           onTextChange={setActivity}
+          isFullSceen
           onPress={updateStatus}
           inputRef={inputRef}>
           <View style={styles.line} />
-          <ScrollView contentContainerStyle={styles.badgesContainer}>
-            {options.map((slot) => (
+          <FlatList
+            contentContainerStyle={styles.badgesContainer}
+            data={options}
+            keyboardShouldPersistTaps="handled"
+            renderItem={({ item: slot }) => (
               <TouchableOpacity onPress={() => setActivity(slot)} key={slot}>
                 <Badge
                   name={slot}
@@ -85,8 +89,8 @@ export default function Activity({ isLoading }: { isLoading: boolean }) {
                   style={styles.badge}
                 />
               </TouchableOpacity>
-            ))}
-          </ScrollView>
+            )}
+          />
         </EditActivity>
       </BottomModal>
     </View>
