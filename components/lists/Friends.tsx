@@ -1,4 +1,4 @@
-import { View, StyleSheet, TouchableWithoutFeedback } from "react-native"
+import { View, StyleSheet, TouchableOpacity } from "react-native"
 import { CustomTitle } from "@/components/ui/CustomTitle"
 import FriendCard from "@/components/Friend"
 import { TemporaryStatusType, useStatus } from "@/contexts/StatusContext"
@@ -54,19 +54,15 @@ export default function FriendsList() {
   return (
     <View style={styles.container}>
       <CustomTitle text="with whom" style={styles.title} />
-      <View style={styles.selectContainer}>
+      <TouchableOpacity
+        onPress={toggleSelectAll}
+        style={styles.selectContainer}>
         <View>
           <CustomText fontWeight="semibold">Select All</CustomText>
           <CustomText>Wavv all your friends</CustomText>
         </View>
-        <TouchableWithoutFeedback
-          onPress={toggleSelectAll}
-          disabled={!allFriends}>
-          <View>
-            <CheckBox isChecked={!canSelectAll} />
-          </View>
-        </TouchableWithoutFeedback>
-      </View>
+        <CheckBox isChecked={!canSelectAll} />
+      </TouchableOpacity>
       {isLoading ? (
         <FriendsSkeleton />
       ) : (
