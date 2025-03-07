@@ -138,7 +138,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   badge: {
-    fontFamily: theme.fontFamily["writer-mono"].normal?.normal,
     paddingVertical: 7.5,
     paddingHorizontal: 16,
     fontSize: theme.fontSize.sm,
