@@ -16,9 +16,13 @@ import { CustomTitle } from "@/components/ui/CustomTitle"
 import { options } from "@/data/default-wavv-options"
 import Badge from "@/components/ui/Badge"
 import { FlatList } from "react-native-gesture-handler"
+import { RouteProp, useRoute } from "@react-navigation/native"
+import { RootStackParamList } from "@/navigation"
 
 export default function Activity({ isLoading }: { isLoading: boolean }) {
-  const [isModalVisible, setIsModalVisible] = useState(false)
+  const route = useRoute<RouteProp<RootStackParamList, "EditSignal">>()
+  const { isNewSignal = false } = route.params
+  const [isModalVisible, setIsModalVisible] = useState(isNewSignal)
   const { temporaryStatus, setTemporaryStatus } = useStatus()
   const [activity, setActivity] = useState(temporaryStatus.activity)
   const inputRef = useRef<TextInput>(null)
