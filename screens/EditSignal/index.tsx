@@ -127,7 +127,14 @@ export default function EditSignal({
         }}>
         <Activity isLoading={isLoading} />
         <Status
-          timeSlots={["NOW", "MORNING", "LUNCH", "AFTERNOON", "EVENING"]}
+          timeSlots={[
+            "SET TIME",
+            "NOW",
+            "MORNING",
+            "LUNCH",
+            "AFTERNOON",
+            "EVENING",
+          ]}
         />
         <FriendsList />
       </ScrollView>
