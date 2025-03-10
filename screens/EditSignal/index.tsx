@@ -1,14 +1,13 @@
-import { StyleSheet, View } from "react-native"
+import { StyleSheet, TouchableOpacity, View } from "react-native"
 import Status from "@/components/cards/Status"
 import { CustomButton } from "@/components/ui/Button"
 import { NativeStackScreenProps } from "react-native-screens/lib/typescript/native-stack/types"
 import FriendsList from "@/components/lists/Friends"
-import Activity from "@/components/Activity"
 import { ScrollView } from "react-native-gesture-handler"
 import { theme } from "@/theme"
 import { useStatus } from "@/contexts/StatusContext"
 import { RootStackParamList } from "@/navigation"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useQueryClient } from "@tanstack/react-query"
 import { StatusBar } from "expo-status-bar"
 import { Signal } from "@/types"
@@ -21,6 +20,11 @@ import {
 import Header from "@/components/cards/Header"
 import { useOfflineHandler } from "@/hooks/useOfflineHandler"
 import { SafeAreaView } from "react-native-safe-area-context"
+import { CustomTitle } from "@/components/ui/CustomTitle"
+import BottomDrawer, { BottomDrawerRef } from "@/components/BottomDrawer"
+import CustomText from "@/components/ui/CustomText"
+import EditIcon from "@/components/vectors/EditIcon"
+import { SetStatus } from "@/components/setStatus"
 
 type EditSignalScreenProps = NativeStackScreenProps<
   RootStackParamList,
@@ -33,11 +37,11 @@ export default function EditSignal({
 }: EditSignalScreenProps) {
   const { temporaryStatus, setTemporaryStatus, isOn } = useStatus()
   const { data: signal } = useMySignal()
-  const [isLoading, setIsLoading] = useState(false)
+  const bottomDrawerRef = useRef<BottomDrawerRef>(null)
   const { handleOfflineAction } = useOfflineHandler()
   const queryclient = useQueryClient()
-
-  const isNewSignal = route.params?.isNewSignal
+  const isNewSignal = route.params?.isNewSignal || false
+  const [_, setIsModalVisible] = useState(isNewSignal)
 
   const turnOnSignal = useTurnOnSignal({
     onMutate: async () => {
@@ -72,7 +76,6 @@ export default function EditSignal({
         status: "active",
       }
       queryclient.setQueryData(["fetch-my-signal"], optimisticStatus)
-      setIsLoading(true)
       navigation.navigate("Home")
     },
     onError: (error) => {
@@ -81,7 +84,6 @@ export default function EditSignal({
     },
     onSettled: async () => {
       await queryclient.refetchQueries({ queryKey: ["fetch-my-signal"] })
-      setIsLoading(false)
     },
   })
 
@@ -105,6 +107,14 @@ export default function EditSignal({
   const handleTurnOffSignal = async () => {
     handleOfflineAction(() => turnOffSignal.mutate())
   }
+
+  const handleOpenSheet = () => {
+    bottomDrawerRef.current?.openBottomSheet()
+  }
+
+  const handleCloseSheet = () => {
+    bottomDrawerRef.current?.closeBottomSheet()
+  }
   useEffect(() => {
     if (!signal) return
     setTemporaryStatus({
@@ -125,7 +135,22 @@ export default function EditSignal({
           paddingTop: 24,
           paddingBottom: 170,
         }}>
-        <Activity isLoading={isLoading} />
+        <View style={style.activity}>
+          <CustomTitle text="your wavv" />
+          <TouchableOpacity
+            onPress={handleOpenSheet}
+            style={style.statusContainer}>
+            <CustomText
+              size="lg"
+              fontWeight="semibold"
+              style={style.statusText}>
+              {temporaryStatus.activity}
+            </CustomText>
+            <View style={style.EditIcon}>
+              <EditIcon />
+            </View>
+          </TouchableOpacity>
+        </View>
         <Status
           timeSlots={["NOW", "MORNING", "LUNCH", "AFTERNOON", "EVENING"]}
         />
@@ -152,6 +177,15 @@ export default function EditSignal({
           />
         )}
       </View>
+      <BottomDrawer
+        ref={bottomDrawerRef}
+        setIsBottomSheetOpen={setIsModalVisible}
+        isFullScreen
+        fullyHiddenOnClose={true}
+        containerStyle={style.activityModalStyles}
+        index={isNewSignal ? 1 : 0}>
+        <SetStatus closeBottomSheet={handleCloseSheet} />
+      </BottomDrawer>
     </SafeAreaView>
   )
 }
@@ -174,5 +208,25 @@ const style = StyleSheet.create({
   },
   button: {
     width: "100%",
+  },
+  activity: {
+    paddingHorizontal: 20,
+  },
+  statusContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  statusText: {
+    flex: 1,
+    alignItems: "center",
+  },
+  EditIcon: {
+    height: 48,
+    width: 48,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  activityModalStyles: {
+    zIndex: 11,
   },
 })
