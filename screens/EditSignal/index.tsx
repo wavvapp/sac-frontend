@@ -38,10 +38,32 @@ export default function EditSignal({
   const queryclient = useQueryClient()
 
   const isNewSignal = route.params?.isNewSignal
+
+  const turnOnSignal = useTurnOnSignal({
+    onMutate: async () => {
+      await queryclient.cancelQueries({ queryKey: ["fetch-my-signal"] })
+      const optimisticStatus: Signal = {
+        when: temporaryStatus.timeSlot,
+        status_message: temporaryStatus.activity,
+        friends: [],
+        friendIds: temporaryStatus.friendIds,
+        status: "active",
+      }
+      queryclient.setQueryData(["fetch-my-signal"], optimisticStatus)
+      handleOfflineAction(() => (isOn.value = !isOn.value))
+      navigation.navigate("Home")
+    },
+    onError: (error) => {
+      // TODO: add toaster
+      console.error(error.message)
+    },
+    onSuccess: () => saveStatus.mutate(),
+  })
+
   const saveStatus = useSaveStatus({
     data: temporaryStatus,
-    onMutate: () => {
-      queryclient.cancelQueries({ queryKey: ["fetch-my-signal"] })
+    onMutate: async () => {
+      await queryclient.cancelQueries({ queryKey: ["fetch-my-signal"] })
       const optimisticStatus: Signal = {
         when: temporaryStatus.timeSlot,
         status_message: temporaryStatus.activity,
@@ -58,17 +80,9 @@ export default function EditSignal({
       console.error(error.message)
     },
     onSettled: async () => {
-      queryclient.invalidateQueries({ queryKey: ["fetch-my-signal"] })
+      await queryclient.refetchQueries({ queryKey: ["fetch-my-signal"] })
       setIsLoading(false)
     },
-  })
-
-  const turnOnSignal = useTurnOnSignal({
-    onMutate: () => {
-      handleOfflineAction(() => (isOn.value = !isOn.value))
-      navigation.navigate("Home")
-    },
-    onSuccess: () => saveStatus.mutate(),
   })
 
   const turnOffSignal = useTurnOffSignal({
@@ -85,11 +99,8 @@ export default function EditSignal({
     },
   })
 
-  const handleSaveStatus = async () => {
-    handleOfflineAction(() =>
-      isNewSignal ? turnOnSignal.mutate() : saveStatus.mutate(),
-    )
-  }
+  const handleSaveStatus = () =>
+    isNewSignal ? turnOnSignal.mutate() : saveStatus.mutate()
 
   const handleTurnOffSignal = async () => {
     handleOfflineAction(() => turnOffSignal.mutate())
