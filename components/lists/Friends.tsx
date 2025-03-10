@@ -11,6 +11,7 @@ import { onShare } from "@/utils/share"
 import { useAuth } from "@/contexts/AuthContext"
 import CustomText from "@/components/ui/CustomText"
 import CheckBox from "@/components/ui/CheckBox"
+import { theme } from "@/theme"
 
 export default function FriendsList() {
   const { temporaryStatus, setTemporaryStatus } = useStatus()
@@ -59,7 +60,9 @@ export default function FriendsList() {
         style={styles.selectContainer}>
         <View>
           <CustomText fontWeight="semibold">Select All</CustomText>
-          <CustomText>Wavv all your friends</CustomText>
+          <CustomText style={styles.selectDescription}>
+            Wavv all your friends
+          </CustomText>
         </View>
         <CheckBox isChecked={!canSelectAll} />
       </TouchableOpacity>
@@ -99,5 +102,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+  },
+  selectDescription: {
+    color: theme.colors.black_500,
   },
 })
