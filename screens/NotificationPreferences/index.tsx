@@ -65,9 +65,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 32,
   },
-  header: { gap: 6 },
+  header: {
+    gap: 6,
+    marginBottom: 24,
+  },
   friendsList: {
-    marginTop: 24,
+    paddingBottom: 12,
   },
   friendContainer: {
     flexDirection: "row",
