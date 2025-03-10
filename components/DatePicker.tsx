@@ -1,5 +1,11 @@
 import { useCallback, useEffect, useState } from "react"
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native"
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Platform,
+} from "react-native"
 import DateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker"
@@ -26,6 +32,7 @@ export default function DatePicker({
 
   const [isBottomDrawerVisible, setIsBottomDrawerVisible] = useState(false)
   const [activeTimeType, setActiveTimeType] = useState<"FROM" | "TO">("FROM")
+  const [isAndroidPickerVisible, setIsAndroidPickerVisible] = useState(false)
 
   useEffect(() => {
     setFromTime(initialFromTime)
@@ -37,36 +44,48 @@ export default function DatePicker({
     const minutes = date.getMinutes()
     const formattedHours = hours % 12 || 12
     const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes
-    const period = hours >= 12 ? "PM" : "AM"
-    return `${formattedHours}:${formattedMinutes} ${period}`
+    return `${formattedHours}:${formattedMinutes}`
   }, [])
 
   const openTimePicker = (type: "FROM" | "TO") => {
     setActiveTimeType(type)
     setTempTime(type === "FROM" ? fromTime : toTime)
-    setIsBottomDrawerVisible(true)
+
+    if (Platform.OS === "android") {
+      setIsAndroidPickerVisible(true)
+    } else {
+      setIsBottomDrawerVisible(true)
+    }
   }
 
   const closeDrawer = () => setIsBottomDrawerVisible(false)
 
   const handleTimeChange = (
-    _event: DateTimePickerEvent,
+    event: DateTimePickerEvent,
     selectedDate?: Date,
   ) => {
-    if (selectedDate) setTempTime(selectedDate)
+    if (event.type === "set" && selectedDate) {
+      setTempTime(selectedDate)
+      if (Platform.OS === "android") {
+        saveTime(selectedDate) // Save immediately on Android
+      }
+    }
+    setIsAndroidPickerVisible(false) // Hide Android picker after selection
   }
 
-  const saveTime = () => {
+  const saveTime = (newTime?: Date) => {
+    if (!newTime) return
+
     let newFromTime = fromTime
     let newToTime = toTime
 
     if (activeTimeType === "FROM") {
-      newFromTime = tempTime
-      if (tempTime > toTime) {
-        newToTime = new Date(tempTime.getTime() + 60 * 60 * 1000)
+      newFromTime = newTime
+      if (newTime > toTime) {
+        newToTime = new Date(newTime.getTime() + 60 * 60 * 1000)
       }
     } else {
-      newToTime = tempTime
+      newToTime = newTime
     }
 
     setFromTime(newFromTime)
@@ -95,28 +114,42 @@ export default function DatePicker({
         </TouchableOpacity>
       </View>
 
-      <DatepickerBottomDrawer
-        isVisible={isBottomDrawerVisible}
-        onClose={closeDrawer}
-        title={activeTimeType}
-        onSave={saveTime}>
-        <View style={styles.drawerContent}>
-          <DateTimePicker
-            value={tempTime}
-            mode="time"
-            is24Hour={false}
-            display="spinner"
-            locale="en_US"
-            minimumDate={activeTimeType === "FROM" ? new Date() : fromTime}
-            maximumDate={
-              activeTimeType === "TO"
-                ? new Date(fromTime.getTime() + 24 * 60 * 60 * 1000)
-                : toTime
-            }
-            onChange={handleTimeChange}
-          />
-        </View>
-      </DatepickerBottomDrawer>
+      {/* ANDROID: Show Native DateTimePicker */}
+      {Platform.OS === "android" && isAndroidPickerVisible && (
+        <DateTimePicker
+          value={tempTime}
+          mode="time"
+          is24Hour={false}
+          display="clock"
+          onChange={handleTimeChange}
+        />
+      )}
+
+      {/* iOS: Show Bottom Drawer Picker */}
+      {Platform.OS === "ios" && (
+        <DatepickerBottomDrawer
+          isVisible={isBottomDrawerVisible}
+          onClose={closeDrawer}
+          title={activeTimeType}
+          onSave={() => saveTime(tempTime)}>
+          <View style={styles.drawerContent}>
+            <DateTimePicker
+              value={tempTime}
+              mode="time"
+              is24Hour={false}
+              display="spinner"
+              locale="en_US"
+              minimumDate={activeTimeType === "FROM" ? new Date() : fromTime}
+              maximumDate={
+                activeTimeType === "TO"
+                  ? new Date(fromTime.getTime() + 24 * 60 * 60 * 1000)
+                  : toTime
+              }
+              onChange={handleTimeChange}
+            />
+          </View>
+        </DatepickerBottomDrawer>
+      )}
     </View>
   )
 }
