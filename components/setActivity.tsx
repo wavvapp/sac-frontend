@@ -14,10 +14,11 @@ import { CustomTitle } from "@/components/ui/CustomTitle"
 import { CustomButton } from "@/components/ui/Button"
 import Input from "@/components/ui/Input"
 import { TemporaryStatusType, useStatus } from "@/contexts/StatusContext"
+import { capitalizeFirstLetter } from "@/utils"
 interface SetStatusProps {
   closeBottomSheet: () => void
 }
-export function SetStatus({ closeBottomSheet }: SetStatusProps) {
+export function SetActivity({ closeBottomSheet }: SetStatusProps) {
   const { temporaryStatus, setTemporaryStatus } = useStatus()
   const [inputHeigt, setInputHeight] = useState<number>(42)
   const [activityText, setActivityText] = useState<string>(
@@ -69,17 +70,17 @@ export function SetStatus({ closeBottomSheet }: SetStatusProps) {
       <BottomSheetScrollView
         contentContainerStyle={styles.badgesContainer}
         keyboardShouldPersistTaps="handled">
-        {options.map((slot) => (
+        {options.map((option) => (
           <TouchableOpacity
             onPress={() => {
-              setActivityText(slot)
-              updateStatus(slot)
+              setActivityText(capitalizeFirstLetter(option))
+              updateStatus(capitalizeFirstLetter(option))
             }}
-            key={slot}>
+            key={option}>
             <Badge
-              name={slot}
+              name={option}
               variant={
-                activityText.toLowerCase() === slot.toLowerCase()
+                activityText.toLowerCase() === option.toLowerCase()
                   ? "default"
                   : "outline"
               }

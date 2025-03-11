@@ -24,7 +24,7 @@ import { CustomTitle } from "@/components/ui/CustomTitle"
 import BottomDrawer, { BottomDrawerRef } from "@/components/BottomDrawer"
 import CustomText from "@/components/ui/CustomText"
 import EditIcon from "@/components/vectors/EditIcon"
-import { SetStatus } from "@/components/setStatus"
+import { SetActivity } from "@/components/setActivity"
 
 type EditSignalScreenProps = NativeStackScreenProps<
   RootStackParamList,
@@ -184,7 +184,7 @@ export default function EditSignal({
         fullyHiddenOnClose={true}
         containerStyle={style.activityModalStyles}
         index={isNewSignal ? 1 : 0}>
-        <SetStatus closeBottomSheet={handleCloseSheet} />
+        <SetActivity closeBottomSheet={handleCloseSheet} />
       </BottomDrawer>
     </SafeAreaView>
   )
