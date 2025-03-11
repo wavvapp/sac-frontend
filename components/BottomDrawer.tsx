@@ -1,6 +1,7 @@
 import BottomSheet, {
   BottomSheetBackdrop,
   BottomSheetBackdropProps,
+  BottomSheetProps,
 } from "@gorhom/bottom-sheet"
 import {
   Dispatch,
@@ -16,14 +17,19 @@ export interface BottomDrawerRef {
   openBottomSheet: () => void
 }
 
-interface DrawerProps {
+interface DrawerProps extends BottomSheetProps {
   children: React.ReactNode
   setIsBottomSheetOpen: Dispatch<SetStateAction<boolean>>
   fullyHiddenOnClose?: boolean
 }
 
 const BottomDrawer = forwardRef<BottomDrawerRef, DrawerProps>((props, ref) => {
-  const { children, setIsBottomSheetOpen, fullyHiddenOnClose = false } = props
+  const {
+    children,
+    setIsBottomSheetOpen,
+    fullyHiddenOnClose = false,
+    ...rest
+  } = props
   const snapPoints = useMemo(
     () => (fullyHiddenOnClose ? ["1%", "88%"] : ["20%", "88%"]),
     [fullyHiddenOnClose],
@@ -51,7 +57,8 @@ const BottomDrawer = forwardRef<BottomDrawerRef, DrawerProps>((props, ref) => {
       snapPoints={snapPoints}
       enablePanDownToClose={fullyHiddenOnClose}
       onChange={handleSheetChanges}
-      backdropComponent={renderBackdrop}>
+      backdropComponent={renderBackdrop}
+      {...rest}>
       {children}
     </BottomSheet>
   )
