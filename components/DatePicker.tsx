@@ -9,9 +9,9 @@ import {
 import DateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker"
-import CloseIcon from "./vectors/CloseIcon"
+import CloseIcon from "@/components/vectors/CloseIcon"
 import { theme } from "@/theme"
-import DatepickerBottomDrawer from "./DatePickerModal"
+import DatepickerBottomDrawer from "@/components/DatePickerModal"
 
 type DatePickerProps = {
   onClose: () => void
@@ -76,21 +76,26 @@ export default function DatePicker({
   const saveTime = (newTime?: Date) => {
     if (!newTime) return
 
-    let newFromTime = fromTime
-    let newToTime = toTime
+    const currentTime = new Date()
+    const maxTime = new Date(currentTime.getTime() + 24 * 60 * 60 * 1000)
 
-    if (activeTimeType === "FROM") {
-      newFromTime = newTime
-      if (newTime > toTime) {
-        newToTime = new Date(newTime.getTime() + 60 * 60 * 1000)
-      }
-    } else {
-      newToTime = newTime
+    if (newTime < currentTime || newTime > maxTime) {
+      return
     }
 
-    setFromTime(newFromTime)
-    setToTime(newToTime)
-    onSave(newFromTime, newToTime)
+    if (activeTimeType === "FROM") {
+      if (newTime > toTime) {
+        setToTime(new Date(newTime.getTime() + 60 * 60 * 1000))
+      }
+      setFromTime(newTime)
+    } else {
+      if (newTime < fromTime) {
+        setFromTime(new Date(newTime.getTime() - 60 * 60 * 1000))
+      }
+      setToTime(newTime)
+    }
+
+    onSave(fromTime, toTime)
     closeDrawer()
   }
 
@@ -120,12 +125,8 @@ export default function DatePicker({
           is24Hour={false}
           display="clock"
           onChange={handleTimeChange}
-          minimumDate={activeTimeType === "FROM" ? new Date() : fromTime}
-          maximumDate={
-            activeTimeType === "TO"
-              ? new Date(fromTime.getTime() + 24 * 60 * 60 * 1000)
-              : toTime
-          }
+          minimumDate={new Date()}
+          maximumDate={new Date(new Date().getTime() + 24 * 60 * 60 * 1000)}
         />
       )}
       {Platform.OS === "ios" && (
@@ -141,12 +142,8 @@ export default function DatePicker({
               is24Hour={false}
               display="spinner"
               locale="en_US"
-              minimumDate={activeTimeType === "FROM" ? new Date() : fromTime}
-              maximumDate={
-                activeTimeType === "TO"
-                  ? new Date(fromTime.getTime() + 24 * 60 * 60 * 1000)
-                  : toTime
-              }
+              minimumDate={new Date()}
+              maximumDate={new Date(new Date().getTime() + 24 * 60 * 60 * 1000)}
               onChange={handleTimeChange}
             />
           </View>

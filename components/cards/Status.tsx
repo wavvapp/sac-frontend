@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react"
 import { View, ScrollView, StyleSheet, TouchableOpacity } from "react-native"
+import { CustomTitle } from "@/components/ui/CustomTitle"
 import Badge from "@/components/ui/Badge"
 import { theme } from "@/theme"
 import { TemporaryStatusType, useStatus } from "@/contexts/StatusContext"
@@ -41,6 +42,15 @@ export const Status: React.FC<StatusProps> = ({ timeSlots }) => {
 
     loadSavedTimes()
   }, [])
+
+  const formatTime = (date: Date) => {
+    const hours = date.getHours()
+    const minutes = date.getMinutes()
+    const formattedHours = hours % 12 || 12
+    const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes
+    return `${formattedHours}:${formattedMinutes}`
+  }
+
   const saveTimes = async (from: Date, to: Date) => {
     const now = new Date()
     const validFrom = from < now ? now : from
@@ -54,6 +64,12 @@ export const Status: React.FC<StatusProps> = ({ timeSlots }) => {
 
     await AsyncStorage.setItem("fromTime", validFrom.toISOString())
     await AsyncStorage.setItem("toTime", validTo.toISOString())
+    const timeRangeDisplay = `${formatTime(validFrom)}-${formatTime(validTo)}`
+
+    setTemporaryStatus((prev: TemporaryStatusType) => ({
+      ...prev,
+      timeSlot: timeRangeDisplay,
+    }))
   }
 
   const handleTimeSlotChange = (selectedTime: string) => {
@@ -79,31 +95,35 @@ export const Status: React.FC<StatusProps> = ({ timeSlots }) => {
           onSave={saveTimes}
         />
       ) : (
-        <View style={styles.scrollContainer}>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.scrollContentContainer}>
-            <View style={styles.buttonContainer}>
-              {timeSlots.map((slot) => (
-                <TouchableOpacity
-                  onPress={() => handleTimeSlotChange(slot)}
-                  key={slot}>
-                  <Badge
-                    name={slot}
-                    variant={
-                      temporaryStatus.timeSlot.toLowerCase() ===
-                      slot.toLowerCase()
-                        ? "default"
-                        : "outline"
-                    }
-                    style={styles.badge}
-                  />
-                </TouchableOpacity>
-              ))}
-            </View>
-          </ScrollView>
-        </View>
+        <>
+          <CustomTitle text="When" style={styles.title} />
+          <View style={styles.scrollContainer}>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.scrollContentContainer}>
+              <View style={styles.buttonContainer}>
+                {timeSlots.map((slot) => (
+                  <TouchableOpacity
+                    onPress={() => handleTimeSlotChange(slot)}
+                    key={slot}>
+                    <Badge
+                      name={slot}
+                      variant={
+                        temporaryStatus.timeSlot === slot ||
+                        (slot.toLowerCase() === "set time" &&
+                          temporaryStatus.timeSlot.includes("-"))
+                          ? "default"
+                          : "outline"
+                      }
+                      style={styles.badge}
+                    />
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </ScrollView>
+          </View>
+        </>
       )}
     </View>
   )
@@ -112,7 +132,8 @@ export const Status: React.FC<StatusProps> = ({ timeSlots }) => {
 export default Status
 
 const styles = StyleSheet.create({
-  container: { gap: 12 },
+  container: { gap: 12, height: 70 },
+  title: { paddingHorizontal: 20 },
   scrollContainer: { flexDirection: "row" },
   scrollContentContainer: { paddingHorizontal: 20 },
   buttonContainer: { flexDirection: "row", gap: 8 },
