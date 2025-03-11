@@ -33,11 +33,10 @@ const TimePickerBottomSheet = ({
     <BottomSheet
       ref={bottomSheetRef}
       index={0}
-      snapPoints={["40%"]} // Adjust the height as needed
+      snapPoints={["40%"]}
       enablePanDownToClose
       onClose={onClose}
-      backgroundComponent={() => <View style={styles.background} />} // Optional: Custom background
-    >
+      backgroundComponent={() => <View style={styles.background} />}>
       <View style={styles.bottomSheetContent}>
         <DateTimePicker
           value={selectedTime}
@@ -45,7 +44,7 @@ const TimePickerBottomSheet = ({
           is24Hour={false}
           display="default"
           onChange={handleTimeChange}
-          minimumDate={new Date()} // Disable times before now
+          minimumDate={new Date()}
         />
         <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
           <Text style={styles.saveButtonText}>SAVE</Text>
@@ -58,7 +57,7 @@ const TimePickerBottomSheet = ({
 const styles = StyleSheet.create({
   background: {
     flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.5)", // Semi-transparent background
+    backgroundColor: theme.colors.black_50,
   },
   bottomSheetContent: {
     padding: 16,

@@ -67,10 +67,10 @@ export default function DatePicker({
     if (event.type === "set" && selectedDate) {
       setTempTime(selectedDate)
       if (Platform.OS === "android") {
-        saveTime(selectedDate) // Save immediately on Android
+        saveTime(selectedDate)
       }
     }
-    setIsAndroidPickerVisible(false) // Hide Android picker after selection
+    setIsAndroidPickerVisible(false)
   }
 
   const saveTime = (newTime?: Date) => {
@@ -113,8 +113,6 @@ export default function DatePicker({
           <CloseIcon color={theme.colors.black} />
         </TouchableOpacity>
       </View>
-
-      {/* ANDROID: Show Native DateTimePicker */}
       {Platform.OS === "android" && isAndroidPickerVisible && (
         <DateTimePicker
           value={tempTime}
@@ -122,10 +120,14 @@ export default function DatePicker({
           is24Hour={false}
           display="clock"
           onChange={handleTimeChange}
+          minimumDate={activeTimeType === "FROM" ? new Date() : fromTime}
+          maximumDate={
+            activeTimeType === "TO"
+              ? new Date(fromTime.getTime() + 24 * 60 * 60 * 1000)
+              : toTime
+          }
         />
       )}
-
-      {/* iOS: Show Bottom Drawer Picker */}
       {Platform.OS === "ios" && (
         <DatepickerBottomDrawer
           isVisible={isBottomDrawerVisible}
