@@ -96,7 +96,6 @@ export function SetActivity({ closeBottomSheet }: SetStatusProps) {
 const styles = StyleSheet.create({
   container: {
     height: "100%",
-    paddingTop: 40,
   },
   formHeader: {
     flexDirection: "row",
