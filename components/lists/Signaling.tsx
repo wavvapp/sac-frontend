@@ -8,8 +8,8 @@ import SignalingUser from "@/components/SignalingUser"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { RootStackParamList } from "@/navigation"
-import { useFriends, useSignalingFriends } from "@/queries/friends"
-import { Friend, User } from "@/types"
+import { useSignalingFriends } from "@/queries/friends"
+import { Friend } from "@/types"
 import { useQueryClient } from "@tanstack/react-query"
 import SearchIcon from "../vectors/SearchIcon"
 import { TouchableOpacity } from "react-native-gesture-handler"
@@ -22,19 +22,16 @@ type SearchProp = NativeStackNavigationProp<RootStackParamList, "Search">
 const Signaling = forwardRef<SignalingRef>((_, ref) => {
   const navigation = useNavigation<SearchProp>()
   const [isbottomSheetOpen, setIsBottomSheetOpen] = useState<boolean>(false)
-  const { data: allFriends } = useFriends(isbottomSheetOpen)
   const { data: availableFriends = [] } = useSignalingFriends(isbottomSheetOpen)
   const queryClient = useQueryClient()
 
+  const onlineFriends = useMemo(() => {
+    return availableFriends.filter((friend) => friend.signal)
+  }, [availableFriends])
+
   const offlineFriends = useMemo(() => {
-    if (!allFriends) return []
-    return allFriends.filter(
-      (friend: Friend) =>
-        !availableFriends.some(
-          (availableFriend: User) => availableFriend.id === friend.id,
-        ),
-    )
-  }, [allFriends, availableFriends])
+    return availableFriends.filter((friend) => !friend.signal)
+  }, [availableFriends])
 
   const openSearch = () => {
     queryClient.refetchQueries({ queryKey: ["friend-signals"] })
@@ -63,7 +60,7 @@ const Signaling = forwardRef<SignalingRef>((_, ref) => {
         sections={[
           {
             title: "available users",
-            data: availableFriends,
+            data: onlineFriends,
             ItemSeparatorComponent: () => (
               <View style={styles.availableItemSeparator} />
             ),
