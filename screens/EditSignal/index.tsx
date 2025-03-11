@@ -41,17 +41,7 @@ export default function EditSignal({
 
   const turnOnSignal = useTurnOnSignal({
     onMutate: async () => {
-      await queryclient.cancelQueries({ queryKey: ["fetch-my-signal"] })
-      const optimisticStatus: Signal = {
-        when: temporaryStatus.timeSlot,
-        status_message: temporaryStatus.activity,
-        friends: [],
-        friendIds: temporaryStatus.friendIds,
-        status: "active",
-      }
-      queryclient.setQueryData(["fetch-my-signal"], optimisticStatus)
       handleOfflineAction(() => (isOn.value = !isOn.value))
-      navigation.navigate("Home")
     },
     onError: (error) => {
       // TODO: add toaster
@@ -80,7 +70,7 @@ export default function EditSignal({
       console.error(error.message)
     },
     onSettled: async () => {
-      await queryclient.refetchQueries({ queryKey: ["fetch-my-signal"] })
+      await queryclient.invalidateQueries({ queryKey: ["fetch-my-signal"] })
       setIsLoading(false)
     },
   })
@@ -100,7 +90,9 @@ export default function EditSignal({
   })
 
   const handleSaveStatus = () =>
-    isNewSignal ? turnOnSignal.mutate() : saveStatus.mutate()
+    handleOfflineAction(() =>
+      isNewSignal ? turnOnSignal.mutate() : saveStatus.mutate(),
+    )
 
   const handleTurnOffSignal = async () => {
     handleOfflineAction(() => turnOffSignal.mutate())
