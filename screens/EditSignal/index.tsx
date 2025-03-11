@@ -24,7 +24,7 @@ import { CustomTitle } from "@/components/ui/CustomTitle"
 import BottomDrawer, { BottomDrawerRef } from "@/components/BottomDrawer"
 import CustomText from "@/components/ui/CustomText"
 import EditIcon from "@/components/vectors/EditIcon"
-import { SetActivity } from "@/components/setActivity"
+import { SetActivity } from "@/components/SetActivity"
 
 type EditSignalScreenProps = NativeStackScreenProps<
   RootStackParamList,
