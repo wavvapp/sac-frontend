@@ -20,22 +20,18 @@ export default function DatePicker({ onCloseDatePicker }: DatePickerProps) {
   const [fromTime, setFromTime] = useState(dayjs().toDate())
   const [toTime, setToTime] = useState(dayjs().add(2, "hour").toDate())
   const [tempTime, setTempTime] = useState(dayjs().toDate())
-  const [isBottomDrawerVisible, setIsBottomDrawerVisible] = useState(false)
+  const [isTimePickerModalVisible, setIsTimePickerModalVisible] =
+    useState(false)
   const [activeTimeType, setActiveTimeType] = useState<"FROM" | "TO">("FROM")
-  const [isAndroidPickerVisible, setIsAndroidPickerVisible] = useState(false)
   const { setTemporaryStatus } = useStatus()
 
   const openTimePicker = (type: "FROM" | "TO") => {
     setActiveTimeType(type)
     setTempTime(type === "FROM" ? fromTime : toTime)
-    if (Platform.OS === "android") {
-      setIsAndroidPickerVisible(true)
-    } else {
-      setIsBottomDrawerVisible(true)
-    }
+    setIsTimePickerModalVisible(true)
   }
 
-  const closeDrawer = useCallback(() => setIsBottomDrawerVisible(false), [])
+  const closeDrawer = () => setIsTimePickerModalVisible(false)
 
   const handleTimeChange = (
     event: DateTimePickerEvent,
@@ -47,16 +43,20 @@ export default function DatePicker({ onCloseDatePicker }: DatePickerProps) {
         saveTime(selectedDate)
       }
     }
-    setIsAndroidPickerVisible(false)
+    setIsTimePickerModalVisible(false)
   }
 
   const saveTime = (selectedDate: Date) => {
+    closeDrawer()
+    const currentTime = dayjs()
     const newTime = dayjs(selectedDate)
-
     let newFromTime = activeTimeType === "FROM" ? newTime : fromTime
     let newToTime = activeTimeType === "TO" ? newTime : toTime
-    if (dayjs(newFromTime).isBefore(fromTime) && activeTimeType === "FROM") {
-      closeDrawer()
+
+    if (
+      dayjs(newFromTime).add(30, "second").isBefore(currentTime) &&
+      activeTimeType === "FROM"
+    ) {
       Alert.alert(
         "Invalid time",
         "The 'From' time needs to be after the current time. Please pick a later time.",
@@ -64,8 +64,10 @@ export default function DatePicker({ onCloseDatePicker }: DatePickerProps) {
       return
     }
 
-    if (!dayjs(newToTime).isAfter(newFromTime) && activeTimeType === "TO") {
-      closeDrawer()
+    if (
+      !dayjs(newToTime).add(30, "second").isAfter(newFromTime) &&
+      activeTimeType === "TO"
+    ) {
       Alert.alert(
         "Invalid time",
         "The 'To' time needs to be after the 'From' time. Please pick a later time.",
@@ -75,7 +77,6 @@ export default function DatePicker({ onCloseDatePicker }: DatePickerProps) {
 
     const maxToTime = dayjs(newFromTime).add(24, "hour")
     if (dayjs(newToTime).isAfter(maxToTime) && activeTimeType === "TO") {
-      closeDrawer()
       Alert.alert(
         "Invalid time",
         "To time must be within 24 hours of from time",
@@ -93,7 +94,6 @@ export default function DatePicker({ onCloseDatePicker }: DatePickerProps) {
       startsAt: dayjs(newFromTime).toDate(),
       endsAt: dayjs(newToTime).toDate(),
     }))
-    closeDrawer()
   }
 
   return (
@@ -121,7 +121,7 @@ export default function DatePicker({ onCloseDatePicker }: DatePickerProps) {
           <CloseIcon color={theme.colors.black} />
         </TouchableOpacity>
       </View>
-      {Platform.OS === "android" && isAndroidPickerVisible && (
+      {Platform.OS === "android" && isTimePickerModalVisible && (
         <DateTimePicker
           value={tempTime}
           mode="time"
@@ -133,7 +133,7 @@ export default function DatePicker({ onCloseDatePicker }: DatePickerProps) {
       )}
       {Platform.OS === "ios" && (
         <DatepickerBottomDrawer
-          isVisible={isBottomDrawerVisible}
+          isVisible={isTimePickerModalVisible}
           onClose={closeDrawer}
           title={activeTimeType}
           onSave={() => saveTime(tempTime)}>
