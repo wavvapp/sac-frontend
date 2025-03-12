@@ -25,13 +25,17 @@ export const useSignalingFriends = (shouldRefetch?: boolean) => {
   return useQuery<Friend[], Error>({
     queryKey: ["friend-signals"],
     queryFn: async () => {
-      const { data } = await api.get("/friend-signals")
-      const friendSignals = data.map((friend: FriendSignal) => ({
-        ...friend,
-        time: friend.signal.when,
-        activity: friend.signal.status_message,
-      }))
-      return friendSignals
+      try {
+        const { data } = await api.get("/friend-signals")
+        const friendSignals = data.map((friend: FriendSignal) => ({
+          ...friend,
+          time: friend.signal?.when,
+          activity: friend.signal?.status_message,
+        }))
+        return friendSignals
+      } catch (error) {
+        console.error("Error in useSignalingFriends:", error)
+      }
     },
     placeholderData: [],
     refetchInterval: shouldRefetch ? 5000 : false,
@@ -154,17 +158,15 @@ export const useSetNotificationPreferences = () => {
         queryKey: ["friends"],
       })
       const oldFriends = queryClient.getQueryData<Friend[]>(["friends"]) || []
-      await queryClient.setQueryData(
-        ["friends"],
-        oldFriends.map((friend) =>
-          friend.id === payload.friendId
-            ? {
-                ...friend,
-                hasNotificationEnabled: payload.enableNotification,
-              }
-            : friend,
-        ),
+      const updatedFriends = oldFriends.map((friend) =>
+        friend.id === payload.friendId
+          ? {
+              ...friend,
+              hasNotificationEnabled: payload.enableNotification,
+            }
+          : friend,
       )
+      queryClient.setQueryData(["friends"], updatedFriends)
     },
     onSettled: async () => {
       await queryClient.invalidateQueries({ queryKey: ["friends"] })
