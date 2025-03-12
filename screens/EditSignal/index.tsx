@@ -64,6 +64,8 @@ export default function EditSignal({
         friends: [],
         friendIds: temporaryStatus.friendIds,
         status: "active",
+        startsAt: temporaryStatus?.startsAt,
+        endsAt: temporaryStatus?.endsAt,
       }
       queryclient.setQueryData(["fetch-my-signal"], optimisticStatus)
       navigation.navigate("Home")
