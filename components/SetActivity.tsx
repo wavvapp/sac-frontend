@@ -59,7 +59,6 @@ export function SetActivity({ closeBottomSheet }: SetStatusProps) {
         textSize="lg"
         placeholder="Enter your plan or pick an option"
         handleTextChange={setActivityText}
-        selectionColor={theme.colors.black}
         value={activityText}
         variant="ghost"
         style={[styles.inputContainer, { maxHeight: INPUT_MAX_HEIGHT }]}
