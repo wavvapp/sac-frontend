@@ -1,6 +1,8 @@
 import React, { useRef, useState } from "react"
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native"
-import DateTimePicker from "@react-native-community/datetimepicker"
+import DateTimePicker, {
+  DateTimePickerEvent,
+} from "@react-native-community/datetimepicker"
 import BottomSheet from "@gorhom/bottom-sheet"
 import { theme } from "@/theme"
 
@@ -18,7 +20,7 @@ const TimePickerBottomSheet = ({
   const bottomSheetRef = useRef<BottomSheet>(null)
   const [selectedTime, setSelectedTime] = useState(initialTime)
 
-  const handleTimeChange = (event: any, date?: Date) => {
+  const handleTimeChange = (event: DateTimePickerEvent, date?: Date) => {
     if (date) {
       setSelectedTime(date)
     }
@@ -70,9 +72,9 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   saveButtonText: {
-    color: "white",
+    color: theme.colors.white,
     fontSize: theme.fontSize.base,
-    fontWeight: "bold",
+    fontWeight: theme.fontWeight.bold,
   },
 })
 

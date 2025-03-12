@@ -9,6 +9,7 @@ import {
 import DateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker"
+import dayjs from "dayjs"
 import CloseIcon from "@/components/vectors/CloseIcon"
 import { theme } from "@/theme"
 import DatepickerBottomDrawer from "@/components/DatePickerModal"
@@ -40,11 +41,7 @@ export default function DatePicker({
   }, [initialFromTime, initialToTime])
 
   const formatTime = useCallback((date: Date) => {
-    const hours = date.getHours()
-    const minutes = date.getMinutes()
-    const formattedHours = hours % 12 || 12
-    const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes
-    return `${formattedHours}:${formattedMinutes}`
+    return dayjs(date).format("h:mm")
   }, [])
 
   const openTimePicker = (type: "FROM" | "TO") => {
@@ -58,7 +55,7 @@ export default function DatePicker({
     }
   }
 
-  const closeDrawer = () => setIsBottomDrawerVisible(false)
+  const closeDrawer = useCallback(() => setIsBottomDrawerVisible(false), [])
 
   const handleTimeChange = (
     event: DateTimePickerEvent,
@@ -73,31 +70,39 @@ export default function DatePicker({
     setIsAndroidPickerVisible(false)
   }
 
-  const saveTime = (newTime?: Date) => {
-    if (!newTime) return
+  const saveTime = useCallback(
+    (newTime?: Date) => {
+      if (!newTime) return
 
-    const currentTime = new Date()
-    const maxTime = new Date(currentTime.getTime() + 24 * 60 * 60 * 1000)
+      if (activeTimeType === "FROM") {
+        setFromTime(newTime)
+        if (dayjs(newTime).isAfter(dayjs(toTime))) {
+          setToTime(dayjs(newTime).add(1, "hour").toDate())
+        }
+      } else {
+        setToTime(newTime)
+      }
 
-    if (newTime < currentTime || newTime > maxTime) {
-      return
-    }
+      onSave(
+        activeTimeType === "FROM" ? newTime : fromTime,
+        activeTimeType === "TO" ? newTime : toTime,
+      )
+      closeDrawer()
+    },
+    [activeTimeType, fromTime, toTime, onSave, closeDrawer],
+  )
 
+  const getMinimumDate = useCallback(() => {
     if (activeTimeType === "FROM") {
-      if (newTime > toTime) {
-        setToTime(new Date(newTime.getTime() + 60 * 60 * 1000))
-      }
-      setFromTime(newTime)
+      return new Date()
     } else {
-      if (newTime < fromTime) {
-        setFromTime(new Date(newTime.getTime() - 60 * 60 * 1000))
-      }
-      setToTime(newTime)
+      return fromTime
     }
+  }, [activeTimeType, fromTime])
 
-    onSave(fromTime, toTime)
-    closeDrawer()
-  }
+  const getMaximumDate = useCallback(() => {
+    return dayjs().add(24, "hour").toDate()
+  }, [])
 
   return (
     <View style={styles.container}>
@@ -125,8 +130,8 @@ export default function DatePicker({
           is24Hour={false}
           display="clock"
           onChange={handleTimeChange}
-          minimumDate={new Date()}
-          maximumDate={new Date(new Date().getTime() + 24 * 60 * 60 * 1000)}
+          minimumDate={getMinimumDate()}
+          maximumDate={getMaximumDate()}
         />
       )}
       {Platform.OS === "ios" && (
@@ -142,8 +147,8 @@ export default function DatePicker({
               is24Hour={false}
               display="spinner"
               locale="en_US"
-              minimumDate={new Date()}
-              maximumDate={new Date(new Date().getTime() + 24 * 60 * 60 * 1000)}
+              minimumDate={getMinimumDate()}
+              maximumDate={getMaximumDate()}
               onChange={handleTimeChange}
             />
           </View>
