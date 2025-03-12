@@ -61,8 +61,6 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.black,
     paddingVertical: 1,
     paddingHorizontal: 6,
-    borderColor: theme.colors.black,
-    borderWidth: 1,
   },
   outline: {
     paddingVertical: 4,

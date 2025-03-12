@@ -18,13 +18,15 @@ import { capitalizeFirstLetter } from "@/utils"
 interface SetStatusProps {
   closeBottomSheet: () => void
 }
+
+const INPUT_MAX_HEIGHT = 200
 export function SetActivity({ closeBottomSheet }: SetStatusProps) {
   const { temporaryStatus, setTemporaryStatus } = useStatus()
-  const [inputHeigt, setInputHeight] = useState<number>(42)
   const [activityText, setActivityText] = useState<string>(
     temporaryStatus.activity,
   )
   const updateStatus = (text: string) => {
+    setActivityText(capitalizeFirstLetter(text))
     setTemporaryStatus((prev: TemporaryStatusType) => ({
       ...prev,
       activity: text.trim(),
@@ -57,12 +59,10 @@ export function SetActivity({ closeBottomSheet }: SetStatusProps) {
         textSize="lg"
         placeholder="Enter your plan or pick an option"
         handleTextChange={setActivityText}
+        selectionColor={theme.colors.black}
         value={activityText}
         variant="ghost"
-        style={[styles.inputContainer, { height: Math.max(42, inputHeigt) }]}
-        onContentSizeChange={(event) => {
-          setInputHeight(event.nativeEvent.contentSize.height)
-        }}
+        style={[styles.inputContainer, { maxHeight: INPUT_MAX_HEIGHT }]}
         multiline={true}
         autoCapitalize="none"
       />
@@ -73,7 +73,6 @@ export function SetActivity({ closeBottomSheet }: SetStatusProps) {
         {options.map((option) => (
           <TouchableOpacity
             onPress={() => {
-              setActivityText(capitalizeFirstLetter(option))
               updateStatus(capitalizeFirstLetter(option))
             }}
             key={option}>
@@ -130,5 +129,7 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     paddingHorizontal: 20,
+    textAlign: "left",
+    minHeight: 42,
   },
 })
