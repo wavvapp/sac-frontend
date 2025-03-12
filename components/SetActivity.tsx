@@ -112,13 +112,13 @@ const styles = StyleSheet.create({
     height: 1,
     width: "100%",
     backgroundColor: theme.colors.gray,
-    marginBottom: 16,
   },
   badgesContainer: {
     alignItems: "flex-start",
     gap: 8,
     paddingHorizontal: 20,
     paddingBottom: 20,
+    marginTop: 16,
   },
   badge: {
     paddingVertical: 7.5,
