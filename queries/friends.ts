@@ -35,7 +35,6 @@ export const useSignalingFriends = (shouldRefetch?: boolean) => {
         return friendSignals
       } catch (error) {
         console.error("Error in useSignalingFriends:", error)
-        throw error
       }
     },
     placeholderData: [],
