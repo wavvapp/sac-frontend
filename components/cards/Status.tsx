@@ -43,32 +43,16 @@ export const Status: React.FC<StatusProps> = ({ timeSlots }) => {
     loadSavedTimes()
   }, [])
 
-  const formatTime = (date: Date) => {
-    const hours = date.getHours()
-    const minutes = date.getMinutes()
-    const formattedHours = hours % 12 || 12
-    const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes
-    return `${formattedHours}:${formattedMinutes}`
-  }
-
-  const saveTimes = async (from: Date, to: Date) => {
-    const now = new Date()
-    const validFrom = from < now ? now : from
-    let validTo =
-      to > validFrom ? to : new Date(validFrom.getTime() + 60 * 60 * 1000)
-    const maxTo = new Date(validFrom.getTime() + 24 * 60 * 60 * 1000)
-    if (validTo > maxTo) validTo = maxTo
-
-    setFromTime(validFrom)
-    setToTime(validTo)
-
-    await AsyncStorage.setItem("fromTime", validFrom.toISOString())
-    await AsyncStorage.setItem("toTime", validTo.toISOString())
-    const timeRangeDisplay = `${formatTime(validFrom)}-${formatTime(validTo)}`
-
+  const handleSaveTimes = (data: {
+    from: Date
+    to: Date
+    timeRange: string
+  }) => {
+    setFromTime(data.from)
+    setToTime(data.to)
     setTemporaryStatus((prev: TemporaryStatusType) => ({
       ...prev,
-      timeSlot: timeRangeDisplay,
+      timeSlot: data.timeRange,
     }))
   }
 
@@ -92,7 +76,7 @@ export const Status: React.FC<StatusProps> = ({ timeSlots }) => {
           initialToTime={
             toTime ?? new Date(new Date().getTime() + 60 * 60 * 1000)
           }
-          onSave={saveTimes}
+          onSave={handleSaveTimes}
         />
       ) : (
         <>

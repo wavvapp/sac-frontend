@@ -9,16 +9,18 @@ import {
 import DateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker"
+import AsyncStorage from "@react-native-async-storage/async-storage"
 import dayjs from "dayjs"
 import CloseIcon from "@/components/vectors/CloseIcon"
 import { theme } from "@/theme"
 import DatepickerBottomDrawer from "@/components/DatePickerModal"
+import { DateFormatter } from "@/constants/DateFormatter"
 
 type DatePickerProps = {
   onClose: () => void
   initialFromTime: Date
   initialToTime: Date
-  onSave: (fromTime: Date, toTime: Date) => void
+  onSave: (data: { from: Date; to: Date; timeRange: string }) => void
 }
 
 export default function DatePicker({
@@ -30,7 +32,6 @@ export default function DatePicker({
   const [fromTime, setFromTime] = useState(initialFromTime)
   const [toTime, setToTime] = useState(initialToTime)
   const [tempTime, setTempTime] = useState(new Date())
-
   const [isBottomDrawerVisible, setIsBottomDrawerVisible] = useState(false)
   const [activeTimeType, setActiveTimeType] = useState<"FROM" | "TO">("FROM")
   const [isAndroidPickerVisible, setIsAndroidPickerVisible] = useState(false)
@@ -40,14 +41,9 @@ export default function DatePicker({
     setToTime(initialToTime)
   }, [initialFromTime, initialToTime])
 
-  const formatTime = useCallback((date: Date) => {
-    return dayjs(date).format("h:mm")
-  }, [])
-
   const openTimePicker = (type: "FROM" | "TO") => {
     setActiveTimeType(type)
     setTempTime(type === "FROM" ? fromTime : toTime)
-
     if (Platform.OS === "android") {
       setIsAndroidPickerVisible(true)
     } else {
@@ -71,38 +67,47 @@ export default function DatePicker({
   }
 
   const saveTime = useCallback(
-    (newTime?: Date) => {
+    async (newTime?: Date) => {
       if (!newTime) return
-
-      if (activeTimeType === "FROM") {
-        setFromTime(newTime)
-        if (dayjs(newTime).isAfter(dayjs(toTime))) {
-          setToTime(dayjs(newTime).add(1, "hour").toDate())
-        }
-      } else {
-        setToTime(newTime)
+      const now = dayjs()
+      const time = dayjs(newTime)
+      let from = activeTimeType === "FROM" ? time : dayjs(fromTime)
+      let to = activeTimeType === "TO" ? time : dayjs(toTime)
+      if (from.isBefore(now)) {
+        from = now
+      }
+      if (!to.isAfter(from)) {
+        to = from.add(1, "hour")
       }
 
-      onSave(
-        activeTimeType === "FROM" ? newTime : fromTime,
-        activeTimeType === "TO" ? newTime : toTime,
-      )
+      const fromDate = from.toDate()
+      const toDate = to.toDate()
+
+      const timeRange = `${DateFormatter(fromDate)}-${DateFormatter(toDate)}`
+
+      try {
+        await AsyncStorage.setItem("fromTime", fromDate.toISOString())
+        await AsyncStorage.setItem("toTime", toDate.toISOString())
+      } catch (error) {
+        console.error("Failed to save times to AsyncStorage:", error)
+      }
+
+      setFromTime(fromDate)
+      setToTime(toDate)
+      onSave({ from: fromDate, to: toDate, timeRange })
+
       closeDrawer()
     },
     [activeTimeType, fromTime, toTime, onSave, closeDrawer],
   )
 
   const getMinimumDate = useCallback(() => {
-    if (activeTimeType === "FROM") {
-      return new Date()
-    } else {
-      return fromTime
-    }
+    return activeTimeType === "FROM" ? new Date() : fromTime
   }, [activeTimeType, fromTime])
 
   const getMaximumDate = useCallback(() => {
-    return dayjs().add(24, "hour").toDate()
-  }, [])
+    return dayjs(fromTime).add(24, "hour").toDate()
+  }, [fromTime])
 
   return (
     <View style={styles.container}>
@@ -110,13 +115,13 @@ export default function DatePicker({
         <View style={styles.column}>
           <Text style={styles.label}>FROM</Text>
           <TouchableOpacity onPress={() => openTimePicker("FROM")}>
-            <Text style={styles.timeText}>{formatTime(fromTime)}</Text>
+            <Text style={styles.timeText}>{DateFormatter(fromTime)}</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.column}>
           <Text style={styles.label}>TO</Text>
           <TouchableOpacity onPress={() => openTimePicker("TO")}>
-            <Text style={styles.timeText}>{formatTime(toTime)}</Text>
+            <Text style={styles.timeText}>{DateFormatter(toTime)}</Text>
           </TouchableOpacity>
         </View>
         <TouchableOpacity style={styles.closeButton} onPress={onClose}>
@@ -128,7 +133,6 @@ export default function DatePicker({
           value={tempTime}
           mode="time"
           is24Hour={false}
-          display="clock"
           onChange={handleTimeChange}
           minimumDate={getMinimumDate()}
           maximumDate={getMaximumDate()}
