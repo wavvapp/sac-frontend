@@ -41,5 +41,6 @@ const styles = StyleSheet.create({
     width: 48,
     alignItems: "flex-end",
     justifyContent: "center",
+    marginRight: -4,
   },
 })
