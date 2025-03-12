@@ -26,9 +26,9 @@ export default function DatePicker({ onCloseDatePicker }: DatePickerProps) {
   const { setTemporaryStatus } = useStatus()
 
   const openTimePicker = (type: "FROM" | "TO") => {
+    setIsTimePickerModalVisible(true)
     setActiveTimeType(type)
     setTempTime(type === "FROM" ? fromTime : toTime)
-    setIsTimePickerModalVisible(true)
   }
 
   const closeDrawer = () => setIsTimePickerModalVisible(false)
@@ -43,6 +43,9 @@ export default function DatePicker({ onCloseDatePicker }: DatePickerProps) {
         saveTime(selectedDate)
       }
     }
+    if (event.type === "dismissed") {
+      setIsTimePickerModalVisible(false)
+    }
   }
 
   const saveTime = (selectedDate: Date) => {
@@ -53,8 +56,9 @@ export default function DatePicker({ onCloseDatePicker }: DatePickerProps) {
     let newToTime = activeTimeType === "TO" ? newTime : toTime
 
     if (
-      dayjs(newFromTime).add(30, "second").isBefore(currentTime) &&
-      activeTimeType === "FROM"
+      dayjs(newFromTime).isBefore(currentTime) &&
+      activeTimeType === "FROM" &&
+      dayjs(newToTime).minute() !== currentTime.minute()
     ) {
       Alert.alert(
         "Invalid time",
@@ -63,10 +67,7 @@ export default function DatePicker({ onCloseDatePicker }: DatePickerProps) {
       return
     }
 
-    if (
-      !dayjs(newToTime).add(30, "second").isAfter(newFromTime) &&
-      activeTimeType === "TO"
-    ) {
+    if (!dayjs(newToTime).isAfter(newFromTime) && activeTimeType === "TO") {
       Alert.alert(
         "Invalid time",
         "The 'To' time needs to be after the 'From' time. Please pick a later time.",
