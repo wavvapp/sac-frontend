@@ -1,6 +1,7 @@
 import BottomSheet, {
   BottomSheetBackdrop,
   BottomSheetBackdropProps,
+  BottomSheetProps,
 } from "@gorhom/bottom-sheet"
 import {
   Dispatch,
@@ -14,25 +15,37 @@ import {
 
 export interface BottomDrawerRef {
   openBottomSheet: () => void
+  closeBottomSheet: () => void
 }
 
-interface DrawerProps {
+interface DrawerProps extends BottomSheetProps {
   children: React.ReactNode
   setIsBottomSheetOpen: Dispatch<SetStateAction<boolean>>
   fullyHiddenOnClose?: boolean
+  isFullScreen?: boolean
 }
 
 const BottomDrawer = forwardRef<BottomDrawerRef, DrawerProps>((props, ref) => {
-  const { children, setIsBottomSheetOpen, fullyHiddenOnClose = false } = props
-  const snapPoints = useMemo(
-    () => (fullyHiddenOnClose ? ["1%", "88%"] : ["20%", "88%"]),
-    [fullyHiddenOnClose],
-  )
+  const {
+    children,
+    setIsBottomSheetOpen,
+    fullyHiddenOnClose = false,
+    isFullScreen = false,
+    ...rest
+  } = props
+  const snapPoints = useMemo(() => {
+    if (isFullScreen) return ["1%", "93%"]
+    return fullyHiddenOnClose ? ["1%", "88%"] : ["20%", "88%"]
+  }, [fullyHiddenOnClose, isFullScreen])
+
   const bottomSheetRef = useRef<BottomSheet>(null)
 
   useImperativeHandle(ref, () => ({
     openBottomSheet: () => {
       bottomSheetRef.current?.expand()
+    },
+    closeBottomSheet: () => {
+      bottomSheetRef.current?.collapse()
     },
   }))
 
@@ -51,7 +64,8 @@ const BottomDrawer = forwardRef<BottomDrawerRef, DrawerProps>((props, ref) => {
       snapPoints={snapPoints}
       enablePanDownToClose={fullyHiddenOnClose}
       onChange={handleSheetChanges}
-      backdropComponent={renderBackdrop}>
+      backdropComponent={renderBackdrop}
+      {...rest}>
       {children}
     </BottomSheet>
   )
