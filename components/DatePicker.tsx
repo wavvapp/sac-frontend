@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react"
+import { useState } from "react"
 import { View, TouchableOpacity, StyleSheet, Platform } from "react-native"
 import DateTimePicker, {
   DateTimePickerEvent,
@@ -43,7 +43,6 @@ export default function DatePicker({ onCloseDatePicker }: DatePickerProps) {
         saveTime(selectedDate)
       }
     }
-    setIsTimePickerModalVisible(false)
   }
 
   const saveTime = (selectedDate: Date) => {
