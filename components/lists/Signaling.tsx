@@ -74,7 +74,7 @@ const Signaling = forwardRef<SignalingRef>((_, ref) => {
               SignalingUser({
                 user,
                 online: true,
-                isLast: index === availableFriends.length - 1,
+                isLast: index === onlineFriends.length - 1,
                 isFirst: index === 0,
                 hasNotificationEnabled: !!user?.hasNotificationEnabled,
               }),
