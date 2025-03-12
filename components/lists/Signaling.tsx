@@ -1,4 +1,4 @@
-import { forwardRef, useMemo, useState } from "react"
+import { forwardRef, useCallback, useMemo, useState } from "react"
 import { View, StyleSheet } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import BottomDrawer from "@/components/BottomDrawer"
@@ -25,6 +25,7 @@ const Signaling = forwardRef<SignalingRef>((_, ref) => {
   const { data: allFriends } = useFriends(isbottomSheetOpen)
   const { data: availableFriends = [] } = useSignalingFriends(isbottomSheetOpen)
   const queryClient = useQueryClient()
+  const [refreshing, setRefreshing] = useState(false)
 
   const offlineFriends = useMemo(() => {
     if (!allFriends) return []
@@ -36,11 +37,26 @@ const Signaling = forwardRef<SignalingRef>((_, ref) => {
     )
   }, [allFriends, availableFriends])
 
+  const refetchFriendsData = useCallback(async () => {
+    await queryClient.refetchQueries({ queryKey: ["friend-signals"] })
+    await queryClient.refetchQueries({ queryKey: ["friends"] })
+  }, [queryClient])
+
   const openSearch = () => {
-    queryClient.refetchQueries({ queryKey: ["friend-signals"] })
-    queryClient.refetchQueries({ queryKey: ["friends"] })
+    refetchFriendsData()
     navigation.navigate("Search")
   }
+
+  const handleRefresh = useCallback(async () => {
+    setRefreshing(true)
+    try {
+      await refetchFriendsData()
+    } catch (err) {
+      console.error("Failed to refetch the friends", err)
+    } finally {
+      setRefreshing(false)
+    }
+  }, [refetchFriendsData])
 
   return (
     <BottomDrawer ref={ref} setIsBottomSheetOpen={setIsBottomSheetOpen}>
@@ -60,6 +76,8 @@ const Signaling = forwardRef<SignalingRef>((_, ref) => {
         </CustomText>
       )}
       <BottomSheetSectionList
+        refreshing={refreshing}
+        onRefresh={handleRefresh}
         sections={[
           {
             title: "available users",
