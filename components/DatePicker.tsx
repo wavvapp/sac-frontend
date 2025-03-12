@@ -161,7 +161,8 @@ export default function DatePicker({
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "white",
-    padding: 16,
+    paddingHorizontal: 20,
+    paddingVertical: 1,
     borderRadius: 8,
     width: "100%",
   },
