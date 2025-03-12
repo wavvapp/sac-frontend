@@ -62,6 +62,7 @@ export interface Friend {
   isFriend?: boolean
   inviteCode: string
   hasNotificationEnabled?: boolean
+  signal?: Signal
 }
 
 export interface Signal {
