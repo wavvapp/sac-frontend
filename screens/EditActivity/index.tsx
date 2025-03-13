@@ -1,5 +1,5 @@
 import { CustomButton } from "@/components/ui/Button"
-import CustomText from "@/components/ui/CustomText"
+import { CustomTitle } from "@/components/ui/CustomTitle"
 import Input from "@/components/ui/Input"
 import { theme } from "@/theme"
 import { Ref, useState } from "react"
@@ -52,7 +52,7 @@ export default function EditActivity({
           style={styles.modalContainer}
           onStartShouldSetResponder={() => true}>
           <View style={styles.formHeader}>
-            <CustomText>{title}</CustomText>
+            <CustomTitle text={title} />
             <CustomButton
               variant="default"
               textSize="sm"
@@ -60,6 +60,7 @@ export default function EditActivity({
               textStyles={styles.button}
               containerStyles={{
                 opacity: !text.trim() ? 0.5 : 1,
+                height: 32,
               }}
               onPress={handleEdit}
               disabled={!text.trim()}
@@ -75,6 +76,7 @@ export default function EditActivity({
             containerStyle={styles.inputContainer}
             multiline={multiLineInput}
             ref={inputRef}
+            autoCapitalize="none"
           />
         </KeyboardAvoidingView>
       </View>
@@ -87,11 +89,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "flex-end",
     backgroundColor: theme.colors.black_500,
+    paddingTop: 244,
   },
   modalContainer: {
-    height: "60%",
+    height: "100%",
     backgroundColor: theme.colors.white,
-    padding: 16,
+    padding: 20,
     borderTopLeftRadius: 12,
     borderTopRightRadius: 12,
   },
@@ -108,5 +111,7 @@ const styles = StyleSheet.create({
   },
   button: {
     fontWeight: theme.fontWeight.semibold,
+    fontSize: 13,
+    lineHeight: 14,
   },
 })

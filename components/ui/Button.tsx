@@ -58,7 +58,7 @@ export function CustomButton({
     },
     ghost: {
       container: styles.ghost,
-      text: {},
+      text: styles.ghostText,
     },
     default: {
       container: styles.default,
@@ -94,8 +94,8 @@ export function CustomButton({
       {title && (
         <CustomText
           size={textSize}
-          fontWeight="semibold"
-          fontFamily="marfa"
+          fontWeight="bold"
+          fontFamily="writer-monos"
           style={[text, styles.buttonText, textStyles]}>
           {title}
         </CustomText>
@@ -154,6 +154,7 @@ const styles = StyleSheet.create({
   },
   secondaryText: {
     color: theme.colors.white,
+    fontWeight: theme.fontWeight.semibold,
   },
   outline: {
     backgroundColor: theme.colors.white,
@@ -177,10 +178,12 @@ const styles = StyleSheet.create({
     color: theme.colors.white,
   },
   ghost: {
-    width: 48,
-    height: 48,
+    paddingVertical: 20,
     justifyContent: "center",
     alignItems: "center",
+  },
+  ghostText: {
+    color: theme.colors.red,
   },
   disabled: {
     opacity: 0.3,

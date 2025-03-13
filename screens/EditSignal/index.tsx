@@ -1,52 +1,69 @@
-import { StyleSheet } from "react-native"
+import { StyleSheet, View } from "react-native"
 import Status from "@/components/cards/Status"
 import { CustomButton } from "@/components/ui/Button"
-import { useNavigation } from "@react-navigation/native"
-import { NativeStackNavigationProp } from "@react-navigation/native-stack"
+import { NativeStackScreenProps } from "react-native-screens/lib/typescript/native-stack/types"
 import FriendsList from "@/components/lists/Friends"
 import Activity from "@/components/Activity"
 import { ScrollView } from "react-native-gesture-handler"
 import { theme } from "@/theme"
-import { useAuth } from "@/contexts/AuthContext"
 import { useStatus } from "@/contexts/StatusContext"
 import { RootStackParamList } from "@/navigation"
 import { useEffect, useState } from "react"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useQueryClient } from "@tanstack/react-query"
 import { StatusBar } from "expo-status-bar"
-import api from "@/service"
 import { Signal } from "@/types"
-import { useMySignal } from "@/queries/signal"
-import { onShare } from "@/utils/share"
-import ShareIcon from "@/components/vectors/ShareIcon"
+import {
+  useMySignal,
+  useSaveStatus,
+  useTurnOffSignal,
+  useTurnOnSignal,
+} from "@/queries/signal"
 import Header from "@/components/cards/Header"
-import ActionCard from "@/components/cards/Action"
 import { useOfflineHandler } from "@/hooks/useOfflineHandler"
 import { SafeAreaView } from "react-native-safe-area-context"
 
-type EditSignalScreenProps = NativeStackNavigationProp<
+type EditSignalScreenProps = NativeStackScreenProps<
   RootStackParamList,
   "EditSignal"
 >
 
-export default function EditSignal() {
-  const navigation = useNavigation<EditSignalScreenProps>()
-  const { temporaryStatus, setTemporaryStatus } = useStatus()
+export default function EditSignal({
+  route,
+  navigation,
+}: EditSignalScreenProps) {
+  const { temporaryStatus, setTemporaryStatus, isOn } = useStatus()
   const { data: signal } = useMySignal()
-  const { user } = useAuth()
   const [isLoading, setIsLoading] = useState(false)
   const { handleOfflineAction } = useOfflineHandler()
   const queryclient = useQueryClient()
 
-  const mutation = useMutation({
-    mutationFn: () => {
-      return api.put("/my-signal", {
-        friends: temporaryStatus.friendIds,
-        status_message: temporaryStatus.activity,
+  const isNewSignal = route.params?.isNewSignal
+
+  const turnOnSignal = useTurnOnSignal({
+    onMutate: async () => {
+      await queryclient.cancelQueries({ queryKey: ["fetch-my-signal"] })
+      const optimisticStatus: Signal = {
         when: temporaryStatus.timeSlot,
-      })
+        status_message: temporaryStatus.activity,
+        friends: [],
+        friendIds: temporaryStatus.friendIds,
+        status: "active",
+      }
+      queryclient.setQueryData(["fetch-my-signal"], optimisticStatus)
+      handleOfflineAction(() => (isOn.value = !isOn.value))
+      navigation.navigate("Home")
     },
-    onMutate: () => {
-      queryclient.cancelQueries({ queryKey: ["fetch-my-signal"] })
+    onError: (error) => {
+      // TODO: add toaster
+      console.error(error.message)
+    },
+    onSuccess: () => saveStatus.mutate(),
+  })
+
+  const saveStatus = useSaveStatus({
+    data: temporaryStatus,
+    onMutate: async () => {
+      await queryclient.cancelQueries({ queryKey: ["fetch-my-signal"] })
       const optimisticStatus: Signal = {
         when: temporaryStatus.timeSlot,
         status_message: temporaryStatus.activity,
@@ -56,20 +73,37 @@ export default function EditSignal() {
       }
       queryclient.setQueryData(["fetch-my-signal"], optimisticStatus)
       setIsLoading(true)
-      navigation.goBack()
+      navigation.navigate("Home")
     },
     onError: (error) => {
       // TODO: add toaster
       console.error(error.message)
     },
     onSettled: async () => {
-      queryclient.invalidateQueries({ queryKey: ["fetch-my-signal"] })
+      await queryclient.refetchQueries({ queryKey: ["fetch-my-signal"] })
       setIsLoading(false)
     },
   })
 
-  const handleSaveStatus = async () => {
-    handleOfflineAction(() => mutation.mutate())
+  const turnOffSignal = useTurnOffSignal({
+    onMutate: async () => {
+      handleOfflineAction(() => (isOn.value = !isOn.value))
+      navigation.goBack()
+    },
+    onError: () => {
+      isOn.value = !isOn.value
+    },
+    onSettled() {
+      queryclient.refetchQueries({ queryKey: ["points"] })
+      queryclient.refetchQueries({ queryKey: ["fetch-my-signal"] })
+    },
+  })
+
+  const handleSaveStatus = () =>
+    isNewSignal ? turnOnSignal.mutate() : saveStatus.mutate()
+
+  const handleTurnOffSignal = async () => {
+    handleOfflineAction(() => turnOffSignal.mutate())
   }
   useEffect(() => {
     if (!signal) return
@@ -82,38 +116,42 @@ export default function EditSignal() {
   return (
     <SafeAreaView style={style.container}>
       <StatusBar style="dark" />
-      <Header title="Edit status" />
+      <Header title={isNewSignal ? "Set your Wavv" : "Edit your Wavv"} />
       <ScrollView
         keyboardShouldPersistTaps="always"
         contentContainerStyle={{
           flexGrow: 1,
-          gap: 20,
-          paddingTop: 62,
-          paddingBottom: 122,
+          gap: 24,
+          paddingTop: 24,
+          paddingBottom: 170,
         }}>
         <Activity isLoading={isLoading} />
         <Status
           timeSlots={["NOW", "MORNING", "LUNCH", "AFTERNOON", "EVENING"]}
         />
         <FriendsList />
-        <ActionCard
-          title="Your friends are not on Wavv?"
-          description="Invite them to join you"
-          onPress={() => onShare(user?.username, user?.inviteCode)}
-          icon={<ShareIcon />}
-          style={{ marginHorizontal: 20 }}
-        />
       </ScrollView>
-      <CustomButton
-        activeOpacity={0.8}
-        containerStyles={{ ...style.saveButton, opacity: isLoading ? 0.8 : 1 }}
-        variant="secondary"
-        fullWidth
-        title={isLoading ? "Saving..." : "Save"}
-        textSize="sm"
-        onPress={handleSaveStatus}
-        disabled={isLoading}
-      />
+      <View style={style.buttonsContainer}>
+        <CustomButton
+          activeOpacity={0.8}
+          containerStyles={style.button}
+          variant="secondary"
+          fullWidth
+          title={isNewSignal ? "Wavv" : "save"}
+          textSize="sm"
+          onPress={handleSaveStatus}
+        />
+        {!isNewSignal && (
+          <CustomButton
+            containerStyles={style.button}
+            variant="ghost"
+            fullWidth
+            title="turn off your wavv"
+            textSize="sm"
+            onPress={handleTurnOffSignal}
+          />
+        )}
+      </View>
     </SafeAreaView>
   )
 }
@@ -123,13 +161,18 @@ const style = StyleSheet.create({
     flex: 1,
     backgroundColor: theme.colors.white,
     position: "relative",
-    paddingTop: 20,
   },
-  saveButton: {
+  buttonsContainer: {
+    backgroundColor: theme.colors.white,
     position: "absolute",
-    bottom: 20,
+    bottom: 0,
+    paddingBottom: 20,
     zIndex: 10,
     width: "90%",
     marginHorizontal: 20,
+    gap: 8,
+  },
+  button: {
+    width: "100%",
   },
 })

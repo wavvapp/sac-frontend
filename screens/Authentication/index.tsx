@@ -40,7 +40,7 @@ export default function EntryScreen() {
       <View style={styles.content}>
         <View style={styles.logoContainer}>
           <WavvLogo width={390} height={80} />
-          <CustomText fontFamily="writer-mono" style={styles.description}>
+          <CustomText fontFamily="writer-monos" style={styles.description}>
             Signal friends your availability
           </CustomText>
         </View>
@@ -62,7 +62,7 @@ export default function EntryScreen() {
             <AppleIcon />
           </CustomButton>
           <CustomText
-            fontFamily="writer-mono"
+            fontFamily="writer-monos"
             size="sm"
             style={styles.agreementText}>
             By clicking on

@@ -4,7 +4,6 @@ import {
   useEffect,
   useContext,
   ReactNode,
-  useCallback,
 } from "react"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import {
@@ -14,16 +13,17 @@ import {
   statusCodes,
 } from "@react-native-google-signin/google-signin"
 import { Platform } from "react-native"
-import { Friend, Provider, User } from "@/types"
+import { Provider, User } from "@/types"
 import { CredentialsScreenProps } from "@/screens/Authentication/SignUp/CreateCredentials"
 import * as AppleAuthentication from "expo-apple-authentication"
 import { handleApiSignIn } from "@/libs/handleApiSignIn"
 import { useQueryClient } from "@tanstack/react-query"
-import api from "@/service"
 import AlertDialog from "@/components/AlertDialog"
 import { useOfflineHandler } from "@/hooks/useOfflineHandler"
 import { useNotification } from "@/contexts/NotificationContext"
 import * as Notifications from "expo-notifications"
+import { usePrefetchFriend } from "@/queries/friends"
+import { usePrefetchSignal } from "@/queries/signal"
 
 interface AuthContextData {
   user: User | null
@@ -152,29 +152,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     }
   }
 
-  const prefetchFriends = useCallback(async () => {
-    await queryClient.prefetchQuery({
-      queryKey: ["friends"],
-      queryFn: async () => {
-        const { data } = await api.get("/friends")
-        return data
-      },
-    })
-  }, [queryClient])
-
-  const prefetchSignal = useCallback(async () => {
-    await queryClient.prefetchQuery({
-      queryKey: ["fetch-my-signal"],
-      queryFn: async () => {
-        const { data } = await api.get("/my-signal")
-        const signal = {
-          ...data,
-          friendIds: data.friends.map((friend: Friend) => friend?.friendId),
-        }
-        return signal
-      },
-    })
-  }, [queryClient])
+  const prefetchFriends = usePrefetchFriend({ queryClient })
+  const prefetchSignal = usePrefetchSignal({ queryClient })
 
   const signInWithApple = async (navigation: CredentialsScreenProps) => {
     try {

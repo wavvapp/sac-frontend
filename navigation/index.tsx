@@ -20,7 +20,7 @@ import NotificationPreferences from "@/screens/NotificationPreferences"
 export type RootStackParamList = {
   EntryScreen: undefined
   Home: undefined
-  EditSignal: undefined
+  EditSignal: { isNewSignal?: boolean }
   SignUp: undefined
   Settings: undefined
   Signaling: undefined
