@@ -1,6 +1,5 @@
 import { Theme } from "@/types"
 import { Platform } from "react-native"
-
 export const theme: Theme = {
   colors: {
     black: "#000000",
@@ -15,6 +14,7 @@ export const theme: Theme = {
     white_500: "#FFFFFF80",
     gray: "#E3E3E3",
     gray_100: "#cccccc",
+    gray_200: "#0000001A",
     light_gray: "#898989",
     red: "#EA4335",
   },

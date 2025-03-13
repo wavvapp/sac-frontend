@@ -1,0 +1,61 @@
+import { View, StyleSheet } from "react-native"
+import CustomText from "@/components/ui/CustomText"
+import { TouchableOpacity } from "react-native"
+import { theme } from "@/theme"
+import LeftArrow from "@/components/vectors/LeftArrow"
+import { useNavigation } from "@react-navigation/native"
+export default function ActionHeader({
+  title,
+  onPress,
+  icon,
+}: {
+  title: string
+  onPress: () => void
+  icon: React.ReactNode
+}) {
+  const navigation = useNavigation()
+  return (
+    <View style={styles.header}>
+      <View style={styles.container}>
+        <TouchableOpacity
+          style={styles.icon}
+          onPress={() => navigation.goBack()}>
+          <LeftArrow />
+        </TouchableOpacity>
+        <CustomText size="lg" style={styles.title}>
+          {title}
+        </CustomText>
+      </View>
+
+      <TouchableOpacity style={styles.icon} onPress={onPress}>
+        {icon}
+      </TouchableOpacity>
+    </View>
+  )
+}
+
+const styles = StyleSheet.create({
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingBottom: 15,
+    paddingHorizontal: 20,
+    width: "100%",
+    borderBottomWidth: 1,
+    borderBottomColor: theme.colors.gray_200,
+  },
+  container: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+  },
+  title: {
+    fontWeight: theme.fontWeight.semibold,
+  },
+  icon: {
+    height: 48,
+    width: 48,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+})

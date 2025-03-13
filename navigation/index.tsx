@@ -17,6 +17,7 @@ import { useEffect } from "react"
 import { StaticPageType } from "@/types"
 import StaticContentScreen from "@/screens/StaticContentScreen"
 import NotificationPreferences from "@/screens/NotificationPreferences"
+import GroupsScreen from "@/screens/Groups"
 export type RootStackParamList = {
   EntryScreen: undefined
   Home: undefined
@@ -28,6 +29,7 @@ export type RootStackParamList = {
   Search: undefined
   NotificationPreferences: undefined
   StaticContentScreen: { pageSlug: StaticPageType }
+  Groups: undefined
 }
 
 export default function AppNavigator() {
@@ -75,6 +77,11 @@ export default function AppNavigator() {
               name="NotificationPreferences"
               options={{ headerShown: false }}
               component={NotificationPreferences}
+            />
+            <Stack.Screen
+              name="Groups"
+              options={{ headerShown: false }}
+              component={GroupsScreen}
             />
           </Stack.Navigator>
         </StatusProvider>
