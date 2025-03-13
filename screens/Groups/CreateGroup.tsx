@@ -1,0 +1,110 @@
+import { FriendsSkeleton } from "@/components/cards/FriendsSkeleton"
+import FriendCard from "@/components/Friend"
+import { CustomButton } from "@/components/ui/Button"
+import HeaderWrapper from "@/components/ui/HeaderWrapper"
+import Input from "@/components/ui/Input"
+import CrossMark from "@/components/vectors/CrossMark"
+import { useFriends } from "@/queries/friends"
+import { useCreateGroup } from "@/queries/groups"
+import { Friend } from "@/types"
+import { useNavigation } from "@react-navigation/native"
+import { useCallback, useState } from "react"
+import { View, StyleSheet, ScrollView, TouchableOpacity } from "react-native"
+import { StatusBar } from "expo-status-bar"
+
+export default function CreateGroup() {
+  const [groupName, setGroupName] = useState("")
+  const { data: allFriends, isLoading } = useFriends()
+  const [friendIds, setFriendIds] = useState<string[]>([])
+  const navigation = useNavigation()
+  const { mutate } = useCreateGroup()
+
+  const updateFriendsList = useCallback(
+    (friendId: string) => {
+      const newFriends = friendIds?.includes(friendId)
+        ? friendIds?.filter((id) => id !== friendId)
+        : [...friendIds, friendId]
+      setFriendIds(newFriends)
+    },
+    [friendIds],
+  )
+
+  const onSaveGroup = () => {
+    mutate({ friendIds, name: groupName })
+    navigation.goBack()
+  }
+
+  return (
+    <View style={styles.container}>
+      <StatusBar style="dark" />
+      <HeaderWrapper style={styles.header}>
+        <View style={styles.inputContainer}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <CrossMark style={{ marginLeft: -5 }} />
+          </TouchableOpacity>
+          <Input
+            variant="ghost"
+            placeholder="Group name"
+            value={groupName}
+            handleTextChange={(text) => setGroupName(text)}
+            style={styles.input}
+            textSize="lg"
+          />
+        </View>
+        <CustomButton
+          onPress={onSaveGroup}
+          disabled={!groupName || friendIds.length <= 0}
+          title="Save"
+        />
+      </HeaderWrapper>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
+        style={styles.friendListContainer}>
+        {isLoading ? (
+          <FriendsSkeleton />
+        ) : (
+          allFriends?.map((friend: Friend) => (
+            <FriendCard
+              containerStyles={styles.friend}
+              selected={friendIds?.includes(friend.id)}
+              key={friend.id}
+              handleChange={() => updateFriendsList(friend.id)}
+              user={friend}
+            />
+          ))
+        )}
+      </ScrollView>
+    </View>
+  )
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+    alignItems: "center",
+  },
+  friendListContainer: {
+    paddingHorizontal: 20,
+    paddingTop: 20,
+    paddingBottom: 100,
+  },
+  friend: {
+    marginTop: 12,
+  },
+  inputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+    flex: 1,
+  },
+  input: {
+    minWidth: "85%",
+    maxWidth: "90%",
+  },
+})
