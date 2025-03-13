@@ -18,13 +18,15 @@ import { capitalizeFirstLetter } from "@/utils"
 interface SetStatusProps {
   closeBottomSheet: () => void
 }
+
+const INPUT_MAX_HEIGHT = 200
 export function SetActivity({ closeBottomSheet }: SetStatusProps) {
   const { temporaryStatus, setTemporaryStatus } = useStatus()
-  const [inputHeigt, setInputHeight] = useState<number>(42)
   const [activityText, setActivityText] = useState<string>(
     temporaryStatus.activity,
   )
   const updateStatus = (text: string) => {
+    setActivityText(capitalizeFirstLetter(text))
     setTemporaryStatus((prev: TemporaryStatusType) => ({
       ...prev,
       activity: text.trim(),
@@ -59,10 +61,7 @@ export function SetActivity({ closeBottomSheet }: SetStatusProps) {
         handleTextChange={setActivityText}
         value={activityText}
         variant="ghost"
-        style={[styles.inputContainer, { height: Math.max(42, inputHeigt) }]}
-        onContentSizeChange={(event) => {
-          setInputHeight(event.nativeEvent.contentSize.height)
-        }}
+        style={[styles.inputContainer, { maxHeight: INPUT_MAX_HEIGHT }]}
         multiline={true}
         autoCapitalize="none"
       />
@@ -73,7 +72,6 @@ export function SetActivity({ closeBottomSheet }: SetStatusProps) {
         {options.map((option) => (
           <TouchableOpacity
             onPress={() => {
-              setActivityText(capitalizeFirstLetter(option))
               updateStatus(capitalizeFirstLetter(option))
             }}
             key={option}>
@@ -113,13 +111,13 @@ const styles = StyleSheet.create({
     height: 1,
     width: "100%",
     backgroundColor: theme.colors.gray,
-    marginBottom: 16,
   },
   badgesContainer: {
     alignItems: "flex-start",
     gap: 8,
     paddingHorizontal: 20,
     paddingBottom: 20,
+    marginTop: 16,
   },
   badge: {
     paddingVertical: 7.5,
@@ -130,5 +128,7 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     paddingHorizontal: 20,
+    textAlign: "left",
+    minHeight: 42,
   },
 })
