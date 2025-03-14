@@ -1,5 +1,5 @@
 import { theme } from "@/theme"
-import { View, ViewProps, StyleSheet, Platform } from "react-native"
+import { View, ViewProps, StyleSheet } from "react-native"
 
 export interface HeaderWrapperProps extends ViewProps {}
 export default function HeaderWrapper(props: HeaderWrapperProps) {
@@ -9,7 +9,6 @@ export default function HeaderWrapper(props: HeaderWrapperProps) {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: Platform.OS === "android" ? 40 : 60,
     paddingHorizontal: 20,
     borderBottomWidth: 1,
     paddingBottom: 12,

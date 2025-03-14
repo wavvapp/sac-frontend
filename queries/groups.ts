@@ -1,5 +1,7 @@
 import api from "@/service"
+import { Group } from "@/types"
 import { MutationOptions, useMutation } from "@tanstack/react-query"
+import { useQuery } from "@tanstack/react-query"
 
 interface MutationFunctionArguments {
   name: string
@@ -15,5 +17,17 @@ export const useCreateGroup = (
       console.error("Error patching data:", error)
     },
     ...args,
+  })
+}
+
+export const useGetGroups = () => {
+  return useQuery({
+    queryKey: ["groups"],
+    queryFn: async () => {
+      const { data } = await api.get<Group[]>("/groups")
+      return data
+    },
+    staleTime: Infinity,
+    placeholderData: [],
   })
 }

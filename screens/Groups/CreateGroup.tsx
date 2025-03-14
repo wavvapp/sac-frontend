@@ -10,13 +10,20 @@ import { Friend } from "@/types"
 import { useNavigation } from "@react-navigation/native"
 import { useCallback, useState } from "react"
 import { View, StyleSheet, ScrollView, TouchableOpacity } from "react-native"
+import { SafeAreaView } from "react-native-safe-area-context"
 import { StatusBar } from "expo-status-bar"
+import { NativeStackNavigationProp } from "@react-navigation/native-stack"
+import { RootStackParamList } from "@/navigation"
+export type CreateGroupScreenProps = NativeStackNavigationProp<
+  RootStackParamList,
+  "CreateGroup"
+>
 
 export default function CreateGroup() {
   const [groupName, setGroupName] = useState("")
   const { data: allFriends, isLoading } = useFriends()
   const [friendIds, setFriendIds] = useState<string[]>([])
-  const navigation = useNavigation()
+  const navigation = useNavigation<CreateGroupScreenProps>()
   const { mutate } = useCreateGroup()
 
   const updateFriendsList = useCallback(
@@ -35,11 +42,13 @@ export default function CreateGroup() {
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <StatusBar style="dark" />
       <HeaderWrapper style={styles.header}>
         <View style={styles.inputContainer}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
+          <TouchableOpacity
+            onPress={() => navigation.goBack()}
+            style={styles.closeIcon}>
             <CrossMark style={{ marginLeft: -5 }} />
           </TouchableOpacity>
           <Input
@@ -75,7 +84,7 @@ export default function CreateGroup() {
           ))
         )}
       </ScrollView>
-    </View>
+    </SafeAreaView>
   )
 }
 
@@ -100,11 +109,17 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 10,
+    gap: 2,
     flex: 1,
   },
   input: {
     minWidth: "85%",
     maxWidth: "90%",
+  },
+  closeIcon: {
+    height: 48,
+    width: 48,
+    justifyContent: "center",
+    alignItems: "flex-start",
   },
 })
