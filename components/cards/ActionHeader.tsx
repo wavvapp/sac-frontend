@@ -4,6 +4,7 @@ import { TouchableOpacity } from "react-native"
 import { theme } from "@/theme"
 import LeftArrow from "@/components/vectors/LeftArrow"
 import { useNavigation } from "@react-navigation/native"
+import HeaderWrapper from "@/components/ui/HeaderWrapper"
 export default function ActionHeader({
   title,
   onPress,
@@ -15,24 +16,26 @@ export default function ActionHeader({
 }) {
   const navigation = useNavigation()
   return (
-    <View style={styles.header}>
-      <View style={styles.container}>
-        <TouchableOpacity
-          style={[styles.icon, { alignItems: "flex-start" }]}
-          onPress={() => navigation.goBack()}>
-          <LeftArrow />
-        </TouchableOpacity>
-        <CustomText size="lg" style={styles.title}>
-          {title}
-        </CustomText>
-      </View>
+    <HeaderWrapper style={{}}>
+      <View style={styles.header}>
+        <View style={styles.container}>
+          <TouchableOpacity
+            style={[styles.icon, { alignItems: "flex-start" }]}
+            onPress={() => navigation.goBack()}>
+            <LeftArrow style={{ marginLeft: -5 }} />
+          </TouchableOpacity>
+          <CustomText size="lg" style={styles.title}>
+            {title}
+          </CustomText>
+        </View>
 
-      <TouchableOpacity
-        style={[styles.icon, { alignItems: "flex-end" }]}
-        onPress={onPress}>
-        {icon}
-      </TouchableOpacity>
-    </View>
+        <TouchableOpacity
+          style={[styles.icon, { alignItems: "flex-end" }]}
+          onPress={onPress}>
+          {icon}
+        </TouchableOpacity>
+      </View>
+    </HeaderWrapper>
   )
 }
 
@@ -40,16 +43,11 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingBottom: 15,
-    paddingHorizontal: 20,
-    width: "100%",
-    borderBottomWidth: 1,
-    borderBottomColor: theme.colors.gray_200,
   },
   container: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 4,
+    gap: 2,
   },
   title: {
     fontWeight: theme.fontWeight.semibold,

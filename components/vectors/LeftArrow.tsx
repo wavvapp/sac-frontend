@@ -17,8 +17,8 @@ export default function LeftArrow({
       <Path
         d="M12 19L5 12M5 12L12 5M5 12H19"
         stroke={color}
-        stroke-width="1.5"
-        stroke-linecap="round"
+        strokeWidth="1.5"
+        strokeLinecap="round"
         strokeLinejoin="round"
       />
     </Svg>
