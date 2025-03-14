@@ -24,7 +24,7 @@ export default function GroupsScreen() {
             key={group.id}
             name={group.name}
             id={group.id}
-            members={group.friend_ids.length}
+            members={group.friend_ids?.length}
           />
         ))}
       </ScrollView>
