@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderBottomWidth: 1,
     paddingBottom: 12,
-    borderColor: theme.colors.gray,
+    borderColor: theme.colors.black_100,
     width: "100%",
   },
 })
