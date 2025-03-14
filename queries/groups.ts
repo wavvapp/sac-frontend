@@ -6,7 +6,6 @@ export const useGetGroups = () => {
     queryKey: ["groups"],
     queryFn: async () => {
       const { data } = await api.get("/groups")
-      console.log(data)
       return data
     },
     staleTime: Infinity,

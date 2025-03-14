@@ -18,7 +18,7 @@ export default function ActionHeader({
     <View style={styles.header}>
       <View style={styles.container}>
         <TouchableOpacity
-          style={styles.icon}
+          style={[styles.icon, { alignItems: "flex-start" }]}
           onPress={() => navigation.goBack()}>
           <LeftArrow />
         </TouchableOpacity>
@@ -27,7 +27,9 @@ export default function ActionHeader({
         </CustomText>
       </View>
 
-      <TouchableOpacity style={styles.icon} onPress={onPress}>
+      <TouchableOpacity
+        style={[styles.icon, { alignItems: "flex-end" }]}
+        onPress={onPress}>
         {icon}
       </TouchableOpacity>
     </View>
@@ -55,7 +57,6 @@ const styles = StyleSheet.create({
   icon: {
     height: 48,
     width: 48,
-    alignItems: "center",
     justifyContent: "center",
   },
 })

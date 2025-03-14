@@ -1,7 +1,7 @@
 import ActionHeader from "@/components/cards/ActionHeader"
 import GroupOverview from "@/components/cards/GroupOverview"
 import PlusIcon from "@/components/vectors/PlusIcon"
-import { ScrollView } from "react-native"
+import { ScrollView, StyleSheet } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { useGetGroups } from "@/queries/groups"
 import { Group } from "@/types"
@@ -12,11 +12,12 @@ export default function GroupsScreen() {
     <SafeAreaView>
       <ActionHeader
         title="Groups"
+        // TODO: Add a function to navigate to the create group screen
         onPress={() => {}}
         icon={<PlusIcon width={24} height={24} />}
       />
       <ScrollView
-        style={{ flexGrow: 1, paddingHorizontal: 20, paddingTop: 14, gap: 16 }}
+        style={styles.GroupContainer}
         contentContainerStyle={{ gap: 16 }}>
         {groups?.map((group: Group) => (
           <GroupOverview
@@ -30,3 +31,12 @@ export default function GroupsScreen() {
     </SafeAreaView>
   )
 }
+
+const styles = StyleSheet.create({
+  GroupContainer: {
+    flexGrow: 1,
+    paddingHorizontal: 20,
+    paddingTop: 14,
+    gap: 16,
+  },
+})
