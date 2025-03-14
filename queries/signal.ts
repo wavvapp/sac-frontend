@@ -42,14 +42,6 @@ export const useSaveStatus = (args: UseSaveSatusArgs) => {
   })
 }
 
-export const useTurnOnSignal = (args: MutationOptions) => {
-  return useMutation({
-    mutationKey: ["toggle-signal-change"],
-    mutationFn: () => api.post("/my-signal/turn-on"),
-    ...args,
-  })
-}
-
 export const useTurnOffSignal = (args: MutationOptions) => {
   return useMutation({
     mutationKey: ["toggle-signal-change"],
