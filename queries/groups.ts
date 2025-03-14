@@ -1,4 +1,5 @@
 import api from "@/service"
+import { Group } from "@/types"
 import { MutationOptions, useMutation } from "@tanstack/react-query"
 import { useQuery } from "@tanstack/react-query"
 
@@ -23,11 +24,10 @@ export const useGetGroups = () => {
   return useQuery({
     queryKey: ["groups"],
     queryFn: async () => {
-      const { data } = await api.get("/groups")
+      const { data } = await api.get<Group[]>("/groups")
       return data
     },
     staleTime: Infinity,
-    refetchInterval: 5000,
     placeholderData: [],
   })
 }

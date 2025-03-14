@@ -106,5 +106,5 @@ export type SettingOption = {
 export type Group = {
   id: string
   name: string
-  friend_ids: string[]
+  friendIds: string[]
 }
