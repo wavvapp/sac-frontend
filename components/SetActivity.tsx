@@ -123,7 +123,6 @@ const styles = StyleSheet.create({
     paddingVertical: 7.5,
     paddingHorizontal: 16,
     fontSize: theme.fontSize.sm,
-    borderColor: theme.colors.gray,
     letterSpacing: 0.003,
   },
   inputContainer: {
