@@ -67,7 +67,7 @@ const Signaling = forwardRef<SignalingRef>((_, ref) => {
           <SearchIcon />
         </TouchableOpacity>
       </View>
-      {!availableFriends.length && (
+      {!onlineFriends.length && (
         <CustomText style={styles.noUsers}>
           None of your friends wavv'd yet :(
         </CustomText>
