@@ -35,6 +35,7 @@ export function SetActivity({ closeBottomSheet }: SetStatusProps) {
     Keyboard.dismiss()
   }
 
+  const isInitiallyEmpty = options.includes(activityText.toLocaleLowerCase())
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -59,7 +60,7 @@ export function SetActivity({ closeBottomSheet }: SetStatusProps) {
         textSize="lg"
         placeholder="Enter your plan or pick an option"
         handleTextChange={setActivityText}
-        value={activityText}
+        value={isInitiallyEmpty ? "" : activityText}
         variant="ghost"
         style={[styles.inputContainer, { maxHeight: INPUT_MAX_HEIGHT }]}
         multiline={true}
