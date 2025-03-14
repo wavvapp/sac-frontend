@@ -75,6 +75,8 @@ export interface Signal {
   friends: Friend[]
   friendIds: string[]
   status?: string
+  startsAt?: Date
+  endsAt?: Date
 }
 
 export type FriendSignal = {

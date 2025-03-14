@@ -11,6 +11,8 @@ import { useMySignal } from "@/queries/signal"
 
 export type TemporaryStatusType = {
   timeSlot: string
+  startsAt?: Date
+  endsAt?: Date
   activity: string
   friendIds: string[]
 }
