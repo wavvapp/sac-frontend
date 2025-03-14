@@ -9,13 +9,8 @@ import { useCreateGroup } from "@/queries/groups"
 import { Friend } from "@/types"
 import { useNavigation } from "@react-navigation/native"
 import { useCallback, useState } from "react"
-import {
-  View,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  SafeAreaView,
-} from "react-native"
+import { View, StyleSheet, ScrollView, TouchableOpacity } from "react-native"
+import { SafeAreaView } from "react-native-safe-area-context"
 import { StatusBar } from "expo-status-bar"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { RootStackParamList } from "@/navigation"
@@ -53,7 +48,7 @@ export default function CreateGroup() {
         <View style={styles.inputContainer}>
           <TouchableOpacity
             onPress={() => navigation.goBack()}
-            style={styles.close}>
+            style={styles.closeIcon}>
             <CrossMark style={{ marginLeft: -5 }} />
           </TouchableOpacity>
           <Input
@@ -121,7 +116,7 @@ const styles = StyleSheet.create({
     minWidth: "85%",
     maxWidth: "90%",
   },
-  close: {
+  closeIcon: {
     height: 48,
     width: 48,
     justifyContent: "center",

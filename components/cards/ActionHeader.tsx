@@ -16,7 +16,7 @@ export default function ActionHeader({
 }) {
   const navigation = useNavigation()
   return (
-    <HeaderWrapper style={{}}>
+    <HeaderWrapper>
       <View style={styles.header}>
         <View style={styles.container}>
           <TouchableOpacity
