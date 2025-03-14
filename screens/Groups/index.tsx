@@ -1,5 +1,4 @@
 import ActionHeader from "@/components/cards/ActionHeader"
-import GroupOverview from "@/components/cards/GroupOverview"
 import PlusIcon from "@/components/vectors/PlusIcon"
 import { ScrollView, StyleSheet } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
@@ -7,6 +6,7 @@ import { useGetGroups } from "@/queries/groups"
 import { Group } from "@/types"
 import { useNavigation } from "@react-navigation/native"
 import { CreateGroupScreenProps } from "@/screens/Groups/CreateGroup"
+import ActionCard from "@/components/cards/Action"
 export default function GroupsScreen() {
   const { data: groups } = useGetGroups()
   const navigation = useNavigation<CreateGroupScreenProps>()
@@ -22,11 +22,13 @@ export default function GroupsScreen() {
         style={styles.GroupContainer}
         contentContainerStyle={{ gap: 16 }}>
         {groups?.map((group: Group) => (
-          <GroupOverview
+          <ActionCard
             key={group.id}
-            name={group.name}
+            title={group.name}
             id={group.id}
-            members={group.friend_ids?.length}
+            description={`${group.friend_ids?.length || 0} members`}
+            onPress={() => {}}
+            fontFamily="writer-monos"
           />
         ))}
       </ScrollView>
