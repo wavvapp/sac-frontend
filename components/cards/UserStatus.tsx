@@ -10,7 +10,6 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
 } from "react-native-reanimated"
-import UserAvailability from "@/components/cards/UserAvailability"
 import { useFriends } from "@/queries/friends"
 import { useMySignal } from "@/queries/signal"
 import { useMemo } from "react"
@@ -85,11 +84,24 @@ export default function UserStatus({
           style={styles.userContainer}
           onPress={() => navigation.push("EditSignal", { isNewSignal: false })}>
           {user && signal && (
-            <UserAvailability
-              fullName={user.names}
-              time={signal.when}
-              activity={signal.status_message}
-            />
+            <View style={styles.signalContainer}>
+              <CustomText style={styles.name} fontWeight="semibold">
+                {user.names}
+              </CustomText>
+              <View style={styles.signal}>
+                <CustomText
+                  fontFamily="writer-monos"
+                  numberOfLines={2}
+                  ellipsizeMode="tail"
+                  style={styles.status}>
+                  {signal.status_message}
+                </CustomText>
+                <View style={styles.dot} />
+                <CustomText style={styles.time} fontFamily="writer-monos">
+                  {signal.when}
+                </CustomText>
+              </View>
+            </View>
           )}
           <View style={{ opacity: 0.5 }}>
             <CustomText size="sm" fontFamily="writer-monos">
@@ -120,6 +132,31 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.white,
     borderRadius: 12,
     minWidth: "100%",
+  },
+  signalContainer: {
+    gap: 1,
+  },
+  signal: {
+    flexDirection: "row",
+    gap: 6,
+  },
+  name: {
+    maxWidth: "70%",
+  },
+  time: {
+    opacity: 0.5,
+    textTransform: "capitalize",
+  },
+  status: {
+    maxWidth: "80%",
+  },
+  dot: {
+    backgroundColor: theme.colors.black,
+    opacity: 0.5,
+    height: 2,
+    width: 2,
+    borderRadius: 2,
+    marginTop: 12,
   },
   userContainer: {
     gap: 24,
