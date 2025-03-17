@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
   usersList: {
     gap: 12,
     marginBottom: 10,
-    paddingBottom: 40,
+    paddingBottom: 48,
     paddingTop: 24,
   },
   line: {
@@ -134,5 +134,6 @@ const styles = StyleSheet.create({
   },
   deleteButton: {
     color: theme.colors.red,
+    paddingVertical: 10,
   },
 })
