@@ -6,6 +6,7 @@ import { useQuery } from "@tanstack/react-query"
 interface MutationFunctionArguments {
   name: string
   friendIds: string[]
+  groupId?: string
 }
 export const useCreateGroup = (
   args?: MutationOptions<unknown, unknown, MutationFunctionArguments, unknown>,
@@ -29,5 +30,17 @@ export const useGetGroups = () => {
     },
     staleTime: Infinity,
     placeholderData: [],
+  })
+}
+export const useUpdateGroup = (
+  args?: MutationOptions<unknown, unknown, MutationFunctionArguments, unknown>,
+) => {
+  return useMutation({
+    mutationFn: ({ groupId, name, friendIds }: MutationFunctionArguments) =>
+      api.put(`/groups/${groupId}`, { name, friendIds }),
+    onError: (error) => {
+      console.error("Error updating group:", error)
+    },
+    ...args,
   })
 }

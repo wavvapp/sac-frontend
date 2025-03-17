@@ -6,9 +6,12 @@ import { useGetGroups } from "@/queries/groups"
 import { useNavigation } from "@react-navigation/native"
 import { CreateGroupScreenProps } from "@/screens/Groups/CreateGroup"
 import ActionCard from "@/components/cards/Action"
+import { EditGroupScreenProps } from "./EditGroups"
 export default function GroupsScreen() {
   const { data: groups } = useGetGroups()
-  const navigation = useNavigation<CreateGroupScreenProps>()
+  const navigation = useNavigation<
+    CreateGroupScreenProps & EditGroupScreenProps
+  >()
 
   const getMemberCountText = (friendIds?: string[]) => {
     const count = friendIds?.length || 0
@@ -32,8 +35,13 @@ export default function GroupsScreen() {
             title={group.name}
             id={group.id}
             description={getMemberCountText(group.friendIds)}
-            // TODO: add onPress logic to navigate to group details
-            onPress={() => {}}
+            onPress={() =>
+              navigation.navigate("EditGroup", {
+                groupId: group.id,
+                name: group.name,
+                friendIds: group.friendIds,
+              })
+            }
             fontFamily="writer-monos"
           />
         ))}
