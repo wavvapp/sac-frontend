@@ -12,7 +12,7 @@ export const useCreateGroup = (
 ) => {
   return useMutation({
     mutationFn: ({ name, friendIds }: MutationFunctionArguments) =>
-      api.post("/groups", { name, friend_ids: friendIds }),
+      api.post("/groups", { name, friendIds }),
     onError: (error) => {
       console.error("Error patching data:", error)
     },
