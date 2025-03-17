@@ -106,5 +106,14 @@ export type SettingOption = {
 export type Group = {
   id: string
   name: string
-  friendIds: string[]
+  friends: {
+    id: string
+    names: string
+    username: string
+  }[]
+}
+
+export enum AudienceOptions {
+  GROUPS = "groups",
+  FRIENDS = "friends",
 }

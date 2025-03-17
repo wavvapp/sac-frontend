@@ -2,7 +2,6 @@ import { StyleSheet, TouchableOpacity, View } from "react-native"
 import Status from "@/components/cards/Status"
 import { CustomButton } from "@/components/ui/Button"
 import { NativeStackScreenProps } from "react-native-screens/lib/typescript/native-stack/types"
-import FriendsList from "@/components/lists/Friends"
 import { ScrollView } from "react-native-gesture-handler"
 import { theme } from "@/theme"
 import { useStatus } from "@/contexts/StatusContext"
@@ -25,6 +24,8 @@ import BottomDrawer, { BottomDrawerRef } from "@/components/BottomDrawer"
 import CustomText from "@/components/ui/CustomText"
 import EditIcon from "@/components/vectors/EditIcon"
 import { SetActivity } from "@/components/SetActivity"
+import Audience from "@/components/Audience"
+import ActionCard from "@/components/cards/Action"
 
 type EditSignalScreenProps = NativeStackScreenProps<
   RootStackParamList,
@@ -146,7 +147,16 @@ export default function EditSignal({
         <Status
           timeSlots={["NOW", "MORNING", "LUNCH", "AFTERNOON", "EVENING"]}
         />
-        <FriendsList />
+        <Audience />
+        {!isNewSignal && (
+          <View style={{ paddingHorizontal: 20 }}>
+            <ActionCard
+              title="Turn off your wavv"
+              titleStyle={{ color: theme.colors.red }}
+              onPress={handleTurnOffSignal}
+            />
+          </View>
+        )}
       </ScrollView>
       <View style={style.buttonsContainer}>
         <CustomButton
@@ -158,16 +168,6 @@ export default function EditSignal({
           textSize="sm"
           onPress={handleSaveStatus}
         />
-        {!isNewSignal && (
-          <CustomButton
-            containerStyles={style.button}
-            variant="ghost"
-            fullWidth
-            title="turn off your wavv"
-            textSize="sm"
-            onPress={handleTurnOffSignal}
-          />
-        )}
       </View>
       <BottomDrawer
         ref={bottomDrawerRef}
