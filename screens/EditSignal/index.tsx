@@ -11,12 +11,7 @@ import { useEffect, useRef, useState } from "react"
 import { useQueryClient } from "@tanstack/react-query"
 import { StatusBar } from "expo-status-bar"
 import { Signal } from "@/types"
-import {
-  useMySignal,
-  useSaveStatus,
-  useTurnOffSignal,
-  useTurnOnSignal,
-} from "@/queries/signal"
+import { useMySignal, useSaveStatus, useTurnOffSignal } from "@/queries/signal"
 import Header from "@/components/cards/Header"
 import { useOfflineHandler } from "@/hooks/useOfflineHandler"
 import { SafeAreaView } from "react-native-safe-area-context"
@@ -42,17 +37,6 @@ export default function EditSignal({
   const queryclient = useQueryClient()
   const isNewSignal = route.params?.isNewSignal || false
   const [_, setIsModalVisible] = useState(isNewSignal)
-
-  const turnOnSignal = useTurnOnSignal({
-    onMutate: async () => {
-      handleOfflineAction(() => (isOn.value = !isOn.value))
-    },
-    onError: (error) => {
-      // TODO: add toaster
-      console.error(error.message)
-    },
-    onSuccess: () => saveStatus.mutate(),
-  })
 
   const saveStatus = useSaveStatus({
     data: temporaryStatus,
@@ -91,10 +75,7 @@ export default function EditSignal({
     },
   })
 
-  const handleSaveStatus = () =>
-    handleOfflineAction(() =>
-      isNewSignal ? turnOnSignal.mutate() : saveStatus.mutate(),
-    )
+  const handleSaveStatus = () => handleOfflineAction(() => saveStatus.mutate())
 
   const handleTurnOffSignal = async () => {
     handleOfflineAction(() => turnOffSignal.mutate())

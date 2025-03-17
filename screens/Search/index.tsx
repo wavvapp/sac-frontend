@@ -43,7 +43,11 @@ const FindFriends = () => {
   const handleSearch = useCallback(
     (name: string) => {
       setSearch(name)
-      debouncedSetSearchQuery(name)
+      if (name.trim().length >= 3) {
+        debouncedSetSearchQuery(name)
+      } else {
+        setSearchQueryText("")
+      }
     },
     [debouncedSetSearchQuery],
   )
@@ -120,7 +124,7 @@ const FindFriends = () => {
           </>
         )}
 
-        {search && !users.length && !isLoading && (
+        {search.trim().length >= 3 && !users.length && !isLoading && (
           <View style={styles.notFoundContainer}>
             <CustomText
               size="sm"
