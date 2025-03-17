@@ -17,6 +17,7 @@ import { useEffect } from "react"
 import { StaticPageType } from "@/types"
 import StaticContentScreen from "@/screens/StaticContentScreen"
 import NotificationPreferences from "@/screens/NotificationPreferences"
+import EditGroups from "@/screens/Groups/EditGroups"
 export type RootStackParamList = {
   EntryScreen: undefined
   Home: undefined
@@ -28,6 +29,7 @@ export type RootStackParamList = {
   Search: undefined
   NotificationPreferences: undefined
   StaticContentScreen: { pageSlug: StaticPageType }
+  EditGroups: undefined
 }
 
 export default function AppNavigator() {
@@ -57,9 +59,9 @@ export default function AppNavigator() {
               component={HomeScreen}
             />
             <Stack.Screen
-              name="Settings"
+              name="EditGroups"
               options={{ headerShown: false }}
-              component={Settings}
+              component={EditGroups}
             />
             <Stack.Screen
               name="EditSignal"
@@ -76,6 +78,11 @@ export default function AppNavigator() {
               options={{ headerShown: false }}
               component={NotificationPreferences}
             />
+            {/* <Stack.Screen
+              name="EditGroups"
+              options={{ headerShown: false }}
+              component={EditGroups}
+            /> */}
           </Stack.Navigator>
         </StatusProvider>
       ) : (
