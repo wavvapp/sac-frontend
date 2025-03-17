@@ -101,25 +101,25 @@ export default function DatePicker({ onCloseDatePicker }: DatePickerProps) {
       <View style={styles.contentContainer}>
         <View style={styles.column}>
           <CustomTitle text="FROM" />
+          <CustomTitle text="TO" />
+        </View>
+        <View style={styles.row}>
           <TouchableOpacity onPress={() => openTimePicker("FROM")}>
             <CustomText size="lg" fontWeight="semibold">
               {dayjs(fromTime).format("hh:mm")}
             </CustomText>
           </TouchableOpacity>
-        </View>
-        <View style={styles.column}>
-          <CustomTitle text="TO" />
           <TouchableOpacity onPress={() => openTimePicker("TO")}>
             <CustomText size="lg" fontWeight="semibold">
               {dayjs(toTime).format("hh:mm")}
             </CustomText>
           </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.closeButton}
+            onPress={onCloseDatePicker}>
+            <CloseIcon color={theme.colors.black} />
+          </TouchableOpacity>
         </View>
-        <TouchableOpacity
-          style={styles.closeButton}
-          onPress={onCloseDatePicker}>
-          <CloseIcon color={theme.colors.black} />
-        </TouchableOpacity>
       </View>
       {Platform.OS === "android" && isTimePickerModalVisible && (
         <DateTimePicker
@@ -155,20 +155,24 @@ export default function DatePicker({ onCloseDatePicker }: DatePickerProps) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "white",
     paddingHorizontal: 20,
     paddingVertical: 1,
     borderRadius: 8,
     width: "100%",
   },
   contentContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: "column",
   },
   column: {
-    flexDirection: "column",
+    flexDirection: "row",
+    justifyContent: "space-between",
     gap: 10,
+    width: "48%",
+  },
+  row: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   closeButton: {
     height: 48,
