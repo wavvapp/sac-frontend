@@ -50,13 +50,10 @@ const styles = StyleSheet.create({
   },
   time: {
     textTransform: "capitalize",
-    // Opacity itselt cannot work here due to text nesting
-    color: "rgba(0, 0, 0,0.5)",
+    color: theme.colors.black_500,
   },
   dot: {
-    opacity: 0.5,
-    // Opacity itselt cannot work here due to text nesting
-    color: "rgba(0, 0, 0,0.5)",
+    color: theme.colors.black_500,
     fontSize: theme.fontSize.base,
     alignSelf: "center",
   },
