@@ -102,3 +102,9 @@ export type SettingOption = {
   onPress: () => void | Promise<void>
   titleStyle?: TextStyle
 }
+
+export type Group = {
+  id: string
+  name: string
+  friendIds: string[]
+}

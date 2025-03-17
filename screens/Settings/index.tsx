@@ -23,6 +23,15 @@ import { useRef, useState } from "react"
 import NotificationPreferences from "@/screens/NotificationPreferences"
 import BottomDrawer, { BottomDrawerRef } from "@/components/BottomDrawer"
 import { ScrollView } from "react-native-gesture-handler"
+import UsersIcon from "@/components/vectors/UsersIcon"
+import { useNavigation } from "@react-navigation/native"
+import { NativeStackNavigationProp } from "@react-navigation/native-stack"
+import { RootStackParamList } from "@/navigation"
+
+export type SettingsScreenProps = NativeStackNavigationProp<
+  RootStackParamList,
+  "Settings"
+>
 
 export default function SettingScreen() {
   const [_, setIsBottomSheetOpen] = useState(false)
@@ -31,6 +40,8 @@ export default function SettingScreen() {
     useUpdateUser()
   const deleteUserMutation = useDeleteUser()
   const bottomDrawerRef = useRef<BottomDrawerRef>(null)
+
+  const navigation = useNavigation<SettingsScreenProps>()
 
   const handleOpenNotificationPreferences = () => {
     bottomDrawerRef.current?.openBottomSheet()
@@ -49,6 +60,12 @@ export default function SettingScreen() {
       description: "Update your data",
       icon: <UserIcon />,
       onPress: toggleEditInfoModal,
+    },
+    {
+      title: "Manage groups",
+      description: "Organize your friends",
+      icon: <UsersIcon />,
+      onPress: () => navigation.navigate("Groups"),
     },
     {
       title: "Your friends are not here?",
