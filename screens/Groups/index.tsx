@@ -104,7 +104,6 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: "row",
     alignItems: "center",
-    paddingBottom: 34,
   },
   groupName: {
     flex: 1,
@@ -125,6 +124,7 @@ const styles = StyleSheet.create({
     gap: 12,
     marginBottom: 10,
     paddingBottom: 40,
+    paddingTop: 24,
   },
   line: {
     height: 1,
