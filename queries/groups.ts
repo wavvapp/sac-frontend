@@ -1,7 +1,6 @@
 import api from "@/service"
 import { Group } from "@/types"
-import { MutationOptions, useMutation } from "@tanstack/react-query"
-import { useQuery } from "@tanstack/react-query"
+import { MutationOptions, useMutation, useQuery } from "@tanstack/react-query"
 
 interface MutationFunctionArguments {
   name: string
@@ -12,7 +11,7 @@ export const useCreateGroup = (
 ) => {
   return useMutation({
     mutationFn: ({ name, friendIds }: MutationFunctionArguments) =>
-      api.post("/groups", { name, friend_ids: friendIds }),
+      api.post("/groups", { name, friendIds }),
     onError: (error) => {
       console.error("Error patching data:", error)
     },
