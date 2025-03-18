@@ -28,15 +28,14 @@ export const GroupForm = ({
   const [friendIds, setFriendIds] = useState<string[]>(initialFriendIds)
   const { data: allFriends, isLoading } = useFriends()
 
-  const updateFriendsList = useCallback(
-    (friendId: string) => {
-      const newFriends = friendIds?.includes(friendId)
-        ? friendIds?.filter((id) => id !== friendId)
-        : [...friendIds, friendId]
-      setFriendIds(newFriends)
-    },
-    [friendIds],
-  )
+  const updateFriendsList = useCallback((friendId: string) => {
+    setFriendIds((prevFriendIds) => {
+      const newFriendIds = prevFriendIds.includes(friendId)
+        ? prevFriendIds.filter((id) => id !== friendId)
+        : [...prevFriendIds, friendId]
+      return newFriendIds
+    })
+  }, [])
 
   return (
     <SafeAreaView style={styles.container}>

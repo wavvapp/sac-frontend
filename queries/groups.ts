@@ -36,11 +36,18 @@ export const useUpdateGroup = (
   args?: MutationOptions<unknown, unknown, MutationFunctionArguments, unknown>,
 ) => {
   return useMutation({
-    mutationFn: ({ groupId, name, friendIds }: MutationFunctionArguments) =>
-      api.put(`/groups/${groupId}`, { name, friendIds }),
-    onError: (error) => {
-      console.error("Error updating group:", error)
+    mutationFn: ({ groupId, name, friendIds }: MutationFunctionArguments) => {
+      console.log("====================================")
+      console.log({ groupId, name, friendIds })
+      console.log("====================================")
+      return api.put(`/groups`, { id: groupId, name, friendIds })
     },
-    ...args,
+    onError: (error) => {
+      console.error("Error updating group:", error) // Logs error in case of failure
+    },
+    onSuccess: (data) => {
+      console.log("Group updated successfully:", data)
+    },
+    ...args, // Spread additional options (if any) passed to the hook
   })
 }
