@@ -55,6 +55,7 @@ export default function EditSignal({
     onError: (error) => {
       // TODO: add toaster
       console.error(error.message)
+      console.log(error, "error")
     },
     onSettled: async () => {
       await queryclient.refetchQueries({ queryKey: ["fetch-my-signal"] })

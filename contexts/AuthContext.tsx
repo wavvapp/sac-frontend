@@ -66,6 +66,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         profilePictureUrl,
         inviteCode,
       } = userData
+      console.log(accessToken, "taken")
       const user: User = {
         id,
         names,

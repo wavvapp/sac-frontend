@@ -1,4 +1,4 @@
-import { forwardRef, useCallback, useMemo, useState } from "react"
+import { forwardRef, useCallback, useEffect, useMemo, useState } from "react"
 import { View, StyleSheet } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import BottomDrawer from "@/components/BottomDrawer"
@@ -13,6 +13,8 @@ import { Friend } from "@/types"
 import { useQueryClient } from "@tanstack/react-query"
 import SearchIcon from "../vectors/SearchIcon"
 import { TouchableOpacity } from "react-native-gesture-handler"
+import { useRefreshOnFocus } from "@/hooks/useRefreshOnFocus"
+import * as Notifications from "expo-notifications"
 
 export interface SignalingRef {
   openBottomSheet: () => void
@@ -22,7 +24,8 @@ type SearchProp = NativeStackNavigationProp<RootStackParamList, "Search">
 const Signaling = forwardRef<SignalingRef>((_, ref) => {
   const navigation = useNavigation<SearchProp>()
   const [isbottomSheetOpen, setIsBottomSheetOpen] = useState<boolean>(false)
-  const { data: availableFriends = [] } = useSignalingFriends(isbottomSheetOpen)
+  const { data: availableFriends = [], refetch } =
+    useSignalingFriends(isbottomSheetOpen)
   const queryClient = useQueryClient()
   const [refreshing, setRefreshing] = useState(false)
 
@@ -38,6 +41,15 @@ const Signaling = forwardRef<SignalingRef>((_, ref) => {
     await queryClient.refetchQueries({ queryKey: ["friend-signals"] })
     await queryClient.refetchQueries({ queryKey: ["friends"] })
   }, [queryClient])
+
+  useRefreshOnFocus(refetch)
+
+  useEffect(() => {
+    const subscription = Notifications.addNotificationReceivedListener(() => {
+      refetch()
+    })
+    return () => subscription.remove()
+  }, [refetch])
 
   const openSearch = () => {
     refetchFriendsData()
