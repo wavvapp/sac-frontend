@@ -1,26 +1,25 @@
-import { StyleSheet, View } from "react-native"
+import { StyleSheet, TouchableOpacity, View } from "react-native"
 import Status from "@/components/cards/Status"
 import { CustomButton } from "@/components/ui/Button"
 import { NativeStackScreenProps } from "react-native-screens/lib/typescript/native-stack/types"
 import FriendsList from "@/components/lists/Friends"
-import Activity from "@/components/Activity"
 import { ScrollView } from "react-native-gesture-handler"
 import { theme } from "@/theme"
 import { useStatus } from "@/contexts/StatusContext"
 import { RootStackParamList } from "@/navigation"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useQueryClient } from "@tanstack/react-query"
 import { StatusBar } from "expo-status-bar"
 import { Signal } from "@/types"
-import {
-  useMySignal,
-  useSaveStatus,
-  useTurnOffSignal,
-  useTurnOnSignal,
-} from "@/queries/signal"
+import { useMySignal, useSaveStatus, useTurnOffSignal } from "@/queries/signal"
 import Header from "@/components/cards/Header"
 import { useOfflineHandler } from "@/hooks/useOfflineHandler"
 import { SafeAreaView } from "react-native-safe-area-context"
+import { CustomTitle } from "@/components/ui/CustomTitle"
+import BottomDrawer, { BottomDrawerRef } from "@/components/BottomDrawer"
+import CustomText from "@/components/ui/CustomText"
+import EditIcon from "@/components/vectors/EditIcon"
+import { SetActivity } from "@/components/SetActivity"
 
 type EditSignalScreenProps = NativeStackScreenProps<
   RootStackParamList,
@@ -33,32 +32,11 @@ export default function EditSignal({
 }: EditSignalScreenProps) {
   const { temporaryStatus, setTemporaryStatus, isOn } = useStatus()
   const { data: signal } = useMySignal()
-  const [isLoading, setIsLoading] = useState(false)
+  const bottomDrawerRef = useRef<BottomDrawerRef>(null)
   const { handleOfflineAction } = useOfflineHandler()
   const queryclient = useQueryClient()
-
-  const isNewSignal = route.params?.isNewSignal
-
-  const turnOnSignal = useTurnOnSignal({
-    onMutate: async () => {
-      await queryclient.cancelQueries({ queryKey: ["fetch-my-signal"] })
-      const optimisticStatus: Signal = {
-        when: temporaryStatus.timeSlot,
-        status_message: temporaryStatus.activity,
-        friends: [],
-        friendIds: temporaryStatus.friendIds,
-        status: "active",
-      }
-      queryclient.setQueryData(["fetch-my-signal"], optimisticStatus)
-      handleOfflineAction(() => (isOn.value = !isOn.value))
-      navigation.navigate("Home")
-    },
-    onError: (error) => {
-      // TODO: add toaster
-      console.error(error.message)
-    },
-    onSuccess: () => saveStatus.mutate(),
-  })
+  const isNewSignal = route.params?.isNewSignal || false
+  const [_, setIsModalVisible] = useState(isNewSignal)
 
   const saveStatus = useSaveStatus({
     data: temporaryStatus,
@@ -70,9 +48,10 @@ export default function EditSignal({
         friends: [],
         friendIds: temporaryStatus.friendIds,
         status: "active",
+        startsAt: temporaryStatus?.startsAt,
+        endsAt: temporaryStatus?.endsAt,
       }
       queryclient.setQueryData(["fetch-my-signal"], optimisticStatus)
-      setIsLoading(true)
       navigation.navigate("Home")
     },
     onError: (error) => {
@@ -81,7 +60,6 @@ export default function EditSignal({
     },
     onSettled: async () => {
       await queryclient.refetchQueries({ queryKey: ["fetch-my-signal"] })
-      setIsLoading(false)
     },
   })
 
@@ -99,11 +77,18 @@ export default function EditSignal({
     },
   })
 
-  const handleSaveStatus = () =>
-    isNewSignal ? turnOnSignal.mutate() : saveStatus.mutate()
+  const handleSaveStatus = () => handleOfflineAction(() => saveStatus.mutate())
 
   const handleTurnOffSignal = async () => {
     handleOfflineAction(() => turnOffSignal.mutate())
+  }
+
+  const handleOpenSheet = () => {
+    bottomDrawerRef.current?.openBottomSheet()
+  }
+
+  const handleCloseSheet = () => {
+    bottomDrawerRef.current?.closeBottomSheet()
   }
   useEffect(() => {
     if (!signal) return
@@ -125,9 +110,31 @@ export default function EditSignal({
           paddingTop: 24,
           paddingBottom: 170,
         }}>
-        <Activity isLoading={isLoading} />
+        <View style={style.activity}>
+          <CustomTitle text="your wavv" />
+          <TouchableOpacity
+            onPress={handleOpenSheet}
+            style={style.statusContainer}>
+            <CustomText
+              size="lg"
+              fontWeight="semibold"
+              style={style.statusText}>
+              {temporaryStatus.activity}
+            </CustomText>
+            <View style={style.EditIcon}>
+              <EditIcon />
+            </View>
+          </TouchableOpacity>
+        </View>
         <Status
-          timeSlots={["NOW", "MORNING", "LUNCH", "AFTERNOON", "EVENING"]}
+          timeSlots={[
+            "SET TIME",
+            "NOW",
+            "MORNING",
+            "LUNCH",
+            "AFTERNOON",
+            "EVENING",
+          ]}
         />
         <FriendsList />
       </ScrollView>
@@ -152,6 +159,15 @@ export default function EditSignal({
           />
         )}
       </View>
+      <BottomDrawer
+        ref={bottomDrawerRef}
+        setIsBottomSheetOpen={setIsModalVisible}
+        isFullScreen
+        fullyHiddenOnClose={true}
+        containerStyle={style.activityModalStyles}
+        index={isNewSignal ? 1 : 0}>
+        <SetActivity closeBottomSheet={handleCloseSheet} />
+      </BottomDrawer>
     </SafeAreaView>
   )
 }
@@ -164,15 +180,38 @@ const style = StyleSheet.create({
   },
   buttonsContainer: {
     backgroundColor: theme.colors.white,
+    borderTopRightRadius: 6,
+    borderTopLeftRadius: 6,
     position: "absolute",
     bottom: 0,
-    paddingBottom: 20,
+    paddingBottom: 8,
+    left: 0,
+    right: 0,
     zIndex: 10,
-    width: "90%",
     marginHorizontal: 20,
     gap: 8,
   },
   button: {
     width: "100%",
+  },
+  activity: {
+    paddingHorizontal: 20,
+  },
+  statusContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  statusText: {
+    flex: 1,
+    alignItems: "center",
+  },
+  EditIcon: {
+    height: 48,
+    width: 48,
+    justifyContent: "center",
+    alignItems: "flex-end",
+  },
+  activityModalStyles: {
+    zIndex: 11,
   },
 })

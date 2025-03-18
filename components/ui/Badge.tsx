@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
   outline: {
     paddingVertical: 4,
     paddingHorizontal: 8,
-    borderColor: theme.colors.black,
+    borderColor: theme.colors.black_200,
     borderWidth: 1,
   },
   primary: {

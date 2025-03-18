@@ -7,7 +7,7 @@ import {
 } from "@/types"
 import { Text, TextProps, TextStyle } from "react-native"
 
-interface CustomTextProps extends TextProps {
+export interface CustomTextProps extends TextProps {
   size?: TypographySizeVariant
   fontWeight?: FontWeightVariant
   fontFamily?: FontFamilyVariant

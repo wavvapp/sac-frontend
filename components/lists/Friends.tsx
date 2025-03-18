@@ -1,4 +1,4 @@
-import { View, StyleSheet, TouchableWithoutFeedback } from "react-native"
+import { View, StyleSheet, TouchableOpacity } from "react-native"
 import { CustomTitle } from "@/components/ui/CustomTitle"
 import FriendCard from "@/components/Friend"
 import { TemporaryStatusType, useStatus } from "@/contexts/StatusContext"
@@ -6,9 +6,12 @@ import { FriendsSkeleton } from "@/components/cards/FriendsSkeleton"
 import { Friend } from "@/types"
 import { useCallback, useMemo } from "react"
 import { useFriends } from "@/queries/friends"
-import ActionCard from "../cards/Action"
+import ActionCard from "@/components/cards/Action"
 import { onShare } from "@/utils/share"
 import { useAuth } from "@/contexts/AuthContext"
+import CustomText from "@/components/ui/CustomText"
+import CheckBox from "@/components/ui/CheckBox"
+import { theme } from "@/theme"
 
 export default function FriendsList() {
   const { temporaryStatus, setTemporaryStatus } = useStatus()
@@ -49,25 +52,39 @@ export default function FriendsList() {
     }))
   }, [allFriends, canSelectAll, setTemporaryStatus])
 
+  const sortedFriends = useMemo(() => {
+    if (!allFriends) return []
+    const selectedFriends = allFriends.filter((friend) =>
+      friendIds?.includes(friend.id),
+    )
+    const unselectedFriends = allFriends.filter(
+      (friend) => !friendIds?.includes(friend.id),
+    )
+    const sortFriendsByName = (a: Friend, b: Friend) =>
+      a.names.localeCompare(b.names)
+    return [
+      ...selectedFriends.sort(sortFriendsByName),
+      ...unselectedFriends.sort(sortFriendsByName),
+    ]
+  }, [allFriends])
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <CustomTitle text="with whom" />
-        <TouchableWithoutFeedback
-          onPress={toggleSelectAll}
-          disabled={!allFriends}>
-          <View>
-            <CustomTitle
-              text={canSelectAll ? "SELECT ALL" : "SELECT NONE"}
-              isUnderline
-            />
-          </View>
-        </TouchableWithoutFeedback>
-      </View>
+      <CustomTitle text="with whom" style={styles.title} />
+      <TouchableOpacity
+        onPress={toggleSelectAll}
+        style={styles.selectContainer}>
+        <View>
+          <CustomText fontWeight="semibold">Select All</CustomText>
+          <CustomText style={styles.selectDescription}>
+            Wavv all your friends
+          </CustomText>
+        </View>
+        <CheckBox isChecked={!canSelectAll} />
+      </TouchableOpacity>
       {isLoading ? (
         <FriendsSkeleton />
       ) : (
-        allFriends?.map((friend: Friend) => (
+        sortedFriends?.map((friend: Friend) => (
           <FriendCard
             selected={friendIds?.includes(friend.id)}
             key={friend.id}
@@ -89,12 +106,18 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "column",
     gap: 12,
-    width: "100%",
     paddingHorizontal: 20,
     paddingTop: 10,
   },
-  header: {
+  title: {
+    marginBottom: 24,
+  },
+  selectContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "center",
+  },
+  selectDescription: {
+    color: theme.colors.black_500,
   },
 })
