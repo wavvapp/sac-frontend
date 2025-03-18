@@ -16,7 +16,6 @@ import {
   useTurnOffSignal,
   useTurnOnSignal,
 } from "@/queries/signal"
-import Header from "@/components/cards/Header"
 import { useOfflineHandler } from "@/hooks/useOfflineHandler"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { CustomTitle } from "@/components/ui/CustomTitle"
@@ -26,6 +25,8 @@ import EditIcon from "@/components/vectors/EditIcon"
 import { SetActivity } from "@/components/SetActivity"
 import Audience from "@/components/Audience"
 import ActionCard from "@/components/cards/Action"
+import HeaderWrapper from "@/components/ui/HeaderWrapper"
+import CrossMark from "@/components/vectors/CrossMark"
 
 type EditSignalScreenProps = NativeStackScreenProps<
   RootStackParamList,
@@ -119,7 +120,14 @@ export default function EditSignal({
   return (
     <SafeAreaView style={style.container}>
       <StatusBar style="dark" />
-      <Header title={isNewSignal ? "Set your Wavv" : "Edit your Wavv"} />
+      <HeaderWrapper style={style.header}>
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          style={style.closeIcon}>
+          <CrossMark style={{ marginLeft: -5 }} />
+        </TouchableOpacity>
+        <CustomButton onPress={handleSaveStatus} title="Save" />
+      </HeaderWrapper>
       <ScrollView
         keyboardShouldPersistTaps="always"
         contentContainerStyle={{
@@ -144,10 +152,12 @@ export default function EditSignal({
             </View>
           </TouchableOpacity>
         </View>
+        <View style={style.separator} />
         <Status
           timeSlots={["NOW", "MORNING", "LUNCH", "AFTERNOON", "EVENING"]}
         />
         <Audience />
+        <View style={style.separator} />
         {!isNewSignal && (
           <View style={{ paddingHorizontal: 20 }}>
             <ActionCard
@@ -158,17 +168,6 @@ export default function EditSignal({
           </View>
         )}
       </ScrollView>
-      <View style={style.buttonsContainer}>
-        <CustomButton
-          activeOpacity={0.8}
-          containerStyles={style.button}
-          variant="secondary"
-          fullWidth
-          title={isNewSignal ? "Wavv" : "save"}
-          textSize="sm"
-          onPress={handleSaveStatus}
-        />
-      </View>
       <BottomDrawer
         ref={bottomDrawerRef}
         setIsBottomSheetOpen={setIsModalVisible}
@@ -188,40 +187,31 @@ const style = StyleSheet.create({
     backgroundColor: theme.colors.white,
     position: "relative",
   },
-  buttonsContainer: {
-    backgroundColor: theme.colors.white,
-    borderTopRightRadius: 6,
-    borderTopLeftRadius: 6,
-    position: "absolute",
-    bottom: 0,
-    paddingBottom: 8,
-    left: 0,
-    right: 0,
-    zIndex: 10,
-    marginHorizontal: 20,
-    gap: 8,
-  },
-  button: {
-    width: "100%",
-  },
-  activity: {
-    paddingHorizontal: 20,
-  },
-  statusContainer: {
+  header: {
     flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
     alignItems: "center",
   },
-  statusText: {
-    flex: 1,
-    alignItems: "center",
+  closeIcon: {
+    height: 48,
+    width: 48,
+    justifyContent: "center",
+    alignItems: "flex-start",
   },
+  separator: {
+    height: 1,
+    width: "100%",
+    backgroundColor: theme.colors.black_100,
+  },
+  activity: { paddingHorizontal: 20 },
+  statusContainer: { flexDirection: "row", alignItems: "center" },
+  statusText: { flex: 1, alignItems: "center" },
   EditIcon: {
     height: 48,
     width: 48,
     justifyContent: "center",
     alignItems: "flex-end",
   },
-  activityModalStyles: {
-    zIndex: 11,
-  },
+  activityModalStyles: { zIndex: 11 },
 })
