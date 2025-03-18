@@ -112,8 +112,3 @@ export type Group = {
     username: string
   }[]
 }
-
-export enum AudienceOptions {
-  GROUPS = "groups",
-  FRIENDS = "friends",
-}
