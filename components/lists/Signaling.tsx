@@ -5,7 +5,7 @@ import BottomDrawer from "@/components/BottomDrawer"
 import { BottomSheetSectionList } from "@gorhom/bottom-sheet"
 import { theme } from "@/theme"
 import SignalingUser from "@/components/SignalingUser"
-import { useNavigation } from "@react-navigation/native"
+import { useFocusEffect, useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { RootStackParamList } from "@/navigation"
 import { useSignalingFriends } from "@/queries/friends"
@@ -13,7 +13,6 @@ import { Friend } from "@/types"
 import { useQueryClient } from "@tanstack/react-query"
 import SearchIcon from "../vectors/SearchIcon"
 import { TouchableOpacity } from "react-native-gesture-handler"
-import { useRefreshOnFocus } from "@/hooks/useRefreshOnFocus"
 import * as Notifications from "expo-notifications"
 
 export interface SignalingRef {
@@ -42,7 +41,11 @@ const Signaling = forwardRef<SignalingRef>((_, ref) => {
     await queryClient.refetchQueries({ queryKey: ["friends"] })
   }, [queryClient])
 
-  useRefreshOnFocus(refetch)
+  useFocusEffect(
+    useCallback(() => {
+      refetch()
+    }, [refetch]),
+  )
 
   useEffect(() => {
     const subscription = Notifications.addNotificationReceivedListener(() => {
