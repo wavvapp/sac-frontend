@@ -65,6 +65,7 @@ const BottomDrawer = forwardRef<BottomDrawerRef, DrawerProps>((props, ref) => {
       enablePanDownToClose={fullyHiddenOnClose}
       onChange={handleSheetChanges}
       backdropComponent={renderBackdrop}
+      containerStyle={{ zIndex: 1 }}
       {...rest}>
       {children}
     </BottomSheet>
