@@ -18,6 +18,7 @@ export const useFriends = (shouldRefetch?: boolean) => {
     staleTime: Infinity,
     refetchInterval: shouldRefetch ? 5000 : false,
     placeholderData: [],
+    refetchOnWindowFocus: "always",
   })
 }
 
