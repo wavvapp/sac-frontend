@@ -54,6 +54,7 @@ export default Status
 
 const styles = StyleSheet.create({
   container: {
+    paddingBottom: 20,
     gap: 12,
   },
   title: {

@@ -157,7 +157,7 @@ export default function EditSignal({
           timeSlots={["NOW", "MORNING", "LUNCH", "AFTERNOON", "EVENING"]}
         />
         <Audience />
-        <View style={style.separator} />
+        <View style={{ ...style.separator, marginHorizontal: 20 }} />
         {!isNewSignal && (
           <View style={{ paddingHorizontal: 20 }}>
             <ActionCard
@@ -204,12 +204,19 @@ const style = StyleSheet.create({
   },
   separator: {
     height: 1,
-    width: "100%",
     backgroundColor: theme.colors.black_100,
   },
-  activity: { paddingHorizontal: 20 },
-  statusContainer: { flexDirection: "row", alignItems: "center" },
-  statusText: { flex: 1, alignItems: "center" },
+  activity: {
+    paddingHorizontal: 20,
+  },
+  statusContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  statusText: {
+    flex: 1,
+    alignItems: "center",
+  },
   EditIcon: {
     height: 48,
     width: 48,

@@ -38,7 +38,6 @@ export default function Audience() {
   return (
     <View style={styles.container}>
       <CustomTitle text="with whom" />
-
       <View style={styles.audienceSwitch}>
         <TouchableWithoutFeedback
           onPress={() => toggleAudienceOptions(AudienceOptions.GROUPS)}>
@@ -88,11 +87,8 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "column",
     gap: 12,
-    width: "100%",
     paddingHorizontal: 20,
-    paddingTop: 10,
   },
-
   audienceSwitch: {
     flexDirection: "row",
     position: "relative",
@@ -123,7 +119,5 @@ const styles = StyleSheet.create({
   },
   secondaryAudienceOption: {
     color: theme.colors.black,
-    // borderWidth: 1,
-    // borderRadius: 50,
   },
 })
