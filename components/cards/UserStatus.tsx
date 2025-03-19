@@ -13,6 +13,7 @@ import Animated, {
 import { useFriends } from "@/queries/friends"
 import { useMySignal } from "@/queries/signal"
 import { useMemo } from "react"
+import UserAvailability from "./UserAvailability"
 
 const MAX_VISIBLE_FRIENDS = 4
 
@@ -84,24 +85,11 @@ export default function UserStatus({
           style={styles.userContainer}
           onPress={() => navigation.push("EditSignal", { isNewSignal: false })}>
           {user && signal && (
-            <View style={styles.signalContainer}>
-              <CustomText style={styles.name} fontWeight="semibold">
-                {user.names}
-              </CustomText>
-              <View style={styles.signal}>
-                <CustomText
-                  fontFamily="writer-monos"
-                  numberOfLines={2}
-                  ellipsizeMode="tail"
-                  style={styles.status}>
-                  {signal.status_message}
-                </CustomText>
-                <View style={styles.dot} />
-                <CustomText style={styles.time} fontFamily="writer-monos">
-                  {signal.when}
-                </CustomText>
-              </View>
-            </View>
+            <UserAvailability
+              activity={signal.status_message}
+              fullName={user.names}
+              time={signal.when}
+            />
           )}
           <View style={{ opacity: 0.5 }}>
             <CustomText size="sm" fontFamily="writer-monos">
@@ -124,37 +112,12 @@ export default function UserStatus({
 const styles = StyleSheet.create({
   container: {
     marginHorizontal: 20,
-    maxHeight: 140,
+    // maxHeight: 140,
   },
   animationContainer: {
     backgroundColor: theme.colors.white,
     borderRadius: 12,
     minWidth: "100%",
-  },
-  signalContainer: {
-    gap: 1,
-  },
-  signal: {
-    flexDirection: "row",
-    gap: 6,
-  },
-  name: {
-    maxWidth: "70%",
-  },
-  time: {
-    opacity: 0.5,
-    textTransform: "capitalize",
-  },
-  status: {
-    maxWidth: "70%",
-  },
-  dot: {
-    backgroundColor: theme.colors.black,
-    opacity: 0.5,
-    height: 2,
-    width: 2,
-    borderRadius: 2,
-    marginTop: 12,
   },
   userContainer: {
     gap: 24,
