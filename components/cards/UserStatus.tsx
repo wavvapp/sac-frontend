@@ -123,9 +123,7 @@ export default function UserStatus({
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: "center",
-    paddingHorizontal: 20,
-    width: "100%",
+    marginHorizontal: 20,
     maxHeight: 140,
   },
   animationContainer: {
@@ -148,7 +146,7 @@ const styles = StyleSheet.create({
     textTransform: "capitalize",
   },
   status: {
-    maxWidth: "80%",
+    maxWidth: "70%",
   },
   dot: {
     backgroundColor: theme.colors.black,
