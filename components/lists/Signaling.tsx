@@ -1,27 +1,17 @@
 import { forwardRef, useCallback, useEffect, useMemo, useState } from "react"
 import { View, StyleSheet } from "react-native"
 import CustomText from "@/components/ui/CustomText"
-import BottomDrawer from "@/components/BottomDrawer"
+import BottomDrawer, { BottomDrawerRef } from "@/components/BottomDrawer"
 import { BottomSheetSectionList } from "@gorhom/bottom-sheet"
 import { theme } from "@/theme"
 import SignalingUser from "@/components/SignalingUser"
-import { useFocusEffect, useNavigation } from "@react-navigation/native"
-import { NativeStackNavigationProp } from "@react-navigation/native-stack"
-import { RootStackParamList } from "@/navigation"
+import { useFocusEffect } from "@react-navigation/native"
 import { useSignalingFriends } from "@/queries/friends"
 import { Friend } from "@/types"
 import { useQueryClient } from "@tanstack/react-query"
-import SearchIcon from "../vectors/SearchIcon"
-import { TouchableOpacity } from "react-native-gesture-handler"
 import * as Notifications from "expo-notifications"
 
-export interface SignalingRef {
-  openBottomSheet: () => void
-}
-type SearchProp = NativeStackNavigationProp<RootStackParamList, "Search">
-
-const Signaling = forwardRef<SignalingRef>((_, ref) => {
-  const navigation = useNavigation<SearchProp>()
+const Signaling = forwardRef<BottomDrawerRef>((_, ref) => {
   const [isbottomSheetOpen, setIsBottomSheetOpen] = useState<boolean>(false)
   const { data: availableFriends = [], refetch } =
     useSignalingFriends(isbottomSheetOpen)
@@ -54,11 +44,6 @@ const Signaling = forwardRef<SignalingRef>((_, ref) => {
     return () => subscription.remove()
   }, [refetch])
 
-  const openSearch = () => {
-    refetchFriendsData()
-    navigation.navigate("Search")
-  }
-
   const handleRefresh = useCallback(async () => {
     setRefreshing(true)
     try {
@@ -76,11 +61,6 @@ const Signaling = forwardRef<SignalingRef>((_, ref) => {
         <CustomText size="lg" fontWeight="semibold" style={styles.headerText}>
           Friends
         </CustomText>
-        <TouchableOpacity
-          style={styles.SearchIcon}
-          onPress={() => openSearch()}>
-          <SearchIcon />
-        </TouchableOpacity>
       </View>
       {!onlineFriends.length && (
         <CustomText style={styles.noUsers}>
@@ -141,6 +121,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     paddingHorizontal: 20,
+    marginBottom: 16,
   },
   headerText: {
     fontSize: 20,
@@ -159,12 +140,6 @@ const styles = StyleSheet.create({
   },
   offlineItemSeparator: {
     height: 12,
-  },
-  SearchIcon: {
-    height: 48,
-    width: 48,
-    justifyContent: "center",
-    alignItems: "center",
   },
 })
 
