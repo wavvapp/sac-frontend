@@ -10,10 +10,10 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
 } from "react-native-reanimated"
-import UserAvailability from "@/components/cards/UserAvailability"
 import { useFriends } from "@/queries/friends"
 import { useMySignal } from "@/queries/signal"
 import { useMemo } from "react"
+import UserAvailability from "./UserAvailability"
 
 const MAX_VISIBLE_FRIENDS = 4
 
@@ -86,9 +86,9 @@ export default function UserStatus({
           onPress={() => navigation.push("EditSignal", { isNewSignal: false })}>
           {user && signal && (
             <UserAvailability
+              activity={signal.status_message}
               fullName={user.names}
               time={signal.when}
-              activity={signal.status_message}
             />
           )}
           <View style={{ opacity: 0.5 }}>
@@ -111,10 +111,8 @@ export default function UserStatus({
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: "center",
-    paddingHorizontal: 20,
-    width: "100%",
-    maxHeight: 140,
+    marginHorizontal: 20,
+    // maxHeight: 140,
   },
   animationContainer: {
     backgroundColor: theme.colors.white,
