@@ -18,6 +18,7 @@ export const useFriends = (shouldRefetch?: boolean) => {
     staleTime: Infinity,
     refetchInterval: shouldRefetch ? 5000 : false,
     placeholderData: [],
+    refetchOnWindowFocus: "always",
   })
 }
 
@@ -40,6 +41,7 @@ export const useSignalingFriends = (shouldRefetch?: boolean) => {
     placeholderData: [],
     refetchInterval: shouldRefetch ? 5000 : false,
     retry: 1,
+    refetchOnWindowFocus: "always",
   })
 }
 
