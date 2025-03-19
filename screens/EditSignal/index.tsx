@@ -25,7 +25,6 @@ import EditIcon from "@/components/vectors/EditIcon"
 import { SetActivity } from "@/components/SetActivity"
 import Audience from "@/components/Audience"
 import ActionCard from "@/components/cards/Action"
-import HeaderWrapper from "@/components/ui/HeaderWrapper"
 import CrossMark from "@/components/vectors/CrossMark"
 
 type EditSignalScreenProps = NativeStackScreenProps<
@@ -120,14 +119,15 @@ export default function EditSignal({
   return (
     <SafeAreaView style={style.container}>
       <StatusBar style="dark" />
-      <HeaderWrapper style={style.header}>
+      <View style={style.header}>
         <TouchableOpacity
           onPress={() => navigation.goBack()}
           style={style.closeIcon}>
           <CrossMark style={{ marginLeft: -5 }} />
         </TouchableOpacity>
         <CustomButton onPress={handleSaveStatus} title="Save" />
-      </HeaderWrapper>
+      </View>
+      <View style={style.separator} />
       <ScrollView
         keyboardShouldPersistTaps="always"
         contentContainerStyle={{
@@ -192,6 +192,9 @@ const style = StyleSheet.create({
     justifyContent: "space-between",
     width: "100%",
     alignItems: "center",
+    marginTop: 12,
+    paddingHorizontal: 20,
+    paddingBottom: 20,
   },
   closeIcon: {
     height: 48,
