@@ -20,6 +20,7 @@ interface SetStatusProps {
 }
 
 const INPUT_MAX_HEIGHT = 200
+const MAX_STATUS_CHARACTERS = 64
 export function SetActivity({ closeBottomSheet }: SetStatusProps) {
   const { temporaryStatus, setTemporaryStatus } = useStatus()
   const [activityText, setActivityText] = useState<string>(
@@ -57,6 +58,7 @@ export function SetActivity({ closeBottomSheet }: SetStatusProps) {
         />
       </View>
       <Input
+        maxLength={MAX_STATUS_CHARACTERS}
         textSize="lg"
         placeholder="Enter your plan or pick an option"
         handleTextChange={setActivityText}
