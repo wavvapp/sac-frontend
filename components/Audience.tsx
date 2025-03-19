@@ -6,70 +6,63 @@ import {
 } from "react-native"
 import { CustomTitle } from "@/components/ui/CustomTitle"
 import FriendsList from "@/components/lists/Friends"
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { AudienceOptions } from "@/types"
 import { theme } from "@/theme"
 import { width } from "@/utils/dimensions"
 import GroupsList from "@/components/lists/Groups"
+
+const audienceOptions = [
+  { label: "GROUPS", value: AudienceOptions.GROUPS },
+  { label: "FRIENDS", value: AudienceOptions.FRIENDS },
+]
 
 export default function Audience() {
   const [selectedAudience, setSelectedAudience] = useState(
     AudienceOptions.GROUPS,
   )
 
-  const translateX = useMemo(
-    () =>
-      new Animated.Value(
-        selectedAudience === AudienceOptions.FRIENDS ? width / 2.22 : 0,
-      ),
-    [selectedAudience],
-  )
+  const translateX = useRef(
+    new Animated.Value(
+      selectedAudience === AudienceOptions.FRIENDS ? width / 2.22 : 0,
+    ),
+  ).current
+
+  const toggleAudienceOptions = (tab: AudienceOptions) =>
+    setSelectedAudience(tab)
 
   useEffect(() => {
-    Animated.timing(translateX, {
+    Animated.spring(translateX, {
       toValue: selectedAudience === AudienceOptions.FRIENDS ? width / 2.22 : 0,
-      duration: 200,
       useNativeDriver: true,
     }).start()
   }, [selectedAudience, translateX])
-  const toggleAudienceOptions = (tab: AudienceOptions) =>
-    setSelectedAudience(tab)
 
   return (
     <View style={styles.container}>
       <CustomTitle text="with whom" />
       <View style={styles.audienceSwitch}>
-        <TouchableWithoutFeedback
-          onPress={() => toggleAudienceOptions(AudienceOptions.GROUPS)}>
-          <CustomTitle
-            text="GROUPS"
-            style={[
-              styles.AudienceOptionText,
-              selectedAudience === AudienceOptions.GROUPS
-                ? styles.primaryAudienceOption
-                : styles.secondaryAudienceOption,
-            ]}
-          />
-        </TouchableWithoutFeedback>
-        <TouchableWithoutFeedback
-          onPress={() => toggleAudienceOptions(AudienceOptions.FRIENDS)}>
-          <CustomTitle
-            text="FRIENDS"
-            style={[
-              styles.AudienceOptionText,
-              selectedAudience === AudienceOptions.FRIENDS
-                ? styles.primaryAudienceOption
-                : styles.secondaryAudienceOption,
-            ]}
-          />
-        </TouchableWithoutFeedback>
+        {audienceOptions.map((option) => (
+          <TouchableWithoutFeedback
+            key={option.value}
+            onPress={() => toggleAudienceOptions(option.value)}>
+            <CustomTitle
+              text={option.label}
+              style={[
+                styles.AudienceOptionText,
+                selectedAudience === option.value
+                  ? styles.primaryAudienceOption
+                  : styles.secondaryAudienceOption,
+              ]}
+            />
+          </TouchableWithoutFeedback>
+        ))}
 
         <Animated.View
           style={[
             styles.thumb,
             {
               transform: [{ translateX }],
-              backgroundColor: theme.colors.black,
             },
           ]}
         />
@@ -105,6 +98,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 50,
     position: "absolute",
+    backgroundColor: theme.colors.black,
   },
   AudienceOptionText: {
     flex: 1,

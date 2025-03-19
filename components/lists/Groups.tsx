@@ -17,36 +17,26 @@ export default function GroupsList() {
   const navigation = useNavigation<CreateGroupScreenProps>()
 
   const { friendIds } = temporaryStatus
+
   const selectedGroups = useMemo(() => {
     if (!groups) return []
-    const selectedOnes = groups.map((group) => {
-      const allSelected = group.friends.every((friend) =>
-        friendIds.includes(friend.id),
+    return groups
+      .filter((group) =>
+        group.friends.every((friend) => friendIds.includes(friend.id)),
       )
-      if (allSelected) return group.id
-      else return null
-    })
-    return selectedOnes
+      .map((group) => group.id)
   }, [groups, friendIds])
-
-  const getFriendIds = (group: Group) => {
-    return group.friends.map((friend) => friend.id)
-  }
 
   const updateSelectedGroupsList = useCallback(
     (group: Group) => {
-      const newGroups = selectedGroups?.includes(group.id)
-        ? selectedGroups?.filter((id) => id !== group.id)
-        : [...selectedGroups, group.id]
-
-      const newFriendIds = getFriendIds(group)
+      const newFriendIds = group.friends.map((friend) => friend.id)
 
       setTemporaryStatus((prev: TemporaryStatusType) => {
-        const updatedFriendIds = selectedGroups?.includes(group.id)
+        const updatedFriendIds = selectedGroups.includes(group.id)
           ? prev.friendIds.filter((id) => !newFriendIds.includes(id))
-          : [...prev.friendIds, ...newFriendIds]
+          : Array.from(new Set([...prev.friendIds, ...newFriendIds]))
 
-        return { ...prev, friendIds: Array.from(new Set(updatedFriendIds)) }
+        return { ...prev, friendIds: updatedFriendIds }
       })
     },
     [selectedGroups, setTemporaryStatus],
@@ -56,9 +46,10 @@ export default function GroupsList() {
     <View style={styles.container}>
       {isLoading ? (
         <FriendsSkeleton />
-      ) : groups ? (
+      ) : !!groups?.length ? (
         groups?.map((group: Group) => (
           <TouchableOpacity
+            key={group.id}
             style={styles.groupsContainer}
             onPress={() => updateSelectedGroupsList(group)}>
             <View style={styles.groupItem}>
@@ -68,12 +59,13 @@ export default function GroupsList() {
               </CustomText>
             </View>
 
-            <CheckBox isChecked={selectedGroups?.includes(group.id)} />
+            <CheckBox isChecked={selectedGroups.includes(group.id)} />
           </TouchableOpacity>
         ))
       ) : (
         <ActionCard
           title="Create a group"
+          description="You don't have any groups yet. Create one!"
           onPress={() => navigation.navigate("CreateGroup")}
         />
       )}
