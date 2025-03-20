@@ -36,6 +36,7 @@ export const useSignalingFriends = (shouldRefetch?: boolean) => {
         return friendSignals
       } catch (error) {
         console.error("Error in useSignalingFriends:", error)
+        return []
       }
     },
     placeholderData: [],
@@ -187,6 +188,27 @@ export const usePrefetchFriend = ({
       queryFn: async () => {
         const { data } = await api.get("/friends")
         return data
+      },
+    })
+  }, [queryClient])
+}
+
+export const usePrefetchFriendSignals = ({
+  queryClient,
+}: {
+  queryClient: QueryClient
+}) => {
+  return useCallback(async () => {
+    await queryClient.prefetchQuery({
+      queryKey: ["friend-signals"],
+      queryFn: async () => {
+        const { data } = await api.get("/friend-signals")
+        const friendSignals = data.map((friend: FriendSignal) => ({
+          ...friend,
+          time: friend.signal?.when,
+          activity: friend.signal?.status_message,
+        }))
+        return friendSignals
       },
     })
   }, [queryClient])
