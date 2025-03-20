@@ -36,7 +36,7 @@ export default function EditSignal({
   const { handleOfflineAction } = useOfflineHandler()
   const queryclient = useQueryClient()
   const isNewSignal = route.params?.isNewSignal || false
-  const [_, setIsModalVisible] = useState(isNewSignal)
+  const [_, setIsModalVisible] = useState(false)
 
   const saveStatus = useSaveStatus({
     data: temporaryStatus,
@@ -102,6 +102,7 @@ export default function EditSignal({
     <SafeAreaView style={style.container}>
       <StatusBar style="dark" />
       <Header title={isNewSignal ? "Set your Wavv" : "Edit your Wavv"} />
+      <View style={style.line} />
       <ScrollView
         keyboardShouldPersistTaps="always"
         contentContainerStyle={{
@@ -164,8 +165,7 @@ export default function EditSignal({
         setIsBottomSheetOpen={setIsModalVisible}
         isFullScreen
         fullyHiddenOnClose={true}
-        containerStyle={style.activityModalStyles}
-        index={isNewSignal ? 1 : 0}>
+        containerStyle={style.activityModalStyles}>
         <SetActivity closeBottomSheet={handleCloseSheet} />
       </BottomDrawer>
     </SafeAreaView>
@@ -193,6 +193,11 @@ const style = StyleSheet.create({
   },
   button: {
     width: "100%",
+  },
+  line: {
+    height: 1,
+    width: "100%",
+    backgroundColor: theme.colors.black_100,
   },
   activity: {
     paddingHorizontal: 20,
