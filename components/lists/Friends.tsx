@@ -1,5 +1,4 @@
 import { View, StyleSheet, TouchableOpacity } from "react-native"
-import { CustomTitle } from "@/components/ui/CustomTitle"
 import FriendCard from "@/components/Friend"
 import { TemporaryStatusType, useStatus } from "@/contexts/StatusContext"
 import { FriendsSkeleton } from "@/components/cards/FriendsSkeleton"
@@ -28,6 +27,7 @@ export default function FriendsList() {
       setTemporaryStatus((prev: TemporaryStatusType) => ({
         ...prev,
         friendIds: newFriends,
+        groups: [],
       }))
     },
     [friendIds, setTemporaryStatus],
@@ -49,12 +49,12 @@ export default function FriendsList() {
     setTemporaryStatus((prev: TemporaryStatusType) => ({
       ...prev,
       friendIds: canSelectAll ? allFriendsIds : [],
+      groups: [],
     }))
   }, [allFriends, canSelectAll, setTemporaryStatus])
 
   return (
     <View style={styles.container}>
-      <CustomTitle text="with whom" style={styles.title} />
       <TouchableOpacity
         onPress={toggleSelectAll}
         style={styles.selectContainer}>
@@ -91,11 +91,6 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "column",
     gap: 12,
-    paddingHorizontal: 20,
-    paddingTop: 10,
-  },
-  title: {
-    marginBottom: 24,
   },
   selectContainer: {
     flexDirection: "row",

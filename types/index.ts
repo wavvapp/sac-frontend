@@ -75,6 +75,7 @@ export interface Signal {
   friends: Friend[]
   friendIds: string[]
   status?: string
+  groups: Group[]
 }
 
 export type FriendSignal = {
@@ -111,4 +112,9 @@ export type Group = {
     names: string
     username: string
   }[]
+}
+
+export enum AudienceOptions {
+  GROUPS = "groups",
+  FRIENDS = "friends",
 }
