@@ -4,6 +4,7 @@ import {
   useEffect,
   useContext,
   ReactNode,
+  useCallback,
 } from "react"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import {
@@ -22,7 +23,7 @@ import AlertDialog from "@/components/AlertDialog"
 import { useOfflineHandler } from "@/hooks/useOfflineHandler"
 import { useNotification } from "@/contexts/NotificationContext"
 import * as Notifications from "expo-notifications"
-import { usePrefetchFriend } from "@/queries/friends"
+import { usePrefetchFriend, usePrefetchFriendSignals } from "@/queries/friends"
 import { usePrefetchSignal } from "@/queries/signal"
 
 interface AuthContextData {
@@ -77,7 +78,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       await AsyncStorage.setItem("@Auth:accessToken", accessToken)
       await AsyncStorage.setItem("@Auth:refreshToken", refreshToken)
       await AsyncStorage.setItem("@Auth:user", JSON.stringify(user))
-      await prefetchFriends()
+      await Promise.all([
+        prefetchSignal(),
+        prefetchFriends(),
+        prefetchFriendsSignal(),
+      ])
       setUser({
         ...userData,
         inviteCode: userData?.inviteCode?.toString(),
@@ -154,6 +159,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
   const prefetchFriends = usePrefetchFriend({ queryClient })
   const prefetchSignal = usePrefetchSignal({ queryClient })
+  const prefetchFriendsSignal = usePrefetchFriendSignals({ queryClient })
 
   const signInWithApple = async (navigation: CredentialsScreenProps) => {
     try {
@@ -188,21 +194,24 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     }
   }
 
-  async function loadStoredData(): Promise<void> {
+  const loadStoredData = useCallback(async (): Promise<void> => {
     setIsLoading(true)
-
     const storedUser = await AsyncStorage.getItem("@Auth:user")
     const storedToken = await AsyncStorage.getItem("@Auth:accessToken")
     if (storedUser && storedToken) {
       setUser(JSON.parse(storedUser))
     }
-    await Promise.all([prefetchSignal(), prefetchFriends()])
+    await Promise.all([
+      prefetchSignal(),
+      prefetchFriends(),
+      prefetchFriendsSignal(),
+    ])
     setIsLoading(false)
-  }
+  }, [prefetchSignal, prefetchFriends, prefetchFriendsSignal])
 
   useEffect(() => {
     loadStoredData()
-  }, [])
+  }, [loadStoredData])
 
   async function signOut(): Promise<void> {
     await AsyncStorage.removeItem("@Auth:accessToken")
