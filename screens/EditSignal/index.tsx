@@ -197,7 +197,7 @@ const style = StyleSheet.create({
   line: {
     height: 1,
     width: "100%",
-    backgroundColor: theme.colors.gray,
+    backgroundColor: theme.colors.black_100,
   },
   activity: {
     paddingHorizontal: 20,
