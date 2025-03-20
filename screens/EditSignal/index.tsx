@@ -64,6 +64,7 @@ export default function EditSignal({
         status_message: temporaryStatus.activity,
         friends: [],
         friendIds: temporaryStatus.friendIds,
+        groups: temporaryStatus.groups,
         status: "active",
       }
       queryclient.setQueryData(["fetch-my-signal"], optimisticStatus)
@@ -114,6 +115,7 @@ export default function EditSignal({
       timeSlot: signal.when,
       activity: signal.status_message,
       friendIds: signal.friendIds,
+      groups: signal.groups,
     })
   }, [navigation, signal, setTemporaryStatus])
   return (

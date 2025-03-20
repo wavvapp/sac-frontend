@@ -27,6 +27,7 @@ export default function FriendsList() {
       setTemporaryStatus((prev: TemporaryStatusType) => ({
         ...prev,
         friendIds: newFriends,
+        groups: [],
       }))
     },
     [friendIds, setTemporaryStatus],
@@ -48,6 +49,7 @@ export default function FriendsList() {
     setTemporaryStatus((prev: TemporaryStatusType) => ({
       ...prev,
       friendIds: canSelectAll ? allFriendsIds : [],
+      groups: [],
     }))
   }, [allFriends, canSelectAll, setTemporaryStatus])
 

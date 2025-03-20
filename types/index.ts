@@ -75,6 +75,7 @@ export interface Signal {
   friends: Friend[]
   friendIds: string[]
   status?: string
+  groups: Group[]
 }
 
 export type FriendSignal = {

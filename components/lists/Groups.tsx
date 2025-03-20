@@ -1,8 +1,6 @@
-import { Group } from "@/types"
 import { FriendsSkeleton } from "../cards/FriendsSkeleton"
 import { StyleSheet, TouchableOpacity, View } from "react-native"
 import { useGetGroups } from "@/queries/groups"
-import { useCallback, useMemo } from "react"
 import CheckBox from "@/components/ui/CheckBox"
 import CustomText from "@/components/ui/CustomText"
 import { theme } from "@/theme"
@@ -10,37 +8,31 @@ import ActionCard from "../cards/Action"
 import { useNavigation } from "@react-navigation/native"
 import { CreateGroupScreenProps } from "@/screens/Groups/CreateGroup"
 import { TemporaryStatusType, useStatus } from "@/contexts/StatusContext"
+import { Group } from "@/types"
 
 export default function GroupsList() {
   const { temporaryStatus, setTemporaryStatus } = useStatus()
   const { data: groups, isLoading } = useGetGroups()
   const navigation = useNavigation<CreateGroupScreenProps>()
 
-  const { friendIds } = temporaryStatus
+  const findGroup = (groups: Group[], group: Group) =>
+    groups?.find((group_) => group_.id === group.id)
 
-  const selectedGroups = useMemo(() => {
-    if (!groups) return []
-    return groups
-      .filter((group) =>
-        group.friends.every((friend) => friendIds.includes(friend.id)),
-      )
-      .map((group) => group.id)
-  }, [groups, friendIds])
-
-  const updateSelectedGroupsList = useCallback(
-    (group: Group) => {
-      const newFriendIds = group.friends.map((friend) => friend.id)
-
-      setTemporaryStatus((prev: TemporaryStatusType) => {
-        const updatedFriendIds = selectedGroups.includes(group.id)
-          ? prev.friendIds.filter((id) => !newFriendIds.includes(id))
-          : Array.from(new Set([...prev.friendIds, ...newFriendIds]))
-
-        return { ...prev, friendIds: updatedFriendIds }
-      })
-    },
-    [selectedGroups, setTemporaryStatus],
-  )
+  const toggleSelectedGroup = (group: Group) => {
+    setTemporaryStatus((prev: TemporaryStatusType) => {
+      const tempGroup = findGroup(prev?.groups, group)
+      const newGroups = !tempGroup || group.id !== tempGroup.id ? [group] : []
+      const newFriendIds =
+        !tempGroup || group.id !== tempGroup.id
+          ? group.friends.map((friend) => friend.id)
+          : []
+      return {
+        ...prev,
+        friendIds: newFriendIds,
+        groups: newGroups,
+      }
+    })
+  }
 
   return (
     <View style={styles.container}>
@@ -51,7 +43,7 @@ export default function GroupsList() {
           <TouchableOpacity
             key={group.id}
             style={styles.groupsContainer}
-            onPress={() => updateSelectedGroupsList(group)}>
+            onPress={() => toggleSelectedGroup(group)}>
             <View style={styles.groupItem}>
               <CustomText fontWeight="semibold">{group.name}</CustomText>
               <CustomText fontFamily="writer-monov" style={styles.details}>
@@ -59,7 +51,7 @@ export default function GroupsList() {
               </CustomText>
             </View>
 
-            <CheckBox isChecked={selectedGroups.includes(group.id)} />
+            <CheckBox isChecked={!!findGroup(temporaryStatus.groups, group)} />
           </TouchableOpacity>
         ))
       ) : (
