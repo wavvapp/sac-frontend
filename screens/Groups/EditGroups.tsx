@@ -14,7 +14,6 @@ export default function EditGroup() {
   const navigation = useNavigation<EditGroupScreenProps>()
   const route = useRoute<RouteProp<RootStackParamList, "EditGroup">>()
   const { groupId, name, friendIds } = route.params
-  console.log("CURRENT EDIT GROUP", groupId, name, friendIds)
   const { mutate: updateGroup } = useUpdateGroup()
 
   const onSaveGroup = (groupName: string, friendIds: string[]) => {

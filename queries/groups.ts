@@ -1,6 +1,10 @@
 import api from "@/service"
 import { Group } from "@/types"
-import { MutationOptions, useMutation } from "@tanstack/react-query"
+import {
+  MutationOptions,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query"
 import { useQuery } from "@tanstack/react-query"
 
 interface MutationFunctionArguments {
@@ -33,21 +37,48 @@ export const useGetGroups = () => {
   })
 }
 export const useUpdateGroup = (
-  args?: MutationOptions<unknown, unknown, MutationFunctionArguments, unknown>,
+  args?: MutationOptions<
+    unknown,
+    unknown,
+    MutationFunctionArguments,
+    { previousGroup: any }
+  >,
 ) => {
+  const queryClient = useQueryClient()
+
   return useMutation({
-    mutationFn: ({ groupId, name, friendIds }: MutationFunctionArguments) => {
-      console.log("====================================")
-      console.log({ groupId, name, friendIds })
-      console.log("====================================")
-      return api.put(`/groups`, { id: groupId, name, friendIds })
+    mutationFn: ({ groupId, name, friendIds }: MutationFunctionArguments) =>
+      api.put(`/groups/${groupId}`, { name, friendIds }),
+    onMutate: async (variables: MutationFunctionArguments) => {
+      const { groupId, name, friendIds } = variables
+      await queryClient.cancelQueries({ queryKey: ["groups", groupId] })
+      const previousGroup = queryClient.getQueryData(["groups", groupId])
+      queryClient.setQueryData(["groups", groupId], (old: Group) => ({
+        ...old,
+        name,
+        friendIds,
+      }))
+      queryClient.setQueryData(["groups"], (oldGroups: any[]) => {
+        if (!oldGroups) return oldGroups
+        return oldGroups.map((group) =>
+          group.id === groupId ? { ...group, name, friendIds } : group,
+        )
+      })
+      return { previousGroup }
     },
-    onError: (error) => {
-      console.error("Error updating group:", error) // Logs error in case of failure
+    onError: (error, variables, context) => {
+      console.error("Error updating group:", error)
+      if (context?.previousGroup) {
+        queryClient.setQueryData(
+          ["groups", variables.groupId],
+          context.previousGroup,
+        )
+      }
     },
-    onSuccess: (data) => {
-      console.log("Group updated successfully:", data)
+    onSettled: (data, error, variables: MutationFunctionArguments) => {
+      queryClient.invalidateQueries({ queryKey: ["groups", variables.groupId] })
+      queryClient.invalidateQueries({ queryKey: ["groups"] })
     },
-    ...args, // Spread additional options (if any) passed to the hook
+    ...args,
   })
 }
