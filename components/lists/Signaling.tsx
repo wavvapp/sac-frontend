@@ -75,11 +75,6 @@ const Signaling = forwardRef<SignalingRef>((_, ref) => {
       snapPoints={["20%", "93%"]}
       ref={ref}
       setIsBottomSheetOpen={setIsBottomSheetOpen}>
-      {/* {!onlineFriends.length && (
-        <CustomText style={styles.noUsers}>
-          None of your friends wavv'd yet :(
-        </CustomText>
-      )} */}
       <BottomSheetSectionList
         refreshing={refreshing}
         onRefresh={handleRefresh}
@@ -99,6 +94,14 @@ const Signaling = forwardRef<SignalingRef>((_, ref) => {
           </View>
         }
         sections={[
+          {
+            data: !onlineFriends.length ? [{} as Friend] : [],
+            renderItem: () => (
+              <CustomText style={styles.noUsers}>
+                None of your friends wavv'd yet :(
+              </CustomText>
+            ),
+          },
           {
             title: "available users",
             data: onlineFriends,
@@ -156,8 +159,8 @@ const styles = StyleSheet.create({
     lineHeight: 28,
   },
   noUsers: {
-    paddingHorizontal: 20,
-    marginBottom: 20,
+    padding: 20,
+    backgroundColor: theme.colors.white,
   },
   sectionListContainer: {
     backgroundColor: theme.colors.black_100,
