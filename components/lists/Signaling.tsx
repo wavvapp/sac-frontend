@@ -74,6 +74,7 @@ const Signaling = forwardRef<SignalingRef>((_, ref) => {
     <BottomDrawer
       snapPoints={["20%", "93%"]}
       ref={ref}
+      handleStyle={{ borderWidth: 1, borderColor: 'red', width: "100%" }}
       setIsBottomSheetOpen={setIsBottomSheetOpen}>
       <BottomSheetSectionList
         refreshing={refreshing}
