@@ -102,6 +102,7 @@ export default function EditSignal({
     <SafeAreaView style={style.container}>
       <StatusBar style="dark" />
       <Header title={isNewSignal ? "Set your Wavv" : "Edit your Wavv"} />
+      <View style={style.line} />
       <ScrollView
         keyboardShouldPersistTaps="always"
         contentContainerStyle={{
@@ -192,6 +193,11 @@ const style = StyleSheet.create({
   },
   button: {
     width: "100%",
+  },
+  line: {
+    height: 1,
+    width: "100%",
+    backgroundColor: theme.colors.gray,
   },
   activity: {
     paddingHorizontal: 20,
