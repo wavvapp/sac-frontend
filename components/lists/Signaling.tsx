@@ -71,25 +71,33 @@ const Signaling = forwardRef<SignalingRef>((_, ref) => {
   }, [refetchFriendsData])
 
   return (
-    <BottomDrawer ref={ref} setIsBottomSheetOpen={setIsBottomSheetOpen}>
-      <View style={styles.header}>
-        <CustomText size="lg" fontWeight="semibold" style={styles.headerText}>
-          Friends
-        </CustomText>
-        <TouchableOpacity
-          style={styles.SearchIcon}
-          onPress={() => openSearch()}>
-          <SearchIcon />
-        </TouchableOpacity>
-      </View>
-      {!onlineFriends.length && (
+    <BottomDrawer
+      snapPoints={["20%", "93%"]}
+      ref={ref}
+      setIsBottomSheetOpen={setIsBottomSheetOpen}>
+      {/* {!onlineFriends.length && (
         <CustomText style={styles.noUsers}>
           None of your friends wavv'd yet :(
         </CustomText>
-      )}
+      )} */}
       <BottomSheetSectionList
         refreshing={refreshing}
         onRefresh={handleRefresh}
+        ListHeaderComponent={
+          <View style={styles.header}>
+            <CustomText
+              size="lg"
+              fontWeight="semibold"
+              style={styles.headerText}>
+              Friends
+            </CustomText>
+            <TouchableOpacity
+              style={styles.SearchIcon}
+              onPress={() => openSearch()}>
+              <SearchIcon />
+            </TouchableOpacity>
+          </View>
+        }
         sections={[
           {
             title: "available users",
@@ -141,6 +149,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     paddingHorizontal: 20,
+    backgroundColor: theme.colors.white,
   },
   headerText: {
     fontSize: 20,
