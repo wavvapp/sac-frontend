@@ -19,6 +19,7 @@ import StaticContentScreen from "@/screens/StaticContentScreen"
 import NotificationPreferences from "@/screens/NotificationPreferences"
 import GroupsScreen from "@/screens/Groups"
 import CreateGroup from "@/screens/Groups/CreateGroup"
+import EditGroup from "@/screens/Groups/EditGroups"
 export type RootStackParamList = {
   EntryScreen: undefined
   Home: undefined
@@ -32,6 +33,7 @@ export type RootStackParamList = {
   NotificationPreferences: undefined
   StaticContentScreen: { pageSlug: StaticPageType }
   Groups: undefined
+  EditGroup: { groupId: string; name: string; friendIds: string[] }
 }
 
 export default function AppNavigator() {
@@ -89,6 +91,11 @@ export default function AppNavigator() {
               name="CreateGroup"
               options={{ headerShown: false }}
               component={CreateGroup}
+            />
+            <Stack.Screen
+              name="EditGroup"
+              options={{ headerShown: false }}
+              component={EditGroup}
             />
           </Stack.Navigator>
         </StatusProvider>

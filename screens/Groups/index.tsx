@@ -1,6 +1,6 @@
 import ActionHeader from "@/components/cards/ActionHeader"
 import PlusIcon from "@/components/vectors/PlusIcon"
-import { ScrollView, StyleSheet, View } from "react-native"
+import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { useGetGroups } from "@/queries/groups"
 import { useNavigation } from "@react-navigation/native"
@@ -14,6 +14,7 @@ import EditIcon from "@/components/vectors/EditIcon"
 import { theme } from "@/theme"
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 import UserInfo from "@/components/UserInfo"
+import { EditGroupScreenProps } from "./EditGroups"
 export default function GroupsScreen() {
   const { data: groups } = useGetGroups()
   const navigation = useNavigation<CreateGroupScreenProps>()
@@ -28,6 +29,8 @@ export default function GroupsScreen() {
     const suffix = count === 1 ? "member" : "members"
     return `${count} ${suffix}`
   }
+  const editNavigation = useNavigation<EditGroupScreenProps>()
+
   return (
     <SafeAreaView style={styles.container}>
       <ActionHeader
@@ -62,9 +65,22 @@ export default function GroupsScreen() {
               style={styles.groupName}>
               {currentGroup?.name}
             </CustomText>
-            <View style={styles.EditIcon}>
+            <TouchableOpacity
+              style={styles.EditIcon}
+              onPress={() => {
+                if (currentGroup) {
+                  editNavigation.navigate("EditGroup", {
+                    groupId: currentGroup.id,
+                    name: currentGroup.name,
+                    friendIds:
+                      currentGroup.friends?.map((friend) => friend.id) || [],
+                  })
+                  // Optional: close the bottom sheet after navigating
+                  bottomDrawerRef.current?.closeBottomSheet()
+                }
+              }}>
               <EditIcon />
-            </View>
+            </TouchableOpacity>
           </View>
           <BottomSheetFlatList
             contentContainerStyle={styles.usersList}

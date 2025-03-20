@@ -43,7 +43,6 @@ export async function registerForPushNotificationsAsync() {
           projectId,
         })
       ).data
-      console.log(pushTokenString)
       return pushTokenString
     } catch (e: unknown) {
       handleRegistrationError(`${e}`)
