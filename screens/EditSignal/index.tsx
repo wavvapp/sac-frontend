@@ -36,7 +36,7 @@ export default function EditSignal({
   const { handleOfflineAction } = useOfflineHandler()
   const queryclient = useQueryClient()
   const isNewSignal = route.params?.isNewSignal || false
-  const [_, setIsModalVisible] = useState(isNewSignal)
+  const [_, setIsModalVisible] = useState(false)
 
   const saveStatus = useSaveStatus({
     data: temporaryStatus,
@@ -164,8 +164,7 @@ export default function EditSignal({
         setIsBottomSheetOpen={setIsModalVisible}
         isFullScreen
         fullyHiddenOnClose={true}
-        containerStyle={style.activityModalStyles}
-        index={isNewSignal ? 1 : 0}>
+        containerStyle={style.activityModalStyles}>
         <SetActivity closeBottomSheet={handleCloseSheet} />
       </BottomDrawer>
     </SafeAreaView>
