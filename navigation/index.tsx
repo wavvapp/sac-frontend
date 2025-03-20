@@ -17,6 +17,8 @@ import { useEffect } from "react"
 import { StaticPageType } from "@/types"
 import StaticContentScreen from "@/screens/StaticContentScreen"
 import NotificationPreferences from "@/screens/NotificationPreferences"
+import GroupsScreen from "@/screens/Groups"
+import CreateGroup from "@/screens/Groups/CreateGroup"
 export type RootStackParamList = {
   EntryScreen: undefined
   Home: undefined
@@ -26,8 +28,10 @@ export type RootStackParamList = {
   Signaling: undefined
   CreateCredentials: undefined
   Search: undefined
+  CreateGroup: undefined
   NotificationPreferences: undefined
   StaticContentScreen: { pageSlug: StaticPageType }
+  Groups: undefined
 }
 
 export default function AppNavigator() {
@@ -75,6 +79,16 @@ export default function AppNavigator() {
               name="NotificationPreferences"
               options={{ headerShown: false }}
               component={NotificationPreferences}
+            />
+            <Stack.Screen
+              name="Groups"
+              options={{ headerShown: false }}
+              component={GroupsScreen}
+            />
+            <Stack.Screen
+              name="CreateGroup"
+              options={{ headerShown: false }}
+              component={CreateGroup}
             />
           </Stack.Navigator>
         </StatusProvider>
