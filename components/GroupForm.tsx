@@ -58,7 +58,7 @@ export const GroupForm = ({
         </View>
         <CustomButton
           onPress={() => onSave(groupName, friendIds)}
-          disabled={!groupName || friendIds.length <= 0}
+          disabled={!groupName || !friendIds.length}
           title="Save"
         />
       </HeaderWrapper>
