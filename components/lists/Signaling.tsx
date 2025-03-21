@@ -73,12 +73,22 @@ const Signaling = forwardRef<SignalingRef>((_, ref) => {
   return (
     <BottomDrawer
       snapPoints={["20%", "93%"]}
+      enableOverDrag
+      maxDynamicContentSize={100}
       ref={ref}
-      handleStyle={{ borderWidth: 1, borderColor: 'red', width: "100%" }}
+      handleStyle={{
+        borderWidth: 1,
+        borderColor: "red",
+        width: "100%",
+        height: 70,
+        position: "absolute",
+        // height: 80,
+      }}
       setIsBottomSheetOpen={setIsBottomSheetOpen}>
       <BottomSheetSectionList
-        refreshing={refreshing}
+        refreshing={false}
         onRefresh={handleRefresh}
+        contentContainerStyle={{ backgroundColor: theme.colors.white }}
         ListHeaderComponent={
           <View style={styles.header}>
             <CustomText
@@ -87,11 +97,11 @@ const Signaling = forwardRef<SignalingRef>((_, ref) => {
               style={styles.headerText}>
               Friends
             </CustomText>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={styles.SearchIcon}
               onPress={() => openSearch()}>
               <SearchIcon />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         }
         sections={[
@@ -153,6 +163,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     paddingHorizontal: 20,
+    marginTop: 32,
     backgroundColor: theme.colors.white,
   },
   headerText: {

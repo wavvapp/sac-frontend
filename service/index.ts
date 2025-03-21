@@ -39,7 +39,6 @@ api.interceptors.request.use(
     }
     const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
     const token = await AsyncStorage.getItem("@Auth:accessToken")
-    console.log(token)
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
     }
