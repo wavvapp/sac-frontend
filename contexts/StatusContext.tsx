@@ -8,11 +8,12 @@ import {
 } from "react"
 import { SharedValue, useSharedValue } from "react-native-reanimated"
 import { useMySignal } from "@/queries/signal"
+import dayjs from "dayjs"
 
 export type TemporaryStatusType = {
   timeSlot: string
-  startsAt?: Date
-  endsAt?: Date
+  startsAt: Date
+  endsAt: Date
   activity: string
   friendIds: string[]
 }
@@ -20,7 +21,9 @@ export type TemporaryStatusType = {
 type StatusContextType = {
   temporaryStatus: TemporaryStatusType
   setTemporaryStatus: Dispatch<SetStateAction<TemporaryStatusType>>
-  isOn: SharedValue<boolean>
+  // isOn: SharedValue<boolean>
+  isOn: boolean
+  setIsOn: any
 }
 
 const StatusContext = createContext<StatusContextType>({} as StatusContextType)
@@ -29,11 +32,14 @@ export const StatusProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const { data: signalData } = useMySignal()
-  const isOn = useSharedValue(!signalData?.hasEnded)
+  // const isOn = useSharedValue(!signalData?.hasEnded)
+  const [isOn, setIsOn] = useState(!signalData?.hasEnded)
   const [temporaryStatus, setTemporaryStatus] = useState<TemporaryStatusType>({
     friendIds: signalData?.friendIds || [],
     activity: signalData?.status_message || "",
     timeSlot: signalData?.when || "NOW",
+    endsAt: signalData?.endsAt,
+    startsAt: signalData?.startsAt,
   })
 
   useEffect(() => {
@@ -44,10 +50,21 @@ export const StatusProvider: React.FC<{ children: React.ReactNode }> = ({
       friendIds,
       activity: signalData.status_message,
       timeSlot: signalData.when,
+      endsAt: signalData.endsAt,
+      startsAt: signalData.startsAt,
     })
+    console.log(!signalData.hasEnded, "signal.has ended")
 
-    isOn.value = !signalData?.hasEnded
+    const dateEnded = dayjs().isAfter(dayjs(signalData.endsAt))
+    console.log(dateEnded, "date ended")
+    console.log(!signalData.hasEnded || !dateEnded, "whole logic")
+    if (dateEnded || signalData.hasEnded) {
+      setIsOn(false)
+      return
+    }
+    setIsOn(true)
   }, [isOn, signalData])
+
 
   return (
     <StatusContext.Provider
@@ -55,6 +72,7 @@ export const StatusProvider: React.FC<{ children: React.ReactNode }> = ({
         temporaryStatus,
         setTemporaryStatus,
         isOn,
+        setIsOn,
       }}>
       {children}
     </StatusContext.Provider>
