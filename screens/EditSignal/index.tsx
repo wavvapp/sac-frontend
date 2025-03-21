@@ -30,7 +30,7 @@ export default function EditSignal({
   route,
   navigation,
 }: EditSignalScreenProps) {
-  const { temporaryStatus, setTemporaryStatus, isOn } = useStatus()
+  const { temporaryStatus, setTemporaryStatus, isOn , setIsOn} = useStatus()
   const { data: signal } = useMySignal()
   const bottomDrawerRef = useRef<BottomDrawerRef>(null)
   const { handleOfflineAction } = useOfflineHandler()
@@ -51,12 +51,15 @@ export default function EditSignal({
         startsAt: temporaryStatus?.startsAt,
         endsAt: temporaryStatus?.endsAt,
       }
+      console.log(optimisticStatus, "optimistic status")
       queryclient.setQueryData(["fetch-my-signal"], optimisticStatus)
       navigation.navigate("Home")
     },
     onError: (error) => {
       // TODO: add toaster
-      console.error(error.message)
+      console.log(JSON.stringify(error, null, 2))
+
+      console.error("coming from herererererer", error.message)
     },
     onSettled: async () => {
       await queryclient.refetchQueries({ queryKey: ["fetch-my-signal"] })
@@ -65,11 +68,11 @@ export default function EditSignal({
 
   const turnOffSignal = useTurnOffSignal({
     onMutate: async () => {
-      handleOfflineAction(() => (isOn.value = !isOn.value))
+      handleOfflineAction(() => setIsOn(!isOn))
       navigation.goBack()
     },
     onError: () => {
-      isOn.value = !isOn.value
+       setIsOn(!isOn)
     },
     onSettled() {
       queryclient.refetchQueries({ queryKey: ["points"] })
@@ -96,6 +99,8 @@ export default function EditSignal({
       timeSlot: signal.when,
       activity: signal.status_message,
       friendIds: signal.friendIds,
+      endsAt: signal.endsAt,
+      startsAt: signal.startsAt,
     })
   }, [navigation, signal, setTemporaryStatus])
   return (

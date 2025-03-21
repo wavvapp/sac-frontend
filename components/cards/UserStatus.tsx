@@ -2,17 +2,17 @@ import { StyleSheet, TouchableOpacity, View, ViewStyle } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import { theme } from "@/theme"
 import { Friend, User } from "@/types"
-import { useNavigation } from "@react-navigation/native"
+import { useFocusEffect, useNavigation } from "@react-navigation/native"
 import { HomeScreenProps } from "@/screens/Home"
 import Animated, {
   interpolate,
-  SharedValue,
+  // SharedValue,
   useAnimatedStyle,
   withTiming,
 } from "react-native-reanimated"
 import { useFriends } from "@/queries/friends"
 import { useMySignal } from "@/queries/signal"
-import { useMemo } from "react"
+import { useCallback, useMemo } from "react"
 import UserAvailability from "./UserAvailability"
 
 const MAX_VISIBLE_FRIENDS = 4
@@ -20,7 +20,7 @@ const MAX_VISIBLE_FRIENDS = 4
 interface UserStatusProps extends ViewStyle {
   user: User | null
   style?: ViewStyle
-  isOn: SharedValue<boolean>
+  isOn: boolean
 }
 export default function UserStatus({
   user,
@@ -28,7 +28,7 @@ export default function UserStatus({
   isOn,
   ...rest
 }: UserStatusProps) {
-  const { data: signal } = useMySignal()
+  const { data: signal, refetch } = useMySignal()
 
   const { data: allFriends } = useFriends()
   const navigation = useNavigation<HomeScreenProps>()
@@ -67,14 +67,20 @@ export default function UserStatus({
   }, [remainingCount, fullFriendsList])
 
   const cardAnimatedStyle = useAnimatedStyle(() => {
-    const moveValue = interpolate(Number(isOn.value), [0, 1], [0, 1])
+    const moveValue = interpolate(Number(isOn), [0, 1], [0, 1])
     const opacity = withTiming(moveValue, { duration: 400 })
 
     return {
       opacity,
-      pointerEvents: isOn.value ? "auto" : "none",
+      pointerEvents: isOn ? "auto" : "none",
     }
   })
+
+  useFocusEffect(
+    useCallback(() => {
+      refetch()
+    }, [refetch]),
+  )
 
   return (
     <View style={styles.container}>

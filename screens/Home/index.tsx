@@ -55,11 +55,11 @@ export default function HomeScreen() {
   }
 
   useDerivedValue(() => {
-    if (isOn.value) {
+    if (isOn) {
       return runOnJS(setIsVisible)(true)
     }
     return runOnJS(setIsVisible)(false)
-  }, [isOn.value])
+  }, [isOn])
 
   return (
     <View style={styles.container}>
@@ -104,7 +104,7 @@ export default function HomeScreen() {
           </View>
         ) : (
           <View style={styles.StatusContainer}>
-            {isOn.value ? <UserStatus isOn={isOn} user={user} /> : <TapWavv />}
+            {isOn ? <UserStatus isOn={isOn} user={user} /> : <TapWavv />}
           </View>
         )}
       </View>
