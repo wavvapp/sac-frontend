@@ -71,26 +71,38 @@ const Signaling = forwardRef<SignalingRef>((_, ref) => {
   }, [refetchFriendsData])
 
   return (
-    <BottomDrawer ref={ref} setIsBottomSheetOpen={setIsBottomSheetOpen}>
-      <View style={styles.header}>
-        <CustomText size="lg" fontWeight="semibold" style={styles.headerText}>
-          Friends
-        </CustomText>
-        <TouchableOpacity
-          style={styles.SearchIcon}
-          onPress={() => openSearch()}>
-          <SearchIcon />
-        </TouchableOpacity>
-      </View>
-      {!onlineFriends.length && (
-        <CustomText style={styles.noUsers}>
-          None of your friends wavv'd yet :(
-        </CustomText>
-      )}
+    <BottomDrawer
+      snapPoints={["20%", "93%"]}
+      ref={ref}
+      setIsBottomSheetOpen={setIsBottomSheetOpen}>
       <BottomSheetSectionList
         refreshing={refreshing}
         onRefresh={handleRefresh}
+        contentContainerStyle={{ backgroundColor: theme.colors.white }}
+        ListHeaderComponent={
+          <View style={styles.header}>
+            <CustomText
+              size="lg"
+              fontWeight="semibold"
+              style={styles.headerText}>
+              Friends
+            </CustomText>
+            <TouchableOpacity
+              style={styles.SearchIcon}
+              onPress={() => openSearch()}>
+              <SearchIcon />
+            </TouchableOpacity>
+          </View>
+        }
         sections={[
+          {
+            data: !onlineFriends.length ? [{} as Friend] : [],
+            renderItem: () => (
+              <CustomText style={styles.noUsers}>
+                None of your friends wavv'd yet :(
+              </CustomText>
+            ),
+          },
           {
             title: "available users",
             data: onlineFriends,
@@ -141,23 +153,24 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     paddingHorizontal: 20,
+    backgroundColor: theme.colors.white,
   },
   headerText: {
     fontSize: 20,
     lineHeight: 28,
   },
   noUsers: {
-    paddingHorizontal: 20,
-    marginBottom: 20,
+    padding: 20,
+    backgroundColor: theme.colors.white,
   },
   sectionListContainer: {
     backgroundColor: theme.colors.black_100,
   },
   availableItemSeparator: {
     height: 12,
-    backgroundColor: theme.colors.white,
   },
   offlineItemSeparator: {
+    backgroundColor: theme.colors.black_100,
     height: 12,
   },
   SearchIcon: {
