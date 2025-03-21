@@ -73,8 +73,6 @@ const Signaling = forwardRef<SignalingRef>((_, ref) => {
   return (
     <BottomDrawer
       snapPoints={["20%", "93%"]}
-      enableOverDrag
-      maxDynamicContentSize={100}
       ref={ref}
       setIsBottomSheetOpen={setIsBottomSheetOpen}>
       <BottomSheetSectionList
@@ -170,9 +168,9 @@ const styles = StyleSheet.create({
   },
   availableItemSeparator: {
     height: 12,
-    backgroundColor: theme.colors.white,
   },
   offlineItemSeparator: {
+    backgroundColor: theme.colors.black_100,
     height: 12,
   },
   SearchIcon: {
