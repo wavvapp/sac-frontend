@@ -41,7 +41,7 @@ export const useUpdateGroup = (
     unknown,
     unknown,
     MutationFunctionArguments,
-    { previousGroup: Group }
+    { previousGroup: Group | undefined }
   >,
 ) => {
   const queryClient = useQueryClient()
@@ -52,7 +52,7 @@ export const useUpdateGroup = (
     onMutate: async (args: MutationFunctionArguments) => {
       const { groupId, name, friendIds } = args
       await queryClient.cancelQueries({ queryKey: ["groups", groupId] })
-      const previousGroup = queryClient.getQueryData(["groups", groupId])
+      const previousGroup = queryClient.getQueryData<Group>(["groups", groupId])
       queryClient.setQueryData(["groups", groupId], (old: Group) => ({
         ...old,
         name,
