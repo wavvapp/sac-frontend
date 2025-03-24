@@ -21,9 +21,7 @@ export type TemporaryStatusType = {
 type StatusContextType = {
   temporaryStatus: TemporaryStatusType
   setTemporaryStatus: Dispatch<SetStateAction<TemporaryStatusType>>
-  // isOn: SharedValue<boolean>
-  isOn: boolean
-  setIsOn: any
+  isOn: SharedValue<boolean>
 }
 
 const StatusContext = createContext<StatusContextType>({} as StatusContextType)
@@ -32,8 +30,7 @@ export const StatusProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const { data: signalData } = useMySignal()
-  // const isOn = useSharedValue(!signalData?.hasEnded)
-  const [isOn, setIsOn] = useState(!signalData?.hasEnded)
+  const isOn = useSharedValue(!signalData?.hasEnded)
   const [temporaryStatus, setTemporaryStatus] = useState<TemporaryStatusType>({
     friendIds: signalData?.friendIds || [],
     activity: signalData?.status_message || "",
@@ -53,18 +50,17 @@ export const StatusProvider: React.FC<{ children: React.ReactNode }> = ({
       endsAt: signalData.endsAt,
       startsAt: signalData.startsAt,
     })
-    console.log(!signalData.hasEnded, "signal.has ended")
+    console.log(signalData.hasEnded, "signal.has ended")
 
     const dateEnded = dayjs().isAfter(dayjs(signalData.endsAt))
-    console.log(dateEnded, "date ended")
+    console.log(dateEnded, "date ernded")
     console.log(!signalData.hasEnded || !dateEnded, "whole logic")
     if (dateEnded || signalData.hasEnded) {
-      setIsOn(false)
+      isOn.value = false
       return
     }
-    setIsOn(true)
+    isOn.value = true
   }, [isOn, signalData])
-
 
   return (
     <StatusContext.Provider
@@ -72,7 +68,6 @@ export const StatusProvider: React.FC<{ children: React.ReactNode }> = ({
         temporaryStatus,
         setTemporaryStatus,
         isOn,
-        setIsOn,
       }}>
       {children}
     </StatusContext.Provider>

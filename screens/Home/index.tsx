@@ -42,12 +42,12 @@ export default function HomeScreen() {
 
   const { data, refetch: refetchPoints } = useFetchPoints()
 
-  useFocusEffect(
-    useCallback(() => {
-      if (!isAuthenticated) return
-      refetchPoints()
-    }, [isAuthenticated, refetchPoints]),
-  )
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     if (!isAuthenticated) return
+  //     refetchPoints()
+  //   }, [isAuthenticated, refetchPoints]),
+  // )
   const handleWebsiteOpen = async () => {
     if (process.env.POINTS_CANISTER_URL) {
       await WebBrowser.openBrowserAsync(process.env.POINTS_CANISTER_URL)
@@ -55,11 +55,11 @@ export default function HomeScreen() {
   }
 
   useDerivedValue(() => {
-    if (isOn) {
+    if (isOn.value) {
       return runOnJS(setIsVisible)(true)
     }
     return runOnJS(setIsVisible)(false)
-  }, [isOn])
+  }, [isOn.value])
 
   return (
     <View style={styles.container}>
@@ -104,7 +104,7 @@ export default function HomeScreen() {
           </View>
         ) : (
           <View style={styles.StatusContainer}>
-            {isOn ? <UserStatus isOn={isOn} user={user} /> : <TapWavv />}
+            {isOn.value ? <UserStatus isOn={isOn} user={user} /> : <TapWavv />}
           </View>
         )}
       </View>

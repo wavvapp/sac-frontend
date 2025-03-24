@@ -30,7 +30,7 @@ export default function EditSignal({
   route,
   navigation,
 }: EditSignalScreenProps) {
-  const { temporaryStatus, setTemporaryStatus, isOn , setIsOn} = useStatus()
+  const { temporaryStatus, setTemporaryStatus, isOn } = useStatus()
   const { data: signal } = useMySignal()
   const bottomDrawerRef = useRef<BottomDrawerRef>(null)
   const { handleOfflineAction } = useOfflineHandler()
@@ -68,11 +68,11 @@ export default function EditSignal({
 
   const turnOffSignal = useTurnOffSignal({
     onMutate: async () => {
-      handleOfflineAction(() => setIsOn(!isOn))
+      handleOfflineAction(() => (isOn.value = !isOn.value))
       navigation.goBack()
     },
     onError: () => {
-       setIsOn(!isOn)
+      isOn.value = !isOn.value
     },
     onSettled() {
       queryclient.refetchQueries({ queryKey: ["points"] })
@@ -83,7 +83,11 @@ export default function EditSignal({
   const handleSaveStatus = () => handleOfflineAction(() => saveStatus.mutate())
 
   const handleTurnOffSignal = async () => {
-    handleOfflineAction(() => turnOffSignal.mutate())
+    try {
+      handleOfflineAction(() => turnOffSignal.mutate())
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   const handleOpenSheet = () => {

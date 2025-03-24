@@ -6,6 +6,7 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native"
 import { HomeScreenProps } from "@/screens/Home"
 import Animated, {
   interpolate,
+  SharedValue,
   // SharedValue,
   useAnimatedStyle,
   withTiming,
@@ -20,7 +21,7 @@ const MAX_VISIBLE_FRIENDS = 4
 interface UserStatusProps extends ViewStyle {
   user: User | null
   style?: ViewStyle
-  isOn: boolean
+  isOn: SharedValue<boolean>
 }
 export default function UserStatus({
   user,
@@ -67,12 +68,12 @@ export default function UserStatus({
   }, [remainingCount, fullFriendsList])
 
   const cardAnimatedStyle = useAnimatedStyle(() => {
-    const moveValue = interpolate(Number(isOn), [0, 1], [0, 1])
+    const moveValue = interpolate(Number(isOn.value), [0, 1], [0, 1])
     const opacity = withTiming(moveValue, { duration: 400 })
 
     return {
       opacity,
-      pointerEvents: isOn ? "auto" : "none",
+      pointerEvents: isOn.value ? "auto" : "none",
     }
   })
 
