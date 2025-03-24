@@ -2,7 +2,7 @@ import ActionHeader from "@/components/cards/ActionHeader"
 import PlusIcon from "@/components/vectors/PlusIcon"
 import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
-import { useGetGroups } from "@/queries/groups"
+import { useDeleteGroups, useGetGroups } from "@/queries/groups"
 import { useNavigation } from "@react-navigation/native"
 import { CreateGroupScreenProps } from "@/screens/Groups/CreateGroup"
 import ActionCard from "@/components/cards/Action"
@@ -31,6 +31,11 @@ export default function GroupsScreen() {
   }
   const editNavigation = useNavigation<EditGroupScreenProps>()
 
+  const deleteGroup = useDeleteGroups()
+  const handleGroupDeletion = (groupId: string) => {
+    bottomDrawerRef.current?.closeBottomSheet()
+    deleteGroup.mutate(groupId)
+  }
   return (
     <SafeAreaView style={styles.container}>
       <ActionHeader
@@ -95,8 +100,7 @@ export default function GroupsScreen() {
                 <ActionCard
                   title="Delete group"
                   titleStyle={styles.deleteButton}
-                  // TODO: add delete group functionality as well
-                  onPress={() => console.log("some")}
+                  onPress={() => handleGroupDeletion(currentGroup?.id || "")}
                 />
               </>
             }
