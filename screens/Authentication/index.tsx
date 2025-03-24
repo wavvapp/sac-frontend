@@ -23,11 +23,20 @@ export default function EntryScreen() {
   const navigation = useNavigation<CredentialsScreenProps>()
 
   const handleGoogleLogin = async () => {
-    await signInWithGoogle(navigation)
+    try {
+      console.log("Button clicked")
+      await signInWithGoogle(navigation)
+    } catch (error) {
+      console.error("SignIn with google failed with:", error)
+    }
   }
 
   const handleAppleSignIn = async () => {
-    await signInWithApple(navigation)
+    try {
+      await signInWithApple(navigation)
+    } catch (error) {
+      console.error("SignIn with Apple failed", error)
+    }
   }
 
   const navigateToStaticScreen = (screen: StaticPageType) => {
