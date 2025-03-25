@@ -5,6 +5,7 @@ import {
   useState,
   Dispatch,
   SetStateAction,
+  useMemo,
 } from "react"
 import { SharedValue, useSharedValue } from "react-native-reanimated"
 import { useMySignal } from "@/queries/signal"
@@ -30,7 +31,13 @@ export const StatusProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const { data: signalData } = useMySignal()
-  const isOn = useSharedValue(!signalData?.hasEnded)
+
+  const dateEnded = useMemo(
+    () => dayjs().isAfter(dayjs(signalData?.endsAt)),
+    [signalData?.endsAt],
+  )
+
+  const isOn = useSharedValue(!dateEnded)
   const [temporaryStatus, setTemporaryStatus] = useState<TemporaryStatusType>({
     friendIds: signalData?.friendIds || [],
     activity: signalData?.status_message || "",
@@ -50,17 +57,8 @@ export const StatusProvider: React.FC<{ children: React.ReactNode }> = ({
       endsAt: signalData.endsAt,
       startsAt: signalData.startsAt,
     })
-    console.log(signalData.hasEnded, "signal.has ended")
-
-    const dateEnded = dayjs().isAfter(dayjs(signalData.endsAt))
-    console.log(dateEnded, "date ernded")
-    console.log(!signalData.hasEnded || !dateEnded, "whole logic")
-    if (dateEnded || signalData.hasEnded) {
-      isOn.value = false
-      return
-    }
-    isOn.value = true
-  }, [isOn, signalData])
+    isOn.value = !dateEnded
+  }, [isOn, signalData, dateEnded])
 
   return (
     <StatusContext.Provider

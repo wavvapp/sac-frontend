@@ -2,18 +2,17 @@ import { StyleSheet, TouchableOpacity, View, ViewStyle } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import { theme } from "@/theme"
 import { Friend, User } from "@/types"
-import { useFocusEffect, useNavigation } from "@react-navigation/native"
+import { useNavigation } from "@react-navigation/native"
 import { HomeScreenProps } from "@/screens/Home"
 import Animated, {
   interpolate,
   SharedValue,
-  // SharedValue,
   useAnimatedStyle,
   withTiming,
 } from "react-native-reanimated"
 import { useFriends } from "@/queries/friends"
 import { useMySignal } from "@/queries/signal"
-import { useCallback, useMemo } from "react"
+import { useMemo } from "react"
 import UserAvailability from "./UserAvailability"
 
 const MAX_VISIBLE_FRIENDS = 4
@@ -29,7 +28,7 @@ export default function UserStatus({
   isOn,
   ...rest
 }: UserStatusProps) {
-  const { data: signal, refetch } = useMySignal()
+  const { data: signal } = useMySignal()
 
   const { data: allFriends } = useFriends()
   const navigation = useNavigation<HomeScreenProps>()
@@ -76,12 +75,6 @@ export default function UserStatus({
       pointerEvents: isOn.value ? "auto" : "none",
     }
   })
-
-  useFocusEffect(
-    useCallback(() => {
-      refetch()
-    }, [refetch]),
-  )
 
   return (
     <View style={styles.container}>

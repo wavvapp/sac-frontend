@@ -42,12 +42,12 @@ export default function HomeScreen() {
 
   const { data, refetch: refetchPoints } = useFetchPoints()
 
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     if (!isAuthenticated) return
-  //     refetchPoints()
-  //   }, [isAuthenticated, refetchPoints]),
-  // )
+  useFocusEffect(
+    useCallback(() => {
+      if (!isAuthenticated) return
+      refetchPoints()
+    }, [isAuthenticated, refetchPoints]),
+  )
   const handleWebsiteOpen = async () => {
     if (process.env.POINTS_CANISTER_URL) {
       await WebBrowser.openBrowserAsync(process.env.POINTS_CANISTER_URL)
