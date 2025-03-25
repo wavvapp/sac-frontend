@@ -129,7 +129,9 @@ export default function EditSignal({
         </View>
         <Status
           timeSlots={[
-            "SET TIME",
+            temporaryStatus?.timeSlot.includes("-")
+              ? temporaryStatus?.timeSlot
+              : "SET TIME",
             "NOW",
             "MORNING",
             "LUNCH",

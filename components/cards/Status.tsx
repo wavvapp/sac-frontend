@@ -15,7 +15,10 @@ export const Status: React.FC<StatusProps> = ({ timeSlots }) => {
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false)
 
   const handleTimeSlotChange = (selectedTime: string) => {
-    if (selectedTime.toLowerCase() === "set time") {
+    if (
+      selectedTime.toLowerCase() === "set time" ||
+      selectedTime.includes("-")
+    ) {
       setIsDatePickerOpen(true)
     } else {
       setTemporaryStatus((prev: TemporaryStatusType) => ({
@@ -45,7 +48,8 @@ export const Status: React.FC<StatusProps> = ({ timeSlots }) => {
                     <Badge
                       name={slot}
                       variant={
-                        temporaryStatus.timeSlot === slot ||
+                        temporaryStatus.timeSlot.toLowerCase() ===
+                          slot.toLowerCase() ||
                         (slot.toLowerCase() === "set time" &&
                           temporaryStatus.timeSlot.includes("-"))
                           ? "default"

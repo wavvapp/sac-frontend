@@ -1,9 +1,9 @@
-import { useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { View, TouchableOpacity, StyleSheet, Platform } from "react-native"
 import DateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker"
-import dayjs from "dayjs"
+import dayjs, { Dayjs } from "dayjs"
 import CloseIcon from "@/components/vectors/CloseIcon"
 import { theme } from "@/theme"
 import DatepickerBottomDrawer from "@/components/DatePickerModal"
@@ -86,16 +86,26 @@ export default function DatePicker({ onCloseDatePicker }: DatePickerProps) {
 
     setFromTime(dayjs(newFromTime).toDate())
     setToTime(dayjs(newToTime).toDate())
-    setTemporaryStatus((prev: TemporaryStatusType) => ({
-      ...prev,
-      timeSlot: `${dayjs(newFromTime).format("hh:mm")}-${dayjs(
-        newToTime,
-      ).format("hh:mm")}`,
-      startsAt: dayjs(newFromTime).toDate(),
-      endsAt: dayjs(newToTime).toDate(),
-    }))
+    saveTemporaryTimeSlot(newFromTime, newToTime)
   }
 
+  const saveTemporaryTimeSlot = useCallback(
+    (newFromTime: Dayjs | Date, newToTime: Dayjs | Date) => {
+      setTemporaryStatus((prev: TemporaryStatusType) => ({
+        ...prev,
+        timeSlot: `${dayjs(newFromTime).format("hh:mm")}-${dayjs(
+          newToTime,
+        ).format("hh:mm")}`,
+        startsAt: dayjs(newFromTime).toDate(),
+        endsAt: dayjs(newToTime).toDate(),
+      }))
+    },
+    [setTemporaryStatus],
+  )
+
+  useEffect(() => {
+    saveTemporaryTimeSlot(fromTime, toTime)
+  }, [fromTime, saveTemporaryTimeSlot, toTime])
   return (
     <View style={styles.container}>
       <View style={styles.contentContainer}>
@@ -179,6 +189,7 @@ const styles = StyleSheet.create({
     width: 48,
     alignItems: "center",
     justifyContent: "center",
+    right: -12,
   },
   drawerContent: {
     alignItems: "center",
