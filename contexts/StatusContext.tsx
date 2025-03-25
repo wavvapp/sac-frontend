@@ -42,8 +42,8 @@ export const StatusProvider: React.FC<{ children: React.ReactNode }> = ({
     friendIds: signalData?.friendIds || [],
     activity: signalData?.status_message || "",
     timeSlot: signalData?.when || "NOW",
-    endsAt: signalData?.endsAt,
-    startsAt: signalData?.startsAt,
+    endsAt: signalData?.endsAt || new Date(),
+    startsAt: signalData?.startsAt || new Date(),
   })
 
   useEffect(() => {
@@ -58,7 +58,7 @@ export const StatusProvider: React.FC<{ children: React.ReactNode }> = ({
       startsAt: signalData.startsAt,
     })
     isOn.value = !dateEnded
-  }, [isOn, signalData, dateEnded])
+  }, [])
 
   return (
     <StatusContext.Provider
