@@ -1,5 +1,5 @@
 import api from "@/service"
-import { Group } from "@/types"
+import { Friend, Group } from "@/types"
 import {
   MutationOptions,
   useMutation,
@@ -52,50 +52,66 @@ export const useGetGroups = () => {
     placeholderData: [],
   })
 }
-export const useUpdateGroup = (
-  args?: MutationOptions<
-    unknown,
-    unknown,
-    MutationFunctionArguments,
-    { previousGroup: Group | undefined }
-  >,
-) => {
+
+export const useUpdateGroup = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: ({ groupId, name, friendIds }: MutationFunctionArguments) =>
-      api.put(`/groups/${groupId}`, { name, friendIds }),
-    onMutate: async (args: MutationFunctionArguments) => {
+    mutationFn: ({
+      groupId,
+      name,
+      friendIds,
+    }: {
+      groupId: string
+      name: string
+      friendIds: string[]
+    }) => api.put(`/groups/${groupId}`, { name, friendIds }),
+
+    onMutate: async (args) => {
       const { groupId, name, friendIds } = args
-      await queryClient.cancelQueries({ queryKey: ["groups", groupId] })
-      const previousGroup = queryClient.getQueryData<Group>(["groups", groupId])
-      queryClient.setQueryData(["groups", groupId], (old: Group) => ({
-        ...old,
-        name,
-        friendIds,
-      }))
-      queryClient.setQueryData(["groups"], (oldGroups: any[]) => {
-        if (!oldGroups) return oldGroups
-        return oldGroups.map((group) =>
-          group.id === groupId ? { ...group, name, friendIds } : group,
-        )
-      })
-      return { previousGroup }
+      await queryClient.cancelQueries({ queryKey: ["groups"] })
+      const previousGroups = queryClient.getQueryData<Group[]>(["groups"])
+      const allFriends = queryClient.getQueryData<Friend[]>(["friends"]) || []
+      queryClient.setQueryData(["groups"], (oldGroups: Group[] = []) =>
+        oldGroups.map((group) => {
+          if (group.id !== groupId) return group
+          const currentFriendIds = group.friends?.map((f) => f.id) || []
+          const newFriendIds = friendIds.filter(
+            (id) => !currentFriendIds.includes(id),
+          )
+          const newFriends = newFriendIds
+            .map((id) => allFriends.find((f) => f.id === id))
+            .filter(Boolean) as Friend[]
+          const updatedFriends = friendIds
+            .map((id) =>
+              [...(group.friends || []), ...newFriends].find(
+                (f) => f.id === id,
+              ),
+            )
+            .filter(Boolean)
+
+          return {
+            ...group,
+            name,
+            friends: updatedFriends,
+          }
+        }),
+      )
+
+      return { previousGroups }
     },
     onError: (error, variables, context) => {
       console.error("Error updating group:", error)
-      if (context?.previousGroup) {
-        queryClient.setQueryData(
-          ["groups", variables.groupId],
-          context.previousGroup,
-        )
+      if (context?.previousGroups) {
+        queryClient.setQueryData(["groups"], context.previousGroups)
       }
     },
-    onSettled: (data, error, variables: MutationFunctionArguments) => {
-      queryClient.invalidateQueries({ queryKey: ["groups", variables.groupId] })
+    onSettled: (data, error, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ["groups", variables.groupId],
+      })
       queryClient.invalidateQueries({ queryKey: ["groups"] })
     },
-    ...args,
   })
 }
 
