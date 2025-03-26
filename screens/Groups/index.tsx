@@ -80,7 +80,6 @@ export default function GroupsScreen() {
                     friendIds:
                       currentGroup.friends?.map((friend) => friend.id) || [],
                   })
-                  // Optional: close the bottom sheet after navigating
                   bottomDrawerRef.current?.closeBottomSheet()
                 }
               }}>
