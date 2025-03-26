@@ -41,7 +41,7 @@ export const StatusProvider: React.FC<{ children: React.ReactNode }> = ({
   const [temporaryStatus, setTemporaryStatus] = useState<TemporaryStatusType>({
     friendIds: signalData?.friendIds || [],
     activity: signalData?.status_message || "",
-    timeSlot: signalData?.when || "NOW",
+    timeSlot: signalData?.when || "",
     endsAt: signalData?.endsAt || new Date(),
     startsAt: signalData?.startsAt || new Date(),
   })

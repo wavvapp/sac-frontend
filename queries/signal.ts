@@ -31,16 +31,14 @@ type UseSaveSatusArgs = MutationOptions & {
 export const useSaveStatus = (args: UseSaveSatusArgs) => {
   const { data: temporaryStatus, ...rest } = args
   return useMutation({
-    mutationFn: async () => {
-      try {
-        return api.put("/my-signal", {
-          friends: temporaryStatus.friendIds,
-          status_message: temporaryStatus.activity,
-          when: temporaryStatus.timeSlot,
-        })
-      } catch (error) {
-        console.error("Failed to save status:", error)
-      }
+    mutationFn: () => {
+      return api.put("/my-signal", {
+        friends: temporaryStatus.friendIds,
+        status_message: temporaryStatus.activity,
+        when: temporaryStatus.timeSlot,
+        startsAt: temporaryStatus?.startsAt,
+        endsAt: temporaryStatus?.endsAt,
+      })
     },
     ...rest,
   })
