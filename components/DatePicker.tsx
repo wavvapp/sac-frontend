@@ -103,6 +103,18 @@ export default function DatePicker({ onCloseDatePicker }: DatePickerProps) {
     [setTemporaryStatus],
   )
 
+  const cancelTimeSettingOperation = useCallback(() => {
+    setTemporaryStatus((prev: TemporaryStatusType) => {
+      delete prev.endsAt
+      delete prev.startsAt
+      return {
+        ...prev,
+        timeSlot: "now",
+      }
+    })
+    onCloseDatePicker()
+  }, [onCloseDatePicker, setTemporaryStatus])
+
   useEffect(() => {
     saveTemporaryTimeSlot(fromTime, toTime)
   }, [fromTime, saveTemporaryTimeSlot, toTime])
@@ -126,7 +138,7 @@ export default function DatePicker({ onCloseDatePicker }: DatePickerProps) {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.closeButton}
-            onPress={onCloseDatePicker}>
+            onPress={cancelTimeSettingOperation}>
             <CloseIcon color={theme.colors.black} />
           </TouchableOpacity>
         </View>
