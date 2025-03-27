@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - stage
-      - dev
 
 jobs:
   publish_preview_update:
