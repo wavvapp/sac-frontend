@@ -10,7 +10,7 @@ import { RootStackParamList } from "@/navigation"
 import { useEffect, useRef, useState } from "react"
 import { useQueryClient } from "@tanstack/react-query"
 import { StatusBar } from "expo-status-bar"
-import { Signal } from "@/types"
+import { Friend, Signal } from "@/types"
 import { useMySignal, useSaveStatus, useTurnOffSignal } from "@/queries/signal"
 import Header from "@/components/cards/Header"
 import { useOfflineHandler } from "@/hooks/useOfflineHandler"
@@ -42,21 +42,26 @@ export default function EditSignal({
     data: temporaryStatus,
     onMutate: async () => {
       await queryclient.cancelQueries({ queryKey: ["fetch-my-signal"] })
+      const allFriends = queryclient.getQueryData<Friend[]>(["friends"])
+      const selectedFriends = allFriends?.filter((friend) =>
+        temporaryStatus.friendIds.includes(friend.id),
+      )
       const optimisticStatus: Signal = {
         when: temporaryStatus.timeSlot,
         status_message: temporaryStatus.activity,
-        friends: [],
+        friends: selectedFriends || [],
         friendIds: temporaryStatus.friendIds,
         status: "active",
         startsAt: temporaryStatus?.startsAt,
         endsAt: temporaryStatus?.endsAt,
       }
+      isOn.value = true
       queryclient.setQueryData(["fetch-my-signal"], optimisticStatus)
       navigation.navigate("Home")
     },
     onError: (error) => {
       // TODO: add toaster
-      console.error(error.message)
+      console.log(error.message)
     },
     onSettled: async () => {
       await queryclient.refetchQueries({ queryKey: ["fetch-my-signal"] })
@@ -71,16 +76,23 @@ export default function EditSignal({
     onError: () => {
       isOn.value = !isOn.value
     },
-    onSettled() {
-      queryclient.refetchQueries({ queryKey: ["points"] })
-      queryclient.refetchQueries({ queryKey: ["fetch-my-signal"] })
+    onSettled: async () => {
+      await Promise.all([
+        queryclient.refetchQueries({ queryKey: ["points"] }),
+        queryclient.refetchQueries({ queryKey: ["fetch-my-signal"] }),
+        queryclient.refetchQueries({ queryKey: ["friends"] }),
+      ])
     },
   })
 
   const handleSaveStatus = () => handleOfflineAction(() => saveStatus.mutate())
 
   const handleTurnOffSignal = async () => {
-    handleOfflineAction(() => turnOffSignal.mutate())
+    try {
+      handleOfflineAction(() => turnOffSignal.mutate())
+    } catch (error) {
+      console.log("Error turning off signal", error)
+    }
   }
 
   const handleOpenSheet = () => {
@@ -96,6 +108,8 @@ export default function EditSignal({
       timeSlot: signal.when,
       activity: signal.status_message,
       friendIds: signal.friendIds,
+      endsAt: signal.endsAt,
+      startsAt: signal.startsAt,
     })
   }, [navigation, signal, setTemporaryStatus])
   return (
@@ -129,7 +143,9 @@ export default function EditSignal({
         </View>
         <Status
           timeSlots={[
-            "SET TIME",
+            temporaryStatus?.timeSlot.includes("-")
+              ? temporaryStatus?.timeSlot
+              : "SET TIME",
             "NOW",
             "MORNING",
             "LUNCH",

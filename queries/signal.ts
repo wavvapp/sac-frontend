@@ -36,6 +36,8 @@ export const useSaveStatus = (args: UseSaveSatusArgs) => {
         friends: temporaryStatus.friendIds,
         status_message: temporaryStatus.activity,
         when: temporaryStatus.timeSlot,
+        startsAt: temporaryStatus?.startsAt,
+        endsAt: temporaryStatus?.endsAt,
       })
     },
     ...rest,
