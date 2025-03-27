@@ -72,32 +72,19 @@ export const useUpdateGroup = () => {
       await queryClient.cancelQueries({ queryKey: ["groups"] })
       const previousGroups = queryClient.getQueryData<Group[]>(["groups"])
       const allFriends = queryClient.getQueryData<Friend[]>(["friends"]) || []
-      queryClient.setQueryData(["groups"], (oldGroups: Group[] = []) =>
-        oldGroups.map((group) => {
-          if (group.id !== groupId) return group
-          const currentFriendIds = group.friends?.map((f) => f.id) || []
-          const newFriendIds = friendIds.filter(
-            (id) => !currentFriendIds.includes(id),
-          )
-          const newFriends = newFriendIds
-            .map((id) => allFriends.find((f) => f.id === id))
-            .filter(Boolean) as Friend[]
-          const updatedFriends = friendIds
-            .map((id) =>
-              [...(group.friends || []), ...newFriends].find(
-                (f) => f.id === id,
-              ),
-            )
-            .filter(Boolean)
-
-          return {
-            ...group,
-            name,
-            friends: updatedFriends,
-          }
-        }),
+      queryClient.setQueryData(["groups"], (groups: Group[] = []) =>
+        groups.map((group) =>
+          group.id === groupId
+            ? {
+                ...group,
+                name,
+                friends: allFriends.filter((friend) =>
+                  friendIds.includes(friend.id),
+                ),
+              }
+            : group,
+        ),
       )
-
       return { previousGroups }
     },
     onError: (error, variables, context) => {

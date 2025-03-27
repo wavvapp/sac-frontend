@@ -14,7 +14,7 @@ import EditIcon from "@/components/vectors/EditIcon"
 import { theme } from "@/theme"
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 import UserInfo from "@/components/UserInfo"
-import { EditGroupScreenProps } from "./EditGroups"
+import { EditGroupScreenProps } from "@/screens/Groups/EditGroups"
 export default function GroupsScreen() {
   const { data: groups } = useGetGroups()
   const navigation = useNavigation<CreateGroupScreenProps>()
@@ -35,6 +35,16 @@ export default function GroupsScreen() {
   const handleGroupDeletion = (groupId: string) => {
     bottomDrawerRef.current?.closeBottomSheet()
     deleteGroup.mutate(groupId)
+  }
+  const navigateToEditGroup = () => {
+    if (currentGroup) {
+      editNavigation.navigate("EditGroup", {
+        groupId: currentGroup.id,
+        name: currentGroup.name,
+        friendIds: currentGroup.friends?.map((friend) => friend.id) || [],
+      })
+      bottomDrawerRef.current?.closeBottomSheet()
+    }
   }
   return (
     <SafeAreaView style={styles.container}>
@@ -72,17 +82,7 @@ export default function GroupsScreen() {
             </CustomText>
             <TouchableOpacity
               style={styles.EditIcon}
-              onPress={() => {
-                if (currentGroup) {
-                  editNavigation.navigate("EditGroup", {
-                    groupId: currentGroup.id,
-                    name: currentGroup.name,
-                    friendIds:
-                      currentGroup.friends?.map((friend) => friend.id) || [],
-                  })
-                  bottomDrawerRef.current?.closeBottomSheet()
-                }
-              }}>
+              onPress={navigateToEditGroup}>
               <EditIcon />
             </TouchableOpacity>
           </View>
