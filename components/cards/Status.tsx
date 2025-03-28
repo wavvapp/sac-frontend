@@ -12,12 +12,7 @@ type StatusProps = {
 
 export const Status: React.FC<StatusProps> = ({ timeSlots }) => {
   const { temporaryStatus, setTemporaryStatus } = useStatus()
-  const [isDatePickerOpen, setIsDatePickerOpen] = useState(
-    () =>
-      temporaryStatus.timeSlot.includes("-") ||
-      temporaryStatus.timeSlot === "set time" ||
-      timeSlots[0].includes("-"),
-  )
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false)
 
   const handleTimeSlotChange = (selectedTime: string) => {
     if (
@@ -35,7 +30,7 @@ export const Status: React.FC<StatusProps> = ({ timeSlots }) => {
 
   return (
     <View style={styles.container}>
-      {isDatePickerOpen ? (
+      {isDatePickerOpen || temporaryStatus.timeSlot.includes("-") ? (
         <DatePicker
           previousTimeSlots={timeSlots[0].includes("-") ? timeSlots[0] : null}
           onCloseDatePicker={() => setIsDatePickerOpen(false)}
