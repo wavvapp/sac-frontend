@@ -192,6 +192,7 @@ export default function DatePicker({
             <DateTimePicker
               value={tempTime}
               mode="time"
+              is24Hour
               display="spinner"
               locale="en_US"
               onChange={handleTimeChange}
