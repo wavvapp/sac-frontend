@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import { useState } from "react"
 import { View, StyleSheet, Text, ActivityIndicator } from "react-native"
 import { CustomButton } from "@/components/ui/Button"
 import { theme } from "@/theme"
@@ -22,29 +22,22 @@ GoogleSignin.configure({
 export default function EntryScreen() {
   const { signInWithGoogle, signInWithApple } = useAuth()
   const navigation = useNavigation<CredentialsScreenProps>()
+  const [loadingButton, setLoadingButton] = useState<"google" | "apple" | null>(
+    null,
+  )
 
-  const [isGoogleLoading, setIsGoogleLoading] = useState(false)
-  const [isAppleLoading, setIsAppleLoading] = useState(false)
-
-  const handleGoogleLogin = async () => {
+  const handleSignIn = async (provider: "google" | "apple") => {
     try {
-      setIsGoogleLoading(true)
-      await signInWithGoogle(navigation)
+      setLoadingButton(provider)
+      if (provider === "google") {
+        await signInWithGoogle(navigation)
+      } else {
+        await signInWithApple(navigation)
+      }
     } catch (error) {
-      console.error("SignIn with google failed with:", error)
+      console.error(`Sign-in with ${provider} failed:`, error)
     } finally {
-      setIsGoogleLoading(false)
-    }
-  }
-
-  const handleAppleSignIn = async () => {
-    try {
-      setIsAppleLoading(true)
-      await signInWithApple(navigation)
-    } catch (error) {
-      console.error("SignIn with Apple failed", error)
-    } finally {
-      setIsAppleLoading(false)
+      setLoadingButton(null)
     }
   }
 
@@ -63,39 +56,33 @@ export default function EntryScreen() {
           </CustomText>
         </View>
         <View style={styles.subContainer}>
-          {isGoogleLoading ? (
-            <ActivityIndicator
-              size="small"
-              color={theme.colors.white}
-              style={styles.spinner}
-            />
-          ) : (
-            <CustomButton
-              variant="destructive"
-              title="Sign In with Google"
-              onPress={handleGoogleLogin}
-              textStyles={styles.buttonText}
-              hasCenteredIcon>
+          <CustomButton
+            variant="destructive"
+            title="Sign In with Google"
+            onPress={() => handleSignIn("google")}
+            textStyles={styles.buttonText}
+            hasCenteredIcon
+            disabled={loadingButton === "google"}>
+            {loadingButton === "google" ? (
+              <ActivityIndicator size="small" color={theme.colors.white} />
+            ) : (
               <GoogleIcon />
-            </CustomButton>
-          )}
+            )}
+          </CustomButton>
 
-          {isAppleLoading ? (
-            <ActivityIndicator
-              size="small"
-              color={theme.colors.white}
-              style={styles.spinner}
-            />
-          ) : (
-            <CustomButton
-              variant="primary"
-              title="Sign in with Apple"
-              onPress={handleAppleSignIn}
-              textStyles={styles.buttonText}
-              hasCenteredIcon>
+          <CustomButton
+            variant="primary"
+            title="Sign in with Apple"
+            onPress={() => handleSignIn("apple")}
+            textStyles={styles.buttonText}
+            hasCenteredIcon
+            disabled={loadingButton === "apple"}>
+            {loadingButton === "apple" ? (
+              <ActivityIndicator size="small" color={theme.colors.white} />
+            ) : (
               <AppleIcon />
-            </CustomButton>
-          )}
+            )}
+          </CustomButton>
 
           <CustomText
             fontFamily="writer-monos"
@@ -153,9 +140,6 @@ const styles = StyleSheet.create({
     gap: 12,
     flex: 0,
     paddingHorizontal: 2,
-  },
-  spinner: {
-    marginVertical: 20,
   },
   agreementText: {
     textAlign: "center",
