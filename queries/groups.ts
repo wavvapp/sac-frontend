@@ -1,5 +1,5 @@
 import api from "@/service"
-import { Group } from "@/types"
+import { Friend, Group } from "@/types"
 import {
   MutationOptions,
   useMutation,
@@ -10,6 +10,7 @@ import { useQuery } from "@tanstack/react-query"
 interface MutationFunctionArguments {
   name: string
   friendIds: string[]
+  groupId?: string
 }
 export const useCreateGroup = (
   args?: MutationOptions<unknown, unknown, MutationFunctionArguments, unknown>,
@@ -49,6 +50,55 @@ export const useGetGroups = () => {
     },
     staleTime: Infinity,
     placeholderData: [],
+  })
+}
+
+export const useUpdateGroup = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: ({
+      groupId,
+      name,
+      friendIds,
+    }: {
+      groupId: string
+      name: string
+      friendIds: string[]
+    }) => api.put(`/groups/${groupId}`, { name, friendIds }),
+
+    onMutate: async (args) => {
+      const { groupId, name, friendIds } = args
+      await queryClient.cancelQueries({ queryKey: ["groups"] })
+      const previousGroups = queryClient.getQueryData<Group[]>(["groups"])
+      const allFriends = queryClient.getQueryData<Friend[]>(["friends"]) || []
+      queryClient.setQueryData(["groups"], (groups: Group[] = []) =>
+        groups.map((group) =>
+          group.id === groupId
+            ? {
+                ...group,
+                name,
+                friends: allFriends.filter((friend) =>
+                  friendIds.includes(friend.id),
+                ),
+              }
+            : group,
+        ),
+      )
+      return { previousGroups }
+    },
+    onError: (error, variables, context) => {
+      console.error("Error updating group:", error)
+      if (context?.previousGroups) {
+        queryClient.setQueryData(["groups"], context.previousGroups)
+      }
+    },
+    onSettled: (data, error, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ["groups", variables.groupId],
+      })
+      queryClient.invalidateQueries({ queryKey: ["groups"] })
+    },
   })
 }
 

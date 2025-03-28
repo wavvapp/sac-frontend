@@ -42,6 +42,7 @@ api.interceptors.request.use(
       config.headers.Authorization = `Bearer ${token}`
     }
     config.headers["x-timezone"] = timezone
+    config.headers["x-api-version"] = "2"
     return config
   },
   (error: AxiosError) => {
