@@ -6,10 +6,12 @@ import {
   Dispatch,
   SetStateAction,
   useMemo,
+  useCallback,
 } from "react"
 import { SharedValue, useSharedValue } from "react-native-reanimated"
 import { useMySignal } from "@/queries/signal"
 import dayjs from "dayjs"
+import { AppState } from "react-native"
 
 export type TemporaryStatusType = {
   timeSlot: string
@@ -36,6 +38,22 @@ export const StatusProvider: React.FC<{ children: React.ReactNode }> = ({
     () => dayjs().isAfter(dayjs(signalData?.endsAt)),
     [signalData?.endsAt],
   )
+
+  const checkDateAndUpdateStatus = useCallback(() => {
+    if (signalData?.endsAt) {
+      const hasEnded = dayjs().isAfter(dayjs(signalData?.endsAt))
+      isOn.value = !hasEnded
+    }
+  }, [signalData?.endsAt])
+
+  useEffect(() => {
+    const subscription = AppState.addEventListener("change", (nextAppState) => {
+      if (nextAppState === "active") {
+        checkDateAndUpdateStatus()
+      }
+    })
+    return () => subscription.remove()
+  }, [checkDateAndUpdateStatus])
 
   const isOn = useSharedValue(!dateEnded)
   const [temporaryStatus, setTemporaryStatus] = useState<TemporaryStatusType>({
