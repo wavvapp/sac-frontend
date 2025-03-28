@@ -14,11 +14,37 @@ import { CustomTitle } from "@/components/ui/CustomTitle"
 
 type DatePickerProps = {
   onCloseDatePicker: () => void
+  previousTimeSlots: string | null
 }
 
-export default function DatePicker({ onCloseDatePicker }: DatePickerProps) {
-  const [fromTime, setFromTime] = useState(dayjs().toDate())
-  const [toTime, setToTime] = useState(dayjs().add(2, "hour").toDate())
+export default function DatePicker({
+  onCloseDatePicker,
+  previousTimeSlots,
+}: DatePickerProps) {
+  const formatPreviousTimeSlots = useCallback((): Date[] => {
+    if (previousTimeSlots) {
+      const [from, to] = previousTimeSlots.split("-")
+      const [fromHours, fromMinutes] = from.split(":")
+      const [toHours, toMinutes] = to.split(":")
+      return [
+        dayjs()
+          .hour(Number(fromHours))
+          .minute(Number(fromMinutes))
+          .second(0)
+          .toDate(),
+        dayjs()
+          .hour(Number(toHours))
+          .minute(Number(toMinutes))
+          .second(0)
+          .toDate(),
+      ]
+    } else {
+      return [dayjs().toDate(), dayjs().add(2, "hour").toDate()]
+    }
+  }, [previousTimeSlots])
+
+  const [fromTime, setFromTime] = useState(formatPreviousTimeSlots()[0])
+  const [toTime, setToTime] = useState(formatPreviousTimeSlots()[1])
   const [tempTime, setTempTime] = useState(dayjs().toDate())
   const [isTimePickerModalVisible, setIsTimePickerModalVisible] =
     useState(false)
@@ -93,9 +119,9 @@ export default function DatePicker({ onCloseDatePicker }: DatePickerProps) {
     (newFromTime: Dayjs | Date, newToTime: Dayjs | Date) => {
       setTemporaryStatus((prev: TemporaryStatusType) => ({
         ...prev,
-        timeSlot: `${dayjs(newFromTime).format("hh:mm")}-${dayjs(
+        timeSlot: `${dayjs(newFromTime).format("HH:mm")}-${dayjs(
           newToTime,
-        ).format("hh:mm")}`,
+        ).format("HH:mm")}`,
         startsAt: dayjs(newFromTime).toDate(),
         endsAt: dayjs(newToTime).toDate(),
       }))
@@ -105,8 +131,11 @@ export default function DatePicker({ onCloseDatePicker }: DatePickerProps) {
 
   const cancelTimeSettingOperation = useCallback(() => {
     setTemporaryStatus((prev: TemporaryStatusType) => {
+      // @ts-ignore
       delete prev.endsAt
+      // @ts-ignore
       delete prev.startsAt
+
       return {
         ...prev,
         timeSlot: "now",
@@ -128,12 +157,12 @@ export default function DatePicker({ onCloseDatePicker }: DatePickerProps) {
         <View style={styles.row}>
           <TouchableOpacity onPress={() => openTimePicker("FROM")}>
             <CustomText size="lg" fontWeight="semibold">
-              {dayjs(fromTime).format("hh:mm")}
+              {dayjs(fromTime).format("HH:mm")}
             </CustomText>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => openTimePicker("TO")}>
             <CustomText size="lg" fontWeight="semibold">
-              {dayjs(toTime).format("hh:mm")}
+              {dayjs(toTime).format("HH:mm")}
             </CustomText>
           </TouchableOpacity>
           <TouchableOpacity
@@ -149,7 +178,7 @@ export default function DatePicker({ onCloseDatePicker }: DatePickerProps) {
           mode="time"
           display="spinner"
           locale="en_US"
-          is24Hour={false}
+          is24Hour
           onChange={handleTimeChange}
         />
       )}
@@ -163,7 +192,7 @@ export default function DatePicker({ onCloseDatePicker }: DatePickerProps) {
             <DateTimePicker
               value={tempTime}
               mode="time"
-              is24Hour={false}
+              is24Hour
               display="spinner"
               locale="en_US"
               onChange={handleTimeChange}
