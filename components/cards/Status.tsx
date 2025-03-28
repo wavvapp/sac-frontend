@@ -28,10 +28,14 @@ export const Status: React.FC<StatusProps> = ({ timeSlots }) => {
     }
   }
 
+  const isTimeSlotACustomTime = timeSlots[0].includes("-")
   return (
     <View style={styles.container}>
-      {isDatePickerOpen ? (
-        <DatePicker onCloseDatePicker={() => setIsDatePickerOpen(false)} />
+      {isDatePickerOpen || isTimeSlotACustomTime ? (
+        <DatePicker
+          previousTimeSlots={isTimeSlotACustomTime ? timeSlots[0] : null}
+          onCloseDatePicker={() => setIsDatePickerOpen(false)}
+        />
       ) : (
         <>
           <CustomTitle text="When" style={styles.title} />
