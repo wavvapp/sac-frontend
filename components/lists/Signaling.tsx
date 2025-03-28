@@ -74,6 +74,7 @@ const Signaling = forwardRef<SignalingRef>((_, ref) => {
     <BottomDrawer
       snapPoints={["20%", "93%"]}
       ref={ref}
+      handleStyle={styles.handleStyles}
       setIsBottomSheetOpen={setIsBottomSheetOpen}>
       <BottomSheetSectionList
         refreshing={refreshing}
@@ -148,11 +149,17 @@ const Signaling = forwardRef<SignalingRef>((_, ref) => {
 })
 
 const styles = StyleSheet.create({
+  handleStyles: {
+    position: "absolute",
+    width: "100%",
+    height: 50,
+  },
   header: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     paddingHorizontal: 20,
+    paddingTop: 32,
     backgroundColor: theme.colors.white,
   },
   headerText: {
