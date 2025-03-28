@@ -11,11 +11,12 @@ type StatusProps = {
 }
 
 export const Status: React.FC<StatusProps> = ({ timeSlots }) => {
-  const isTimeSlotACustomTime =
-    timeSlots[0].includes("-") || timeSlots[0].toLowerCase() === "set time"
   const { temporaryStatus, setTemporaryStatus } = useStatus()
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(
-    () => isTimeSlotACustomTime,
+    () =>
+      temporaryStatus.timeSlot.includes("-") ||
+      temporaryStatus.timeSlot === "set time" ||
+      timeSlots[0].includes("-"),
   )
 
   const handleTimeSlotChange = (selectedTime: string) => {
