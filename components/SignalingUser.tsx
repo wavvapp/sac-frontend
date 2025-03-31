@@ -32,7 +32,7 @@ export default function SignalingUser({
         styles.userCard,
         isLast && styles.lastCardInTheListStyles,
         isFirst && styles.firstCardInTheListStyles,
-        online && styles.availableUserContainer,
+        !online && styles.offlineUserContainer,
       ]}>
       <View style={{ flex: 1 }}>
         {online ? (
@@ -66,8 +66,8 @@ const styles = StyleSheet.create({
   firstCardInTheListStyles: {
     paddingTop: 20,
   },
-  availableUserContainer: {
-    backgroundColor: theme.colors.white,
+  offlineUserContainer: {
+    backgroundColor: theme.colors.black_100,
   },
   BellIcon: {
     height: 48,
