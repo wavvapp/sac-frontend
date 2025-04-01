@@ -20,7 +20,7 @@ GoogleSignin.configure({
   offlineAccess: false,
 })
 export default function EntryScreen() {
-  const { signInWithGoogle, signInWithApple } = useAuth()
+  const { signInWithGoogle, signInWithApple, isLoading } = useAuth()
   const navigation = useNavigation<CredentialsScreenProps>()
   const [loadingButton, setLoadingButton] = useState<"google" | "apple" | null>(
     null,
@@ -62,7 +62,7 @@ export default function EntryScreen() {
             onPress={() => handleSignIn("google")}
             textStyles={styles.buttonText}
             hasCenteredIcon
-            disabled={loadingButton === "google"}>
+            disabled={loadingButton === "google" || isLoading}>
             {loadingButton === "google" ? (
               <ActivityIndicator size="small" color={theme.colors.white} />
             ) : (
@@ -76,7 +76,7 @@ export default function EntryScreen() {
             onPress={() => handleSignIn("apple")}
             textStyles={styles.buttonText}
             hasCenteredIcon
-            disabled={loadingButton === "apple"}>
+            disabled={loadingButton === "apple" || isLoading}>
             {loadingButton === "apple" ? (
               <ActivityIndicator size="small" color={theme.colors.white} />
             ) : (
