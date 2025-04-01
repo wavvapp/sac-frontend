@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     lineHeight: 28,
   },
   noUsers: {
-    marginTop: 10,
+    marginVertical: 10,
   },
 })
 
