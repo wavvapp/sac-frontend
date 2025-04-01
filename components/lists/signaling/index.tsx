@@ -38,11 +38,11 @@ const Index = forwardRef<SignalingRef>((_, ref) => {
     await queryClient.refetchQueries({ queryKey: ["friends"] })
   }, [queryClient])
 
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     refetch()
-  //   }, [refetch]),
-  // )
+  useFocusEffect(
+    useCallback(() => {
+      refetch()
+    }, [refetch]),
+  )
 
   useEffect(() => {
     const listener = AppState.addEventListener("change", () => {
