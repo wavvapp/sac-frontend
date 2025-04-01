@@ -17,6 +17,7 @@ import { TouchableOpacity } from "react-native-gesture-handler"
 export interface SignalingRef {
   openBottomSheet: () => void
 }
+
 type SearchProp = NativeStackNavigationProp<RootStackParamList, "Search">
 
 const Signaling = forwardRef<SignalingRef>((_, ref) => {
