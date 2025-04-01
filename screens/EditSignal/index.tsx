@@ -5,11 +5,11 @@ import { ScrollView } from "react-native-gesture-handler"
 import { theme } from "@/theme"
 import { useStatus } from "@/contexts/StatusContext"
 import { RootStackParamList } from "@/navigation"
-import { useEffect, useRef, useState } from "react"
+import { useRef, useState } from "react"
 import { useQueryClient } from "@tanstack/react-query"
 import { StatusBar } from "expo-status-bar"
 import { Friend, Signal } from "@/types"
-import { useMySignal, useSaveStatus, useTurnOffSignal } from "@/queries/signal"
+import { useSaveStatus, useTurnOffSignal } from "@/queries/signal"
 import { useOfflineHandler } from "@/hooks/useOfflineHandler"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { CustomTitle } from "@/components/ui/CustomTitle"
@@ -31,8 +31,7 @@ export default function EditSignal({
   route,
   navigation,
 }: EditSignalScreenProps) {
-  const { temporaryStatus, setTemporaryStatus, isOn } = useStatus()
-  const { data: signal } = useMySignal()
+  const { temporaryStatus, isOn } = useStatus()
   const bottomDrawerRef = useRef<BottomDrawerRef>(null)
   const { handleOfflineAction } = useOfflineHandler()
   const queryclient = useQueryClient()
@@ -104,17 +103,7 @@ export default function EditSignal({
   const handleCloseSheet = () => {
     bottomDrawerRef.current?.closeBottomSheet()
   }
-  useEffect(() => {
-    if (!signal) return
-    setTemporaryStatus({
-      timeSlot: signal.when,
-      activity: signal.status_message,
-      friendIds: signal.friendIds,
-      groups: signal.groups,
-      endsAt: signal.endsAt,
-      startsAt: signal.startsAt,
-    })
-  }, [navigation, signal, setTemporaryStatus])
+
   return (
     <SafeAreaView style={style.container}>
       <StatusBar style="dark" />
