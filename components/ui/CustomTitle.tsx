@@ -1,7 +1,7 @@
-import { StyleSheet, TextProps } from "react-native"
-import CustomText from "@/components/ui/CustomText"
+import { StyleSheet } from "react-native"
+import CustomText, { CustomTextProps } from "@/components/ui/CustomText"
 
-interface CustomTitleProps extends TextProps {
+interface CustomTitleProps extends CustomTextProps {
   text: string
   isUnderline?: boolean
 }
@@ -9,12 +9,14 @@ export const CustomTitle = ({
   text,
   isUnderline = false,
   style = {},
+  ...rest
 }: CustomTitleProps) => {
   return (
     <CustomText
       fontFamily="writer-monov"
       size="sm"
-      style={[style, styles.textStyles, isUnderline && styles.underLinedText]}>
+      style={[styles.textStyles, isUnderline && styles.underLinedText, style]}
+      {...rest}>
       {text}
     </CustomText>
   )

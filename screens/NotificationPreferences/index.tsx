@@ -5,12 +5,45 @@ import UserInfo from "@/components/UserInfo"
 import { useEnableFriendNotification } from "@/hooks/useEnableFriendNotification"
 import { useFriends } from "@/queries/friends"
 import { theme } from "@/theme"
-import { BottomSheetScrollView } from "@gorhom/bottom-sheet"
+import { Friend } from "@/types"
+import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
+import { useFocusEffect } from "@react-navigation/native"
+import { useCallback } from "react"
 import { StyleSheet, TouchableOpacity, View } from "react-native"
 
 export default function NotificationPreferences() {
-  const { data: allFriends, isLoading } = useFriends(true)
+  const { data: allFriends, isLoading, refetch } = useFriends(true)
   const { changePreferences } = useEnableFriendNotification()
+
+  useFocusEffect(
+    useCallback(() => {
+      refetch()
+    }, [refetch]),
+  )
+  const renderFriend = ({ item: friend }: { item: Friend }) => (
+    <TouchableOpacity
+      key={friend.id}
+      style={styles.friendContainer}
+      disabled={false}
+      onPress={() => changePreferences(friend)}>
+      <UserInfo
+        fullName={friend.names}
+        username={friend.username}
+        style={styles.friendInfo}
+      />
+      <CustomSwitch
+        onPress={() => changePreferences(friend)}
+        switchTrackBackground={
+          friend.hasNotificationEnabled
+            ? theme.colors.black
+            : theme.colors.black_200
+        }
+        thumbBackground={theme.colors.white}
+        isOn={friend?.hasNotificationEnabled}
+      />
+    </TouchableOpacity>
+  )
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -22,40 +55,20 @@ export default function NotificationPreferences() {
           control—switch them on or off anytime!
         </CustomText>
       </View>
-
-      <BottomSheetScrollView
+      <BottomSheetFlatList
+        data={allFriends}
+        keyExtractor={(friend) => friend.id}
+        renderItem={renderFriend}
+        ListEmptyComponent={
+          isLoading ? (
+            <FriendsSkeleton />
+          ) : (
+            <CustomText size="sm">You currently have no friends!</CustomText>
+          )
+        }
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.friendsList}>
-        {isLoading ? (
-          <FriendsSkeleton />
-        ) : allFriends && allFriends.length !== 0 ? (
-          allFriends.map((friend) => (
-            <TouchableOpacity
-              key={friend.id}
-              style={styles.friendContainer}
-              disabled={false}
-              onPress={() => changePreferences(friend)}>
-              <UserInfo
-                fullName={friend.names}
-                username={friend.username}
-                style={styles.friendInfo}
-              />
-              <CustomSwitch
-                onPress={() => changePreferences(friend)}
-                switchTrackBackground={
-                  friend.hasNotificationEnabled
-                    ? theme.colors.black
-                    : theme.colors.black_200
-                }
-                thumbBackground={theme.colors.white}
-                isOn={friend?.hasNotificationEnabled}
-              />
-            </TouchableOpacity>
-          ))
-        ) : (
-          <CustomText size="sm">You currently have no friends!</CustomText>
-        )}
-      </BottomSheetScrollView>
+        contentContainerStyle={styles.friendsList}
+      />
     </View>
   )
 }
@@ -65,9 +78,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 32,
   },
-  header: { gap: 6 },
+  header: {
+    gap: 6,
+    marginBottom: 24,
+  },
   friendsList: {
-    marginTop: 24,
+    paddingBottom: 12,
   },
   friendContainer: {
     flexDirection: "row",

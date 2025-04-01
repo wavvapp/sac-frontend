@@ -4,14 +4,8 @@
     "strict": true,
     "jsx": "react-jsx",
     "paths": {
-      "@/*": [
-        "./*"
-      ]
+      "@/*": ["./*"]
     }
   },
-  "include": [
-    "**/*.ts",
-    "**/*.tsx",
-    ".eslintrc.js"
-  ]
+  "include": ["**/*.ts", "**/*.tsx", ".eslintrc.js", "app.config.js"]
 }
