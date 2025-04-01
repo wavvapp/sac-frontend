@@ -76,6 +76,7 @@ export default function HomeScreen() {
     return runOnJS(setIsVisible)(false)
   }, [isOn.value])
 
+  console.log({ isOn: isOn.value })
   return (
     <View style={styles.container}>
       <NoiseVideo />

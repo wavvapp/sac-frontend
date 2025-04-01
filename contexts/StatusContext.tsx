@@ -41,24 +41,20 @@ export const StatusProvider: React.FC<{ children: React.ReactNode }> = ({
     () => dayjs().isAfter(dayjs(signal?.endsAt)),
     [signal?.endsAt],
   )
-
+  const isOn = useSharedValue(!dateEnded)
   const checkDateAndUpdateStatus = useCallback(() => {
     if (signal?.endsAt) {
-      const hasEnded = dayjs().isAfter(dayjs(signal?.endsAt))
+      const hasEnded = dayjs().isAfter(signal?.endsAt)
       isOn.value = !hasEnded
     }
-  }, [signal?.endsAt])
+  }, [isOn, signal?.endsAt])
 
   useEffect(() => {
-    const subscription = AppState.addEventListener("change", (nextAppState) => {
-      if (nextAppState === "active") {
-        checkDateAndUpdateStatus()
-      }
+    const subscription = AppState.addEventListener("change", () => {
+      checkDateAndUpdateStatus()
     })
     return () => subscription.remove()
   }, [checkDateAndUpdateStatus])
-
-  const isOn = useSharedValue(!dateEnded)
 
   const [temporaryStatus, setTemporaryStatus] = useState<TemporaryStatusType>({
     friendIds: signal?.friendIds || [],
@@ -81,8 +77,7 @@ export const StatusProvider: React.FC<{ children: React.ReactNode }> = ({
       startsAt: signal.startsAt,
       groups: signal.groups,
     })
-    isOn.value = !dateEnded
-  }, [dateEnded, isOn, signal])
+  }, [isOn.value, signal])
 
   return (
     <StatusContext.Provider

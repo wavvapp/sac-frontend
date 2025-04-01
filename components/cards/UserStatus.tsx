@@ -14,6 +14,7 @@ import { useFriends } from "@/queries/friends"
 import { useMySignal } from "@/queries/signal"
 import { useMemo } from "react"
 import UserAvailability from "./UserAvailability"
+import { useStatus } from "@/contexts/StatusContext"
 
 const MAX_VISIBLE_FRIENDS = 4
 
@@ -28,7 +29,7 @@ export default function UserStatus({
   isOn,
   ...rest
 }: UserStatusProps) {
-  const { data: signal } = useMySignal()
+  const { signal } = useStatus()
 
   const { data: allFriends } = useFriends()
   const navigation = useNavigation<HomeScreenProps>()
