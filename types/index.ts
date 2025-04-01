@@ -75,6 +75,7 @@ export interface Signal {
   friends: Friend[]
   friendIds: string[]
   status?: string
+  groups: Group[]
   startsAt: Date
   endsAt: Date
 }
@@ -103,4 +104,19 @@ export type SettingOption = {
   icon: React.JSX.Element
   onPress: () => void | Promise<void>
   titleStyle?: TextStyle
+}
+
+export type Group = {
+  id: string
+  name: string
+  friends: {
+    id: string
+    names: string
+    username: string
+  }[]
+}
+
+export enum AudienceOptions {
+  GROUPS = "groups",
+  FRIENDS = "friends",
 }

@@ -1,28 +1,35 @@
 import { forwardRef, useCallback, useEffect, useMemo, useState } from "react"
 import { View, StyleSheet, AppState } from "react-native"
-import CustomText from "@/components/ui/CustomText"
-import BottomDrawer, { BottomDrawerRef } from "@/components/BottomDrawer"
+import BottomDrawer from "@/components/BottomDrawer"
 import { BottomSheetSectionList } from "@gorhom/bottom-sheet"
 import { theme } from "@/theme"
 import SignalingUser from "@/components/SignalingUser"
 import { useFocusEffect } from "@react-navigation/native"
 import { useSignalingFriends } from "@/queries/friends"
-import { Friend } from "@/types"
 import { useQueryClient } from "@tanstack/react-query"
+import { onShare } from "@/utils/share"
+import ActionCard from "@/components/cards/Action"
+import { useAuth } from "@/contexts/AuthContext"
+import SignalingHeader from "@/components/lists/signaling/signalingHeader"
 import * as Notifications from "expo-notifications"
 
-const Signaling = forwardRef<BottomDrawerRef>((_, ref) => {
+export interface SignalingRef {
+  openBottomSheet: () => void
+}
+
+const Index = forwardRef<SignalingRef>((_, ref) => {
   const [isbottomSheetOpen, setIsBottomSheetOpen] = useState<boolean>(false)
   const { data: availableFriends = [], refetch } =
     useSignalingFriends(isbottomSheetOpen)
   const queryClient = useQueryClient()
   const [refreshing, setRefreshing] = useState(false)
+  const { user } = useAuth()
 
-  const onlineFriends = useMemo(() => {
+  const friendsWithSignalOn = useMemo(() => {
     return availableFriends.filter((friend) => friend.signal)
   }, [availableFriends])
 
-  const offlineFriends = useMemo(() => {
+  const friendsWithSignalOff = useMemo(() => {
     return availableFriends.filter((friend) => !friend.signal)
   }, [availableFriends])
 
@@ -65,44 +72,40 @@ const Signaling = forwardRef<BottomDrawerRef>((_, ref) => {
 
   return (
     <BottomDrawer ref={ref} setIsBottomSheetOpen={setIsBottomSheetOpen}>
-      <View style={styles.header}>
-        <CustomText size="lg" fontWeight="semibold" style={styles.headerText}>
-          Friends
-        </CustomText>
-      </View>
-      {!onlineFriends.length && (
-        <CustomText style={styles.noUsers}>
-          None of your friends wavv'd yet :(
-        </CustomText>
-      )}
       <BottomSheetSectionList
         refreshing={refreshing}
+        contentContainerStyle={styles.contentContainerStyle}
+        ListHeaderComponent={() =>
+          SignalingHeader({ availableFriends: friendsWithSignalOn })
+        }
+        ListFooterComponent={() =>
+          ActionCard({
+            style: styles.shareActionCard,
+            title: "Your friends are not here?",
+            description: "Find/Invite friends on Wavv",
+            onPress: () => onShare(user?.username, user?.inviteCode),
+          })
+        }
         onRefresh={handleRefresh}
         sections={[
           {
             title: "available users",
-            data: onlineFriends,
+            data: friendsWithSignalOn,
             ItemSeparatorComponent: () => (
               <View style={styles.availableItemSeparator} />
             ),
-            renderItem: ({
-              item: user,
-              index,
-            }: {
-              item: Friend
-              index: number
-            }) =>
+            renderItem: ({ item: user, index }) =>
               SignalingUser({
                 user,
                 online: true,
-                isLast: index === onlineFriends.length - 1,
+                isLast: index === friendsWithSignalOn.length - 1,
                 isFirst: index === 0,
                 hasNotificationEnabled: !!user?.hasNotificationEnabled,
               }),
           },
           {
             title: "Other users",
-            data: offlineFriends,
+            data: friendsWithSignalOff,
             ItemSeparatorComponent: () => (
               <View style={styles.offlineItemSeparator} />
             ),
@@ -110,7 +113,7 @@ const Signaling = forwardRef<BottomDrawerRef>((_, ref) => {
               SignalingUser({
                 user,
                 online: false,
-                isLast: index === offlineFriends.length - 1,
+                isLast: index === friendsWithSignalOff.length - 1,
                 isFirst: index === 0,
                 hasNotificationEnabled: !!user?.hasNotificationEnabled,
               }),
@@ -124,21 +127,6 @@ const Signaling = forwardRef<BottomDrawerRef>((_, ref) => {
 })
 
 const styles = StyleSheet.create({
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: 20,
-    marginBottom: 16,
-  },
-  headerText: {
-    fontSize: 20,
-    lineHeight: 28,
-  },
-  noUsers: {
-    paddingHorizontal: 20,
-    marginBottom: 20,
-  },
   sectionListContainer: {
     backgroundColor: theme.colors.black_100,
   },
@@ -149,8 +137,14 @@ const styles = StyleSheet.create({
   offlineItemSeparator: {
     height: 12,
   },
+  shareActionCard: {
+    paddingHorizontal: 20,
+  },
+  contentContainerStyle: {
+    paddingBottom: 20,
+  },
 })
 
-Signaling.displayName = "Signaling"
+Index.displayName = "Signaling"
 
-export default Signaling
+export default Index

@@ -4,8 +4,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { StyleSheet, View, StatusBar, Platform } from "react-native"
 import { runOnJS, useDerivedValue } from "react-native-reanimated"
 import { useCallback, useRef, useState } from "react"
-import Signaling from "@/components/lists/Signaling"
-import { BottomDrawerRef } from "@/components/BottomDrawer"
+import Signaling from "@/components/lists/signaling"
 import Settings from "@/components/vectors/Settings"
 import { theme } from "@/theme"
 import Badge from "@/components/ui/Badge"
@@ -28,6 +27,7 @@ import NoiseVideo from "@/components/NoiseVideo"
 import TapWavv from "@/components/cards/TapWavv"
 import { useFetchPoints } from "@/queries/points"
 import { useQueryClient } from "@tanstack/react-query"
+import { BottomDrawerRef } from "@/components/BottomDrawer"
 
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -62,6 +62,7 @@ export default function HomeScreen() {
       refetchPoints()
     }, [isAuthenticated, refetchPoints]),
   )
+
   const handleWebsiteOpen = async () => {
     if (process.env.POINTS_CANISTER_URL) {
       await WebBrowser.openBrowserAsync(process.env.POINTS_CANISTER_URL)
@@ -153,7 +154,6 @@ const styles = StyleSheet.create({
     width: "100%",
     paddingHorizontal: 20,
     paddingVertical: 25,
-    zIndex: 1,
   },
   buttonContainer: {
     flexDirection: "row",
