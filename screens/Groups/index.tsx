@@ -1,8 +1,8 @@
 import ActionHeader from "@/components/cards/ActionHeader"
 import PlusIcon from "@/components/vectors/PlusIcon"
-import { ScrollView, StyleSheet, View } from "react-native"
+import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
-import { useGetGroups } from "@/queries/groups"
+import { useDeleteGroups, useGetGroups } from "@/queries/groups"
 import { useNavigation } from "@react-navigation/native"
 import { CreateGroupScreenProps } from "@/screens/Groups/CreateGroup"
 import ActionCard from "@/components/cards/Action"
@@ -14,6 +14,7 @@ import EditIcon from "@/components/vectors/EditIcon"
 import { theme } from "@/theme"
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 import UserInfo from "@/components/UserInfo"
+import { EditGroupScreenProps } from "@/screens/Groups/EditGroups"
 export default function GroupsScreen() {
   const { data: groups } = useGetGroups()
   const navigation = useNavigation<CreateGroupScreenProps>()
@@ -27,6 +28,23 @@ export default function GroupsScreen() {
   const getMemberCountText = (count?: number) => {
     const suffix = count === 1 ? "member" : "members"
     return `${count} ${suffix}`
+  }
+  const editNavigation = useNavigation<EditGroupScreenProps>()
+
+  const deleteGroup = useDeleteGroups()
+  const handleGroupDeletion = (groupId: string) => {
+    bottomDrawerRef.current?.closeBottomSheet()
+    deleteGroup.mutate(groupId)
+  }
+  const navigateToEditGroup = () => {
+    if (currentGroup) {
+      editNavigation.navigate("EditGroup", {
+        groupId: currentGroup.id,
+        name: currentGroup.name,
+        friendIds: currentGroup.friends?.map((friend) => friend.id) || [],
+      })
+      bottomDrawerRef.current?.closeBottomSheet()
+    }
   }
   return (
     <SafeAreaView style={styles.container}>
@@ -62,9 +80,11 @@ export default function GroupsScreen() {
               style={styles.groupName}>
               {currentGroup?.name}
             </CustomText>
-            <View style={styles.EditIcon}>
+            <TouchableOpacity
+              style={styles.EditIcon}
+              onPress={navigateToEditGroup}>
               <EditIcon />
-            </View>
+            </TouchableOpacity>
           </View>
           <BottomSheetFlatList
             contentContainerStyle={styles.usersList}
@@ -79,8 +99,7 @@ export default function GroupsScreen() {
                 <ActionCard
                   title="Delete group"
                   titleStyle={styles.deleteButton}
-                  // TODO: add delete group functionality as well
-                  onPress={() => console.log("some")}
+                  onPress={() => handleGroupDeletion(currentGroup?.id || "")}
                 />
               </>
             }
