@@ -4,7 +4,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { StyleSheet, View, StatusBar, Platform } from "react-native"
 import { runOnJS, useDerivedValue } from "react-native-reanimated"
 import { useCallback, useRef, useState } from "react"
-import Index, { SignalingRef } from "@/components/lists/signaling"
+import Signaling from "@/components/lists/signaling"
 import Settings from "@/components/vectors/Settings"
 import { theme } from "@/theme"
 import Badge from "@/components/ui/Badge"
@@ -27,6 +27,7 @@ import NoiseVideo from "@/components/NoiseVideo"
 import TapWavv from "@/components/cards/TapWavv"
 import { useFetchPoints } from "@/queries/points"
 import { useQueryClient } from "@tanstack/react-query"
+import { BottomDrawerRef } from "@/components/BottomDrawer"
 
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -124,7 +125,7 @@ export default function HomeScreen() {
           </View>
         )}
       </View>
-      {!!allFriends?.length && <Index ref={signalingRef} />}
+      {!!allFriends?.length && <Signaling ref={signalingRef} />}
     </View>
   )
 }

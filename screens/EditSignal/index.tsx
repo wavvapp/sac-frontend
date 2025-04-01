@@ -10,7 +10,6 @@ import { useQueryClient } from "@tanstack/react-query"
 import { StatusBar } from "expo-status-bar"
 import { Friend, Signal } from "@/types"
 import { useMySignal, useSaveStatus, useTurnOffSignal } from "@/queries/signal"
-import Header from "@/components/cards/Header"
 import { useOfflineHandler } from "@/hooks/useOfflineHandler"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { CustomTitle } from "@/components/ui/CustomTitle"
@@ -20,6 +19,8 @@ import EditIcon from "@/components/vectors/EditIcon"
 import { SetActivity } from "@/components/SetActivity"
 import Audience from "@/components/Audience"
 import ActionCard from "@/components/cards/Action"
+import CrossMark from "@/components/vectors/CrossMark"
+import { CustomButton } from "@/components/ui/Button"
 
 type EditSignalScreenProps = NativeStackScreenProps<
   RootStackParamList,
@@ -117,7 +118,15 @@ export default function EditSignal({
   return (
     <SafeAreaView style={style.container}>
       <StatusBar style="dark" />
-      <Header title={isNewSignal ? "Set your Wavv" : "Edit your Wavv"} />
+      <View style={style.header}>
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          style={style.closeIcon}>
+          <CrossMark style={{ marginLeft: -5 }} />
+        </TouchableOpacity>
+        <CustomButton onPress={handleSaveStatus} title="Save" />
+      </View>
+
       <View style={style.line} />
       <ScrollView
         keyboardShouldPersistTaps="always"

@@ -1,6 +1,5 @@
 import { forwardRef, useCallback, useEffect, useMemo, useState } from "react"
 import { View, StyleSheet, AppState } from "react-native"
-import CustomText from "@/components/ui/CustomText"
 import BottomDrawer from "@/components/BottomDrawer"
 import { BottomSheetSectionList } from "@gorhom/bottom-sheet"
 import { theme } from "@/theme"
@@ -26,11 +25,11 @@ const Index = forwardRef<SignalingRef>((_, ref) => {
   const [refreshing, setRefreshing] = useState(false)
   const { user } = useAuth()
 
-  const onlineFriends = useMemo(() => {
+  const friendsWithSignalOn = useMemo(() => {
     return availableFriends.filter((friend) => friend.signal)
   }, [availableFriends])
 
-  const offlineFriends = useMemo(() => {
+  const friendsWithSignalOff = useMemo(() => {
     return availableFriends.filter((friend) => !friend.signal)
   }, [availableFriends])
 
@@ -73,15 +72,12 @@ const Index = forwardRef<SignalingRef>((_, ref) => {
 
   return (
     <BottomDrawer ref={ref} setIsBottomSheetOpen={setIsBottomSheetOpen}>
-      {!availableFriends.length && (
-        <CustomText style={styles.noUsers}>
-          None of your friends wavv'd yet :(
-        </CustomText>
-      )}
       <BottomSheetSectionList
         refreshing={refreshing}
         contentContainerStyle={styles.contentContainerStyle}
-        ListHeaderComponent={() => SignalingHeader()}
+        ListHeaderComponent={() =>
+          SignalingHeader({ availableFriends: friendsWithSignalOn })
+        }
         ListFooterComponent={() =>
           ActionCard({
             style: styles.shareActionCard,
@@ -94,7 +90,7 @@ const Index = forwardRef<SignalingRef>((_, ref) => {
         sections={[
           {
             title: "available users",
-            data: onlineFriends,
+            data: friendsWithSignalOn,
             ItemSeparatorComponent: () => (
               <View style={styles.availableItemSeparator} />
             ),
@@ -102,14 +98,14 @@ const Index = forwardRef<SignalingRef>((_, ref) => {
               SignalingUser({
                 user,
                 online: true,
-                isLast: index === onlineFriends.length - 1,
+                isLast: index === friendsWithSignalOn.length - 1,
                 isFirst: index === 0,
                 hasNotificationEnabled: !!user?.hasNotificationEnabled,
               }),
           },
           {
             title: "Other users",
-            data: offlineFriends,
+            data: friendsWithSignalOff,
             ItemSeparatorComponent: () => (
               <View style={styles.offlineItemSeparator} />
             ),
@@ -117,7 +113,7 @@ const Index = forwardRef<SignalingRef>((_, ref) => {
               SignalingUser({
                 user,
                 online: false,
-                isLast: index === offlineFriends.length - 1,
+                isLast: index === friendsWithSignalOff.length - 1,
                 isFirst: index === 0,
                 hasNotificationEnabled: !!user?.hasNotificationEnabled,
               }),
@@ -131,10 +127,6 @@ const Index = forwardRef<SignalingRef>((_, ref) => {
 })
 
 const styles = StyleSheet.create({
-  noUsers: {
-    paddingHorizontal: 20,
-    marginBottom: 20,
-  },
   sectionListContainer: {
     backgroundColor: theme.colors.black_100,
   },

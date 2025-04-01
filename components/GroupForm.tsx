@@ -1,10 +1,9 @@
 import React, { useState, useCallback } from "react"
-import { View, StyleSheet, ScrollView, TouchableOpacity } from "react-native"
+import { View, StyleSheet, TouchableOpacity, FlatList } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { StatusBar } from "expo-status-bar"
 import { useNavigation } from "@react-navigation/native"
 import { useFriends } from "@/queries/friends"
-import { Friend } from "@/types"
 import { FriendsSkeleton } from "@/components/cards/FriendsSkeleton"
 import FriendCard from "./Friend"
 import { CustomButton } from "@/components/ui/Button"
@@ -62,24 +61,26 @@ export const GroupForm = ({
           title="Save"
         />
       </HeaderWrapper>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
-        style={styles.friendListContainer}>
-        {isLoading ? (
-          <FriendsSkeleton />
-        ) : (
-          allFriends?.map((friend: Friend) => (
-            <FriendCard
-              containerStyles={styles.friend}
-              selected={friendIds?.includes(friend.id)}
-              key={friend.id}
-              handleChange={() => updateFriendsList(friend.id)}
-              user={friend}
-            />
-          ))
-        )}
-      </ScrollView>
+
+      {isLoading ? (
+        <FriendsSkeleton />
+      ) : (
+        allFriends && (
+          <FlatList
+            contentContainerStyle={styles.contentContainerStyle}
+            style={styles.friendListContainer}
+            data={allFriends}
+            renderItem={({ item: friend }) =>
+              FriendCard({
+                containerStyles: styles.friend,
+                selected: friendIds?.includes(friend.id),
+                handleChange: () => updateFriendsList(friend.id),
+                user: friend,
+              })
+            }
+          />
+        )
+      )}
     </SafeAreaView>
   )
 }
@@ -96,7 +97,7 @@ const styles = StyleSheet.create({
   },
   friendListContainer: {
     paddingHorizontal: 20,
-    paddingTop: 20,
+    paddingTop: 10,
     paddingBottom: 100,
   },
   friend: {
@@ -117,5 +118,8 @@ const styles = StyleSheet.create({
     width: 48,
     justifyContent: "center",
     alignItems: "flex-start",
+  },
+  contentContainerStyle: {
+    paddingBottom: 50,
   },
 })

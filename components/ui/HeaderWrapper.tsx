@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 20,
     borderBottomWidth: 1,
-    paddingBottom: 12,
+    paddingVertical: 10,
     borderColor: theme.colors.black_100,
     width: "100%",
   },
