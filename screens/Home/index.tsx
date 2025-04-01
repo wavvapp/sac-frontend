@@ -4,7 +4,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { StyleSheet, View, StatusBar, Platform } from "react-native"
 import { runOnJS, useDerivedValue } from "react-native-reanimated"
 import { useCallback, useRef, useState } from "react"
-import Signaling, { SignalingRef } from "@/components/lists/Signaling"
+import Index, { SignalingRef } from "@/components/lists/signaling"
 import Settings from "@/components/vectors/Settings"
 import { theme } from "@/theme"
 import Badge from "@/components/ui/Badge"
@@ -108,7 +108,7 @@ export default function HomeScreen() {
           </View>
         )}
       </View>
-      {!!allFriends?.length && <Signaling ref={signalingRef} />}
+      {!!allFriends?.length && <Index ref={signalingRef} />}
     </View>
   )
 }

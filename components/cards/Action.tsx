@@ -19,7 +19,6 @@ export default function ActionCard({
   icon,
   onPress,
   fontFamily,
-  id
 }: {
   style?: ViewStyle
   titleStyle?: TextStyle
