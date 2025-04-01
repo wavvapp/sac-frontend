@@ -37,17 +37,11 @@ export const useSaveStatus = (args: UseSaveSatusArgs) => {
         status_message: temporaryStatus.activity,
         when: temporaryStatus.timeSlot,
         groups: temporaryStatus.groups,
+        startsAt: temporaryStatus?.startsAt,
+        endsAt: temporaryStatus?.endsAt,
       })
     },
     ...rest,
-  })
-}
-
-export const useTurnOnSignal = (args: MutationOptions) => {
-  return useMutation({
-    mutationKey: ["toggle-signal-change"],
-    mutationFn: () => api.post("/my-signal/turn-on"),
-    ...args,
   })
 }
 

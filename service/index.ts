@@ -1,11 +1,11 @@
+import AlertDialog from "@/components/AlertDialog"
+import AsyncStorage from "@react-native-async-storage/async-storage"
+import NetInfo from "@react-native-community/netinfo"
 import axios, {
   AxiosError,
   AxiosResponse,
   InternalAxiosRequestConfig,
 } from "axios"
-import AsyncStorage from "@react-native-async-storage/async-storage"
-import NetInfo from "@react-native-community/netinfo"
-import AlertDialog from "@/components/AlertDialog"
 
 // Create an Axios instance
 const api = axios.create({
@@ -13,6 +13,7 @@ const api = axios.create({
   timeout: 10000,
   headers: {
     "Content-Type": "application/json",
+    "x-api-version": "2",
   },
 })
 

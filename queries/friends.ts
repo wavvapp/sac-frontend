@@ -18,6 +18,7 @@ export const useFriends = (shouldRefetch?: boolean) => {
     staleTime: Infinity,
     refetchInterval: shouldRefetch ? 5000 : false,
     placeholderData: [],
+    refetchOnWindowFocus: "always",
   })
 }
 
@@ -35,11 +36,14 @@ export const useSignalingFriends = (shouldRefetch?: boolean) => {
         return friendSignals
       } catch (error) {
         console.error("Error in useSignalingFriends:", error)
+        return []
       }
     },
     placeholderData: [],
+    staleTime: Infinity,
     refetchInterval: shouldRefetch ? 5000 : false,
     retry: 1,
+    refetchOnWindowFocus: "always",
   })
 }
 
@@ -185,6 +189,27 @@ export const usePrefetchFriend = ({
       queryFn: async () => {
         const { data } = await api.get("/friends")
         return data
+      },
+    })
+  }, [queryClient])
+}
+
+export const usePrefetchFriendSignals = ({
+  queryClient,
+}: {
+  queryClient: QueryClient
+}) => {
+  return useCallback(async () => {
+    await queryClient.prefetchQuery({
+      queryKey: ["friend-signals"],
+      queryFn: async () => {
+        const { data } = await api.get("/friend-signals")
+        const friendSignals = data.map((friend: FriendSignal) => ({
+          ...friend,
+          time: friend.signal?.when,
+          activity: friend.signal?.status_message,
+        }))
+        return friendSignals
       },
     })
   }, [queryClient])

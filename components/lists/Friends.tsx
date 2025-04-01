@@ -53,6 +53,21 @@ export default function FriendsList() {
     }))
   }, [allFriends, canSelectAll, setTemporaryStatus])
 
+  const sortedFriends = useMemo(() => {
+    if (!allFriends) return []
+    const selectedFriends = allFriends.filter((friend) =>
+      friendIds?.includes(friend.id),
+    )
+    const unselectedFriends = allFriends.filter(
+      (friend) => !friendIds?.includes(friend.id),
+    )
+    const sortFriendsByName = (a: Friend, b: Friend) =>
+      a.names.localeCompare(b.names)
+    return [
+      ...selectedFriends.sort(sortFriendsByName),
+      ...unselectedFriends.sort(sortFriendsByName),
+    ]
+  }, [allFriends])
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -69,7 +84,7 @@ export default function FriendsList() {
       {isLoading ? (
         <FriendsSkeleton />
       ) : (
-        allFriends?.map((friend: Friend) => (
+        sortedFriends?.map((friend: Friend) => (
           <FriendCard
             selected={friendIds?.includes(friend.id)}
             key={friend.id}

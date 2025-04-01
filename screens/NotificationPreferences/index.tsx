@@ -7,12 +7,19 @@ import { useFriends } from "@/queries/friends"
 import { theme } from "@/theme"
 import { Friend } from "@/types"
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
+import { useFocusEffect } from "@react-navigation/native"
+import { useCallback } from "react"
 import { StyleSheet, TouchableOpacity, View } from "react-native"
 
 export default function NotificationPreferences() {
-  const { data: allFriends, isLoading } = useFriends(true)
+  const { data: allFriends, isLoading, refetch } = useFriends(true)
   const { changePreferences } = useEnableFriendNotification()
 
+  useFocusEffect(
+    useCallback(() => {
+      refetch()
+    }, [refetch]),
+  )
   const renderFriend = ({ item: friend }: { item: Friend }) => (
     <TouchableOpacity
       key={friend.id}

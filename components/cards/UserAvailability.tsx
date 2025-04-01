@@ -1,4 +1,4 @@
-import { StyleSheet, View, ViewProps } from "react-native"
+import { StyleSheet, View, ViewProps, Text } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import { theme } from "@/theme"
 import { User } from "@/types"
@@ -21,46 +21,40 @@ export default function UserAvailability({
       <CustomText style={styles.name} fontWeight="semibold">
         {fullName}
       </CustomText>
-      <View style={styles.header}>
-        <CustomText
-          fontFamily="writer-monos"
-          numberOfLines={2}
-          ellipsizeMode="tail"
-          style={styles.status}>
-          {activity}
-        </CustomText>
-        <View style={styles.dot} />
-        <CustomText style={styles.time} fontFamily="writer-monos">
-          {time}
-        </CustomText>
-      </View>
+
+      <CustomText style={styles.header} fontFamily="writer-monos">
+        <Text style={{ color: "rgba(0, 0, 0,1)" }}>{activity}</Text>
+        <Text
+          style={{
+            ...styles.dot,
+            fontFamily: "System",
+            marginVertical: "auto",
+          }}>
+          {" \u2022 "}
+        </Text>
+        <Text style={styles.time}>{time}</Text>
+      </CustomText>
     </View>
   )
 }
+
 const styles = StyleSheet.create({
   container: {
     gap: 1,
   },
   header: {
     flexDirection: "row",
-    gap: 6,
   },
   name: {
     maxWidth: "70%",
   },
   time: {
-    opacity: 0.5,
     textTransform: "capitalize",
-  },
-  status: {
-    maxWidth: "80%",
+    color: theme.colors.black_500,
   },
   dot: {
-    backgroundColor: theme.colors.black,
-    opacity: 0.5,
-    height: 2,
-    width: 2,
-    borderRadius: 2,
-    marginTop: 12,
+    color: theme.colors.black_500,
+    fontSize: theme.fontSize.base,
+    alignSelf: "center",
   },
 })

@@ -20,6 +20,7 @@ interface SetStatusProps {
 }
 
 const INPUT_MAX_HEIGHT = 200
+const MAX_STATUS_CHARACTERS = 64
 export function SetActivity({ closeBottomSheet }: SetStatusProps) {
   const { temporaryStatus, setTemporaryStatus } = useStatus()
   const [activityText, setActivityText] = useState<string>(
@@ -35,6 +36,7 @@ export function SetActivity({ closeBottomSheet }: SetStatusProps) {
     Keyboard.dismiss()
   }
 
+  const isInitiallyEmpty = options.includes(activityText.toLocaleLowerCase())
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -56,10 +58,11 @@ export function SetActivity({ closeBottomSheet }: SetStatusProps) {
         />
       </View>
       <Input
+        maxLength={MAX_STATUS_CHARACTERS}
         textSize="lg"
         placeholder="Enter your plan or pick an option"
         handleTextChange={setActivityText}
-        value={activityText}
+        value={isInitiallyEmpty ? "" : activityText}
         variant="ghost"
         style={[styles.inputContainer, { maxHeight: INPUT_MAX_HEIGHT }]}
         multiline={true}

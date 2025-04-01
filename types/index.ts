@@ -76,6 +76,8 @@ export interface Signal {
   friendIds: string[]
   status?: string
   groups: Group[]
+  startsAt: Date
+  endsAt: Date
 }
 
 export type FriendSignal = {

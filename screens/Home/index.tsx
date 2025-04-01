@@ -9,6 +9,7 @@ import Settings from "@/components/vectors/Settings"
 import { theme } from "@/theme"
 import Badge from "@/components/ui/Badge"
 import ShareIcon from "@/components/vectors/ShareIcon"
+import SearchIcon from "@/components/vectors/SearchIcon"
 import { CustomButton } from "@/components/ui/Button"
 import { useFocusEffect, useNavigation } from "@react-navigation/native"
 import { onShare } from "@/utils/share"
@@ -25,6 +26,7 @@ import AlertDialog from "@/components/AlertDialog"
 import NoiseVideo from "@/components/NoiseVideo"
 import TapWavv from "@/components/cards/TapWavv"
 import { useFetchPoints } from "@/queries/points"
+import { useQueryClient } from "@tanstack/react-query"
 
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -34,13 +36,24 @@ export type HomeScreenProps = NativeStackNavigationProp<
 export default function HomeScreen() {
   const [_, setIsVisible] = useState(false)
   const { isOn } = useStatus()
-  const signalingRef = useRef<SignalingRef>(null)
+  const signalingRef = useRef<BottomDrawerRef>(null)
   const navigation = useNavigation<HomeScreenProps>()
   const { data: allFriends } = useFriends()
   const { user, isAuthenticated } = useAuth()
   const { handleOfflineAction } = useOfflineHandler()
 
   const { data, refetch: refetchPoints } = useFetchPoints()
+
+  const queryClient = useQueryClient()
+  const refetchFriendsData = useCallback(async () => {
+    await queryClient.refetchQueries({ queryKey: ["friend-signals"] })
+    await queryClient.refetchQueries({ queryKey: ["friends"] })
+  }, [queryClient])
+
+  const openSearch = () => {
+    refetchFriendsData()
+    navigation.navigate("Search")
+  }
 
   useFocusEffect(
     useCallback(() => {
@@ -74,6 +87,9 @@ export default function HomeScreen() {
             />
           </TouchableOpacity>
           <View style={styles.buttonContainer}>
+            <TouchableOpacity style={styles.SearchIcon} onPress={openSearch}>
+              <SearchIcon color={theme.colors.white} strokeWidth={1.5} />
+            </TouchableOpacity>
             <CustomButton
               style={styles.settingsButton}
               onPress={() =>
@@ -88,13 +104,13 @@ export default function HomeScreen() {
                 })
               }>
               <TouchableOpacity style={styles.shareButton}>
-                <ShareIcon color={theme.colors.white} />
+                <ShareIcon color={theme.colors.white} strokeWidth={1.5} />
               </TouchableOpacity>
             </CustomButton>
             <CustomButton
               style={styles.settingsButton}
               onPress={() => navigation.push("Settings")}>
-              <Settings color={theme.colors.white} />
+              <Settings color={theme.colors.white} strokeWidth={1.5} />
             </CustomButton>
           </View>
         </View>
@@ -167,5 +183,11 @@ const styles = StyleSheet.create({
     width: 48,
     alignItems: "center",
     justifyContent: "center",
+  },
+  SearchIcon: {
+    height: 48,
+    width: 48,
+    justifyContent: "center",
+    alignItems: "center",
   },
 })

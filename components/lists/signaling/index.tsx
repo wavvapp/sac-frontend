@@ -1,16 +1,18 @@
-import { forwardRef, useCallback, useMemo, useState } from "react"
-import { View, StyleSheet } from "react-native"
+import { forwardRef, useCallback, useEffect, useMemo, useState } from "react"
+import { View, StyleSheet, AppState } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import BottomDrawer from "@/components/BottomDrawer"
 import { BottomSheetSectionList } from "@gorhom/bottom-sheet"
 import { theme } from "@/theme"
 import SignalingUser from "@/components/SignalingUser"
+import { useFocusEffect } from "@react-navigation/native"
 import { useSignalingFriends } from "@/queries/friends"
 import { useQueryClient } from "@tanstack/react-query"
 import { onShare } from "@/utils/share"
 import ActionCard from "@/components/cards/Action"
 import { useAuth } from "@/contexts/AuthContext"
 import SignalingHeader from "@/components/lists/signaling/signalingHeader"
+import * as Notifications from "expo-notifications"
 
 export interface SignalingRef {
   openBottomSheet: () => void
@@ -18,7 +20,8 @@ export interface SignalingRef {
 
 const Index = forwardRef<SignalingRef>((_, ref) => {
   const [isbottomSheetOpen, setIsBottomSheetOpen] = useState<boolean>(false)
-  const { data: availableFriends = [] } = useSignalingFriends(isbottomSheetOpen)
+  const { data: availableFriends = [], refetch } =
+    useSignalingFriends(isbottomSheetOpen)
   const queryClient = useQueryClient()
   const [refreshing, setRefreshing] = useState(false)
   const { user } = useAuth()
@@ -35,6 +38,27 @@ const Index = forwardRef<SignalingRef>((_, ref) => {
     await queryClient.refetchQueries({ queryKey: ["friend-signals"] })
     await queryClient.refetchQueries({ queryKey: ["friends"] })
   }, [queryClient])
+
+  useFocusEffect(
+    useCallback(() => {
+      refetch()
+    }, [refetch]),
+  )
+
+  useEffect(() => {
+    const listener = AppState.addEventListener("change", () => {
+      refetch()
+    })
+
+    return () => listener.remove()
+  }, [refetch])
+
+  useEffect(() => {
+    const subscription = Notifications.addNotificationReceivedListener(() => {
+      refetch()
+    })
+    return () => subscription.remove()
+  }, [refetch])
 
   const handleRefresh = useCallback(async () => {
     setRefreshing(true)
@@ -57,11 +81,7 @@ const Index = forwardRef<SignalingRef>((_, ref) => {
       <BottomSheetSectionList
         refreshing={refreshing}
         contentContainerStyle={styles.contentContainerStyle}
-        ListHeaderComponent={() =>
-          SignalingHeader({
-            refetchFriendsData,
-          })
-        }
+        ListHeaderComponent={() => SignalingHeader()}
         ListFooterComponent={() =>
           ActionCard({
             style: styles.shareActionCard,
