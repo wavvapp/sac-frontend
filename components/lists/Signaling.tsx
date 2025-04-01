@@ -1,5 +1,5 @@
 import { forwardRef, useCallback, useEffect, useMemo, useState } from "react"
-import { View, StyleSheet } from "react-native"
+import { View, StyleSheet, AppState } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import BottomDrawer from "@/components/BottomDrawer"
 import { BottomSheetSectionList } from "@gorhom/bottom-sheet"
@@ -46,6 +46,14 @@ const Signaling = forwardRef<SignalingRef>((_, ref) => {
       refetch()
     }, [refetch]),
   )
+
+  useEffect(() => {
+    const listener = AppState.addEventListener("change", () => {
+      refetch()
+    })
+
+    return () => listener.remove()
+  }, [refetch])
 
   useEffect(() => {
     const subscription = Notifications.addNotificationReceivedListener(() => {
