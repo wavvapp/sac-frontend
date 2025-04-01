@@ -8,11 +8,13 @@ import {
 } from "react"
 import { SharedValue, useSharedValue } from "react-native-reanimated"
 import { useMySignal } from "@/queries/signal"
+import { Group } from "@/types"
 
 export type TemporaryStatusType = {
   timeSlot: string
   activity: string
   friendIds: string[]
+  groups: Group[]
 }
 
 type StatusContextType = {
@@ -32,6 +34,7 @@ export const StatusProvider: React.FC<{ children: React.ReactNode }> = ({
     friendIds: signalData?.friendIds || [],
     activity: signalData?.status_message || "",
     timeSlot: signalData?.when || "NOW",
+    groups: signalData?.groups || [],
   })
 
   useEffect(() => {
@@ -42,6 +45,7 @@ export const StatusProvider: React.FC<{ children: React.ReactNode }> = ({
       friendIds,
       activity: signalData.status_message,
       timeSlot: signalData.when,
+      groups: signalData.groups,
     })
 
     isOn.value = !signalData?.hasEnded

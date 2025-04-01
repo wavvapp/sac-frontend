@@ -2,7 +2,6 @@ import { StyleSheet, TouchableOpacity, View } from "react-native"
 import Status from "@/components/cards/Status"
 import { CustomButton } from "@/components/ui/Button"
 import { NativeStackScreenProps } from "react-native-screens/lib/typescript/native-stack/types"
-import FriendsList from "@/components/lists/Friends"
 import { ScrollView } from "react-native-gesture-handler"
 import { theme } from "@/theme"
 import { useStatus } from "@/contexts/StatusContext"
@@ -17,7 +16,6 @@ import {
   useTurnOffSignal,
   useTurnOnSignal,
 } from "@/queries/signal"
-import Header from "@/components/cards/Header"
 import { useOfflineHandler } from "@/hooks/useOfflineHandler"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { CustomTitle } from "@/components/ui/CustomTitle"
@@ -25,6 +23,9 @@ import BottomDrawer, { BottomDrawerRef } from "@/components/BottomDrawer"
 import CustomText from "@/components/ui/CustomText"
 import EditIcon from "@/components/vectors/EditIcon"
 import { SetActivity } from "@/components/SetActivity"
+import Audience from "@/components/Audience"
+import ActionCard from "@/components/cards/Action"
+import CrossMark from "@/components/vectors/CrossMark"
 
 type EditSignalScreenProps = NativeStackScreenProps<
   RootStackParamList,
@@ -63,6 +64,7 @@ export default function EditSignal({
         status_message: temporaryStatus.activity,
         friends: [],
         friendIds: temporaryStatus.friendIds,
+        groups: temporaryStatus.groups,
         status: "active",
       }
       queryclient.setQueryData(["fetch-my-signal"], optimisticStatus)
@@ -113,12 +115,21 @@ export default function EditSignal({
       timeSlot: signal.when,
       activity: signal.status_message,
       friendIds: signal.friendIds,
+      groups: signal.groups,
     })
   }, [navigation, signal, setTemporaryStatus])
   return (
     <SafeAreaView style={style.container}>
       <StatusBar style="dark" />
-      <Header title={isNewSignal ? "Set your Wavv" : "Edit your Wavv"} />
+      <View style={style.header}>
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          style={style.closeIcon}>
+          <CrossMark style={{ marginLeft: -5 }} />
+        </TouchableOpacity>
+        <CustomButton onPress={handleSaveStatus} title="Save" />
+      </View>
+      <View style={style.separator} />
       <ScrollView
         keyboardShouldPersistTaps="always"
         contentContainerStyle={{
@@ -143,32 +154,22 @@ export default function EditSignal({
             </View>
           </TouchableOpacity>
         </View>
+        <View style={style.separator} />
         <Status
           timeSlots={["NOW", "MORNING", "LUNCH", "AFTERNOON", "EVENING"]}
         />
-        <FriendsList />
-      </ScrollView>
-      <View style={style.buttonsContainer}>
-        <CustomButton
-          activeOpacity={0.8}
-          containerStyles={style.button}
-          variant="secondary"
-          fullWidth
-          title={isNewSignal ? "Wavv" : "save"}
-          textSize="sm"
-          onPress={handleSaveStatus}
-        />
+        <Audience />
+        <View style={{ ...style.separator, marginHorizontal: 20 }} />
         {!isNewSignal && (
-          <CustomButton
-            containerStyles={style.button}
-            variant="ghost"
-            fullWidth
-            title="turn off your wavv"
-            textSize="sm"
-            onPress={handleTurnOffSignal}
-          />
+          <View style={{ paddingHorizontal: 20 }}>
+            <ActionCard
+              title="Turn off your wavv"
+              titleStyle={{ color: theme.colors.red }}
+              onPress={handleTurnOffSignal}
+            />
+          </View>
         )}
-      </View>
+      </ScrollView>
       <BottomDrawer
         ref={bottomDrawerRef}
         setIsBottomSheetOpen={setIsModalVisible}
@@ -188,21 +189,24 @@ const style = StyleSheet.create({
     backgroundColor: theme.colors.white,
     position: "relative",
   },
-  buttonsContainer: {
-    backgroundColor: theme.colors.white,
-    borderTopRightRadius: 6,
-    borderTopLeftRadius: 6,
-    position: "absolute",
-    bottom: 0,
-    paddingBottom: 8,
-    left: 0,
-    right: 0,
-    zIndex: 10,
-    marginHorizontal: 20,
-    gap: 8,
-  },
-  button: {
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
     width: "100%",
+    alignItems: "center",
+    marginTop: 12,
+    paddingHorizontal: 20,
+    paddingBottom: 20,
+  },
+  closeIcon: {
+    height: 48,
+    width: 48,
+    justifyContent: "center",
+    alignItems: "flex-start",
+  },
+  separator: {
+    height: 1,
+    backgroundColor: theme.colors.black_100,
   },
   activity: {
     paddingHorizontal: 20,
@@ -221,7 +225,5 @@ const style = StyleSheet.create({
     justifyContent: "center",
     alignItems: "flex-end",
   },
-  activityModalStyles: {
-    zIndex: 11,
-  },
+  activityModalStyles: { zIndex: 11 },
 })
