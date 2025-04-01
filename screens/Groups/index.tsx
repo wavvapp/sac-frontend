@@ -15,6 +15,7 @@ import { theme } from "@/theme"
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 import UserInfo from "@/components/UserInfo"
 import { EditGroupScreenProps } from "@/screens/Groups/EditGroups"
+
 export default function GroupsScreen() {
   const { data: groups } = useGetGroups()
   const navigation = useNavigation<CreateGroupScreenProps>()
