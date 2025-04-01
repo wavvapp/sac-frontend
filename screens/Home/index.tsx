@@ -88,9 +88,7 @@ export default function HomeScreen() {
             />
           </TouchableOpacity>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              style={styles.SearchIcon}
-              onPress={() => openSearch()}>
+            <TouchableOpacity style={styles.SearchIcon} onPress={openSearch}>
               <SearchIcon color={theme.colors.white} strokeWidth={1.5} />
             </TouchableOpacity>
             <CustomButton
