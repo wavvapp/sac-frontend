@@ -78,7 +78,7 @@ export default function EntryScreen() {
             hasCenteredIcon
             disabled={loadingButton === "apple" || isLoading}>
             {loadingButton === "apple" ? (
-              <ActivityIndicator size="small" color={theme.colors.white} />
+              <ActivityIndicator size="small" color={theme.colors.black} />
             ) : (
               <AppleIcon />
             )}
