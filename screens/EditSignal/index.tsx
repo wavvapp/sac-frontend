@@ -49,7 +49,7 @@ export default function EditSignal({
         const endTimeToday = dayjs().hour(endHours).minute(endMinutes)
 
         if (endTimeToday.isBefore(now)) {
-          Alert.alert("Error", "Cannot save status with end time in the past")
+          Alert.alert("Error", "Cannot save a wavv with end time in the past")
           return
         }
       }
@@ -59,7 +59,7 @@ export default function EditSignal({
       const selectedFriends = allFriends?.filter((friend) =>
         temporaryStatus.friendIds.includes(friend.id),
       )
-      console.log({ temporaryStatus })
+
       const optimisticStatus: Signal = {
         when: temporaryStatus.timeSlot,
         status_message: temporaryStatus.activity,
