@@ -95,6 +95,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       await registerForNotifications?.()
     } catch (err) {
       console.error("error with saving user info")
+      throw err
     } finally {
       setIsLoading(false)
     }
@@ -117,8 +118,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       queryClient.setQueryData(["friends"], [])
       await completeSignIn(data)
     } catch (error) {
-      setIsLoading(false)
       console.error("Error when signing up: ", error)
+      throw error
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -148,7 +151,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         await completeSignIn(data)
       }
     } catch (error) {
-      setIsLoading(false)
       if (isErrorWithCode(error)) {
         switch (error.code) {
           case statusCodes.IN_PROGRESS:
@@ -161,6 +163,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       } else {
         console.error("Unexpected Error:", error)
       }
+      throw error
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -194,8 +199,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         await completeSignIn(data)
       }
     } catch (error) {
-      setIsLoading(false)
       console.error("Error while signing in: ", error)
+      throw error
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -203,15 +210,21 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     setIsLoading(true)
     const storedUser = await AsyncStorage.getItem("@Auth:user")
     const storedToken = await AsyncStorage.getItem("@Auth:accessToken")
-    if (storedUser && storedToken) {
-      await Promise.all([
-        prefetchSignal(),
-        prefetchFriends(),
-        prefetchFriendsSignal(),
-      ])
-      setUser(JSON.parse(storedUser))
+    try {
+      if (storedUser && storedToken) {
+        await Promise.all([
+          prefetchSignal(),
+          prefetchFriends(),
+          prefetchFriendsSignal(),
+        ])
+        setUser(JSON.parse(storedUser))
+      }
+    } catch (error) {
+      console.error("Error loading stored data: ", error)
+      throw error
+    } finally {
+      setIsLoading(false)
     }
-    setIsLoading(false)
   }, [prefetchSignal, prefetchFriends, prefetchFriendsSignal])
 
   useEffect(() => {
