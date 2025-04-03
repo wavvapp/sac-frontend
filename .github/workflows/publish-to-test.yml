@@ -1,0 +1,34 @@
+name: Publish to Test
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run semantic-release
+        run: npx semantic-release --dry-run
+        id: release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get release version
+        run: echo "${{ steps.release.outputs.version }}"
+
+      - name: Create Staging branch
+        run: git checkout -b stage/${{ steps.release.outputs.version }}
+
+      - name: Push Staging branch
+        run: git push origin stage/${{ steps.release.outputs.version }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
