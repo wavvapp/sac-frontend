@@ -41,6 +41,11 @@ jobs:
         run: git checkout -b stage/${{ steps.semantic.outputs.new_release_version }}
 
       - name: Push Staging branch
-        run: git push -u origin stage/${{ steps.semantic.outputs.new_release_version }}
+        run: |
+          VERSION=${{ steps.semantic.outputs.new_release_version }}
+
+          gh api repos/${{ github.repository }}/git/refs \
+            -f ref="refs/heads/stage/$VERSION" \
+            -f sha="$(git rev-parse HEAD)"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
