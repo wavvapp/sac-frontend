@@ -19,7 +19,7 @@ export default {
     ],
     name: "Wavv",
     slug: "Wavv",
-    version: "1.3.0",
+    version: "1.4.0",
     orientation: "portrait",
     icon: "./assets/images/icon.png",
     userInterfaceStyle: "light",
@@ -33,7 +33,7 @@ export default {
       usesAppleSignIn: true,
       supportsTablet: true,
       bundleIdentifier: "com.apeunit.social.app",
-      buildNumber: "1.3.0",
+      buildNumber: "1.4.0",
       teamId: "CZ6DRS2DW4",
       infoPlist: {
         NSCameraUsageDescription:
