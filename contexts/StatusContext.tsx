@@ -10,6 +10,7 @@ import {
 } from "react"
 import { SharedValue, useSharedValue } from "react-native-reanimated"
 import { useMySignal } from "@/queries/signal"
+import { Group, Signal } from "@/types"
 import dayjs from "dayjs"
 import { AppState } from "react-native"
 
@@ -19,12 +20,14 @@ export type TemporaryStatusType = {
   endsAt: Date
   activity: string
   friendIds: string[]
+  groups: Group[]
 }
 
 type StatusContextType = {
   temporaryStatus: TemporaryStatusType
   setTemporaryStatus: Dispatch<SetStateAction<TemporaryStatusType>>
   isOn: SharedValue<boolean>
+  signal?: Signal
 }
 
 const StatusContext = createContext<StatusContextType>({} as StatusContextType)
@@ -32,57 +35,56 @@ const StatusContext = createContext<StatusContextType>({} as StatusContextType)
 export const StatusProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const { data: signalData } = useMySignal()
+  const { data: signal } = useMySignal()
 
   const dateEnded = useMemo(
-    () => dayjs().isAfter(dayjs(signalData?.endsAt)),
-    [signalData?.endsAt],
+    () => dayjs().isAfter(dayjs(signal?.endsAt)),
+    [signal?.endsAt],
   )
-
+  const isOn = useSharedValue(!dateEnded)
   const checkDateAndUpdateStatus = useCallback(() => {
-    if (signalData?.endsAt) {
-      const hasEnded = dayjs().isAfter(dayjs(signalData?.endsAt))
+    if (signal?.endsAt) {
+      const hasEnded = dayjs().isAfter(signal?.endsAt)
       isOn.value = !hasEnded
     }
-  }, [signalData?.endsAt])
+  }, [isOn, signal?.endsAt])
 
   useEffect(() => {
-    const subscription = AppState.addEventListener("change", (nextAppState) => {
-      if (nextAppState === "active") {
-        checkDateAndUpdateStatus()
-      }
+    const subscription = AppState.addEventListener("change", () => {
+      checkDateAndUpdateStatus()
     })
     return () => subscription.remove()
   }, [checkDateAndUpdateStatus])
 
-  const isOn = useSharedValue(!dateEnded)
   const [temporaryStatus, setTemporaryStatus] = useState<TemporaryStatusType>({
-    friendIds: signalData?.friendIds || [],
-    activity: signalData?.status_message || "",
-    timeSlot: signalData?.when || "",
-    endsAt: signalData?.endsAt || new Date(),
-    startsAt: signalData?.startsAt || new Date(),
+    friendIds: signal?.friendIds || [],
+    activity: signal?.status_message || "",
+    timeSlot: isOn.value ? signal?.when || "NOW" : "NOW",
+    endsAt: signal?.endsAt || new Date(),
+    startsAt: signal?.startsAt || new Date(),
+    groups: signal?.groups || [],
   })
 
   useEffect(() => {
-    if (!signalData) return
-    const friendIds = signalData.friends.map((friend) => friend.friendId)
+    if (!signal) return
+    const friendIds = signal.friends.map((friend) => friend.friendId)
 
     setTemporaryStatus({
       friendIds,
-      activity: signalData.status_message,
-      timeSlot: signalData.when,
-      endsAt: signalData.endsAt,
-      startsAt: signalData.startsAt,
+      activity: signal.status_message,
+      timeSlot: !isOn.value ? "NOW" : signal.when,
+      endsAt: signal.endsAt,
+      startsAt: signal.startsAt,
+      groups: signal.groups,
     })
-    isOn.value = !dateEnded
-  }, [])
+  }, [isOn.value, signal])
 
   return (
     <StatusContext.Provider
       value={{
         temporaryStatus,
         setTemporaryStatus,
+        signal,
         isOn,
       }}>
       {children}

@@ -1,4 +1,5 @@
-import { View, StyleSheet, Text } from "react-native"
+import { useState } from "react"
+import { View, StyleSheet, Text, ActivityIndicator } from "react-native"
 import { CustomButton } from "@/components/ui/Button"
 import { theme } from "@/theme"
 import CustomText from "@/components/ui/CustomText"
@@ -19,15 +20,25 @@ GoogleSignin.configure({
   offlineAccess: false,
 })
 export default function EntryScreen() {
-  const { signInWithGoogle, signInWithApple } = useAuth()
+  const { signInWithGoogle, signInWithApple, isLoading } = useAuth()
   const navigation = useNavigation<CredentialsScreenProps>()
+  const [loadingButton, setLoadingButton] = useState<"google" | "apple" | null>(
+    null,
+  )
 
-  const handleGoogleLogin = async () => {
-    await signInWithGoogle(navigation)
-  }
-
-  const handleAppleSignIn = async () => {
-    await signInWithApple(navigation)
+  const handleSignIn = async (provider: "google" | "apple") => {
+    try {
+      setLoadingButton(provider)
+      if (provider === "google") {
+        await signInWithGoogle(navigation)
+      } else {
+        await signInWithApple(navigation)
+      }
+    } catch (error) {
+      console.error(`Sign-in with ${provider} failed:`, error)
+    } finally {
+      setLoadingButton(null)
+    }
   }
 
   const navigateToStaticScreen = (screen: StaticPageType) => {
@@ -48,19 +59,31 @@ export default function EntryScreen() {
           <CustomButton
             variant="destructive"
             title="Sign In with Google"
-            onPress={handleGoogleLogin}
+            onPress={() => handleSignIn("google")}
             textStyles={styles.buttonText}
-            hasCenteredIcon>
-            <GoogleIcon />
+            hasCenteredIcon
+            disabled={loadingButton === "google" || isLoading}>
+            {loadingButton === "google" ? (
+              <ActivityIndicator size="small" color={theme.colors.white} />
+            ) : (
+              <GoogleIcon />
+            )}
           </CustomButton>
+
           <CustomButton
             variant="primary"
             title="Sign in with Apple"
-            onPress={handleAppleSignIn}
+            onPress={() => handleSignIn("apple")}
             textStyles={styles.buttonText}
-            hasCenteredIcon>
-            <AppleIcon />
+            hasCenteredIcon
+            disabled={loadingButton === "apple" || isLoading}>
+            {loadingButton === "apple" ? (
+              <ActivityIndicator size="small" color={theme.colors.black} />
+            ) : (
+              <AppleIcon />
+            )}
           </CustomButton>
+
           <CustomText
             fontFamily="writer-monos"
             size="sm"
@@ -118,7 +141,6 @@ const styles = StyleSheet.create({
     flex: 0,
     paddingHorizontal: 2,
   },
-
   agreementText: {
     textAlign: "center",
     color: theme.colors.white_500,

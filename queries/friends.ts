@@ -40,6 +40,7 @@ export const useSignalingFriends = (shouldRefetch?: boolean) => {
       }
     },
     placeholderData: [],
+    staleTime: Infinity,
     refetchInterval: shouldRefetch ? 5000 : false,
     retry: 1,
     refetchOnWindowFocus: "always",

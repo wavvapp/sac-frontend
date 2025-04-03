@@ -4,11 +4,12 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { StyleSheet, View, StatusBar, Platform } from "react-native"
 import { runOnJS, useDerivedValue } from "react-native-reanimated"
 import { useCallback, useRef, useState } from "react"
-import Signaling, { SignalingRef } from "@/components/lists/Signaling"
+import Signaling from "@/components/lists/signaling"
 import Settings from "@/components/vectors/Settings"
 import { theme } from "@/theme"
 import Badge from "@/components/ui/Badge"
 import ShareIcon from "@/components/vectors/ShareIcon"
+import SearchIcon from "@/components/vectors/SearchIcon"
 import { CustomButton } from "@/components/ui/Button"
 import { useFocusEffect, useNavigation } from "@react-navigation/native"
 import { onShare } from "@/utils/share"
@@ -25,6 +26,8 @@ import AlertDialog from "@/components/AlertDialog"
 import NoiseVideo from "@/components/NoiseVideo"
 import TapWavv from "@/components/cards/TapWavv"
 import { useFetchPoints } from "@/queries/points"
+import { useQueryClient } from "@tanstack/react-query"
+import { BottomDrawerRef } from "@/components/BottomDrawer"
 
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -34,7 +37,7 @@ export type HomeScreenProps = NativeStackNavigationProp<
 export default function HomeScreen() {
   const [_, setIsVisible] = useState(false)
   const { isOn } = useStatus()
-  const signalingRef = useRef<SignalingRef>(null)
+  const signalingRef = useRef<BottomDrawerRef>(null)
   const navigation = useNavigation<HomeScreenProps>()
   const { data: allFriends } = useFriends()
   const { user, isAuthenticated } = useAuth()
@@ -42,12 +45,24 @@ export default function HomeScreen() {
 
   const { data, refetch: refetchPoints } = useFetchPoints()
 
+  const queryClient = useQueryClient()
+  const refetchFriendsData = useCallback(async () => {
+    await queryClient.refetchQueries({ queryKey: ["friend-signals"] })
+    await queryClient.refetchQueries({ queryKey: ["friends"] })
+  }, [queryClient])
+
+  const openSearch = () => {
+    refetchFriendsData()
+    navigation.navigate("Search")
+  }
+
   useFocusEffect(
     useCallback(() => {
       if (!isAuthenticated) return
       refetchPoints()
     }, [isAuthenticated, refetchPoints]),
   )
+
   const handleWebsiteOpen = async () => {
     if (process.env.POINTS_CANISTER_URL) {
       await WebBrowser.openBrowserAsync(process.env.POINTS_CANISTER_URL)
@@ -74,6 +89,9 @@ export default function HomeScreen() {
             />
           </TouchableOpacity>
           <View style={styles.buttonContainer}>
+            <TouchableOpacity style={styles.SearchIcon} onPress={openSearch}>
+              <SearchIcon color={theme.colors.white} strokeWidth={1.5} />
+            </TouchableOpacity>
             <CustomButton
               style={styles.settingsButton}
               onPress={() =>
@@ -88,13 +106,13 @@ export default function HomeScreen() {
                 })
               }>
               <TouchableOpacity style={styles.shareButton}>
-                <ShareIcon color={theme.colors.white} />
+                <ShareIcon color={theme.colors.white} strokeWidth={1.5} />
               </TouchableOpacity>
             </CustomButton>
             <CustomButton
               style={styles.settingsButton}
               onPress={() => navigation.push("Settings")}>
-              <Settings color={theme.colors.white} />
+              <Settings color={theme.colors.white} strokeWidth={1.5} />
             </CustomButton>
           </View>
         </View>
@@ -136,7 +154,6 @@ const styles = StyleSheet.create({
     width: "100%",
     paddingHorizontal: 20,
     paddingVertical: 25,
-    zIndex: 1,
   },
   buttonContainer: {
     flexDirection: "row",
@@ -168,5 +185,11 @@ const styles = StyleSheet.create({
     width: 48,
     alignItems: "center",
     justifyContent: "center",
+  },
+  SearchIcon: {
+    height: 48,
+    width: 48,
+    justifyContent: "center",
+    alignItems: "center",
   },
 })

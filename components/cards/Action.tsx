@@ -9,6 +9,7 @@ import CustomText from "@/components/ui/CustomText"
 import { theme } from "@/theme"
 import { ReactNode } from "react"
 import ChevronRightIcon from "@/components/vectors/ChevronRightIcon"
+import { FontFamilyVariant } from "@/types"
 
 export default function ActionCard({
   style,
@@ -17,13 +18,16 @@ export default function ActionCard({
   description,
   icon,
   onPress,
+  fontFamily,
 }: {
   style?: ViewStyle
   titleStyle?: TextStyle
   title: string
   description?: string
   icon?: ReactNode
+  fontFamily?: FontFamilyVariant
   onPress: () => void
+  id?: string
 }) {
   return (
     <TouchableOpacity onPress={onPress}>
@@ -34,7 +38,7 @@ export default function ActionCard({
             {title}
           </CustomText>
           {description && (
-            <CustomText style={styles.inviteButtonText}>
+            <CustomText fontFamily={fontFamily} style={styles.inviteButtonText}>
               {description}
             </CustomText>
           )}
