@@ -6,7 +6,7 @@
       "channel": false
     },
     {
-      "name": "stage/*",
+      "name": "stage-*",
       "prerelease": false,
       "channel": false
     }
