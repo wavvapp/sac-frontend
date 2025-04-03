@@ -20,18 +20,27 @@ jobs:
         run: npm install
 
       - name: Run semantic-release
-        run: npx semantic-release --dry-run
-        id: release
+        uses: cycjimmy/semantic-release-action@v4
+        id: semantic
+        with:
+          dry_run: true
+          semantic_version: 19
+          extra_plugins: |
+            @semantic-release/changelog@6
+            @semantic-release/git@10
+            @semantic-release/exec@6
+            @semantic-release/commit-analyzer@9
+            @semantic-release/release-notes-generator@10
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Get release version
-        run: echo "${{ steps.release.outputs.version }}"
+        run: echo "NEW_VERSION=${{ steps.semantic.outputs.new_release_version }}" >> $GITHUB_ENV
 
       - name: Create Staging branch
-        run: git checkout -b stage/${{ steps.release.outputs.version }}
+        run: git checkout -b stage/${{ steps.semantic.outputs.new_release_version }}
 
       - name: Push Staging branch
-        run: git push origin stage/${{ steps.release.outputs.version }}
+        run: git push origin stage/${{ steps.semantic.outputs.new_release_version }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
