@@ -44,7 +44,12 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git add .
           git commit -m "chore: update version to ${{ steps.semantic.outputs.new_release_version }}"
-          git push origin HEAD
+          
+          gh api repos/${{ github.repository }}/git/refs \
+            -f ref="refs/heads/${{ github.ref_name }}" \
+            -f sha="$(git rev-parse HEAD)"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create Staging branch
         run: git checkout -b stage-${{ steps.semantic.outputs.new_release_version }}
