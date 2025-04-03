@@ -42,13 +42,12 @@ jobs:
 
       - name: Commit and push version update
         run: |
-          git config --global user.email "jonathanzihindula95@gmail.com"
-          git config --global user.name "Jonath-z"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
 
           git add .
           git commit -m "chore: update version to ${{ steps.semantic.outputs.new_release_version }}"
-
-          git push "https://x-access-token:${{ secrets.PERSONAL_TOKEN }}@github.com/${{ github.repository }}.git" HEAD:${{ github.ref_name }}
+          git push origin HEAD
         env:
           GITHUB_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
 
