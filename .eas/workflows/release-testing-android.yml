@@ -3,7 +3,8 @@ name: Create Preview builds
 on:
   push:
     branches:
-      - "stage/*"
+      - "stage-*"
+      - stage
 
 jobs:
   build_android:
