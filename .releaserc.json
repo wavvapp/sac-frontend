@@ -1,0 +1,28 @@
+{
+  "branches": [
+    {
+      "name": "dev",
+      "prerelease": false,
+      "channel": false
+    },
+    {
+      "name": "stage/*",
+      "prerelease": false,
+      "channel": false
+    }
+  ],
+  "repositoryUrl": "https://github.com/wavvapp/sac-frontend",
+  "tagFormat": "v${version}",
+  "plugins": [
+    "@semantic-release/commit-analyzer",
+    [
+      "@semantic-release/exec",
+      {
+        "verifyReleaseCmd": "echo \"NEXT_RELEASE_VERSION=${nextRelease.version}\" >> $GITHUB_ENV"
+      }
+    ],
+    "@semantic-release/release-notes-generator",
+    "@semantic-release/github",
+    "@semantic-release/git"
+  ]
+}
