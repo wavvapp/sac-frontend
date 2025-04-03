@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity, View } from "react-native"
+import { Alert, StyleSheet, TouchableOpacity, View } from "react-native"
 import Status from "@/components/cards/Status"
 import { CustomButton } from "@/components/ui/Button"
 import { NativeStackScreenProps } from "react-native-screens/lib/typescript/native-stack/types"
@@ -20,6 +20,7 @@ import BottomDrawer, { BottomDrawerRef } from "@/components/BottomDrawer"
 import CustomText from "@/components/ui/CustomText"
 import EditIcon from "@/components/vectors/EditIcon"
 import { SetActivity } from "@/components/SetActivity"
+import dayjs from "dayjs"
 
 type EditSignalScreenProps = NativeStackScreenProps<
   RootStackParamList,
@@ -41,11 +42,24 @@ export default function EditSignal({
   const saveStatus = useSaveStatus({
     data: temporaryStatus,
     onMutate: async () => {
+      if (temporaryStatus.timeSlot.includes("-")) {
+        const [_, endTime] = temporaryStatus.timeSlot.split("-")
+        const [endHours, endMinutes] = endTime.split(":").map(Number)
+        const now = dayjs()
+        const endTimeToday = dayjs().hour(endHours).minute(endMinutes)
+
+        if (endTimeToday.isBefore(now)) {
+          Alert.alert("Error", "Cannot save a wavv with end time in the past")
+          return
+        }
+      }
+
       await queryclient.cancelQueries({ queryKey: ["fetch-my-signal"] })
       const allFriends = queryclient.getQueryData<Friend[]>(["friends"])
       const selectedFriends = allFriends?.filter((friend) =>
         temporaryStatus.friendIds.includes(friend.id),
       )
+
       const optimisticStatus: Signal = {
         when: temporaryStatus.timeSlot,
         status_message: temporaryStatus.activity,
@@ -60,12 +74,13 @@ export default function EditSignal({
       navigation.navigate("Home")
     },
     onError: (error) => {
-      // TODO: add toaster
+      Alert.alert("Error", "Failed to save the wavv")
       console.log(error.message)
     },
     onSettled: async () => {
       await queryclient.refetchQueries({ queryKey: ["fetch-my-signal"] })
     },
+    retry: 3,
   })
 
   const turnOffSignal = useTurnOffSignal({
