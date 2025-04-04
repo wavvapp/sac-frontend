@@ -40,6 +40,12 @@ jobs:
       - name: Update npm version
         run: npm version ${{ steps.semantic.outputs.new_release_version }} --no-git-tag-version
 
+      - name: Make version update script executable
+        run: chmod +x ./script/update-app-version.sh
+
+      - name: Update app version in app.config.js
+        run: APP_VERSION=${{ steps.semantic.outputs.new_release_version }} ./update-app-version.sh
+
       - name: Commit and push version update
         run: |
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
