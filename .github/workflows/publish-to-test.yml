@@ -47,7 +47,7 @@ jobs:
 
       - name: Update app version in app.config.js
         if: steps.semantic.outputs.new_release_version
-        run: APP_VERSION=${{ steps.semantic.outputs.new_release_version }} ./update-app-version.sh
+        run: APP_VERSION=${{ steps.semantic.outputs.new_release_version }} ./script/update-app-version.sh
 
       - name: Commit and push version update
         if: steps.semantic.outputs.new_release_version
