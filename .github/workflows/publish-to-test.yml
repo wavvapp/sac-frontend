@@ -35,18 +35,22 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Get release version
+        if: steps.semantic.outputs.new_release_version
         run: echo "NEW_VERSION=${{ steps.semantic.outputs.new_release_version }}" >> $GITHUB_ENV
 
       - name: Update npm version
+        if: steps.semantic.outputs.new_release_published
         run: npm version ${{ steps.semantic.outputs.new_release_version }} --no-git-tag-version
 
       - name: Make version update script executable
         run: chmod +x ./script/update-app-version.sh
 
       - name: Update app version in app.config.js
+        if: steps.semantic.outputs.new_release_version
         run: APP_VERSION=${{ steps.semantic.outputs.new_release_version }} ./update-app-version.sh
 
       - name: Commit and push version update
+        if: steps.semantic.outputs.new_release_version
         run: |
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
@@ -58,12 +62,14 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
 
       - name: Create Staging branch
+        if: steps.semantic.outputs.new_release_version
         run: git checkout -b stage-${{ steps.semantic.outputs.new_release_version }}
 
       - name: Push Staging branch
+        if: steps.semantic.outputs.new_release_version
         run: |
           VERSION=${{ steps.semantic.outputs.new_release_version }}
-
+          
           gh api repos/${{ github.repository }}/git/refs \
             -f ref="refs/heads/stage-${VERSION}" \
             -f sha="$(git rev-parse HEAD)"
