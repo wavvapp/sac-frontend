@@ -117,9 +117,7 @@ export default function HomeScreen() {
           </View>
         </View>
         {!allFriends?.length ? (
-          <View style={styles.noFriendsContainer}>
-            <NoFriends />
-          </View>
+          <NoFriends />
         ) : (
           <View style={styles.StatusContainer}>
             {isOn.value ? <UserStatus isOn={isOn} user={user} /> : <TapWavv />}
@@ -172,13 +170,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-start",
     width: "100%",
-  },
-  noFriendsContainer: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
   },
   shareButton: {
     height: 48,
