@@ -1,4 +1,7 @@
-import { NavigationContainer } from "@react-navigation/native"
+import {
+  NavigationContainer,
+  createNavigationContainerRef,
+} from "@react-navigation/native"
 import "react-native-reanimated"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import HomeScreen from "@/screens/Home"
@@ -25,7 +28,7 @@ export type RootStackParamList = {
   Home: undefined
   EditSignal: { isNewSignal?: boolean }
   SignUp: undefined
-  Settings: undefined
+  Settings: undefine
   Signaling: undefined
   CreateCredentials: undefined
   Search: undefined
@@ -35,6 +38,13 @@ export type RootStackParamList = {
   Groups: undefined
   EditGroup: { groupId: string; name: string; friendIds: string[] }
 }
+
+/**
+ * Navigation container reference
+ * Required for navigation from outside the navigator
+ * See https://reactnavigation.org/docs/6.x/navigating-without-navigation-prop?config=static
+ */
+export const navigationRef = createNavigationContainerRef<RootStackParamList>()
 
 export default function AppNavigator() {
   const Stack = createNativeStackNavigator<RootStackParamList>()
@@ -48,7 +58,7 @@ export default function AppNavigator() {
   }, [isFriendsLoading, isLoading])
 
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={navigationRef}>
       {isAuthenticated ? (
         <StatusProvider>
           <Stack.Navigator
