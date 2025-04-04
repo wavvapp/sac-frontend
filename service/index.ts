@@ -1,5 +1,5 @@
 import AlertDialog from "@/components/AlertDialog"
-import { navigationRef } from "@/navigation"
+import { navigateToAuthScreen } from "@/utils/navigation"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import NetInfo from "@react-native-community/netinfo"
 import axios, {
@@ -52,16 +52,6 @@ api.interceptors.request.use(
   },
 )
 
-const navigateToAuthScreen = () => {
-  AsyncStorage.removeItem("@Auth:refreshToken")
-  AsyncStorage.removeItem("@Auth:accessToken")
-
-  navigationRef.reset({
-    index: 0,
-    routes: [{ name: "SignUp" }],
-  })
-}
-
 // Response Interceptor
 api.interceptors.response.use(
   (response: AxiosResponse) => response,
@@ -75,10 +65,9 @@ api.interceptors.response.use(
             `Bearer ${newAccessToken}`
           return axios(error.response.config)
         } catch (refreshError) {
+          navigateToAuthScreen()
           console.error("Error refreshing token:", refreshError)
         }
-      } else {
-        navigateToAuthScreen()
       }
     }
     return Promise.reject(error)

@@ -5,8 +5,8 @@ import { StatusBar } from "expo-status-bar"
 import { StyleSheet, TouchableOpacity, View } from "react-native"
 import { ScrollView } from "react-native-gesture-handler"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import { RootStackParamList } from "@/navigation"
 import { STATIC_PAGE_CONTENTS } from "@/constants/static-page-content"
+import { RootStackParamList } from "@/types"
 
 type StaticPageScreenProps = NativeStackScreenProps<
   RootStackParamList,

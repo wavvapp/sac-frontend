@@ -1,7 +1,4 @@
-import {
-  NavigationContainer,
-  createNavigationContainerRef,
-} from "@react-navigation/native"
+import { NavigationContainer } from "@react-navigation/native"
 import "react-native-reanimated"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import HomeScreen from "@/screens/Home"
@@ -17,34 +14,13 @@ import { StatusProvider } from "@/contexts/StatusContext"
 import { useFriends } from "@/queries/friends"
 import * as SplashScreen from "expo-splash-screen"
 import { useEffect } from "react"
-import { StaticPageType } from "@/types"
+import { RootStackParamList } from "@/types"
 import StaticContentScreen from "@/screens/StaticContentScreen"
 import NotificationPreferences from "@/screens/NotificationPreferences"
 import GroupsScreen from "@/screens/Groups"
 import CreateGroup from "@/screens/Groups/CreateGroup"
 import EditGroup from "@/screens/Groups/EditGroups"
-export type RootStackParamList = {
-  EntryScreen: undefined
-  Home: undefined
-  EditSignal: { isNewSignal?: boolean }
-  SignUp: undefined
-  Settings: undefine
-  Signaling: undefined
-  CreateCredentials: undefined
-  Search: undefined
-  CreateGroup: undefined
-  NotificationPreferences: undefined
-  StaticContentScreen: { pageSlug: StaticPageType }
-  Groups: undefined
-  EditGroup: { groupId: string; name: string; friendIds: string[] }
-}
-
-/**
- * Navigation container reference
- * Required for navigation from outside the navigator
- * See https://reactnavigation.org/docs/6.x/navigating-without-navigation-prop?config=static
- */
-export const navigationRef = createNavigationContainerRef<RootStackParamList>()
+import { navigationRef } from "@/utils/navigation"
 
 export default function AppNavigator() {
   const Stack = createNativeStackNavigator<RootStackParamList>()

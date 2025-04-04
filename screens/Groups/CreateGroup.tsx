@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native"
 import { useCreateGroup } from "@/queries/groups"
-import { RootStackParamList } from "@/navigation"
+import { RootStackParamList } from "@/types"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { GroupForm } from "@/components/GroupForm"
 
