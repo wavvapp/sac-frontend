@@ -11,7 +11,6 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated"
 import { useFriends } from "@/queries/friends"
-import { useMySignal } from "@/queries/signal"
 import { useMemo } from "react"
 import UserAvailability from "./UserAvailability"
 import { useStatus } from "@/contexts/StatusContext"

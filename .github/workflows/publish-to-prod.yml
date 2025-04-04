@@ -1,0 +1,54 @@
+name: Publish to production
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Extract branch name
+        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+        id: get_branch
+
+      - name: Check branch format
+        run: |
+          BRANCH_NAME="${{ steps.get_branch.outputs.branch }}"
+          if echo "$BRANCH_NAME" | grep -E -q '^stage-[0-9]+\.[0-9]+\.[0-9]+$'; then
+            echo "Branch matches the required format."
+          else
+            echo "Branch does NOT match the required format."
+            exit 1
+          fi
+
+      - name: Creating release new tag
+        uses: cycjimmy/semantic-release-action@v4
+        id: semantic
+        with:
+          semantic_version: 19
+          extra_plugins: |
+            @semantic-release/changelog@6
+            @semantic-release/git@10
+            @semantic-release/exec@6
+            @semantic-release/commit-analyzer@9
+            @semantic-release/release-notes-generator@10
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get release version
+        run: echo "NEW_VERSION=${{ steps.semantic.outputs.new_release_version }}" >> $GITHUB_ENV
+
+      - name: Archive stage branch
+        run: |
+          git checkout -b archive-${{ steps.get_branch.outputs.branch }} ${{ steps.get_branch.outputs.branch }}
+          git push origin archive-${{ steps.get_branch.outputs.branch }}
+          git push -d origin ${{ steps.get_branch.outputs.branch }}
+          git branch -D ${{ steps.get_branch.outputs.branch }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_TOKEN }}

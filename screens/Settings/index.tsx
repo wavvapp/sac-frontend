@@ -26,7 +26,7 @@ import { ScrollView } from "react-native-gesture-handler"
 import UsersIcon from "@/components/vectors/UsersIcon"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
-import { RootStackParamList } from "@/navigation"
+import { RootStackParamList } from "@/types"
 
 export type SettingsScreenProps = NativeStackNavigationProp<
   RootStackParamList,

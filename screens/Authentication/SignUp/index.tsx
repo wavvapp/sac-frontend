@@ -1,5 +1,5 @@
 import { CustomButton } from "@/components/ui/Button"
-import { RootStackParamList } from "@/navigation"
+import { RootStackParamList } from "@/types"
 import { theme } from "@/theme"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"

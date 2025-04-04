@@ -1,5 +1,5 @@
 import UserStatus from "@/components/cards/UserStatus"
-import { RootStackParamList } from "@/navigation"
+import { RootStackParamList } from "@/types"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { StyleSheet, View, StatusBar, Platform } from "react-native"
 import { runOnJS, useDerivedValue } from "react-native-reanimated"

@@ -120,3 +120,19 @@ export enum AudienceOptions {
   GROUPS = "groups",
   FRIENDS = "friends",
 }
+
+export type RootStackParamList = {
+  EntryScreen: undefined
+  Home: undefined
+  EditSignal: { isNewSignal?: boolean }
+  SignUp: undefined
+  Settings: undefined
+  Signaling: undefined
+  CreateCredentials: undefined
+  Search: undefined
+  CreateGroup: undefined
+  NotificationPreferences: undefined
+  StaticContentScreen: { pageSlug: StaticPageType }
+  Groups: undefined
+  EditGroup: { groupId: string; name: string; friendIds: string[] }
+}
