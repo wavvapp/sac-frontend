@@ -29,6 +29,8 @@ import { useFetchPoints } from "@/queries/points"
 import { useQueryClient } from "@tanstack/react-query"
 import { BottomDrawerRef } from "@/components/BottomDrawer"
 import UserStatusDetails from "@/components/StatusDetails/UserStatusDetails"
+import UserStatusDetailsBottomSheet from "@/components/StatusDetails/UserStatusDetailsBottomSheet"
+import CustomText from "@/components/ui/CustomText"
 
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,

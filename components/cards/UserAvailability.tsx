@@ -10,6 +10,7 @@ interface UserAvailabilityProps extends ViewProps {
   activity: User["activity"]
   hasNotificationEnabled?: boolean
   showNotificationIcon?: boolean
+  onChangeNotificationStatus?: () => void
 }
 
 export default function UserAvailability({
@@ -19,6 +20,7 @@ export default function UserAvailability({
   style,
   hasNotificationEnabled,
   showNotificationIcon,
+  onChangeNotificationStatus,
   ...rest
 }: UserAvailabilityProps) {
   return (
@@ -26,6 +28,7 @@ export default function UserAvailability({
       <UserInfo
         fullName={fullName}
         username={""}
+        onChangeNotificationStatus={onChangeNotificationStatus}
         showNotificationIcon={showNotificationIcon}
         hasNotificationEnabled={hasNotificationEnabled}
       />
@@ -50,15 +53,8 @@ const styles = StyleSheet.create({
   container: {
     gap: 1,
   },
-  userInfo: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
   header: {
     flexDirection: "row",
-  },
-  name: {
-    maxWidth: "70%",
   },
   time: {
     textTransform: "capitalize",

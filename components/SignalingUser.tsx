@@ -4,7 +4,7 @@ import UserAvailability from "@/components/cards/UserAvailability"
 import UserInfo from "@/components/UserInfo"
 import { theme } from "@/theme"
 import { useEnableFriendNotification } from "@/hooks/useEnableFriendNotification"
-import Badge from "@/components/ui/Badge"
+import CustomText from "@/components/ui/CustomText"
 
 interface SignalingUserProps {
   user: Friend
@@ -12,6 +12,7 @@ interface SignalingUserProps {
   isLast: boolean
   isFirst: boolean
   hasNotificationEnabled: boolean
+  onReply: (user: Friend) => void
 }
 
 export default function SignalingUser({
@@ -20,41 +21,56 @@ export default function SignalingUser({
   isLast,
   isFirst,
   hasNotificationEnabled,
+  onReply,
 }: SignalingUserProps) {
   const { changePreferences } = useEnableFriendNotification()
 
   return (
-    <View
-      style={[
-        styles.userCard,
-        isLast && styles.lastCardInTheListStyles,
-        isFirst && styles.firstCardInTheListStyles,
-        online && styles.availableUserContainer,
-      ]}>
-      <View style={{ flex: 1 }}>
-        {online ? (
-          <UserAvailability
-            fullName={user.names}
-            time={user?.time}
-            activity={user.activity}
-            hasNotificationEnabled={hasNotificationEnabled}
-            showNotificationIcon
-          />
-        ) : (
-          <UserInfo
-            fullName={user.names}
-            username={user.username}
-            showNotificationIcon={true}
-            showUsername={true}
-          />
-        )}
-      </View>
-      {online && (
-        <TouchableOpacity onPress={() => changePreferences(user)}>
-          <Badge name="reply" variant="outline" />
+    <>
+      <View
+        style={[
+          styles.userCard,
+          isLast && styles.lastCardInTheListStyles,
+          isFirst && styles.firstCardInTheListStyles,
+          online && styles.availableUserContainer,
+        ]}>
+        <View style={{ flex: 1 }}>
+          {online ? (
+            <UserAvailability
+              onChangeNotificationStatus={() => {
+                changePreferences(user)
+              }}
+              fullName={user.names}
+              time={user?.time}
+              activity={user.activity}
+              hasNotificationEnabled={hasNotificationEnabled}
+              showNotificationIcon
+            />
+          ) : (
+            <UserInfo
+              onChangeNotificationStatus={() => {
+                changePreferences(user)
+              }}
+              fullName={user.names}
+              username={user.username}
+              showNotificationIcon={true}
+              showUsername={true}
+            />
+          )}
+        </View>
+        {/*{online && (*/}
+        <TouchableOpacity onPress={() => onReply(user)}>
+          <CustomText
+            style={styles.badgeText}
+            fontFamily="writer-monov"
+            size="sm"
+            fontWeight="medium">
+            Reply
+          </CustomText>
         </TouchableOpacity>
-      )}
-    </View>
+        {/*)}*/}
+      </View>
+    </>
   )
 }
 const styles = StyleSheet.create({
@@ -72,5 +88,15 @@ const styles = StyleSheet.create({
   },
   availableUserContainer: {
     backgroundColor: theme.colors.white,
+  },
+  badgeText: {
+    textTransform: "uppercase",
+    borderColor: theme.colors.black,
+    borderWidth: 1,
+    paddingVertical: 2,
+    paddingHorizontal: 10,
+    borderRadius: 20,
+    fontWeight: "700",
+    opacity: 0.5,
   },
 })

@@ -1,4 +1,4 @@
-import { StyleSheet, View, ViewProps } from "react-native"
+import { StyleSheet, TouchableOpacity, View, ViewProps } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import { theme } from "@/theme"
 import { TypographySizeVariant } from "@/types"
@@ -11,6 +11,7 @@ interface UserInfoProps extends ViewProps {
   hasNotificationEnabled?: boolean
   showNotificationIcon?: boolean
   showUsername?: boolean
+  onChangeNotificationStatus?: () => void
 }
 
 export default function UserInfo({
@@ -21,6 +22,7 @@ export default function UserInfo({
   hasNotificationEnabled,
   showUsername,
   showNotificationIcon,
+  onChangeNotificationStatus,
   ...rest
 }: UserInfoProps) {
   const bellColor = hasNotificationEnabled
@@ -34,7 +36,9 @@ export default function UserInfo({
           {fullName}
         </CustomText>
         {showNotificationIcon && (
-          <BellIcon width={16} height={16} stroke={bellColor} />
+          <TouchableOpacity onPress={onChangeNotificationStatus}>
+            <BellIcon width={16} height={16} stroke={bellColor} />
+          </TouchableOpacity>
         )}
       </View>
       {showUsername && (

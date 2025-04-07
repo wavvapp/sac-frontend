@@ -4,35 +4,22 @@ import Animated, {
   useAnimatedStyle,
   runOnJS,
 } from "react-native-reanimated"
-import {
-  Gesture,
-  GestureDetector,
-  FlatList,
-} from "react-native-gesture-handler"
-import { View, StyleSheet, Dimensions, ListRenderItem } from "react-native"
-import { useRef } from "react"
+import { Gesture, GestureDetector } from "react-native-gesture-handler"
+import { View, StyleSheet, Dimensions } from "react-native"
+import { ReactNode } from "react"
 import { theme } from "../../theme"
-import { Friend } from "../../types"
 
 const height = Dimensions.get("window").height
 
 export default function UserStatusDetailsBottomSheet({
   toggleStatusDetailsModal,
-  data,
-  renderData,
-  renderSignalDescription,
-  renderTitle,
+  children,
 }: {
   toggleStatusDetailsModal: () => void
-  data: Friend[]
-  renderData: ListRenderItem<Friend>
-  renderSignalDescription: () => JSX.Element
-  renderTitle: () => JSX.Element
+  children: ReactNode
 }) {
   const translateY = useSharedValue(0)
   const context = useSharedValue({ y: 0 })
-  const scrollY = useSharedValue(0) // Track scroll position
-  const listRef = useRef<FlatList>(null)
 
   const closeModal = () => {
     "worklet"
@@ -77,24 +64,7 @@ export default function UserStatusDetailsBottomSheet({
           <View>
             <View style={styles.dragHandle} />
           </View>
-          {renderSignalDescription()}
-          <FlatList
-            ref={listRef}
-            data={data}
-            contentContainerStyle={{
-              paddingHorizontal: 20,
-              paddingTop: 20,
-              paddingBottom: 20,
-              gap: 12,
-            }}
-            ListHeaderComponent={renderTitle()}
-            renderItem={renderData}
-            keyExtractor={(item) => item.friendId}
-            scrollEventThrottle={16}
-            onScroll={(e) => {
-              scrollY.value = e.nativeEvent.contentOffset.y
-            }}
-          />
+          {children}
         </Animated.View>
       </GestureDetector>
     </View>
@@ -134,8 +104,5 @@ const styles = StyleSheet.create({
     borderRadius: 3,
     alignSelf: "center",
     marginBottom: 15,
-  },
-  text: {
-    color: "black",
   },
 })

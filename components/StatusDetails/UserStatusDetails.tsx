@@ -9,6 +9,8 @@ import { useNavigation } from "@react-navigation/native"
 import { HomeScreenProps } from "@/screens/Home"
 import { CustomTitle } from "@/components/ui/CustomTitle"
 import Badge from "@/components/ui/Badge"
+import { FlatList } from "react-native-gesture-handler"
+import { useRef } from "react"
 
 export default function UserStatusDetails({
   toggleStatusDetailsModal,
@@ -19,7 +21,9 @@ export default function UserStatusDetails({
   signal: Signal
   user: User
 }) {
+  const listRef = useRef(null)
   const navigation = useNavigation<HomeScreenProps>()
+
   const renderFriendSignal = (item: Friend) => {
     return (
       <View>
@@ -41,30 +45,39 @@ export default function UserStatusDetails({
 
   return (
     <UserStatusDetailsBottomSheet
-      toggleStatusDetailsModal={toggleStatusDetailsModal}
-      data={signal?.friends}
-      renderTitle={() => (
-        <CustomTitle text="Friends invited to join" style={styles.title} />
-      )}
-      renderSignalDescription={() => (
-        <View style={styles.statusDescriptionContainer}>
-          <UserAvailability
-            fullName={user.names}
-            time={signal.when}
-            activity={signal.status_message}
-          />
-          <TouchableOpacity
-            onPress={() => {
-              toggleStatusDetailsModal()
-              navigation.push("EditSignal", { isNewSignal: false })
-            }}
-            style={styles.editSignalButton}>
-            <PenIcon stroke={theme.colors.black} strokeOpacity={0.5} />
-          </TouchableOpacity>
-        </View>
-      )}
-      renderData={({ item }) => renderFriendSignal(item as Friend)}
-    />
+      toggleStatusDetailsModal={toggleStatusDetailsModal}>
+      <View style={styles.statusDescriptionContainer}>
+        <UserAvailability
+          fullName={user.names}
+          time={signal.when}
+          activity={signal.status_message}
+        />
+        <TouchableOpacity
+          onPress={() => {
+            toggleStatusDetailsModal()
+            navigation.push("EditSignal", { isNewSignal: false })
+          }}
+          style={styles.editSignalButton}>
+          <PenIcon stroke={theme.colors.black} strokeOpacity={0.5} />
+        </TouchableOpacity>
+      </View>
+      <FlatList
+        ref={listRef}
+        data={signal?.friends}
+        contentContainerStyle={{
+          paddingHorizontal: 20,
+          paddingTop: 20,
+          paddingBottom: 20,
+          gap: 12,
+        }}
+        ListHeaderComponent={() => (
+          <CustomTitle text="Friends invited to join" style={styles.title} />
+        )}
+        renderItem={({ item }) => renderFriendSignal(item)}
+        keyExtractor={(item) => item.friendId}
+        scrollEventThrottle={16}
+      />
+    </UserStatusDetailsBottomSheet>
   )
 }
 
