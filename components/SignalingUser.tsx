@@ -3,8 +3,8 @@ import { View, StyleSheet, TouchableOpacity } from "react-native"
 import UserAvailability from "@/components/cards/UserAvailability"
 import UserInfo from "@/components/UserInfo"
 import { theme } from "@/theme"
-import BellIcon from "@/components/vectors/BellIcon"
 import { useEnableFriendNotification } from "@/hooks/useEnableFriendNotification"
+import Badge from "@/components/ui/Badge"
 
 interface SignalingUserProps {
   user: Friend
@@ -21,11 +21,8 @@ export default function SignalingUser({
   isFirst,
   hasNotificationEnabled,
 }: SignalingUserProps) {
-  const bellColor = hasNotificationEnabled
-    ? theme.colors.black
-    : theme.colors.black_200
-
   const { changePreferences } = useEnableFriendNotification()
+
   return (
     <View
       style={[
@@ -40,16 +37,23 @@ export default function SignalingUser({
             fullName={user.names}
             time={user?.time}
             activity={user.activity}
+            hasNotificationEnabled={hasNotificationEnabled}
+            showNotificationIcon
           />
         ) : (
-          <UserInfo fullName={user.names} username={user.username} />
+          <UserInfo
+            fullName={user.names}
+            username={user.username}
+            showNotificationIcon={true}
+            showUsername={true}
+          />
         )}
       </View>
-      <TouchableOpacity
-        style={styles.BellIcon}
-        onPress={() => changePreferences(user)}>
-        <BellIcon width={16} height={16} color={bellColor} />
-      </TouchableOpacity>
+      {online && (
+        <TouchableOpacity onPress={() => changePreferences(user)}>
+          <Badge name="reply" variant="outline" />
+        </TouchableOpacity>
+      )}
     </View>
   )
 }
@@ -68,11 +72,5 @@ const styles = StyleSheet.create({
   },
   availableUserContainer: {
     backgroundColor: theme.colors.white,
-  },
-  BellIcon: {
-    height: 48,
-    width: 48,
-    justifyContent: "center",
-    alignItems: "center",
   },
 })

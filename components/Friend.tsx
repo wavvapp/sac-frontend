@@ -25,6 +25,7 @@ export default function FriendCard({
       <UserInfo
         fullName={user?.names}
         username={user.username}
+        showUsername={true}
         style={styles.userInfoStyles}
       />
       <CheckBox isChecked={selected} />

@@ -2,8 +2,6 @@ import { StyleSheet, TouchableOpacity, View, ViewStyle } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import { theme } from "@/theme"
 import { Friend, User } from "@/types"
-import { useNavigation } from "@react-navigation/native"
-import { HomeScreenProps } from "@/screens/Home"
 import Animated, {
   interpolate,
   SharedValue,
