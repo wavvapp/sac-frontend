@@ -64,7 +64,7 @@ export default function SettingScreen() {
     {
       title: "Manage groups",
       description: "Organize your friends",
-      icon: <UsersIcon />,
+      icon: <UsersIcon width={24} height={24} />,
       onPress: () => navigation.navigate("Groups"),
     },
     {

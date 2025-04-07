@@ -28,6 +28,7 @@ import TapWavv from "@/components/cards/TapWavv"
 import { useFetchPoints } from "@/queries/points"
 import { useQueryClient } from "@tanstack/react-query"
 import { BottomDrawerRef } from "@/components/BottomDrawer"
+import UserStatusDetails from "@/components/StatusDetails/UserStatusDetails"
 
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -36,13 +37,13 @@ export type HomeScreenProps = NativeStackNavigationProp<
 
 export default function HomeScreen() {
   const [_, setIsVisible] = useState(false)
-  const { isOn } = useStatus()
+  const { isOn, signal } = useStatus()
   const signalingRef = useRef<BottomDrawerRef>(null)
   const navigation = useNavigation<HomeScreenProps>()
   const { data: allFriends } = useFriends()
   const { user, isAuthenticated } = useAuth()
   const { handleOfflineAction } = useOfflineHandler()
-
+  const [statusDetailsOpened, setStatusDetailsOpened] = useState(false)
   const { data, refetch: refetchPoints } = useFetchPoints()
 
   const queryClient = useQueryClient()
@@ -120,14 +121,34 @@ export default function HomeScreen() {
           <NoFriends />
         ) : (
           <View style={styles.StatusContainer}>
-            {isOn.value ? <UserStatus isOn={isOn} user={user} /> : <TapWavv />}
+            {isOn.value ? (
+              <UserStatus
+                onOpenStatusDetails={() =>
+                  setStatusDetailsOpened((prev) => !prev)
+                }
+                isOn={isOn}
+                user={user}
+              />
+            ) : (
+              <TapWavv />
+            )}
           </View>
         )}
       </View>
       {!!allFriends?.length && <Signaling ref={signalingRef} />}
+      {statusDetailsOpened && signal && user && (
+        <UserStatusDetails
+          toggleStatusDetailsModal={() =>
+            setStatusDetailsOpened((prev) => !prev)
+          }
+          signal={signal}
+          user={user}
+        />
+      )}
     </View>
   )
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

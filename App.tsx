@@ -31,17 +31,17 @@ export default function App() {
     return null
   }
   return (
-    <QueryClientProvider client={queryClient}>
-      <NotificationProvider>
-        <SafeAreaProvider>
-          <StatusBar style="inverted" />
-          <AuthProvider>
-            <GestureHandlerRootView>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <QueryClientProvider client={queryClient}>
+        <NotificationProvider>
+          <SafeAreaProvider>
+            <StatusBar style="inverted" />
+            <AuthProvider>
               <AppNavigator />
-            </GestureHandlerRootView>
-          </AuthProvider>
-        </SafeAreaProvider>
-      </NotificationProvider>
-    </QueryClientProvider>
+            </AuthProvider>
+          </SafeAreaProvider>
+        </NotificationProvider>
+      </QueryClientProvider>
+    </GestureHandlerRootView>
   )
 }

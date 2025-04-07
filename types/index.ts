@@ -1,4 +1,5 @@
 import { ImageSourcePropType, TextStyle } from "react-native"
+import { theme } from "@/theme"
 
 export type TypographySizeVariant = "lg" | "base" | "sm"
 export type FontSizeVariant = TypographySizeVariant
@@ -25,17 +26,8 @@ export type fontStyleVariant = "normal" | "italic"
 export type BadgeVariant = "default" | "outline" | "primary"
 export type InputVariant = "primary" | "secondary" | "ghost"
 
-export type Theme = {
-  colors: Record<string, string>
-  fontSize: Record<FontSizeVariant, TextStyle["fontSize"]>
-  lineHeight: Record<LineHeightVariant, TextStyle["lineHeight"]>
-  fontWeight: Record<FontWeightVariant, TextStyle["fontWeight"]>
-  fontStyle: Record<fontStyleVariant, fontStyleVariant>
-  fontFamily: Record<
-    FontFamilyVariant,
-    Partial<Record<FontWeightVariant, { normal: string; italic: string }>>
-  >
-}
+export type Theme = typeof theme
+
 export interface User {
   id: string
   username: string

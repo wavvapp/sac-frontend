@@ -1,6 +1,6 @@
-import { Theme } from "@/types"
 import { Platform } from "react-native"
-export const theme: Theme = {
+
+export const theme = {
   colors: {
     black: "#000000",
     black_30: "#000000BF",
@@ -91,4 +91,4 @@ export const theme: Theme = {
       },
     },
   },
-}
+} as const
