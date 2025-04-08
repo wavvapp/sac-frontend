@@ -1,5 +1,5 @@
 import { forwardRef, useCallback, useEffect, useMemo, useState } from "react"
-import { View, StyleSheet, AppState } from "react-native"
+import { View, StyleSheet, AppState, TouchableOpacity } from "react-native"
 import BottomDrawer from "@/components/BottomDrawer"
 import { BottomSheetSectionList } from "@gorhom/bottom-sheet"
 import { theme } from "@/theme"
@@ -16,6 +16,7 @@ import UserStatusDetailsBottomSheet from "@/components/StatusDetails/UserStatusD
 import CustomText from "@/components/ui/CustomText"
 import { Friend } from "@/types"
 import Badge from "@/components/ui/Badge"
+import { CustomTitle } from "@/components/ui/CustomTitle"
 
 export interface SignalingRef {
   openBottomSheet: () => void
@@ -79,7 +80,7 @@ const Index = forwardRef<SignalingRef>((_, ref) => {
     setIsStatusDetailsBottomSheetOpened,
   ] = useState(false)
 
-  const onOpenDetailsModal = (user: Friend) => {
+  const onOpenDetailsModal = (_user: Friend) => {
     setIsStatusDetailsBottomSheetOpened((prev) => !prev)
   }
 
@@ -145,15 +146,9 @@ const Index = forwardRef<SignalingRef>((_, ref) => {
             setIsStatusDetailsBottomSheetOpened((prev) => !prev)
           }>
           <View>
-            <View
-              style={{
-                flexDirection: "row",
-                gap: 4,
-                alignItems: "center",
-                justifyContent: "center",
-              }}>
+            <View style={styles.userDetailsContainer}>
               <CustomText size="lg" fontWeight="bold">
-                {user.names}
+                {user?.names}
               </CustomText>
               <CustomText
                 size="lg"
@@ -162,7 +157,21 @@ const Index = forwardRef<SignalingRef>((_, ref) => {
                 @{user?.username}
               </CustomText>
             </View>
-            <Badge name="afternoon" />
+            <View style={styles.signalContainer}>
+              <CustomText size="lg" fontWeight="bold">
+                Tempelhofer Feld
+              </CustomText>
+              <Badge name="afternoon" variant="outline" />
+            </View>
+            <View style={styles.replyButtonsContainer}>
+              <TouchableOpacity style={styles.replyButton}>
+                <CustomTitle style={[styles.replyButtonTitle]} text="I'm in" />
+              </TouchableOpacity>
+              <View style={styles.separator} />
+              <TouchableOpacity style={styles.replyButton}>
+                <CustomTitle style={styles.replyButtonTitle} text="I'm out" />
+              </TouchableOpacity>
+            </View>
           </View>
         </UserStatusDetailsBottomSheet>
       )}
@@ -186,6 +195,46 @@ const styles = StyleSheet.create({
   },
   contentContainerStyle: {
     paddingBottom: 20,
+  },
+  userDetailsContainer: {
+    flexDirection: "row",
+    gap: 4,
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 10,
+  },
+  signalContainer: {
+    flexDirection: "column",
+    gap: 5,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: 70,
+  },
+  separator: {
+    height: "100%",
+    width: 2,
+    backgroundColor: theme.colors.black,
+    opacity: 0.2,
+  },
+  replyButtonsContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    backgroundColor: theme.colors.gray,
+    borderBottomEndRadius: 20,
+    borderBottomStartRadius: 20,
+    paddingVertical: 7,
+  },
+  replyButton: {
+    width: "50%",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: 20,
+  },
+  replyButtonTitle: {
+    fontWeight: "700",
+    color: theme.colors.black,
+    opacity: 0.5,
   },
 })
 
