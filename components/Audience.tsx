@@ -19,7 +19,7 @@ const audienceOptions = [
 
 export default function Audience() {
   const [selectedAudience, setSelectedAudience] = useState(
-    AudienceOptions.GROUPS,
+    AudienceOptions.FRIENDS,
   )
 
   const translateX = useRef(
@@ -51,8 +51,26 @@ export default function Audience() {
               style={[
                 styles.AudienceOptionText,
                 selectedAudience === option.value
-                  ? styles.primaryAudienceOption
-                  : styles.secondaryAudienceOption,
+                  ? styles.activeTab
+                  : [
+                      styles.nonActiveTab,
+                      selectedAudience === AudienceOptions.FRIENDS
+                        ? {
+                            borderLeftWidth: 1,
+                            borderTopLeftRadius: 20,
+                            borderBottomLeftRadius: 20,
+                          }
+                        : {
+                            borderRightWidth: 1,
+                            borderTopRightRadius: 20,
+                            borderBottomRightRadius: 20,
+                          },
+                    ],
+                selectedAudience === option.value
+                  ? selectedAudience === AudienceOptions.FRIENDS
+                    ? { marginLeft: -24 }
+                    : { marginRight: -24 }
+                  : null,
               ]}
             />
           </TouchableWithoutFeedback>
@@ -63,6 +81,7 @@ export default function Audience() {
             styles.thumb,
             {
               transform: [{ translateX }],
+              zIndex: 5, // Ensure thumb is below text
             },
           ]}
         />
@@ -85,21 +104,17 @@ const styles = StyleSheet.create({
   audienceSwitch: {
     flexDirection: "row",
     position: "relative",
-    borderWidth: 1,
-    borderRadius: 50,
-    borderColor: theme.colors.black_200,
     marginBottom: 24,
   },
 
   thumb: {
     width: "50%",
     height: "100%",
-    borderColor: theme.colors.black,
-    borderWidth: 1,
     borderRadius: 50,
     position: "absolute",
     backgroundColor: theme.colors.black,
   },
+
   AudienceOptionText: {
     flex: 1,
     textAlign: "center",
@@ -107,11 +122,13 @@ const styles = StyleSheet.create({
     position: "relative",
     zIndex: 10,
   },
-  primaryAudienceOption: {
+  activeTab: {
     color: theme.colors.white,
-    borderColor: theme.colors.black_200,
   },
-  secondaryAudienceOption: {
+  nonActiveTab: {
+    borderBottomWidth: 1,
+    borderTopWidth: 1,
+    borderColor: theme.colors.black_200,
     color: theme.colors.black,
   },
 })

@@ -1,6 +1,5 @@
 import { forwardRef, useCallback, useEffect, useMemo, useState } from "react"
 import { View, StyleSheet, AppState } from "react-native"
-import CustomText from "@/components/ui/CustomText"
 import BottomDrawer from "@/components/BottomDrawer"
 import { BottomSheetSectionList } from "@gorhom/bottom-sheet"
 import { theme } from "@/theme"
@@ -145,7 +144,6 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
 })
-
 Index.displayName = "Signaling"
 
 export default Index
