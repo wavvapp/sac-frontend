@@ -1,4 +1,4 @@
-import Svg, { Defs, G, Path, ClipPath, Rect, SvgProps } from "react-native-svg"
+import Svg, { G, Path, SvgProps } from "react-native-svg"
 
 export default function CircleCheck(props: SvgProps) {
   return (
@@ -10,11 +10,6 @@ export default function CircleCheck(props: SvgProps) {
           strokeLinejoin="round"
         />
       </G>
-      <Defs>
-        <ClipPath>
-          <Rect width="16" height="16" fill="white" />
-        </ClipPath>
-      </Defs>
     </Svg>
   )
 }

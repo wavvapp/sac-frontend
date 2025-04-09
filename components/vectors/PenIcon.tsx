@@ -10,11 +10,6 @@ export default function PenIcon(props: SvgProps) {
           strokeLinejoin="round"
         />
       </G>
-      <Defs>
-        <ClipPath>
-          <Rect width="16" height="16" fill="white" />
-        </ClipPath>
-      </Defs>
     </Svg>
   )
 }
