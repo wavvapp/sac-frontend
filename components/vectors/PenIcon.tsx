@@ -1,4 +1,4 @@
-import Svg, { ClipPath, Defs, G, Path, Rect, SvgProps } from "react-native-svg"
+import Svg, { G, Path, SvgProps } from "react-native-svg"
 
 export default function PenIcon(props: SvgProps) {
   return (
