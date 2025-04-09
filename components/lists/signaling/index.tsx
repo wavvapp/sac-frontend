@@ -66,7 +66,7 @@ const Index = forwardRef<SignalingRef>((_, ref) => {
 
       return { previousFriends }
     },
-    onError: (err, variables, context) => {
+    onError: (_err, _variables, context) => {
       if (context?.previousFriends) {
         queryClient.setQueryData(["friend-signals"], context.previousFriends)
       }
