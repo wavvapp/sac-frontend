@@ -103,7 +103,7 @@ export default function UserStatusDetails({
 const styles = StyleSheet.create({
   statusDescriptionContainer: {
     position: "relative",
-    paddingBottom: 28,
+    paddingBottom: 20,
     paddingTop: 10,
     paddingHorizontal: 20,
     borderBottomWidth: 1,
