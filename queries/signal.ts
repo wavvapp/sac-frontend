@@ -18,7 +18,6 @@ export const useMySignal = () => {
         ...data,
         friendIds: data.friends.map((friend: Friend) => friend?.friendId),
       }
-      console.log("signal", signal)
       return signal
     },
     staleTime: 10000,
