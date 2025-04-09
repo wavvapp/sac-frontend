@@ -31,8 +31,27 @@ export default function UserStatusDetails({
           <CustomText fontWeight="bold" size="base">
             {item.names}
           </CustomText>
-          <CustomText fontWeight="medium"> is </CustomText>
-          <Badge name="in" />
+          {item.signal?.replied && (
+            <>
+              <CustomText fontWeight="medium"> is </CustomText>
+              <Badge
+                name={item.signal?.accepted ? "in" : "out"}
+                style={
+                  item.signal?.accepted
+                    ? { backgroundColor: theme.colors.black }
+                    : {
+                        backgroundColor: theme.colors.black_200,
+                        borderWidth: 0,
+                      }
+                }
+                textStyle={
+                  item.signal?.accepted
+                    ? { color: theme.colors.white }
+                    : { color: theme.colors.black }
+                }
+              />
+            </>
+          )}
         </View>
         <CustomText
           fontFamily="writer-monov"

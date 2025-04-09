@@ -83,7 +83,7 @@ export default function UserStatus({
             <View style={styles.statusStat}>
               <CircleCheck stroke={theme.colors.black} strokeWidth={1.5} />
               <CustomText fontFamily="writer-monos" fontWeight="bold">
-                {signal?.counts.accepted || 0}
+                {signal?.counts?.accepted || 0}
               </CustomText>
             </View>
             <View style={styles.statusStat}>
@@ -94,7 +94,7 @@ export default function UserStatus({
                 height={16}
               />
               <CustomText fontFamily="writer-monos" fontWeight="bold">
-                {signal?.counts.rejected || 0}
+                {signal?.counts?.rejected || 0}
               </CustomText>
             </View>
           </View>
