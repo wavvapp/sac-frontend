@@ -1,6 +1,7 @@
 import {
   QueryClient,
   useMutation,
+  UseMutationOptions,
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query"
@@ -213,4 +214,19 @@ export const usePrefetchFriendSignals = ({
       },
     })
   }, [queryClient])
+}
+
+type ReplyToSignalArgs = {
+  signalId: string
+  hasAccepted: boolean
+}
+export const useReplyToSignal = (
+  args?: UseMutationOptions<any, Error, ReplyToSignalArgs, unknown>,
+) => {
+  return useMutation({
+    mutationKey: ["reply-to-signal"],
+    mutationFn: (payload: ReplyToSignalArgs) =>
+      api.post("/friend-signals/reply", payload),
+    ...args,
+  })
 }

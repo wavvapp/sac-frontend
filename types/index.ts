@@ -54,6 +54,8 @@ export interface Friend {
   isFriend?: boolean
   inviteCode: string
   hasNotificationEnabled?: boolean
+  accepted: boolean
+  replied: boolean
   signal?: Signal
 }
 
@@ -70,6 +72,8 @@ export interface Signal {
   groups: Group[]
   startsAt: Date
   endsAt: Date
+  accepted?: boolean
+  replied?: boolean
 }
 
 export type FriendSignal = {

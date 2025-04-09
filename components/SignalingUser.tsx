@@ -13,6 +13,8 @@ interface SignalingUserProps {
   isFirst: boolean
   hasNotificationEnabled: boolean
   onReply: (user: Friend) => void
+  hasReplied?: boolean
+  hasAccepted?: boolean
 }
 
 export default function SignalingUser({
@@ -22,6 +24,8 @@ export default function SignalingUser({
   isFirst,
   hasNotificationEnabled,
   onReply,
+  hasReplied,
+  hasAccepted,
 }: SignalingUserProps) {
   const { changePreferences } = useEnableFriendNotification()
 
@@ -58,17 +62,22 @@ export default function SignalingUser({
             />
           )}
         </View>
-        {/*{online && (*/}
-        <TouchableOpacity onPress={() => onReply(user)}>
-          <CustomText
-            style={styles.badgeText}
-            fontFamily="writer-monov"
-            size="sm"
-            fontWeight="medium">
-            Reply
-          </CustomText>
-        </TouchableOpacity>
-        {/*)}*/}
+        {online && (
+          <TouchableOpacity onPress={() => onReply(user)}>
+            <CustomText
+              style={[
+                styles.badgeText,
+                hasReplied && hasAccepted
+                  ? styles.iamInBadgeStyle
+                  : styles.iamOutBadgeStyle,
+              ]}
+              fontFamily="writer-monov"
+              size="sm"
+              fontWeight="medium">
+              {!hasReplied ? "Reply" : hasAccepted ? "I'm in" : "I'm out"}
+            </CustomText>
+          </TouchableOpacity>
+        )}
       </View>
     </>
   )
@@ -96,7 +105,18 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
     paddingHorizontal: 10,
     borderRadius: 20,
-    fontWeight: "700",
+    fontWeight: "600",
     opacity: 0.5,
+  },
+  iamInBadgeStyle: {
+    opacity: 1,
+    backgroundColor: theme.colors.black,
+    color: theme.colors.white,
+  },
+  iamOutBadgeStyle: {
+    backgroundColor: theme.colors.black_200,
+    color: theme.colors.black,
+    opacity: 0.5,
+    borderWidth: 0,
   },
 })

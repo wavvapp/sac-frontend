@@ -1,11 +1,17 @@
 import { forwardRef, useCallback, useEffect, useMemo, useState } from "react"
-import { View, StyleSheet, AppState, TouchableOpacity } from "react-native"
+import {
+  View,
+  StyleSheet,
+  AppState,
+  TouchableOpacity,
+  Alert,
+} from "react-native"
 import BottomDrawer from "@/components/BottomDrawer"
 import { BottomSheetSectionList } from "@gorhom/bottom-sheet"
 import { theme } from "@/theme"
 import SignalingUser from "@/components/SignalingUser"
 import { useFocusEffect } from "@react-navigation/native"
-import { useSignalingFriends } from "@/queries/friends"
+import { useReplyToSignal, useSignalingFriends } from "@/queries/friends"
 import { useQueryClient } from "@tanstack/react-query"
 import { onShare } from "@/utils/share"
 import ActionCard from "@/components/cards/Action"
@@ -29,7 +35,16 @@ const Index = forwardRef<SignalingRef>((_, ref) => {
   const queryClient = useQueryClient()
   const [refreshing, setRefreshing] = useState(false)
   const { user } = useAuth()
+  const [signalingFriend, setSignalingFriend] = useState<Friend | null>(null)
 
+  const { mutateAsync: replyToSignal } = useReplyToSignal({
+    onSuccess: () => {
+      refetch()
+    },
+    onError: () => {
+      Alert.alert("Error", "Failed to reply to the signal, try again!")
+    },
+  })
   const friendsWithSignalOn = useMemo(() => {
     return availableFriends.filter((friend) => friend.signal)
   }, [availableFriends])
@@ -80,8 +95,22 @@ const Index = forwardRef<SignalingRef>((_, ref) => {
     setIsStatusDetailsBottomSheetOpened,
   ] = useState(false)
 
-  const onOpenDetailsModal = (_user: Friend) => {
+  const onOpenDetailsModal = (signalingFriend: Friend) => {
+    setSignalingFriend(signalingFriend)
     setIsStatusDetailsBottomSheetOpened((prev) => !prev)
+  }
+
+  const onReplyToSignal = async (
+    signalingFriend: Friend,
+    hasAccepted: boolean,
+  ) => {
+    setSignalingFriend((prev) =>
+      prev ? { ...prev, hasAccepted, hasReplied: true } : null,
+    )
+    if (signalingFriend.signal?.id) {
+      await replyToSignal({ signalId: signalingFriend.signal?.id, hasAccepted })
+    }
+    setIsStatusDetailsBottomSheetOpened(false)
   }
 
   return (
@@ -117,6 +146,8 @@ const Index = forwardRef<SignalingRef>((_, ref) => {
                   isFirst: index === 0,
                   hasNotificationEnabled: !!user?.hasNotificationEnabled,
                   onReply: onOpenDetailsModal,
+                  hasAccepted: user.signal?.accepted,
+                  hasReplied: user.signal?.replied,
                 }),
             },
             {
@@ -140,7 +171,7 @@ const Index = forwardRef<SignalingRef>((_, ref) => {
           style={styles.sectionListContainer}
         />
       </BottomDrawer>
-      {isStatusDetailsBottomSheetOpened && (
+      {isStatusDetailsBottomSheetOpened && signalingFriend && (
         <UserStatusDetailsBottomSheet
           toggleStatusDetailsModal={() =>
             setIsStatusDetailsBottomSheetOpened((prev) => !prev)
@@ -148,28 +179,65 @@ const Index = forwardRef<SignalingRef>((_, ref) => {
           <View>
             <View style={styles.userDetailsContainer}>
               <CustomText size="lg" fontWeight="bold">
-                {user?.names}
+                {signalingFriend?.names}
               </CustomText>
               <CustomText
                 size="lg"
                 fontFamily="writer-monos"
                 style={{ color: theme.colors.black, opacity: 0.5 }}>
-                @{user?.username}
+                @{signalingFriend?.username}
               </CustomText>
             </View>
             <View style={styles.signalContainer}>
               <CustomText size="lg" fontWeight="bold">
-                Tempelhofer Feld
+                {signalingFriend.signal?.status_message}
               </CustomText>
-              <Badge name="afternoon" variant="outline" />
+              <Badge
+                name={signalingFriend.signal?.when || ""}
+                variant="outline"
+              />
             </View>
             <View style={styles.replyButtonsContainer}>
-              <TouchableOpacity style={styles.replyButton}>
-                <CustomTitle style={[styles.replyButtonTitle]} text="I'm in" />
+              <TouchableOpacity
+                onPress={() => onReplyToSignal(signalingFriend, true)}
+                style={
+                  signalingFriend.signal?.replied &&
+                  signalingFriend.signal?.accepted
+                    ? styles.replyButtonFilled
+                    : styles.replyButton
+                }>
+                <CustomTitle
+                  style={[
+                    styles.replyButtonTitle,
+                    signalingFriend.signal?.replied &&
+                    signalingFriend.signal?.accepted
+                      ? { color: theme.colors.white, opacity: 1 }
+                      : { color: theme.colors.black },
+                  ]}
+                  text="I'm in"
+                />
               </TouchableOpacity>
-              <View style={styles.separator} />
-              <TouchableOpacity style={styles.replyButton}>
-                <CustomTitle style={styles.replyButtonTitle} text="I'm out" />
+              {!signalingFriend.signal?.replied && (
+                <View style={styles.separator} />
+              )}
+              <TouchableOpacity
+                style={
+                  signalingFriend.signal?.replied &&
+                  !signalingFriend.signal?.accepted
+                    ? styles.replyButtonFilled
+                    : styles.replyButton
+                }>
+                <CustomTitle
+                  onPress={() => onReplyToSignal(signalingFriend, false)}
+                  style={[
+                    styles.replyButtonTitle,
+                    signalingFriend.signal?.replied &&
+                    !signalingFriend.signal?.accepted
+                      ? { color: theme.colors.white, opacity: 1 }
+                      : { color: theme.colors.black },
+                  ]}
+                  text="I'm out"
+                />
               </TouchableOpacity>
             </View>
           </View>
@@ -224,6 +292,7 @@ const styles = StyleSheet.create({
     borderBottomEndRadius: 20,
     borderBottomStartRadius: 20,
     paddingVertical: 7,
+    paddingHorizontal: 7,
   },
   replyButton: {
     width: "50%",
@@ -232,9 +301,18 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
   },
   replyButtonTitle: {
-    fontWeight: "700",
+    fontWeight: "600",
     color: theme.colors.black,
     opacity: 0.5,
+  },
+  replyButtonFilled: {
+    justifyContent: "center",
+    alignItems: "center",
+    color: theme.colors.white,
+    backgroundColor: theme.colors.black,
+    borderRadius: 10,
+    paddingVertical: 20,
+    width: "50%",
   },
 })
 
