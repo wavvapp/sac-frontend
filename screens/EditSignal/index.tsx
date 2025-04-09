@@ -68,6 +68,11 @@ export default function EditSignal({
         status: "active",
         startsAt: temporaryStatus?.startsAt,
         endsAt: temporaryStatus?.endsAt,
+        counts: {
+          total: selectedFriends?.length || 0,
+          accepted: 0,
+          rejected: 0,
+        },
       }
       isOn.value = true
       queryclient.setQueryData(["fetch-my-signal"], optimisticStatus)

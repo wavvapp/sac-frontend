@@ -38,13 +38,46 @@ const Index = forwardRef<SignalingRef>((_, ref) => {
   const [signalingFriend, setSignalingFriend] = useState<Friend | null>(null)
 
   const { mutateAsync: replyToSignal } = useReplyToSignal({
-    onSuccess: () => {
-      refetch()
+    onMutate: async (variables) => {
+      await queryClient.cancelQueries({ queryKey: ["friend-signals"] })
+      const previousFriends =
+        queryClient.getQueryData<Friend[]>(["friend-signals"]) || []
+
+      if (signalingFriend) {
+        queryClient.setQueryData<Friend[]>(["friend-signals"], (old) => {
+          const updatedFriends = old ? [...old] : []
+          const friendIndex = updatedFriends.findIndex(
+            (friend) => friend.id === signalingFriend.id,
+          )
+
+          if (friendIndex !== -1) {
+            const updatedFriend = {
+              ...updatedFriends[friendIndex],
+              hasReplied: true,
+              hasAccepted: variables.hasAccepted,
+            }
+
+            updatedFriends[friendIndex] = updatedFriend
+          }
+
+          return updatedFriends
+        })
+      }
+
+      return { previousFriends }
     },
-    onError: () => {
+    onError: (err, variables, context) => {
+      if (context?.previousFriends) {
+        queryClient.setQueryData(["friend-signals"], context.previousFriends)
+      }
       Alert.alert("Error", "Failed to reply to the signal, try again!")
     },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["friend-signals"] })
+      setIsStatusDetailsBottomSheetOpened(false)
+    },
   })
+
   const friendsWithSignalOn = useMemo(() => {
     return availableFriends.filter((friend) => friend.signal)
   }, [availableFriends])
@@ -104,13 +137,23 @@ const Index = forwardRef<SignalingRef>((_, ref) => {
     signalingFriend: Friend,
     hasAccepted: boolean,
   ) => {
-    setSignalingFriend((prev) =>
-      prev ? { ...prev, hasAccepted, hasReplied: true } : null,
-    )
+    setSignalingFriend((prev) => {
+      if (!prev) return null
+      return {
+        ...prev,
+        signal: prev.signal
+          ? {
+              ...prev.signal,
+              accepted: hasAccepted,
+              replied: true,
+            }
+          : null,
+      } as Friend
+    })
+
     if (signalingFriend.signal?.id) {
       await replyToSignal({ signalId: signalingFriend.signal?.id, hasAccepted })
     }
-    setIsStatusDetailsBottomSheetOpened(false)
   }
 
   return (
