@@ -67,9 +67,11 @@ export default function SignalingUser({
             <CustomText
               style={[
                 styles.badgeText,
-                hasReplied && hasAccepted
-                  ? styles.iamInBadgeStyle
-                  : styles.iamOutBadgeStyle,
+                !hasReplied
+                  ? styles.badgeText
+                  : hasAccepted
+                    ? styles.iamInBadgeStyle
+                    : styles.iamOutBadgeStyle,
               ]}
               fontFamily="writer-monov"
               size="sm"

@@ -74,6 +74,11 @@ export interface Signal {
   endsAt: Date
   accepted?: boolean
   replied?: boolean
+  counts: {
+    total: number
+    accepted: number
+    rejected: number
+  }
 }
 
 export type FriendSignal = {
