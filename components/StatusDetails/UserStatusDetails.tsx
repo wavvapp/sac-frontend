@@ -28,7 +28,7 @@ export default function UserStatusDetails({
     return (
       <View>
         <View style={{ flexDirection: "row", gap: 1 }}>
-          <CustomText fontWeight="bold" size="base">
+          <CustomText fontWeight="semibold" size="base">
             {item.names}
           </CustomText>
           {item.signal?.replied && (
