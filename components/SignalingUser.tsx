@@ -63,15 +63,24 @@ export default function SignalingUser({
           )}
         </View>
         {online && (
-          <TouchableOpacity onPress={() => onReply(user)}>
+          <TouchableOpacity
+            style={[
+              styles.badge,
+              !hasReplied
+                ? null
+                : hasAccepted
+                  ? styles.iamInBadgeStyle
+                  : styles.iamOutBadgeStyle,
+            ]}
+            onPress={() => onReply(user)}>
             <CustomText
               style={[
                 styles.badgeText,
                 !hasReplied
-                  ? styles.badgeText
+                  ? null
                   : hasAccepted
-                    ? styles.iamInBadgeStyle
-                    : styles.iamOutBadgeStyle,
+                    ? styles.iamInBadgeTextStyle
+                    : styles.iamOutBadgeTextStyle,
               ]}
               fontFamily="writer-monov"
               size="sm"
@@ -100,24 +109,32 @@ const styles = StyleSheet.create({
   availableUserContainer: {
     backgroundColor: theme.colors.white,
   },
-  badgeText: {
-    textTransform: "uppercase",
+  badge: {
     borderColor: theme.colors.black,
     borderWidth: 1,
+    borderRadius: 20,
     paddingVertical: 2,
     paddingHorizontal: 10,
-    borderRadius: 20,
+  },
+  badgeText: {
+    textTransform: "uppercase",
     fontWeight: "600",
     opacity: 0.5,
+  },
+  iamInBadgeTextStyle: {
+    color: theme.colors.white,
+    opacity: 1,
+  },
+  iamOutBadgeTextStyle: {
+    color: theme.colors.black,
+    opacity: 0.8,
   },
   iamInBadgeStyle: {
     opacity: 1,
     backgroundColor: theme.colors.black,
-    color: theme.colors.white,
   },
   iamOutBadgeStyle: {
     backgroundColor: theme.colors.black_200,
-    color: theme.colors.black,
     opacity: 0.5,
     borderWidth: 0,
   },
