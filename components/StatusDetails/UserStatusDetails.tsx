@@ -10,7 +10,8 @@ import { HomeScreenProps } from "@/screens/Home"
 import { CustomTitle } from "@/components/ui/CustomTitle"
 import Badge from "@/components/ui/Badge"
 import { FlatList } from "react-native-gesture-handler"
-import { useRef } from "react"
+import { useEffect, useRef } from "react"
+import { useQueryClient } from "@tanstack/react-query"
 
 export default function UserStatusDetails({
   toggleStatusDetailsModal,
@@ -23,6 +24,11 @@ export default function UserStatusDetails({
 }) {
   const listRef = useRef(null)
   const navigation = useNavigation<HomeScreenProps>()
+  const queryClient = useQueryClient()
+
+  useEffect(() => {
+    queryClient.refetchQueries({ queryKey: ["friend-signals"] })
+  }, [queryClient])
 
   const renderFriendSignal = (item: Friend) => {
     return (
