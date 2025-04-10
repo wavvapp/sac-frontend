@@ -221,7 +221,7 @@ const Index = forwardRef<SignalingRef>((_, ref) => {
           }>
           <View>
             <View style={styles.userDetailsContainer}>
-              <CustomText size="lg" fontWeight="bold">
+              <CustomText size="lg" fontWeight="semibold">
                 {signalingFriend?.names}
               </CustomText>
               <CustomText
@@ -232,7 +232,7 @@ const Index = forwardRef<SignalingRef>((_, ref) => {
               </CustomText>
             </View>
             <View style={styles.signalContainer}>
-              <CustomText size="lg" fontWeight="bold">
+              <CustomText size="lg" fontWeight="semibold">
                 {signalingFriend.signal?.status_message}
               </CustomText>
               <Badge
