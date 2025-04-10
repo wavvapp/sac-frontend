@@ -1,7 +1,7 @@
 import CustomText from "@/components/ui/CustomText"
 import { StyleSheet, TouchableOpacity, View } from "react-native"
 import UserStatusDetailsBottomSheet from "@/components/StatusDetails/UserStatusDetailsBottomSheet"
-import { Friend, Signal, User } from "@/types"
+import { Friend, Signal, SignalReplyStatus, User } from "@/types"
 import UserAvailability from "@/components/cards/UserAvailability"
 import { theme } from "@/theme"
 import PenIcon from "@/components/vectors/PenIcon"
@@ -27,23 +27,23 @@ export default function UserStatusDetails({
   const queryClient = useQueryClient()
 
   useEffect(() => {
-    queryClient.refetchQueries({ queryKey: ["friend-signals"] })
+    queryClient.refetchQueries({ queryKey: ["fetch-my-signal"] })
   }, [queryClient])
 
-  const renderFriendSignal = (item: Friend) => {
+  const renderFriendSignal = (item: Friend & SignalReplyStatus) => {
     return (
       <View>
         <View style={{ flexDirection: "row", gap: 1 }}>
           <CustomText fontWeight="semibold" size="base">
             {item.names}
           </CustomText>
-          {item.signal?.replied && (
+          {item?.hasReplied && (
             <>
               <CustomText fontWeight="medium"> is </CustomText>
               <Badge
-                name={item.signal?.accepted ? "in" : "out"}
+                name={item?.hasAccepted ? "in" : "out"}
                 style={
-                  item.signal?.accepted
+                  item?.hasAccepted
                     ? { backgroundColor: theme.colors.black }
                     : {
                         backgroundColor: theme.colors.black_200,
@@ -51,7 +51,7 @@ export default function UserStatusDetails({
                       }
                 }
                 textStyle={
-                  item.signal?.accepted
+                  item?.hasAccepted
                     ? { color: theme.colors.white }
                     : { color: theme.colors.black }
                 }
@@ -98,7 +98,9 @@ export default function UserStatusDetails({
         ListHeaderComponent={() => (
           <CustomTitle text="Friends invited to join" style={styles.title} />
         )}
-        renderItem={({ item }) => renderFriendSignal(item)}
+        renderItem={({ item }) =>
+          renderFriendSignal(item as Friend & SignalReplyStatus)
+        }
         keyExtractor={(item) => item.friendId}
         scrollEventThrottle={16}
       />

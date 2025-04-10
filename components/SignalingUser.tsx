@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.white,
   },
   badge: {
-    borderColor: theme.colors.black,
+    borderColor: theme.colors.black_200,
     borderWidth: 1,
     borderRadius: 20,
     paddingVertical: 2,

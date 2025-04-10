@@ -74,7 +74,6 @@ const Index = forwardRef<SignalingRef>((_, ref) => {
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["friend-signals"] })
-      setIsStatusDetailsBottomSheetOpened(false)
     },
   })
 
@@ -144,13 +143,13 @@ const Index = forwardRef<SignalingRef>((_, ref) => {
         signal: prev.signal
           ? {
               ...prev.signal,
-              accepted: hasAccepted,
-              replied: true,
+              hasAccepted: hasAccepted,
+              hasReplied: true,
             }
           : null,
       } as Friend
     })
-
+    setIsStatusDetailsBottomSheetOpened(false)
     if (signalingFriend.signal?.id) {
       await replyToSignal({ signalId: signalingFriend.signal?.id, hasAccepted })
     }
@@ -189,8 +188,8 @@ const Index = forwardRef<SignalingRef>((_, ref) => {
                   isFirst: index === 0,
                   hasNotificationEnabled: !!user?.hasNotificationEnabled,
                   onReply: onOpenDetailsModal,
-                  hasAccepted: user.signal?.accepted,
-                  hasReplied: user.signal?.replied,
+                  hasAccepted: user.signal?.hasAccepted,
+                  hasReplied: user.signal?.hasReplied,
                 }),
             },
             {
@@ -244,29 +243,29 @@ const Index = forwardRef<SignalingRef>((_, ref) => {
               <TouchableOpacity
                 onPress={() => onReplyToSignal(signalingFriend, true)}
                 style={
-                  signalingFriend.signal?.replied &&
-                  signalingFriend.signal?.accepted
+                  signalingFriend.signal?.hasReplied &&
+                  signalingFriend.signal?.hasAccepted
                     ? styles.replyButtonFilled
                     : styles.replyButton
                 }>
                 <CustomTitle
                   style={[
                     styles.replyButtonTitle,
-                    signalingFriend.signal?.replied &&
-                    signalingFriend.signal?.accepted
+                    signalingFriend.signal?.hasReplied &&
+                    signalingFriend.signal?.hasAccepted
                       ? { color: theme.colors.white, opacity: 1 }
                       : { color: theme.colors.black },
                   ]}
                   text="I'm in"
                 />
               </TouchableOpacity>
-              {!signalingFriend.signal?.replied && (
+              {!signalingFriend.signal?.hasReplied && (
                 <View style={styles.separator} />
               )}
               <TouchableOpacity
                 style={
-                  signalingFriend.signal?.replied &&
-                  !signalingFriend.signal?.accepted
+                  signalingFriend.signal?.hasReplied &&
+                  !signalingFriend.signal?.hasAccepted
                     ? styles.replyButtonFilled
                     : styles.replyButton
                 }>
@@ -274,8 +273,8 @@ const Index = forwardRef<SignalingRef>((_, ref) => {
                   onPress={() => onReplyToSignal(signalingFriend, false)}
                   style={[
                     styles.replyButtonTitle,
-                    signalingFriend.signal?.replied &&
-                    !signalingFriend.signal?.accepted
+                    signalingFriend.signal?.hasReplied &&
+                    !signalingFriend.signal?.hasAccepted
                       ? { color: theme.colors.white, opacity: 1 }
                       : { color: theme.colors.black },
                   ]}

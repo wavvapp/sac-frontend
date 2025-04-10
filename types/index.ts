@@ -28,7 +28,7 @@ export type InputVariant = "primary" | "secondary" | "ghost"
 
 export type Theme = typeof theme
 
-export interface User {
+export type User = {
   id: string
   username: string
   names: string
@@ -40,7 +40,7 @@ export interface User {
   isFriend?: boolean
   inviteCode: string
 }
-export interface Friend {
+export type Friend = {
   id: string
   friendId: string
   username: string
@@ -54,12 +54,15 @@ export interface Friend {
   isFriend?: boolean
   inviteCode: string
   hasNotificationEnabled?: boolean
-  accepted: boolean
-  replied: boolean
   signal?: Signal
 }
 
-export interface Signal {
+export type SignalReplyStatus = {
+  hasAccepted: boolean
+  hasReplied: boolean
+}
+
+export type Signal = {
   id?: string
   hasEnded?: boolean
   when: string
@@ -72,14 +75,12 @@ export interface Signal {
   groups: Group[]
   startsAt: Date
   endsAt: Date
-  accepted?: boolean
-  replied?: boolean
   counts: {
     total: number
     accepted: number
     rejected: number
   }
-}
+} & SignalReplyStatus
 
 export type FriendSignal = {
   id: string
