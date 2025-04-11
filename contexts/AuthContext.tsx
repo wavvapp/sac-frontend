@@ -21,7 +21,6 @@ import { handleApiSignIn } from "@/libs/handleApiSignIn"
 import { useQueryClient } from "@tanstack/react-query"
 import AlertDialog from "@/components/AlertDialog"
 import { useOfflineHandler } from "@/hooks/useOfflineHandler"
-import { useNotification } from "@/contexts/NotificationContext"
 import * as Notifications from "expo-notifications"
 import { usePrefetchFriend, usePrefetchFriendSignals } from "@/queries/friends"
 import { usePrefetchSignal } from "@/queries/signal"
@@ -53,8 +52,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const [isNewUser, setIsNewUser] = useState<boolean>(false)
   const { isOnline } = useOfflineHandler()
   const queryClient = useQueryClient()
-  const { registerForNotifications } = useNotification()
-
   const prefetchFriends = usePrefetchFriend({ queryClient })
   const prefetchSignal = usePrefetchSignal({ queryClient })
   const prefetchFriendsSignal = usePrefetchFriendSignals({ queryClient })
@@ -92,7 +89,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         ...userData,
         inviteCode: userData?.inviteCode?.toString(),
       })
-      await registerForNotifications?.()
     } catch (err) {
       console.error("error with saving user info")
       throw err

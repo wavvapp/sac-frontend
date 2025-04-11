@@ -12,7 +12,6 @@ import BellIcon from "@/components/vectors/BellIcon"
 import TrashIcon from "@/components/vectors/TrashIcon"
 import UserProfile from "@/components/cards/UserProfile"
 import { SettingOption } from "@/types"
-import { CopiableText } from "@/components/cards/CopiableText"
 import { onShare } from "@/utils/share"
 import AlertDialog from "@/components/AlertDialog"
 import BottomModal from "@/components/BottomModal"
@@ -71,16 +70,7 @@ export default function SettingScreen() {
       title: "Your friends are not here?",
       description: "Find/Invite friends on Wavv",
       icon: <ShareIcon />,
-      onPress: () =>
-        AlertDialog.open({
-          title: "Share this invite code with your friend",
-          description: <CopiableText text={user?.inviteCode || ""} />,
-          variant: "confirm",
-          confirmText: "Share",
-          cancelText: "cancel",
-          onConfirm: () => onShare(user?.username, user?.inviteCode),
-          closeAutomatically: false,
-        }),
+      onPress: () => onShare(user?.username),
     },
     {
       title: "Push notifications",

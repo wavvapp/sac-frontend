@@ -169,7 +169,7 @@ const Index = forwardRef<SignalingRef>((_, ref) => {
               style: styles.shareActionCard,
               title: "Your friends are not here?",
               description: "Find/Invite friends on Wavv",
-              onPress: () => onShare(user?.username, user?.inviteCode),
+              onPress: () => onShare(user?.username),
             })
           }
           onRefresh={handleRefresh}
