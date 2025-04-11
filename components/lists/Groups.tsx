@@ -38,28 +38,36 @@ export default function GroupsList() {
     <View style={styles.container}>
       {isLoading ? (
         <FriendsSkeleton />
-      ) : !!groups?.length ? (
-        groups?.map((group: Group) => (
-          <TouchableOpacity
-            key={group.id}
-            style={styles.groupsContainer}
-            onPress={() => toggleSelectedGroup(group)}>
-            <View style={styles.groupItem}>
-              <CustomText fontWeight="semibold">{group.name}</CustomText>
-              <CustomText fontFamily="writer-monov" style={styles.details}>
-                {`${group.friends.length} members`}
-              </CustomText>
-            </View>
-
-            <CheckBox isChecked={!!findGroup(temporaryStatus.groups, group)} />
-          </TouchableOpacity>
-        ))
       ) : (
-        <ActionCard
-          title="Create a group"
-          description="You don't have any groups yet. Create one!"
-          onPress={() => navigation.navigate("CreateGroup")}
-        />
+        <>
+          {groups?.map((group: Group) => (
+            <TouchableOpacity
+              key={group.id}
+              style={styles.groupsContainer}
+              onPress={() => toggleSelectedGroup(group)}>
+              <View style={styles.groupItem}>
+                <CustomText fontWeight="semibold">{group.name}</CustomText>
+                <CustomText fontFamily="writer-monov" style={styles.details}>
+                  {`${group.friends.length} members`}
+                </CustomText>
+              </View>
+
+              <CheckBox
+                isChecked={!!findGroup(temporaryStatus.groups, group)}
+              />
+            </TouchableOpacity>
+          ))}
+
+          <ActionCard
+            title="Create a group"
+            description={
+              groups && groups?.length > 0
+                ? "Add more groups to organize your friends!"
+                : "You don't have any groups yet. Create one!"
+            }
+            onPress={() => navigation.navigate("CreateGroup")}
+          />
+        </>
       )}
     </View>
   )

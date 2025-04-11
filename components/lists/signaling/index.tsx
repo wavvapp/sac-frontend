@@ -78,14 +78,20 @@ const Index = forwardRef<SignalingRef>((_, ref) => {
         ListHeaderComponent={() =>
           SignalingHeader({ availableFriends: friendsWithSignalOn })
         }
-        ListFooterComponent={() =>
-          ActionCard({
-            style: styles.shareActionCard,
-            title: "Your friends are not here?",
-            description: "Find/Invite friends on Wavv",
-            onPress: () => onShare(user?.username, user?.inviteCode),
-          })
-        }
+        ListFooterComponent={() => (
+          <View
+            style={{
+              backgroundColor: theme.colors.black_100,
+              paddingBottom: 20,
+            }}>
+            {ActionCard({
+              style: styles.shareActionCard,
+              title: "Your friends are not here?",
+              description: "Find/Invite friends on Wavv",
+              onPress: () => onShare(user?.username, user?.inviteCode),
+            })}
+          </View>
+        )}
         onRefresh={handleRefresh}
         sections={[
           {
@@ -106,9 +112,6 @@ const Index = forwardRef<SignalingRef>((_, ref) => {
           {
             title: "Other users",
             data: friendsWithSignalOff,
-            ItemSeparatorComponent: () => (
-              <View style={styles.offlineItemSeparator} />
-            ),
             renderItem: ({ item: user, index }) =>
               SignalingUser({
                 user,
@@ -116,26 +119,23 @@ const Index = forwardRef<SignalingRef>((_, ref) => {
                 isLast: index === friendsWithSignalOff.length - 1,
                 isFirst: index === 0,
                 hasNotificationEnabled: !!user?.hasNotificationEnabled,
+                style: {
+                  backgroundColor: theme.colors.black_100,
+                  paddingTop: 12,
+                },
               }),
           },
         ]}
         keyExtractor={(item) => item.id}
-        style={styles.sectionListContainer}
       />
     </BottomDrawer>
   )
 })
 
 const styles = StyleSheet.create({
-  sectionListContainer: {
-    backgroundColor: theme.colors.black_100,
-  },
   availableItemSeparator: {
     height: 12,
     backgroundColor: theme.colors.white,
-  },
-  offlineItemSeparator: {
-    height: 12,
   },
   shareActionCard: {
     paddingHorizontal: 20,
