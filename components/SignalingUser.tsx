@@ -1,5 +1,11 @@
 import { Friend } from "@/types"
-import { View, StyleSheet, TouchableOpacity } from "react-native"
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  StyleProp,
+  ViewStyle,
+} from "react-native"
 import UserAvailability from "@/components/cards/UserAvailability"
 import UserInfo from "@/components/UserInfo"
 import { theme } from "@/theme"
@@ -12,6 +18,7 @@ interface SignalingUserProps {
   isLast: boolean
   isFirst: boolean
   hasNotificationEnabled: boolean
+  style?: StyleProp<ViewStyle>
 }
 
 export default function SignalingUser({
@@ -20,6 +27,7 @@ export default function SignalingUser({
   isLast,
   isFirst,
   hasNotificationEnabled,
+  style,
 }: SignalingUserProps) {
   const bellColor = hasNotificationEnabled
     ? theme.colors.black
@@ -33,6 +41,7 @@ export default function SignalingUser({
         isLast && styles.lastCardInTheListStyles,
         isFirst && styles.firstCardInTheListStyles,
         online && styles.availableUserContainer,
+        style,
       ]}>
       <View style={{ flex: 1 }}>
         {online ? (

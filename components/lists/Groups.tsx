@@ -60,7 +60,11 @@ export default function GroupsList() {
 
           <ActionCard
             title="Create a group"
-            description="You don't have any groups yet. Create one!"
+            description={
+              groups && groups?.length > 0
+                ? "Add more groups to organize your friends!"
+                : "You don't have any groups yet. Create one!"
+            }
             onPress={() => navigation.navigate("CreateGroup")}
           />
         </>

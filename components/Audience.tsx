@@ -35,6 +35,7 @@ export default function Audience() {
     Animated.spring(translateX, {
       toValue: selectedAudience === AudienceOptions.FRIENDS ? width / 2.22 : 0,
       useNativeDriver: true,
+      bounciness: 0,
     }).start()
   }, [selectedAudience, translateX])
 
@@ -46,8 +47,7 @@ export default function Audience() {
           <TouchableWithoutFeedback
             key={option.value}
             onPress={() => toggleAudienceOptions(option.value)}>
-            <CustomTitle
-              text={option.label}
+            <View
               style={[
                 styles.AudienceOptionText,
                 selectedAudience === option.value
@@ -71,8 +71,16 @@ export default function Audience() {
                     ? { marginLeft: -24 }
                     : { marginRight: -24 }
                   : null,
-              ]}
-            />
+              ]}>
+              <CustomTitle
+                text={option.label}
+                style={[
+                  selectedAudience === option.value
+                    ? styles.activeTabText
+                    : styles.nonActiveTabText,
+                ]}
+              />
+            </View>
           </TouchableWithoutFeedback>
         ))}
 
@@ -106,7 +114,6 @@ const styles = StyleSheet.create({
     position: "relative",
     marginBottom: 24,
   },
-
   thumb: {
     width: "50%",
     height: "100%",
@@ -114,7 +121,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     backgroundColor: theme.colors.black,
   },
-
   AudienceOptionText: {
     flex: 1,
     textAlign: "center",
@@ -122,13 +128,21 @@ const styles = StyleSheet.create({
     position: "relative",
     zIndex: 10,
   },
-  activeTab: {
+  activeTabText: {
     color: theme.colors.white,
   },
+  nonActiveTabText: {
+    color: theme.colors.black,
+  },
+  activeTab: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
   nonActiveTab: {
+    justifyContent: "center",
+    alignItems: "center",
     borderBottomWidth: 1,
     borderTopWidth: 1,
     borderColor: theme.colors.black_200,
-    color: theme.colors.black,
   },
 })
