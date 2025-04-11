@@ -68,8 +68,8 @@ export default function Audience() {
                     ],
                 selectedAudience === option.value
                   ? selectedAudience === AudienceOptions.FRIENDS
-                    ? { marginLeft: -24 }
-                    : { marginRight: -24 }
+                    ? { marginLeft: -28 }
+                    : { marginRight: -28 }
                   : null,
               ]}>
               <CustomTitle
