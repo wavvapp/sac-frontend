@@ -25,10 +25,8 @@ export default function CredentialsButton({
   }, [isError, isLoading])
 
   const buttonStatusText = useMemo(() => {
-    if (isLoading && step === 1) return "checking invitation code"
-    if (isError && step === 1) return "invalid code"
-    if (isLoading && step === 3) return "checking availability"
-    if (isError && step === 3) return "username not available"
+    if (isLoading && step === 2) return "checking availability"
+    if (isError && step === 2) return "username not available"
   }, [isError, isLoading, step])
 
   return (
@@ -60,7 +58,8 @@ const styles = StyleSheet.create({
   buttonChildren: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "center",
+    gap: 20,
     width: "100%",
     paddingHorizontal: 16,
   },

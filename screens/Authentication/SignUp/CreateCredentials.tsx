@@ -1,4 +1,3 @@
-import { ConfirmationCode } from "@/components/cards/ConfirmationCode"
 import CredentialsButton from "@/components/CredentialsButton"
 import Badge from "@/components/ui/Badge"
 import CustomText from "@/components/ui/CustomText"
@@ -41,10 +40,8 @@ export default function CreateCredentials() {
 
   const isInputValid = useMemo(() => {
     if (userInput.trim().length < 5) return false
-    if (step === 1 && VALIDATION_PATTERNS.verificationCode.test(userInput))
-      return true
-    if (step === 2 && VALIDATION_PATTERNS.fullName.test(userInput)) return true
-    if (step === 3 && VALIDATION_PATTERNS.username.test(userInput)) return true
+    if (step === 1 && VALIDATION_PATTERNS.fullName.test(userInput)) return true
+    if (step === 2 && VALIDATION_PATTERNS.username.test(userInput)) return true
 
     return false
   }, [step, userInput])
@@ -53,31 +50,6 @@ export default function CreateCredentials() {
     if (isLoading || isError) return true
     return !isInputValid
   }, [isError, isInputValid, isLoading])
-
-  const handleVerificationCode = useMutation({
-    mutationFn: async () => {
-      const { data } = await api.post("/invitations/verify", {
-        invitationCode: Number(userInput),
-      })
-      if (!data.isValid) throw new Error("Invalid invitation code")
-      return data
-    },
-    onMutate: () => {
-      setIsLoading(true)
-    },
-    onSuccess: () => {
-      setUserInput("")
-      setStep(2)
-      setIsError(false)
-    },
-    onError: (error) => {
-      console.error("Error fetching verification code:", error)
-      setIsError(true)
-    },
-    onSettled: () => {
-      setIsLoading(false)
-    },
-  })
 
   const handleUsernameSubmit = useMutation({
     mutationFn: async () => {
@@ -121,7 +93,7 @@ export default function CreateCredentials() {
     try {
       await AsyncStorage.setItem("@Auth:names", userInput)
       setUserInput("")
-      setStep(3)
+      setStep(2)
     } catch (error) {
       console.error("Error saving edited names:", error)
     }
@@ -129,9 +101,8 @@ export default function CreateCredentials() {
 
   const handleSubmit = async () => {
     if (!isInputValid) return
-    if (step === 1) handleVerificationCode.mutate()
-    if (step === 2) await handleFullNamesSubmit()
-    if (step === 3) handleUsernameSubmit.mutate()
+    if (step === 1) await handleFullNamesSubmit()
+    if (step === 2) handleUsernameSubmit.mutate()
   }
 
   useEffect(() => {
@@ -169,21 +140,14 @@ export default function CreateCredentials() {
           <CustomText style={styles.title} size="lg">
             {ACCOUNT_SETUP_STEPS[step].titleText}
           </CustomText>
-          {step === 1 ? (
-            <ConfirmationCode
-              handleTextChange={setUserInput}
-              value={userInput}
-            />
-          ) : (
-            <Input
-              handleTextChange={setUserInput}
-              variant="secondary"
-              placeholder={ACCOUNT_SETUP_STEPS[step].inputPlaceholder}
-              value={userInput}
-              onSubmitEditing={handleSubmit}
-              autoFocus
-            />
-          )}
+          <Input
+            handleTextChange={setUserInput}
+            variant="secondary"
+            placeholder={ACCOUNT_SETUP_STEPS[step].inputPlaceholder}
+            value={userInput}
+            onSubmitEditing={handleSubmit}
+            autoFocus
+          />
           <CustomText size="base" style={styles.description}>
             {ACCOUNT_SETUP_STEPS[step].descriptionText}
           </CustomText>
