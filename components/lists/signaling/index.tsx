@@ -1,6 +1,6 @@
 import { forwardRef, useCallback, useEffect, useMemo, useState } from "react"
 import { View, StyleSheet, AppState } from "react-native"
-import BottomDrawer from "@/components/BottomDrawer"
+import BottomDrawer, { BottomDrawerRef } from "@/components/BottomDrawer"
 import { BottomSheetSectionList } from "@gorhom/bottom-sheet"
 import { theme } from "@/theme"
 import SignalingUser from "@/components/SignalingUser"
@@ -17,7 +17,7 @@ export interface SignalingRef {
   openBottomSheet: () => void
 }
 
-const Index = forwardRef<SignalingRef>((_, ref) => {
+const Index = forwardRef<BottomDrawerRef>((_, ref) => {
   const [isbottomSheetOpen, setIsBottomSheetOpen] = useState<boolean>(false)
   const { data: availableFriends = [], refetch } =
     useSignalingFriends(isbottomSheetOpen)
@@ -71,7 +71,10 @@ const Index = forwardRef<SignalingRef>((_, ref) => {
   }, [refetchFriendsData])
 
   return (
-    <BottomDrawer ref={ref} setIsBottomSheetOpen={setIsBottomSheetOpen}>
+    <BottomDrawer
+      ref={ref}
+      style={{ backgroundColor: theme.colors.white }}
+      setIsBottomSheetOpen={setIsBottomSheetOpen}>
       <BottomSheetSectionList
         refreshing={refreshing}
         contentContainerStyle={styles.contentContainerStyle}
@@ -81,7 +84,6 @@ const Index = forwardRef<SignalingRef>((_, ref) => {
         ListFooterComponent={() => (
           <View
             style={{
-              backgroundColor: theme.colors.black_100,
               paddingBottom: 20,
             }}>
             {ActionCard({
@@ -120,7 +122,6 @@ const Index = forwardRef<SignalingRef>((_, ref) => {
                 isFirst: index === 0,
                 hasNotificationEnabled: !!user?.hasNotificationEnabled,
                 style: {
-                  backgroundColor: theme.colors.black_100,
                   paddingTop: 12,
                 },
               }),
@@ -142,6 +143,8 @@ const styles = StyleSheet.create({
   },
   contentContainerStyle: {
     paddingBottom: 20,
+    flexGrow: 1,
+    backgroundColor: theme.colors.black_100,
   },
 })
 Index.displayName = "Signaling"
