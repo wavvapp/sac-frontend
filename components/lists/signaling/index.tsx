@@ -73,7 +73,7 @@ const Index = forwardRef<BottomDrawerRef>((_, ref) => {
   return (
     <BottomDrawer
       ref={ref}
-      style={{ backgroundColor: theme.colors.white }}
+      style={{ backgroundColor: theme.colors.white, borderRadius: 20 }}
       setIsBottomSheetOpen={setIsBottomSheetOpen}>
       <BottomSheetSectionList
         refreshing={refreshing}
