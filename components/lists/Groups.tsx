@@ -21,11 +21,15 @@ export default function GroupsList() {
   const toggleSelectedGroup = (group: Group) => {
     setTemporaryStatus((prev: TemporaryStatusType) => {
       const tempGroup = findGroup(prev?.groups, group)
-      const newGroups = !tempGroup || group.id !== tempGroup.id ? [group] : []
-      const newFriendIds =
-        !tempGroup || group.id !== tempGroup.id
-          ? group.friends.map((friend) => friend.id)
-          : []
+
+      const newGroups = tempGroup
+        ? prev.groups.filter((g) => g.id !== group.id)
+        : [...prev.groups, group]
+
+      const newFriendIds = newGroups.flatMap((g) =>
+        g.friends.map((friend) => friend.id),
+      )
+
       return {
         ...prev,
         friendIds: newFriendIds,

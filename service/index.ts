@@ -65,7 +65,7 @@ api.interceptors.response.use(
             `Bearer ${newAccessToken}`
           return axios(error.response.config)
         } catch (refreshError) {
-          navigateToAuthScreen()
+          await navigateToAuthScreen()
           console.error("Error refreshing token:", refreshError)
         }
       }
