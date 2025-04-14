@@ -9,7 +9,7 @@ import {
 } from "react-native"
 import { options } from "@/data/default-wavv-options"
 import { theme } from "@/theme"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { CustomTitle } from "@/components/ui/CustomTitle"
 import { CustomButton } from "@/components/ui/Button"
 import Input from "@/components/ui/Input"
@@ -23,9 +23,8 @@ const INPUT_MAX_HEIGHT = 200
 const MAX_STATUS_CHARACTERS = 64
 export function SetActivity({ closeBottomSheet }: SetStatusProps) {
   const { temporaryStatus, setTemporaryStatus } = useStatus()
-  const [activityText, setActivityText] = useState<string>(
-    temporaryStatus.activity,
-  )
+  const [activityText, setActivityText] = useState<string>("")
+
   const updateStatus = (text: string) => {
     setActivityText(capitalizeFirstLetter(text))
     setTemporaryStatus((prev: TemporaryStatusType) => ({
@@ -36,7 +35,10 @@ export function SetActivity({ closeBottomSheet }: SetStatusProps) {
     Keyboard.dismiss()
   }
 
-  const isInitiallyEmpty = options.includes(activityText.toLocaleLowerCase())
+  useEffect(() => {
+    setActivityText(temporaryStatus.activity)
+  }, [temporaryStatus.activity])
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -62,7 +64,7 @@ export function SetActivity({ closeBottomSheet }: SetStatusProps) {
         textSize="lg"
         placeholder="Enter your plan or pick an option"
         handleTextChange={setActivityText}
-        value={isInitiallyEmpty ? "" : activityText}
+        value={activityText}
         variant="ghost"
         style={[styles.inputContainer, { maxHeight: INPUT_MAX_HEIGHT }]}
         multiline={true}
