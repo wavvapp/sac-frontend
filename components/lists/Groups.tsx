@@ -27,7 +27,7 @@ export default function GroupsList() {
         : [...prev.groups, group]
 
       const newFriendIds = newGroups.flatMap((g) =>
-        g.friends.map((friend) => friend.id),
+        g.friends?.map((friend) => friend.id),
       )
 
       return {
