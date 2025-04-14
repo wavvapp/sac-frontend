@@ -26,13 +26,13 @@ export default function GroupsList() {
         ? prev.groups.filter((g) => g.id !== group.id)
         : [...prev.groups, group]
 
-      const newFriendIds = newGroups.flatMap((g) =>
-        g.friends?.map((friend) => friend.id),
-      )
+      const newFriendIds = newGroups
+        .map((g) => g.friends?.map((friend) => friend.id))
+        .flat()
 
       return {
         ...prev,
-        friendIds: newFriendIds,
+        friendIds: Array.from(new Set(newFriendIds)),
         groups: newGroups,
       }
     })
