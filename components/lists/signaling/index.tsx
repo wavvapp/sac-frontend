@@ -210,7 +210,6 @@ const Index = forwardRef<BottomDrawerRef>((_, ref) => {
             },
           ]}
           keyExtractor={(item) => item.id}
-          style={styles.sectionListContainer}
         />
       </BottomDrawer>
       {isStatusDetailsBottomSheetOpened && signalingFriend && (
@@ -351,6 +350,9 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingVertical: 20,
     width: "50%",
+  },
+  offlineItemSeparator: {
+    height: 12,
   },
 })
 

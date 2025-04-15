@@ -124,6 +124,8 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderColor: theme.colors.gray,
+    justifyContent: "center",
+    alignItems: "center",
     position: "absolute",
     bottom: -20,
     right: 20,
