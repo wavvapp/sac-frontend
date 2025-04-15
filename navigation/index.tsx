@@ -14,21 +14,13 @@ import { StatusProvider } from "@/contexts/StatusContext"
 import { useFriends } from "@/queries/friends"
 import * as SplashScreen from "expo-splash-screen"
 import { useEffect } from "react"
-import { StaticPageType } from "@/types"
+import { RootStackParamList } from "@/types"
 import StaticContentScreen from "@/screens/StaticContentScreen"
 import NotificationPreferences from "@/screens/NotificationPreferences"
-export type RootStackParamList = {
-  EntryScreen: undefined
-  Home: undefined
-  EditSignal: { isNewSignal?: boolean }
-  SignUp: undefined
-  Settings: undefined
-  Signaling: undefined
-  CreateCredentials: undefined
-  Search: undefined
-  NotificationPreferences: undefined
-  StaticContentScreen: { pageSlug: StaticPageType }
-}
+import GroupsScreen from "@/screens/Groups"
+import CreateGroup from "@/screens/Groups/CreateGroup"
+import EditGroup from "@/screens/Groups/EditGroups"
+import { navigationRef } from "@/utils/navigation"
 
 export default function AppNavigator() {
   const Stack = createNativeStackNavigator<RootStackParamList>()
@@ -42,7 +34,7 @@ export default function AppNavigator() {
   }, [isFriendsLoading, isLoading])
 
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={navigationRef}>
       {isAuthenticated ? (
         <StatusProvider>
           <Stack.Navigator
@@ -75,6 +67,21 @@ export default function AppNavigator() {
               name="NotificationPreferences"
               options={{ headerShown: false }}
               component={NotificationPreferences}
+            />
+            <Stack.Screen
+              name="Groups"
+              options={{ headerShown: false }}
+              component={GroupsScreen}
+            />
+            <Stack.Screen
+              name="CreateGroup"
+              options={{ headerShown: false }}
+              component={CreateGroup}
+            />
+            <Stack.Screen
+              name="EditGroup"
+              options={{ headerShown: false }}
+              component={EditGroup}
             />
           </Stack.Navigator>
         </StatusProvider>

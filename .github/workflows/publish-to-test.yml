@@ -1,0 +1,65 @@
+name: Publish to Test
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run semantic-release
+        uses: cycjimmy/semantic-release-action@v4
+        id: semantic
+        with:
+          dry_run: true
+          semantic_version: 19
+          extra_plugins: |
+            @semantic-release/changelog@6
+            @semantic-release/git@10
+            @semantic-release/exec@6
+            @semantic-release/commit-analyzer@9
+            @semantic-release/release-notes-generator@10
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get release version
+        run: echo "NEW_VERSION=${{ steps.semantic.outputs.new_release_version }}" >> $GITHUB_ENV
+
+      - name: Update npm version
+        run: npm version ${{ steps.semantic.outputs.new_release_version }} --no-git-tag-version
+
+      - name: Commit and push version update
+        run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+
+          git add .
+          git commit -m "chore: update version to ${{ steps.semantic.outputs.new_release_version }}"
+          git push origin HEAD
+        env:
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
+
+      - name: Create Staging branch
+        run: git checkout -b stage-${{ steps.semantic.outputs.new_release_version }}
+
+      - name: Push Staging branch
+        run: |
+          VERSION=${{ steps.semantic.outputs.new_release_version }}
+
+          gh api repos/${{ github.repository }}/git/refs \
+            -f ref="refs/heads/stage-${VERSION}" \
+            -f sha="$(git rev-parse HEAD)"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

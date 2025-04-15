@@ -1,4 +1,5 @@
 import AlertDialog from "@/components/AlertDialog"
+import { navigateToAuthScreen } from "@/utils/navigation"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import NetInfo from "@react-native-community/netinfo"
 import axios, {
@@ -43,6 +44,7 @@ api.interceptors.request.use(
       config.headers.Authorization = `Bearer ${token}`
     }
     config.headers["x-timezone"] = timezone
+    config.headers["x-api-version"] = "2"
     return config
   },
   (error: AxiosError) => {
@@ -63,6 +65,7 @@ api.interceptors.response.use(
             `Bearer ${newAccessToken}`
           return axios(error.response.config)
         } catch (refreshError) {
+          await navigateToAuthScreen()
           console.error("Error refreshing token:", refreshError)
         }
       }

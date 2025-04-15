@@ -55,6 +55,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const queryClient = useQueryClient()
   const { registerForNotifications } = useNotification()
 
+  const prefetchFriends = usePrefetchFriend({ queryClient })
+  const prefetchSignal = usePrefetchSignal({ queryClient })
+  const prefetchFriendsSignal = usePrefetchFriendSignals({ queryClient })
   async function completeSignIn(userData: ExtendedUser): Promise<void> {
     try {
       const {
@@ -78,11 +81,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       await AsyncStorage.setItem("@Auth:accessToken", accessToken)
       await AsyncStorage.setItem("@Auth:refreshToken", refreshToken)
       await AsyncStorage.setItem("@Auth:user", JSON.stringify(user))
-      await Promise.all([
-        prefetchSignal(),
-        prefetchFriends(),
-        prefetchFriendsSignal(),
-      ])
+      if (user) {
+        await Promise.all([
+          prefetchSignal(),
+          prefetchFriends(),
+          prefetchFriendsSignal(),
+        ])
+      }
       setUser({
         ...userData,
         inviteCode: userData?.inviteCode?.toString(),
@@ -90,6 +95,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       await registerForNotifications?.()
     } catch (err) {
       console.error("error with saving user info")
+      throw err
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -111,15 +119,18 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       await completeSignIn(data)
     } catch (error) {
       console.error("Error when signing up: ", error)
+      throw error
+    } finally {
+      setIsLoading(false)
     }
   }
 
   const signInWithGoogle = async (navigation: CredentialsScreenProps) => {
     try {
+      setIsLoading(true)
       await GoogleSignin.hasPlayServices()
       const response = await GoogleSignin.signIn()
       if (isSuccessResponse(response)) {
-        setIsLoading(true)
         const idToken = response.data.idToken
         const name = response?.data?.user.name ?? ""
         const payload = {
@@ -152,17 +163,15 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       } else {
         console.error("Unexpected Error:", error)
       }
+      throw error
     } finally {
       setIsLoading(false)
     }
   }
 
-  const prefetchFriends = usePrefetchFriend({ queryClient })
-  const prefetchSignal = usePrefetchSignal({ queryClient })
-  const prefetchFriendsSignal = usePrefetchFriendSignals({ queryClient })
-
   const signInWithApple = async (navigation: CredentialsScreenProps) => {
     try {
+      setIsLoading(true)
       const credential = await AppleAuthentication.signInAsync({
         requestedScopes: [
           AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
@@ -191,6 +200,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       }
     } catch (error) {
       console.error("Error while signing in: ", error)
+      throw error
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -198,15 +210,21 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     setIsLoading(true)
     const storedUser = await AsyncStorage.getItem("@Auth:user")
     const storedToken = await AsyncStorage.getItem("@Auth:accessToken")
-    if (storedUser && storedToken) {
-      setUser(JSON.parse(storedUser))
+    try {
+      if (storedUser && storedToken) {
+        await Promise.all([
+          prefetchSignal(),
+          prefetchFriends(),
+          prefetchFriendsSignal(),
+        ])
+        setUser(JSON.parse(storedUser))
+      }
+    } catch (error) {
+      console.error("Error loading stored data: ", error)
+      throw error
+    } finally {
+      setIsLoading(false)
     }
-    await Promise.all([
-      prefetchSignal(),
-      prefetchFriends(),
-      prefetchFriendsSignal(),
-    ])
-    setIsLoading(false)
   }, [prefetchSignal, prefetchFriends, prefetchFriendsSignal])
 
   useEffect(() => {

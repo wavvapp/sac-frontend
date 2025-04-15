@@ -4,7 +4,7 @@ import CustomText from "@/components/ui/CustomText"
 import { theme } from "@/theme"
 import { useNavigation } from "@react-navigation/native"
 
-import { RootStackParamList } from "@/navigation"
+import { RootStackParamList } from "@/types"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 
 type NoFriendsScreenProps = NativeStackNavigationProp<
@@ -44,7 +44,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center",
   },
   contentContainer: {
     borderRadius: 12,

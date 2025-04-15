@@ -3,8 +3,8 @@ name: Create Preview builds
 on:
   push:
     branches:
+      - "stage-*"
       - stage
-      - dev
 
 jobs:
   build_ios:

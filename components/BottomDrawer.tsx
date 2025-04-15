@@ -35,7 +35,7 @@ const BottomDrawer = forwardRef<BottomDrawerRef, DrawerProps>((props, ref) => {
   } = props
   const snapPoints = useMemo(() => {
     if (isFullScreen) return ["1%", "93%"]
-    return fullyHiddenOnClose ? ["1%", "88%"] : ["20%", "88%"]
+    return fullyHiddenOnClose ? ["1%", "88%"] : ["20%", "92%"]
   }, [fullyHiddenOnClose, isFullScreen])
 
   const bottomSheetRef = useRef<BottomSheet>(null)
