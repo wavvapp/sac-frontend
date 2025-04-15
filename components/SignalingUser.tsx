@@ -1,5 +1,11 @@
 import { Friend } from "@/types"
-import { View, StyleSheet, TouchableOpacity } from "react-native"
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  StyleProp,
+  ViewStyle,
+} from "react-native"
 import UserAvailability from "@/components/cards/UserAvailability"
 import UserInfo from "@/components/UserInfo"
 import { theme } from "@/theme"
@@ -15,6 +21,7 @@ interface SignalingUserProps {
   onReply: (user: Friend) => void
   hasReplied?: boolean
   hasAccepted?: boolean
+  style?: StyleProp<ViewStyle>
 }
 
 export default function SignalingUser({
@@ -26,6 +33,7 @@ export default function SignalingUser({
   onReply,
   hasReplied,
   hasAccepted,
+  style,
 }: SignalingUserProps) {
   const { changePreferences } = useEnableFriendNotification()
 

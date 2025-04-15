@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native"
-import BottomDrawer from "@/components/BottomDrawer"
+import BottomDrawer, { BottomDrawerRef } from "@/components/BottomDrawer"
 import { BottomSheetSectionList } from "@gorhom/bottom-sheet"
 import { theme } from "@/theme"
 import SignalingUser from "@/components/SignalingUser"
@@ -28,7 +28,7 @@ export interface SignalingRef {
   openBottomSheet: () => void
 }
 
-const Index = forwardRef<SignalingRef>((_, ref) => {
+const Index = forwardRef<BottomDrawerRef>((_, ref) => {
   const [isbottomSheetOpen, setIsBottomSheetOpen] = useState<boolean>(false)
   const { data: availableFriends = [], refetch } =
     useSignalingFriends(isbottomSheetOpen)
@@ -290,21 +290,17 @@ const Index = forwardRef<SignalingRef>((_, ref) => {
 })
 
 const styles = StyleSheet.create({
-  sectionListContainer: {
-    backgroundColor: theme.colors.black_100,
-  },
   availableItemSeparator: {
     height: 12,
     backgroundColor: theme.colors.white,
-  },
-  offlineItemSeparator: {
-    height: 12,
   },
   shareActionCard: {
     paddingHorizontal: 20,
   },
   contentContainerStyle: {
     paddingBottom: 20,
+    flexGrow: 1,
+    backgroundColor: theme.colors.black_100,
   },
   userDetailsContainer: {
     flexDirection: "row",

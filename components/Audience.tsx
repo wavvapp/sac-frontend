@@ -35,6 +35,7 @@ export default function Audience() {
     Animated.spring(translateX, {
       toValue: selectedAudience === AudienceOptions.FRIENDS ? width / 2.22 : 0,
       useNativeDriver: true,
+      bounciness: 0,
     }).start()
   }, [selectedAudience, translateX])
 
@@ -46,15 +47,40 @@ export default function Audience() {
           <TouchableWithoutFeedback
             key={option.value}
             onPress={() => toggleAudienceOptions(option.value)}>
-            <CustomTitle
-              text={option.label}
+            <View
               style={[
                 styles.AudienceOptionText,
                 selectedAudience === option.value
-                  ? styles.primaryAudienceOption
-                  : styles.secondaryAudienceOption,
-              ]}
-            />
+                  ? styles.activeTab
+                  : [
+                      styles.nonActiveTab,
+                      selectedAudience === AudienceOptions.FRIENDS
+                        ? {
+                            borderLeftWidth: 1,
+                            borderTopLeftRadius: 20,
+                            borderBottomLeftRadius: 20,
+                          }
+                        : {
+                            borderRightWidth: 1,
+                            borderTopRightRadius: 20,
+                            borderBottomRightRadius: 20,
+                          },
+                    ],
+                selectedAudience === option.value
+                  ? selectedAudience === AudienceOptions.FRIENDS
+                    ? { marginLeft: -28 }
+                    : { marginRight: -28 }
+                  : null,
+              ]}>
+              <CustomTitle
+                text={option.label}
+                style={[
+                  selectedAudience === option.value
+                    ? styles.activeTabText
+                    : styles.nonActiveTabText,
+                ]}
+              />
+            </View>
           </TouchableWithoutFeedback>
         ))}
 
@@ -85,17 +111,11 @@ const styles = StyleSheet.create({
   audienceSwitch: {
     flexDirection: "row",
     position: "relative",
-    borderWidth: 1,
-    borderRadius: 50,
-    borderColor: theme.colors.black_200,
     marginBottom: 24,
   },
-
   thumb: {
     width: "50%",
     height: "100%",
-    borderColor: theme.colors.black,
-    borderWidth: 1,
     borderRadius: 50,
     position: "absolute",
     backgroundColor: theme.colors.black,
@@ -107,11 +127,21 @@ const styles = StyleSheet.create({
     position: "relative",
     zIndex: 10,
   },
-  primaryAudienceOption: {
+  activeTabText: {
     color: theme.colors.white,
-    borderColor: theme.colors.black_200,
   },
-  secondaryAudienceOption: {
+  nonActiveTabText: {
     color: theme.colors.black,
+  },
+  activeTab: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  nonActiveTab: {
+    justifyContent: "center",
+    alignItems: "center",
+    borderBottomWidth: 1,
+    borderTopWidth: 1,
+    borderColor: theme.colors.black_200,
   },
 })
