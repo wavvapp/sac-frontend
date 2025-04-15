@@ -146,7 +146,7 @@ const FindFriends = () => {
                 variant: "confirm",
                 confirmText: "Share",
                 cancelText: "cancel",
-                onConfirm: () => onShare(user?.username, user?.inviteCode),
+                onConfirm: () => onShare(user?.username),
                 closeAutomatically: false,
               })
             }}

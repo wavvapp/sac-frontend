@@ -1,16 +1,18 @@
 import { theme } from "@/theme"
-import { StyleSheet, View, ViewProps, ViewStyle } from "react-native"
+import { StyleSheet, TextStyle, View, ViewProps, ViewStyle } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import { BadgeVariant } from "@/types"
 interface BadgeProps extends ViewProps {
   name: string | number
   variant?: BadgeVariant
+  textStyle?: TextStyle
 }
 
 export default function Badge({
   name,
   variant = "default",
   style,
+  textStyle,
   ...rest
 }: BadgeProps) {
   const variantStyle: Record<BadgeVariant, ViewStyle> = {
@@ -29,7 +31,7 @@ export default function Badge({
     <View style={[styles.container, variantStyle[variant], style]} {...rest}>
       <CustomText
         size="sm"
-        style={[styles.text, customTextStyle[variant]]}
+        style={[styles.text, customTextStyle[variant], textStyle]}
         fontFamily="writer-monov">
         {name}
       </CustomText>

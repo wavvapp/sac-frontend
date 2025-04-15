@@ -1,6 +1,7 @@
 import {
   QueryClient,
   useMutation,
+  UseMutationOptions,
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query"
@@ -18,7 +19,6 @@ export const useFriends = (shouldRefetch?: boolean) => {
     staleTime: Infinity,
     refetchInterval: shouldRefetch ? 5000 : false,
     placeholderData: [],
-    refetchOnWindowFocus: "always",
   })
 }
 
@@ -28,12 +28,11 @@ export const useSignalingFriends = (shouldRefetch?: boolean) => {
     queryFn: async () => {
       try {
         const { data } = await api.get("/friend-signals")
-        const friendSignals = data.map((friend: FriendSignal) => ({
+        return data.map((friend: FriendSignal) => ({
           ...friend,
           time: friend.signal?.when,
           activity: friend.signal?.status_message,
         }))
-        return friendSignals
       } catch (error) {
         console.error("Error in useSignalingFriends:", error)
         return []
@@ -43,7 +42,6 @@ export const useSignalingFriends = (shouldRefetch?: boolean) => {
     staleTime: Infinity,
     refetchInterval: shouldRefetch ? 5000 : false,
     retry: 1,
-    refetchOnWindowFocus: "always",
   })
 }
 
@@ -213,4 +211,24 @@ export const usePrefetchFriendSignals = ({
       },
     })
   }, [queryClient])
+}
+
+type ReplyToSignalArgs = {
+  signalId: string
+  hasAccepted: boolean
+}
+export const useReplyToSignal = (
+  args?: UseMutationOptions<
+    any,
+    Error,
+    ReplyToSignalArgs,
+    { previousFriends: Friend[] }
+  >,
+) => {
+  return useMutation({
+    mutationKey: ["reply-to-signal"],
+    mutationFn: (payload: ReplyToSignalArgs) =>
+      api.post("/friend-signals/reply", payload),
+    ...args,
+  })
 }

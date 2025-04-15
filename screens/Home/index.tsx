@@ -1,7 +1,7 @@
 import UserStatus from "@/components/cards/UserStatus"
 import { RootStackParamList } from "@/types"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
-import { StyleSheet, View, StatusBar, Platform } from "react-native"
+import { StyleSheet, View, StatusBar, Platform, Pressable } from "react-native"
 import { runOnJS, useDerivedValue } from "react-native-reanimated"
 import { useCallback, useRef, useState } from "react"
 import Signaling from "@/components/lists/signaling"
@@ -21,13 +21,12 @@ import { useStatus } from "@/contexts/StatusContext"
 import { useFriends } from "@/queries/friends"
 import { useOfflineHandler } from "@/hooks/useOfflineHandler"
 import { height } from "@/utils/dimensions"
-import { CopiableText } from "@/components/cards/CopiableText"
-import AlertDialog from "@/components/AlertDialog"
 import NoiseVideo from "@/components/NoiseVideo"
 import TapWavv from "@/components/cards/TapWavv"
 import { useFetchPoints } from "@/queries/points"
 import { useQueryClient } from "@tanstack/react-query"
 import { BottomDrawerRef } from "@/components/BottomDrawer"
+import UserStatusDetails from "@/components/StatusDetails/UserStatusDetails"
 
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -36,13 +35,13 @@ export type HomeScreenProps = NativeStackNavigationProp<
 
 export default function HomeScreen() {
   const [_, setIsVisible] = useState(false)
-  const { isOn } = useStatus()
+  const { isOn, signal } = useStatus()
   const signalingRef = useRef<BottomDrawerRef>(null)
   const navigation = useNavigation<HomeScreenProps>()
   const { data: allFriends } = useFriends()
   const { user, isAuthenticated } = useAuth()
   const { handleOfflineAction } = useOfflineHandler()
-
+  const [statusDetailsOpened, setStatusDetailsOpened] = useState(false)
   const { data, refetch: refetchPoints } = useFetchPoints()
 
   const queryClient = useQueryClient()
@@ -92,23 +91,13 @@ export default function HomeScreen() {
             <TouchableOpacity style={styles.SearchIcon} onPress={openSearch}>
               <SearchIcon color={theme.colors.white} strokeWidth={1.5} />
             </TouchableOpacity>
-            <CustomButton
+
+            <Pressable
               style={styles.settingsButton}
-              onPress={() =>
-                AlertDialog.open({
-                  title: "Share this invite code with your friend",
-                  description: <CopiableText text={user?.inviteCode || ""} />,
-                  variant: "confirm",
-                  confirmText: "Share",
-                  cancelText: "cancel",
-                  onConfirm: () => onShare(user?.username, user?.inviteCode),
-                  closeAutomatically: false,
-                })
-              }>
-              <TouchableOpacity style={styles.shareButton}>
-                <ShareIcon color={theme.colors.white} strokeWidth={1.5} />
-              </TouchableOpacity>
-            </CustomButton>
+              onPress={() => onShare(user?.username)}>
+              <ShareIcon color={theme.colors.white} strokeWidth={1.5} />
+            </Pressable>
+
             <CustomButton
               style={styles.settingsButton}
               onPress={() => navigation.push("Settings")}>
@@ -120,14 +109,34 @@ export default function HomeScreen() {
           <NoFriends />
         ) : (
           <View style={styles.StatusContainer}>
-            {isOn.value ? <UserStatus isOn={isOn} user={user} /> : <TapWavv />}
+            {isOn.value ? (
+              <UserStatus
+                onOpenStatusDetails={() =>
+                  setStatusDetailsOpened((prev) => !prev)
+                }
+                isOn={isOn}
+                user={user}
+              />
+            ) : (
+              <TapWavv />
+            )}
           </View>
         )}
       </View>
       {!!allFriends?.length && <Signaling ref={signalingRef} />}
+      {statusDetailsOpened && signal && user && (
+        <UserStatusDetails
+          toggleStatusDetailsModal={() =>
+            setStatusDetailsOpened((prev) => !prev)
+          }
+          signal={signal}
+          user={user}
+        />
+      )}
     </View>
   )
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -170,12 +179,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-start",
     width: "100%",
-  },
-  shareButton: {
-    height: 48,
-    width: 48,
-    alignItems: "center",
-    justifyContent: "center",
   },
   SearchIcon: {
     height: 48,

@@ -92,7 +92,11 @@ export default function GroupsScreen() {
             showsVerticalScrollIndicator={false}
             data={currentGroup?.friends}
             renderItem={({ item }) => (
-              <UserInfo fullName={item.names} username={"username"} />
+              <UserInfo
+                fullName={item.names}
+                showUsername={true}
+                username={"username"}
+              />
             )}
             ListFooterComponent={
               <>

@@ -9,8 +9,8 @@ import {
 import UserAvailability from "@/components/cards/UserAvailability"
 import UserInfo from "@/components/UserInfo"
 import { theme } from "@/theme"
-import BellIcon from "@/components/vectors/BellIcon"
 import { useEnableFriendNotification } from "@/hooks/useEnableFriendNotification"
+import CustomText from "@/components/ui/CustomText"
 
 interface SignalingUserProps {
   user: Friend
@@ -18,6 +18,9 @@ interface SignalingUserProps {
   isLast: boolean
   isFirst: boolean
   hasNotificationEnabled: boolean
+  onReply: (user: Friend) => void
+  hasReplied?: boolean
+  hasAccepted?: boolean
   style?: StyleProp<ViewStyle>
 }
 
@@ -27,39 +30,77 @@ export default function SignalingUser({
   isLast,
   isFirst,
   hasNotificationEnabled,
+  onReply,
+  hasReplied,
+  hasAccepted,
   style,
 }: SignalingUserProps) {
-  const bellColor = hasNotificationEnabled
-    ? theme.colors.black
-    : theme.colors.black_200
-
   const { changePreferences } = useEnableFriendNotification()
+
   return (
-    <View
-      style={[
-        styles.userCard,
-        isLast && styles.lastCardInTheListStyles,
-        isFirst && styles.firstCardInTheListStyles,
-        online && styles.availableUserContainer,
-        style,
-      ]}>
-      <View style={{ flex: 1 }}>
-        {online ? (
-          <UserAvailability
-            fullName={user.names}
-            time={user?.time}
-            activity={user.activity}
-          />
-        ) : (
-          <UserInfo fullName={user.names} username={user.username} />
+    <>
+      <View
+        style={[
+          styles.userCard,
+          isLast && styles.lastCardInTheListStyles,
+          isFirst && styles.firstCardInTheListStyles,
+          online && styles.availableUserContainer,
+          style,
+        ]}>
+        <View style={{ flex: 1 }}>
+          {online ? (
+            <UserAvailability
+              onChangeNotificationStatus={() => {
+                changePreferences(user)
+              }}
+              fullName={user.names}
+              time={user?.time}
+              activity={user.activity}
+              hasNotificationEnabled={hasNotificationEnabled}
+              showNotificationIcon
+            />
+          ) : (
+            <UserInfo
+              onChangeNotificationStatus={() => {
+                changePreferences(user)
+              }}
+              fullName={user.names}
+              username={user.username}
+              showNotificationIcon={true}
+              showUsername={true}
+              hasNotificationEnabled={hasNotificationEnabled}
+            />
+          )}
+        </View>
+        {online && (
+          <TouchableOpacity
+            style={[
+              styles.badge,
+              !hasReplied
+                ? null
+                : hasAccepted
+                  ? styles.iamInBadgeStyle
+                  : styles.iamOutBadgeStyle,
+            ]}
+            onPress={() => onReply(user)}>
+            <CustomText
+              style={[
+                styles.badgeText,
+                !hasReplied
+                  ? null
+                  : hasAccepted
+                    ? styles.iamInBadgeTextStyle
+                    : styles.iamOutBadgeTextStyle,
+              ]}
+              fontFamily="writer-monov"
+              size="sm"
+              fontWeight="medium">
+              {!hasReplied ? "Reply" : hasAccepted ? "I'm in" : "I'm out"}
+            </CustomText>
+          </TouchableOpacity>
         )}
       </View>
-      <TouchableOpacity
-        style={styles.BellIcon}
-        onPress={() => changePreferences(user)}>
-        <BellIcon width={16} height={16} color={bellColor} />
-      </TouchableOpacity>
-    </View>
+    </>
   )
 }
 const styles = StyleSheet.create({
@@ -78,10 +119,33 @@ const styles = StyleSheet.create({
   availableUserContainer: {
     backgroundColor: theme.colors.white,
   },
-  BellIcon: {
-    height: 48,
-    width: 48,
-    justifyContent: "center",
-    alignItems: "center",
+  badge: {
+    borderColor: theme.colors.black_200,
+    borderWidth: 1,
+    borderRadius: 20,
+    paddingVertical: 2,
+    paddingHorizontal: 10,
+  },
+  badgeText: {
+    textTransform: "uppercase",
+    fontWeight: "600",
+    opacity: 0.5,
+  },
+  iamInBadgeTextStyle: {
+    color: theme.colors.white,
+    opacity: 1,
+  },
+  iamOutBadgeTextStyle: {
+    color: theme.colors.black,
+    opacity: 0.8,
+  },
+  iamInBadgeStyle: {
+    opacity: 1,
+    backgroundColor: theme.colors.black,
+  },
+  iamOutBadgeStyle: {
+    backgroundColor: theme.colors.black_200,
+    opacity: 0.5,
+    borderWidth: 0,
   },
 })

@@ -2,8 +2,6 @@ import { StyleSheet, TouchableOpacity, View, ViewStyle } from "react-native"
 import CustomText from "@/components/ui/CustomText"
 import { theme } from "@/theme"
 import { Friend, User } from "@/types"
-import { useNavigation } from "@react-navigation/native"
-import { HomeScreenProps } from "@/screens/Home"
 import Animated, {
   interpolate,
   SharedValue,
@@ -14,24 +12,26 @@ import { useFriends } from "@/queries/friends"
 import { useMemo } from "react"
 import UserAvailability from "./UserAvailability"
 import { useStatus } from "@/contexts/StatusContext"
-
-const MAX_VISIBLE_FRIENDS = 4
+import UsersIcon from "@/components/vectors/UsersIcon"
+import CircleCheck from "@/components/vectors/CircleCheck"
+import CircleX from "@/components/vectors/CircleX"
 
 interface UserStatusProps extends ViewStyle {
   user: User | null
   style?: ViewStyle
   isOn: SharedValue<boolean>
+  onOpenStatusDetails: () => void
 }
 export default function UserStatus({
   user,
   style,
   isOn,
+  onOpenStatusDetails,
   ...rest
 }: UserStatusProps) {
   const { signal } = useStatus()
 
   const { data: allFriends } = useFriends()
-  const navigation = useNavigation<HomeScreenProps>()
 
   const friends = useMemo(() => {
     if (!allFriends) return []
@@ -42,29 +42,6 @@ export default function UserStatus({
       (a.names || "").localeCompare(b.names || ""),
     )
   }, [signal, allFriends])
-
-  const visibleFriends = useMemo(
-    () => friends.slice(0, MAX_VISIBLE_FRIENDS),
-    [friends],
-  )
-  const remainingCount = useMemo(
-    () => Math.max(friends.length - MAX_VISIBLE_FRIENDS, 0),
-    [friends.length],
-  )
-  const fullFriendsList = useMemo(() => {
-    return visibleFriends
-      .map((friend: User) => {
-        const firstName = friend.names?.split(" ")[0]
-        const lastName = friend.names?.split(" ").slice(1).join(" ")
-        return `${firstName} ${lastName?.trim().charAt(0)}`.trim()
-      })
-      .join(", ")
-  }, [visibleFriends])
-
-  const visibleFriendsList = useMemo(() => {
-    if (!fullFriendsList) return ""
-    return remainingCount > 0 ? `${fullFriendsList}...` : `${fullFriendsList}.`
-  }, [remainingCount, fullFriendsList])
 
   const cardAnimatedStyle = useAnimatedStyle(() => {
     const moveValue = interpolate(Number(isOn.value), [0, 1], [0, 1])
@@ -83,7 +60,7 @@ export default function UserStatus({
         {...rest}>
         <TouchableOpacity
           style={styles.userContainer}
-          onPress={() => navigation.push("EditSignal", { isNewSignal: false })}>
+          onPress={onOpenStatusDetails}>
           {user && signal && (
             <UserAvailability
               activity={signal.status_message}
@@ -91,17 +68,35 @@ export default function UserStatus({
               time={signal.when}
             />
           )}
-          <View style={{ opacity: 0.5 }}>
-            <CustomText size="sm" fontFamily="writer-monos">
-              {friends.length
-                ? `Visible to ${friends.length} ${friends.length === 1 ? "friend" : "friends"}`
-                : "This status is not visible to anyone."}
-            </CustomText>
-            <CustomText size="sm" fontFamily="writer-monos">
-              {visibleFriendsList
-                ? `${visibleFriendsList}`
-                : "Tap to edit your preferences."}
-            </CustomText>
+          <View style={styles.statusStatContainer}>
+            <View style={styles.statusStat}>
+              <UsersIcon
+                color={theme.colors.black}
+                strokeWidth={2.4}
+                width={16}
+                height={16}
+              />
+              <CustomText fontFamily="writer-monos" fontWeight="bold">
+                {friends.length}
+              </CustomText>
+            </View>
+            <View style={styles.statusStat}>
+              <CircleCheck stroke={theme.colors.black} strokeWidth={1.5} />
+              <CustomText fontFamily="writer-monos" fontWeight="bold">
+                {signal?.counts?.accepted || 0}
+              </CustomText>
+            </View>
+            <View style={styles.statusStat}>
+              <CircleX
+                stroke={theme.colors.black_50}
+                strokeWidth={1.5}
+                width={16}
+                height={16}
+              />
+              <CustomText fontFamily="writer-monos" fontWeight="bold">
+                {signal?.counts?.rejected || 0}
+              </CustomText>
+            </View>
           </View>
         </TouchableOpacity>
       </Animated.View>
@@ -112,7 +107,6 @@ export default function UserStatus({
 const styles = StyleSheet.create({
   container: {
     marginHorizontal: 20,
-    // maxHeight: 140,
   },
   animationContainer: {
     backgroundColor: theme.colors.white,
@@ -123,5 +117,15 @@ const styles = StyleSheet.create({
     gap: 24,
     padding: 20,
     justifyContent: "space-between",
+  },
+  statusStat: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+  },
+  statusStatContainer: {
+    flexDirection: "row",
+    gap: 16,
+    opacity: 0.5,
   },
 })

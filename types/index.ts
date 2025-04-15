@@ -1,4 +1,5 @@
 import { ImageSourcePropType, TextStyle } from "react-native"
+import { theme } from "@/theme"
 
 export type TypographySizeVariant = "lg" | "base" | "sm"
 export type FontSizeVariant = TypographySizeVariant
@@ -25,18 +26,9 @@ export type fontStyleVariant = "normal" | "italic"
 export type BadgeVariant = "default" | "outline" | "primary"
 export type InputVariant = "primary" | "secondary" | "ghost"
 
-export type Theme = {
-  colors: Record<string, string>
-  fontSize: Record<FontSizeVariant, TextStyle["fontSize"]>
-  lineHeight: Record<LineHeightVariant, TextStyle["lineHeight"]>
-  fontWeight: Record<FontWeightVariant, TextStyle["fontWeight"]>
-  fontStyle: Record<fontStyleVariant, fontStyleVariant>
-  fontFamily: Record<
-    FontFamilyVariant,
-    Partial<Record<FontWeightVariant, { normal: string; italic: string }>>
-  >
-}
-export interface User {
+export type Theme = typeof theme
+
+export type User = {
   id: string
   username: string
   names: string
@@ -48,7 +40,7 @@ export interface User {
   isFriend?: boolean
   inviteCode: string
 }
-export interface Friend {
+export type Friend = {
   id: string
   friendId: string
   username: string
@@ -65,7 +57,12 @@ export interface Friend {
   signal?: Signal
 }
 
-export interface Signal {
+export type SignalReplyStatus = {
+  hasAccepted: boolean
+  hasReplied: boolean
+}
+
+export type Signal = {
   id?: string
   hasEnded?: boolean
   when: string
@@ -78,7 +75,12 @@ export interface Signal {
   groups: Group[]
   startsAt: Date
   endsAt: Date
-}
+  counts: {
+    total: number
+    accepted: number
+    rejected: number
+  }
+} & SignalReplyStatus
 
 export type FriendSignal = {
   id: string
@@ -88,7 +90,7 @@ export type FriendSignal = {
   names: string
   signal: Signal
 }
-export type AccountCreationStep = 1 | 2 | 3
+export type AccountCreationStep = 1 | 2
 
 export enum Provider {
   GOOGLE = "google",

@@ -96,7 +96,7 @@ export default function FriendsList() {
       <ActionCard
         title="Your friends are not here?"
         description="Find/Invite friends on Wavv"
-        onPress={() => onShare(user?.username, user?.inviteCode)}
+        onPress={() => onShare(user?.username)}
       />
     </View>
   )

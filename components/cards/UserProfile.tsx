@@ -10,7 +10,7 @@ export default function UserProfile() {
   return (
     <View style={styles.container}>
       <View style={styles.iconContainer}>
-        <UserIcon color={theme.colors.black_200} height={96} width={96} />
+        <UserIcon stroke={theme.colors.black_200} height={96} width={96} />
       </View>
       {names && username && (
         <UserInfo
