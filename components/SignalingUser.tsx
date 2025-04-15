@@ -45,6 +45,7 @@ export default function SignalingUser({
           isLast && styles.lastCardInTheListStyles,
           isFirst && styles.firstCardInTheListStyles,
           online && styles.availableUserContainer,
+          style,
         ]}>
         <View style={{ flex: 1 }}>
           {online ? (
@@ -67,6 +68,7 @@ export default function SignalingUser({
               username={user.username}
               showNotificationIcon={true}
               showUsername={true}
+              hasNotificationEnabled={hasNotificationEnabled}
             />
           )}
         </View>
