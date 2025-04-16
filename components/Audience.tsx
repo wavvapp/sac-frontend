@@ -19,7 +19,7 @@ const audienceOptions = [
 
 export default function Audience() {
   const [selectedAudience, setSelectedAudience] = useState(
-    AudienceOptions.GROUPS,
+    AudienceOptions.FRIENDS,
   )
 
   const translateX = useRef(
