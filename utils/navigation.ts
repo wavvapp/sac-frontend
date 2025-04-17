@@ -13,6 +13,8 @@ export const navigateToAuthScreen = async () => {
       index: 0,
       routes: [{ name: "EntryScreen" }],
     })
+  } else {
+    console.warn("Navigation is not ready yet")
   }
 }
 
