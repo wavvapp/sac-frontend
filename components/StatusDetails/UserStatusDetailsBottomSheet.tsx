@@ -53,7 +53,12 @@ export default function UserStatusDetailsBottomSheet({
   }))
 
   const renderBackdrop = () => (
-    <BlurView blurAmount={1} blurType="dark" style={styles.backdrop} />
+    <BlurView
+      onTouchEnd={closeModal}
+      blurAmount={1}
+      blurType="dark"
+      style={styles.backdrop}
+    />
   )
 
   return (
