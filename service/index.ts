@@ -1,5 +1,4 @@
 import AlertDialog from "@/components/AlertDialog"
-import { navigateToAuthScreen } from "@/utils/navigation"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import NetInfo from "@react-native-community/netinfo"
 import axios, {
@@ -7,6 +6,7 @@ import axios, {
   AxiosResponse,
   InternalAxiosRequestConfig,
 } from "axios"
+import { navigateToAuthScreen } from "@/utils/navigation"
 
 // Create an Axios instance
 const api = axios.create({
@@ -67,6 +67,7 @@ api.interceptors.response.use(
         } catch (refreshError) {
           await navigateToAuthScreen()
           console.error("Error refreshing token:", refreshError)
+          throw refreshError
         }
       }
     }
