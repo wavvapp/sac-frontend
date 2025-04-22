@@ -13,13 +13,40 @@ import * as Notifications from "expo-notifications"
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync()
 
+const appEnvironment = process.env.APP_ENVIRONMENT
+
 Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: true,
-    priority: Notifications.AndroidNotificationPriority.MAX,
-  }),
+  handleNotification: async (notification) => {
+    const notificationEnvironment =
+      notification.request.content.data?.environment
+
+    if (notificationEnvironment) {
+      const shouldShowNotification = notificationEnvironment === appEnvironment
+
+      if (shouldShowNotification) {
+        return {
+          shouldShowAlert: true,
+          shouldPlaySound: true,
+          shouldSetBadge: true,
+          priority: Notifications.AndroidNotificationPriority.MAX,
+        }
+      }
+
+      return {
+        shouldShowAlert: false,
+        shouldPlaySound: false,
+        shouldSetBadge: false,
+        priority: Notifications.AndroidNotificationPriority.MIN,
+      }
+    }
+
+    return {
+      shouldShowAlert: true,
+      shouldPlaySound: true,
+      shouldSetBadge: true,
+      priority: Notifications.AndroidNotificationPriority.MAX,
+    }
+  },
 })
 
 const queryClient = new QueryClient()
