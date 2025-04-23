@@ -307,6 +307,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginTop: 10,
+    paddingHorizontal: 10,
   },
   signalContainer: {
     flexDirection: "column",
