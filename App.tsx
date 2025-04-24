@@ -18,7 +18,10 @@ const appEnvironment = process.env.APP_ENVIRONMENT
 Notifications.setNotificationHandler({
   handleNotification: async (notification) => {
     const notificationEnvironment =
-      notification.request.content.data?.environment
+      notification.request.content.data?.environment ||
+      // @ts-ignore
+      // NOTE: dataString is not defined in the notification request content interface
+      JSON.parse(notification.request.content?.dataString || "").environment
 
     if (notificationEnvironment) {
       const shouldShowNotification = notificationEnvironment === appEnvironment
