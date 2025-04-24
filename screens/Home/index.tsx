@@ -26,7 +26,7 @@ import TapWavv from "@/components/cards/TapWavv"
 import { useFetchPoints } from "@/queries/points"
 import { useQueryClient } from "@tanstack/react-query"
 import { BottomDrawerRef } from "@/components/BottomDrawer"
-import UserStatusDetails from "@/components/StatusDetails/UserStatusDetails"
+import UserStatusDetailsModal from "../../components/StatusDetails/UserStatusDetailsModal"
 
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -125,7 +125,7 @@ export default function HomeScreen() {
       </View>
       {!!allFriends?.length && <Signaling ref={signalingRef} />}
       {statusDetailsOpened && signal && user && (
-        <UserStatusDetails
+        <UserStatusDetailsModal
           toggleStatusDetailsModal={() =>
             setStatusDetailsOpened((prev) => !prev)
           }
