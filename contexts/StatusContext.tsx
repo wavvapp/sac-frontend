@@ -13,6 +13,7 @@ import { useMySignal } from "@/queries/signal"
 import { Group, Signal } from "@/types"
 import dayjs from "dayjs"
 import { AppState } from "react-native"
+import * as Notifications from "expo-notifications"
 
 export type TemporaryStatusType = {
   timeSlot: string
@@ -35,12 +36,13 @@ const StatusContext = createContext<StatusContextType>({} as StatusContextType)
 export const StatusProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const { data: signal } = useMySignal()
+  const { data: signal, refetch: refetchSignal } = useMySignal()
 
   const dateEnded = useMemo(
     () => dayjs().isAfter(dayjs(signal?.endsAt)),
     [signal?.endsAt],
   )
+
   const isOn = useSharedValue(!dateEnded)
   const checkDateAndUpdateStatus = useCallback(() => {
     if (signal?.endsAt) {
@@ -52,9 +54,17 @@ export const StatusProvider: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     const subscription = AppState.addEventListener("change", () => {
       checkDateAndUpdateStatus()
+      refetchSignal()
     })
     return () => subscription.remove()
-  }, [checkDateAndUpdateStatus])
+  }, [checkDateAndUpdateStatus, refetchSignal])
+
+  useEffect(() => {
+    const subscription = Notifications.addNotificationReceivedListener(() => {
+      refetchSignal()
+    })
+    return () => subscription.remove()
+  }, [refetchSignal])
 
   const [temporaryStatus, setTemporaryStatus] = useState<TemporaryStatusType>({
     friendIds: signal?.friendIds || [],
