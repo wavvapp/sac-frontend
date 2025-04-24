@@ -219,14 +219,19 @@ const Index = forwardRef<BottomDrawerRef>((_, ref) => {
           }>
           <View>
             <View style={styles.userDetailsContainer}>
-              <CustomText size="lg" fontWeight="semibold">
-                {signalingFriend?.names}
-              </CustomText>
               <CustomText
+                style={{ textAlign: "center" }}
                 size="lg"
-                fontFamily="writer-monos"
-                style={{ color: theme.colors.black, opacity: 0.5 }}>
-                @{signalingFriend?.username}
+                fontWeight="semibold">
+                {signalingFriend?.names}{" "}
+                <CustomText
+                  size="lg"
+                  fontFamily="writer-monos"
+                  style={{
+                    color: theme.colors.light_gray,
+                  }}>
+                  @{signalingFriend?.username}
+                </CustomText>
               </CustomText>
             </View>
             <View style={styles.signalContainer}>

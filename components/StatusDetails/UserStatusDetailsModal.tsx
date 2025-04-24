@@ -13,7 +13,7 @@ import { FlatList } from "react-native-gesture-handler"
 import { useEffect, useRef } from "react"
 import { useQueryClient } from "@tanstack/react-query"
 
-export default function UserStatusDetails({
+export default function UserStatusDetailsModal({
   toggleStatusDetailsModal,
   signal,
   user,
