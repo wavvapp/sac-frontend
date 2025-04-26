@@ -3,6 +3,9 @@ name: Publish to production
 on:
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -31,13 +34,13 @@ jobs:
 
       - name: Create Git tag
         run: |
-            git config --global user.email "github-actions[bot]@users.noreply.github.com"
-            git config --global user.name "github-actions[bot]"
-            
-            TAG_VERSION="${NEW_VERSION:-$VERSION}"
-            
-            git tag -a "v$TAG_VERSION" -m "Release version $TAG_VERSION"
-            git push origin "v$TAG_VERSION"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+
+          TAG_VERSION="${NEW_VERSION:-$VERSION}"
+
+          git tag -a "v$TAG_VERSION" -m "Release version $TAG_VERSION"
+          git push origin "v$TAG_VERSION"
         env:
           GITHUB_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
 
