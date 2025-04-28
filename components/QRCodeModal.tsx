@@ -23,7 +23,7 @@ export default function QRCodeModal({
           Invite Friends
         </CustomText>
         <CustomText style={{ textAlign: "center", lineHeight: 20 }}>
-          Let your friend scan the QR code  or send them the link
+          Let your friend scan the QR code or send them the link
         </CustomText>
       </View>
       <QRCode size={230} value={`wavv://Home/?me=${userId}`} />
