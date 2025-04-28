@@ -51,5 +51,6 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     gap: 5,
     paddingTop: 5,
+    marginBottom: -10,
   },
 })
