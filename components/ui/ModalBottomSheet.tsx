@@ -15,10 +15,11 @@ const height = Dimensions.get("window").height
 
 type ModalBottomSheetProps = {
   bluredBackdrop?: boolean
-  toggleStatusDetailsModal: () => void
+  toggleModalBottomSheet: () => void
   renderBackdrop?: () => ReactNode
   children: ReactNode
   modalContainerStyle?: StyleProp<ViewStyle>
+  modalStyle?: StyleProp<ViewStyle>
   dragHandleStyle?: StyleProp<ViewStyle>
   blurBackdrop?: BlurViewProps
 }
@@ -26,11 +27,12 @@ type ModalBottomSheetProps = {
 // Inspired by android ModalBottomSheet
 export default function ModalBottomSheet({
   bluredBackdrop = true,
-  toggleStatusDetailsModal,
+  toggleModalBottomSheet,
   renderBackdrop,
   children,
   modalContainerStyle = {},
   dragHandleStyle = {},
+  modalStyle = {},
   blurBackdrop,
 }: ModalBottomSheetProps) {
   const translateY = useSharedValue(0)
@@ -38,7 +40,7 @@ export default function ModalBottomSheet({
 
   const closeModal = () => {
     "worklet"
-    runOnJS(toggleStatusDetailsModal)()
+    runOnJS(toggleModalBottomSheet)()
   }
 
   const panGesture = Gesture.Pan()
@@ -82,11 +84,11 @@ export default function ModalBottomSheet({
       {renderBackdrop?.()}
       {bluredBackdrop && renderBluredBackdrop()}
       <GestureDetector gesture={composedGesture}>
-        <Animated.View style={[styles.sheet, animatedStyle]}>
+        <Animated.View style={[styles.sheetContainer, animatedStyle]}>
           <View>
             <View style={[styles.dragHandle, dragHandleStyle]} />
           </View>
-          {children}
+          <View style={[styles.sheet, modalStyle]}>{children}</View>
         </Animated.View>
       </GestureDetector>
     </View>
@@ -110,13 +112,18 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   sheet: {
-    backgroundColor: "white",
+    zIndex: 2,
+    width: "100%",
+    height: "auto",
+  },
+  sheetContainer: {
     marginTop: "auto",
+    backgroundColor: "white",
     marginHorizontal: 20,
     marginBottom: 20,
     borderRadius: 20,
     zIndex: 2,
-    maxHeight: "50%",
+    maxHeight: "90%",
   },
   dragHandle: {
     width: 50,

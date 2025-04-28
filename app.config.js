@@ -19,6 +19,7 @@ export default {
     ],
     name: "Wavv",
     slug: "Wavv",
+    scheme: "wavv",
     version: "1.5.0",
     orientation: "portrait",
     icon: "./assets/images/icon.png",

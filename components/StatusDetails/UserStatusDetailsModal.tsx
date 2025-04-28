@@ -69,7 +69,7 @@ export default function UserStatusDetailsModal({
   }
 
   return (
-    <ModalBottomSheet toggleStatusDetailsModal={toggleStatusDetailsModal}>
+    <ModalBottomSheet toggleModalBottomSheet={toggleStatusDetailsModal}>
       <View style={styles.statusDescriptionContainer}>
         <UserAvailability
           fullName={user.names}

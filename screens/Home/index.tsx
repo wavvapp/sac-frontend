@@ -12,7 +12,6 @@ import ShareIcon from "@/components/vectors/ShareIcon"
 import SearchIcon from "@/components/vectors/SearchIcon"
 import { CustomButton } from "@/components/ui/Button"
 import { useFocusEffect, useNavigation } from "@react-navigation/native"
-import { onShare } from "@/utils/share"
 import NoFriends from "@/components/cards/NoFriends"
 import { useAuth } from "@/contexts/AuthContext"
 import * as WebBrowser from "expo-web-browser"
@@ -27,6 +26,7 @@ import { useFetchPoints } from "@/queries/points"
 import { useQueryClient } from "@tanstack/react-query"
 import { BottomDrawerRef } from "@/components/BottomDrawer"
 import UserStatusDetailsModal from "../../components/StatusDetails/UserStatusDetailsModal"
+import QRCodeModal from "../../components/QRCodeModal"
 
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -43,6 +43,7 @@ export default function HomeScreen() {
   const { handleOfflineAction } = useOfflineHandler()
   const [statusDetailsOpened, setStatusDetailsOpened] = useState(false)
   const { data, refetch: refetchPoints } = useFetchPoints()
+  const [QRCodeModalVisible, setQRCodeModalVisible] = useState(false)
 
   const queryClient = useQueryClient()
   const refetchFriendsData = useCallback(async () => {
@@ -94,7 +95,7 @@ export default function HomeScreen() {
 
             <Pressable
               style={styles.settingsButton}
-              onPress={() => onShare(user?.username)}>
+              onPress={() => setQRCodeModalVisible(true)}>
               <ShareIcon color={theme.colors.white} strokeWidth={1.5} />
             </Pressable>
 
@@ -123,6 +124,13 @@ export default function HomeScreen() {
           </View>
         )}
       </View>
+      {QRCodeModalVisible && (
+        <QRCodeModal
+          onClose={() => setQRCodeModalVisible(false)}
+          userId={user?.id || ""}
+          username={user?.username || ""}
+        />
+      )}
       {!!allFriends?.length && <Signaling ref={signalingRef} />}
       {statusDetailsOpened && signal && user && (
         <UserStatusDetailsModal
