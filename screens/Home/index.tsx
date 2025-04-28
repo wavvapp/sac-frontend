@@ -27,6 +27,7 @@ import { useQueryClient } from "@tanstack/react-query"
 import { BottomDrawerRef } from "@/components/BottomDrawer"
 import UserStatusDetailsModal from "../../components/StatusDetails/UserStatusDetailsModal"
 import QRCodeModal from "../../components/QRCodeModal"
+import AddToFriendModal from "@/components/AddToFriendModal"
 
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -124,6 +125,7 @@ export default function HomeScreen() {
           </View>
         )}
       </View>
+      {user && <AddToFriendModal onClose={() => null} user={user} />}
       {QRCodeModalVisible && (
         <QRCodeModal
           onClose={() => setQRCodeModalVisible(false)}
