@@ -45,6 +45,7 @@ export default function HomeScreen() {
   const [statusDetailsOpened, setStatusDetailsOpened] = useState(false)
   const { data, refetch: refetchPoints } = useFetchPoints()
   const [QRCodeModalVisible, setQRCodeModalVisible] = useState(false)
+  const [addToFriendModalVisible, setAddToFriendModalVisible] = useState(false)
 
   const queryClient = useQueryClient()
   const refetchFriendsData = useCallback(async () => {
@@ -125,7 +126,12 @@ export default function HomeScreen() {
           </View>
         )}
       </View>
-      {user && <AddToFriendModal onClose={() => null} user={user} />}
+      {user && addToFriendModalVisible && (
+        <AddToFriendModal
+          onClose={() => setAddToFriendModalVisible(false)}
+          user={user}
+        />
+      )}
       {QRCodeModalVisible && (
         <QRCodeModal
           onClose={() => setQRCodeModalVisible(false)}
