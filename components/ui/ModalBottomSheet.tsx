@@ -1,4 +1,4 @@
-import { BlurView } from "@react-native-community/blur"
+import { BlurView, BlurViewProps } from "@react-native-community/blur"
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -8,16 +8,31 @@ import { Gesture, GestureDetector } from "react-native-gesture-handler"
 import { View, StyleSheet, Dimensions } from "react-native"
 import { ReactNode } from "react"
 import { theme } from "../../theme"
+import { StyleProp } from "react-native"
+import { ViewStyle } from "react-native"
 
 const height = Dimensions.get("window").height
 
-export default function UserStatusDetailsBottomSheet({
-  toggleStatusDetailsModal,
-  children,
-}: {
+type ModalBottomSheetProps = {
+  bluredBackdrop?: boolean
   toggleStatusDetailsModal: () => void
+  renderBackdrop?: () => ReactNode
   children: ReactNode
-}) {
+  modalContainerStyle?: StyleProp<ViewStyle>
+  dragHandleStyle?: StyleProp<ViewStyle>
+  blurBackdrop?: BlurViewProps
+}
+
+// Inspired by android ModalBottomSheet
+export default function ModalBottomSheet({
+  bluredBackdrop = true,
+  toggleStatusDetailsModal,
+  renderBackdrop,
+  children,
+  modalContainerStyle = {},
+  dragHandleStyle = {},
+  blurBackdrop,
+}: ModalBottomSheetProps) {
   const translateY = useSharedValue(0)
   const context = useSharedValue({ y: 0 })
 
@@ -52,22 +67,24 @@ export default function UserStatusDetailsBottomSheet({
     transform: [{ translateY: translateY.value }],
   }))
 
-  const renderBackdrop = () => (
+  const renderBluredBackdrop = () => (
     <BlurView
       onTouchEnd={closeModal}
       blurAmount={1}
       blurType="dark"
       style={styles.backdrop}
+      {...blurBackdrop}
     />
   )
 
   return (
-    <View style={styles.modalContainer}>
-      {renderBackdrop()}
+    <View style={[styles.modalContainer, modalContainerStyle]}>
+      {renderBackdrop?.()}
+      {bluredBackdrop && renderBluredBackdrop()}
       <GestureDetector gesture={composedGesture}>
         <Animated.View style={[styles.sheet, animatedStyle]}>
           <View>
-            <View style={styles.dragHandle} />
+            <View style={[styles.dragHandle, dragHandleStyle]} />
           </View>
           {children}
         </Animated.View>

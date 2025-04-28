@@ -1,6 +1,5 @@
 import CustomText from "@/components/ui/CustomText"
 import { StyleSheet, TouchableOpacity, View } from "react-native"
-import UserStatusDetailsBottomSheet from "@/components/StatusDetails/UserStatusDetailsBottomSheet"
 import { Friend, Signal, SignalReplyStatus, User } from "@/types"
 import UserAvailability from "@/components/cards/UserAvailability"
 import { theme } from "@/theme"
@@ -12,6 +11,7 @@ import Badge from "@/components/ui/Badge"
 import { FlatList } from "react-native-gesture-handler"
 import { useEffect, useRef } from "react"
 import { useQueryClient } from "@tanstack/react-query"
+import ModalBottomSheet from "../ui/ModalBottomSheet"
 
 export default function UserStatusDetailsModal({
   toggleStatusDetailsModal,
@@ -69,8 +69,7 @@ export default function UserStatusDetailsModal({
   }
 
   return (
-    <UserStatusDetailsBottomSheet
-      toggleStatusDetailsModal={toggleStatusDetailsModal}>
+    <ModalBottomSheet toggleStatusDetailsModal={toggleStatusDetailsModal}>
       <View style={styles.statusDescriptionContainer}>
         <UserAvailability
           fullName={user.names}
@@ -104,7 +103,7 @@ export default function UserStatusDetailsModal({
         keyExtractor={(item) => item.friendId}
         scrollEventThrottle={16}
       />
-    </UserStatusDetailsBottomSheet>
+    </ModalBottomSheet>
   )
 }
 

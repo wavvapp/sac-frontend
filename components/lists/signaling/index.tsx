@@ -18,11 +18,11 @@ import ActionCard from "@/components/cards/Action"
 import { useAuth } from "@/contexts/AuthContext"
 import SignalingHeader from "@/components/lists/signaling/signalingHeader"
 import * as Notifications from "expo-notifications"
-import UserStatusDetailsBottomSheet from "@/components/StatusDetails/UserStatusDetailsBottomSheet"
 import CustomText from "@/components/ui/CustomText"
 import { Friend } from "@/types"
 import Badge from "@/components/ui/Badge"
 import { CustomTitle } from "@/components/ui/CustomTitle"
+import ModalBottomSheet from "@/components/ui/ModalBottomSheet"
 
 export interface SignalingRef {
   openBottomSheet: () => void
@@ -213,7 +213,7 @@ const Index = forwardRef<BottomDrawerRef>((_, ref) => {
         />
       </BottomDrawer>
       {isStatusDetailsBottomSheetOpened && signalingFriend && (
-        <UserStatusDetailsBottomSheet
+        <ModalBottomSheet
           toggleStatusDetailsModal={() =>
             setIsStatusDetailsBottomSheetOpened((prev) => !prev)
           }>
@@ -287,7 +287,7 @@ const Index = forwardRef<BottomDrawerRef>((_, ref) => {
               </TouchableOpacity>
             </View>
           </View>
-        </UserStatusDetailsBottomSheet>
+        </ModalBottomSheet>
       )}
     </>
   )
