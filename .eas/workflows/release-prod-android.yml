@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - "archive-*"
-      - main
 
 jobs:
   build_android:
