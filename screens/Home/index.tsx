@@ -156,13 +156,8 @@ export default function HomeScreen() {
             names={dataFromDeepLink.names}
           />
         )}
-      {QRCodeModalVisible && (
-        <QRCodeModal
-          onClose={() => setQRCodeModalVisible(false)}
-          userId={user?.id || ""}
-          username={user?.username || ""}
-          names={user?.names || ""}
-        />
+      {QRCodeModalVisible && user && (
+        <QRCodeModal onClose={() => setQRCodeModalVisible(false)} user={user} />
       )}
       {!!allFriends?.length && <Signaling ref={signalingRef} />}
       {statusDetailsOpened && signal && user && (

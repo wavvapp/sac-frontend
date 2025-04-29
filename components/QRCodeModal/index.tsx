@@ -1,26 +1,18 @@
 import { View, StyleSheet } from "react-native"
-import ModalBottomSheet from "./ui/ModalBottomSheet"
-import CustomText from "./ui/CustomText"
-import { CustomButton } from "./ui/Button"
-import QRCode from "react-native-qrcode-svg"
-import { onShare } from "../utils/share"
+import ModalBottomSheet from "../ui/ModalBottomSheet"
+import CustomText from "../ui/CustomText"
+import { CustomButton } from "../ui/Button"
+import { onShare } from "../../utils/share"
+import InviteFriendQRCode from "./InviteFriendQRCode"
+import { User } from "@/types"
 
-const WAVV_APP_WEBSITE = "https://wavvapp.com"
 export default function QRCodeModal({
   onClose,
-  userId,
-  username,
-  names,
+  user,
 }: {
   onClose: () => void
-  userId: string
-  username: string
-  names: string
+  user: User
 }) {
-  const addFriendDeepLink = (userId: string) => {
-    return `${WAVV_APP_WEBSITE}/open?screen=Home&userId=${userId}&username=${username}&names=${names}`
-  }
-
   return (
     <ModalBottomSheet
       modalStyle={styles.modalStyle}
@@ -33,11 +25,11 @@ export default function QRCodeModal({
           Let your friend scan the QR code or send them the link
         </CustomText>
       </View>
-      <QRCode size={230} value={addFriendDeepLink(userId)} />
+      <InviteFriendQRCode user={user} />
       <CustomButton
         containerStyles={{ height: 56, paddingHorizontal: 40 }}
         onPress={() => {
-          onShare(username)
+          onShare(user.username)
         }}
         title="Share Link"
       />

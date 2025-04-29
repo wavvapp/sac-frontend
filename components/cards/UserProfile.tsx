@@ -1,17 +1,14 @@
 import { View, StyleSheet } from "react-native"
 import { useAuth } from "@/contexts/AuthContext"
 import UserInfo from "@/components/UserInfo"
-import UserIcon from "@/components/vectors/UserIcon"
-import { theme } from "@/theme"
+import InviteFriendQRCode from "../QRCodeModal/InviteFriendQRCode"
 
 export default function UserProfile() {
   const { user } = useAuth()
   const { names, username } = user || {}
   return (
     <View style={styles.container}>
-      <View style={styles.iconContainer}>
-        <UserIcon stroke={theme.colors.black_200} height={96} width={96} />
-      </View>
+      <View>{user && <InviteFriendQRCode user={user} size={150} />}</View>
       {names && username && (
         <UserInfo
           fullName={names}
@@ -31,11 +28,5 @@ const styles = StyleSheet.create({
   },
   userInfoStyles: {
     alignItems: "center",
-  },
-  iconContainer: {
-    borderWidth: 1,
-    borderRadius: 80,
-    borderColor: theme.colors.black_200,
-    padding: 24,
   },
 })
