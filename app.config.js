@@ -19,6 +19,8 @@ export default {
     ],
     name: "Wavv",
     slug: "Wavv",
+    scheme: "wavv",
+    platforms: ["ios", "android", "web"],
     version: "1.5.0",
     orientation: "portrait",
     icon: "./assets/images/icon.png",
@@ -35,6 +37,7 @@ export default {
       bundleIdentifier: "com.apeunit.social.app",
       buildNumber: "1.5.0",
       teamId: "CZ6DRS2DW4",
+      associatedDomains: ["applinks:wavvapp.com"],
       infoPlist: {
         NSCameraUsageDescription:
           "This app uses the camera to scan barcodes on event tickets.",
