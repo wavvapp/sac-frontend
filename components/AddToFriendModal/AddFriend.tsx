@@ -1,26 +1,27 @@
 import { theme } from "@/theme"
-import { User } from "@/types"
 import { StyleSheet, View } from "react-native"
 import { CustomButton } from "../ui/Button"
 import CustomText from "../ui/CustomText"
 
 export default function AddFriend({
-  user,
+  username,
+  names,
   onAddFriend,
 }: {
-  user: User
+  username: string
+  names: string
   onAddFriend: () => void
 }) {
   return (
     <View style={styles.container}>
       <CustomText style={{ textAlign: "center" }} fontWeight="semibold">
-        {user?.names}{" "}
+        {names}{" "}
         <CustomText
           fontFamily="writer-monos"
           style={{
             color: theme.colors.light_gray,
           }}>
-          @{user?.username}
+          @{username}
         </CustomText>
       </CustomText>
       <CustomText fontWeight="bold" size="lg" style={{ textAlign: "center" }}>

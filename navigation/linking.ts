@@ -5,7 +5,6 @@ export const linking: LinkingOptions<any> = {
   config: {
     screens: {
       Home: "Home",
-      Profile: "/?userId",
       NotFound: "*",
     },
   },

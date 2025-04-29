@@ -3,7 +3,7 @@ import { RootStackParamList } from "@/types"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { StyleSheet, View, StatusBar, Platform, Pressable } from "react-native"
 import { runOnJS, useDerivedValue } from "react-native-reanimated"
-import { useCallback, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import Signaling from "@/components/lists/signaling"
 import Settings from "@/components/vectors/Settings"
 import { theme } from "@/theme"
@@ -28,6 +28,7 @@ import { BottomDrawerRef } from "@/components/BottomDrawer"
 import UserStatusDetailsModal from "../../components/StatusDetails/UserStatusDetailsModal"
 import QRCodeModal from "../../components/QRCodeModal"
 import AddToFriendModal from "@/components/AddToFriendModal"
+import * as Linking from "expo-linking"
 
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -46,6 +47,12 @@ export default function HomeScreen() {
   const { data, refetch: refetchPoints } = useFetchPoints()
   const [QRCodeModalVisible, setQRCodeModalVisible] = useState(false)
   const [addToFriendModalVisible, setAddToFriendModalVisible] = useState(false)
+  const url = Linking.useURL()
+  const [dataFromDeepLink, setDataFromDeepLink] = useState({
+    userId: "",
+    username: "",
+    names: "",
+  })
 
   const queryClient = useQueryClient()
   const refetchFriendsData = useCallback(async () => {
@@ -57,6 +64,17 @@ export default function HomeScreen() {
     refetchFriendsData()
     navigation.navigate("Search")
   }
+
+  useEffect(() => {
+    if (!url) return
+    const parsedUrl = Linking.parse(url)
+    setAddToFriendModalVisible(!!url)
+    setDataFromDeepLink({
+      userId: (parsedUrl.queryParams?.user_id as string) || "",
+      username: (parsedUrl.queryParams?.username as string) || "",
+      names: (parsedUrl.queryParams?.names as string) || "",
+    })
+  }, [url])
 
   useFocusEffect(
     useCallback(() => {
@@ -126,17 +144,24 @@ export default function HomeScreen() {
           </View>
         )}
       </View>
-      {user && addToFriendModalVisible && (
-        <AddToFriendModal
-          onClose={() => setAddToFriendModalVisible(false)}
-          user={user}
-        />
-      )}
+      {user &&
+        addToFriendModalVisible &&
+        dataFromDeepLink.userId &&
+        dataFromDeepLink.username &&
+        dataFromDeepLink.names && (
+          <AddToFriendModal
+            onClose={() => setAddToFriendModalVisible(false)}
+            username={dataFromDeepLink.username}
+            friendIdFromDeepLink={dataFromDeepLink.userId}
+            names={dataFromDeepLink.names}
+          />
+        )}
       {QRCodeModalVisible && (
         <QRCodeModal
           onClose={() => setQRCodeModalVisible(false)}
           userId={user?.id || ""}
           username={user?.username || ""}
+          names={user?.names || ""}
         />
       )}
       {!!allFriends?.length && <Signaling ref={signalingRef} />}

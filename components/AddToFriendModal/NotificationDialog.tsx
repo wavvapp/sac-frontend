@@ -1,39 +1,42 @@
 import { theme } from "@/theme"
-import { User } from "@/types"
 import { View } from "react-native"
 import { CustomButton } from "../ui/Button"
 import CustomText from "../ui/CustomText"
 import { StyleSheet } from "react-native"
 
 export default function NotificationDialog({
-  user,
-  onClose,
+  username,
+  names,
+  onCancelNotificationForFriend,
+  onEnableNotificationsForFriend,
 }: {
-  user: User
-  onClose: () => void
+  username: string
+  names: string
+  onCancelNotificationForFriend: () => void
+  onEnableNotificationsForFriend: () => void
 }) {
   return (
     <View style={styles.contentContainer}>
       <View style={styles.content}>
         <CustomText style={styles.title} size="lg">
-          Stay updated with {user.username}
+          Stay updated with {username}
         </CustomText>
 
         <CustomText style={styles.description}>
-          Do you want to get notified whenever {user.names} shares updates?  You
-          can adjust this preference later.
+          Do you want to get notified whenever {names} shares updates?  You can
+          adjust this preference later.
         </CustomText>
       </View>
 
       <View style={styles.buttonContainer}>
         <CustomButton
           variant="outline"
-          onPress={onClose}
+          onPress={onCancelNotificationForFriend}
           title="No"
           containerStyles={styles.button}
         />
         <CustomButton
-          onPress={() => null}
+          onPress={onEnableNotificationsForFriend}
           title="Yes"
           containerStyles={styles.button}
         />

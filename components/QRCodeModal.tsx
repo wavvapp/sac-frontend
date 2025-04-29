@@ -10,13 +10,15 @@ export default function QRCodeModal({
   onClose,
   userId,
   username,
+  names,
 }: {
   onClose: () => void
   userId: string
   username: string
+  names: string
 }) {
   const addFriendDeepLink = (userId: string) => {
-    return `${WAVV_APP_WEBSITE}/open?screen=Home&userId=${userId}`
+    return `${WAVV_APP_WEBSITE}/open?screen=Home&userId=${userId}&username=${username}&names=${names}`
   }
 
   return (

@@ -1,30 +1,55 @@
-import { User } from "@/types"
 import ModalBottomSheet from "../ui/ModalBottomSheet"
 import { StyleSheet } from "react-native"
 import { useState } from "react"
 import NotificationDialog from "./NotificationDialog"
 import AddFriend from "./AddFriend"
+import { useAddFriend } from "@/queries/friends"
 
 export default function AddToFriendModal({
-  user,
+  username,
+  names,
+  friendIdFromDeepLink,
   onClose,
 }: {
-  user: User
+  username: string
+  names: string
+  friendIdFromDeepLink: string
   onClose: () => void
 }) {
   const [showNotificationMessage, setShowNotificationMessage] = useState(false)
+  const { mutateAsync: addfriend } = useAddFriend()
 
   return (
     <ModalBottomSheet
       modalStyle={styles.modalStyle}
       toggleModalBottomSheet={onClose}>
       {showNotificationMessage && (
-        <NotificationDialog user={user} onClose={onClose} />
+        <NotificationDialog
+          names={names}
+          username={username}
+          onEnableNotificationsForFriend={() => {
+            addfriend({
+              friendId: friendIdFromDeepLink,
+              hasNotificationEnabled: true,
+            })
+            onClose()
+          }}
+          onCancelNotificationForFriend={() => {
+            addfriend({
+              friendId: friendIdFromDeepLink,
+              hasNotificationEnabled: false,
+            })
+            onClose()
+          }}
+        />
       )}
       {!showNotificationMessage && (
         <AddFriend
-          user={user}
-          onAddFriend={() => setShowNotificationMessage(true)}
+          names={names}
+          username={username}
+          onAddFriend={() => {
+            setShowNotificationMessage(true)
+          }}
         />
       )}
     </ModalBottomSheet>
