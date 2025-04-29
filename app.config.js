@@ -64,6 +64,17 @@ export default {
       googleServicesFile:
         process.env.GOOGLE_SERVICES_JSON ?? "./google-services.json",
       useNextNotificationsApi: true,
+      intentFilters: [
+        {
+          action: "VIEW",
+          data: {
+            scheme: "https",
+            host: "wavvapp.com",
+            pathPrefix: "/open",
+          },
+          category: ["BROWSABLE", "DEFAULT"],
+        },
+      ],
     },
     web: {
       favicon: "./assets/images/favicon.png",
