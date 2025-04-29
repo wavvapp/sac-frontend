@@ -38,7 +38,7 @@ jobs:
           git config --global user.name "github-actions[bot]"
 
           TAG_VERSION="${NEW_VERSION:-$VERSION}"
-
+          git checkout main
           git tag -a "v$TAG_VERSION" -m "Release version $TAG_VERSION"
           git push origin "v$TAG_VERSION"
         env:
