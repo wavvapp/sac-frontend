@@ -21,6 +21,7 @@ import GroupsScreen from "@/screens/Groups"
 import CreateGroup from "@/screens/Groups/CreateGroup"
 import EditGroup from "@/screens/Groups/EditGroups"
 import { navigationRef } from "@/utils/navigation"
+import { linking } from "./linking"
 
 export default function AppNavigator() {
   const Stack = createNativeStackNavigator<RootStackParamList>()
@@ -34,7 +35,7 @@ export default function AppNavigator() {
   }, [isFriendsLoading, isLoading])
 
   return (
-    <NavigationContainer ref={navigationRef}>
+    <NavigationContainer linking={linking} ref={navigationRef}>
       {isAuthenticated ? (
         <StatusProvider>
           <Stack.Navigator

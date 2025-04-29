@@ -5,6 +5,7 @@ import { CustomButton } from "./ui/Button"
 import QRCode from "react-native-qrcode-svg"
 import { onShare } from "../utils/share"
 
+const WAVV_APP_WEBSITE = "https://wavvapp.com"
 export default function QRCodeModal({
   onClose,
   userId,
@@ -14,6 +15,10 @@ export default function QRCodeModal({
   userId: string
   username: string
 }) {
+  const addFriendDeepLink = (userId: string) => {
+    return `${WAVV_APP_WEBSITE}/open?screen=Home&userId=${userId}`
+  }
+
   return (
     <ModalBottomSheet
       modalStyle={styles.modalStyle}
@@ -26,7 +31,7 @@ export default function QRCodeModal({
           Let your friend scan the QR code or send them the link
         </CustomText>
       </View>
-      <QRCode size={230} value={`wavv://Home/?me=${userId}`} />
+      <QRCode size={230} value={addFriendDeepLink(userId)} />
       <CustomButton
         containerStyles={{ height: 56, paddingHorizontal: 40 }}
         onPress={() => {
