@@ -144,18 +144,14 @@ export default function HomeScreen() {
           </View>
         )}
       </View>
-      {user &&
-        addToFriendModalVisible &&
-        dataFromDeepLink.userId &&
-        dataFromDeepLink.username &&
-        dataFromDeepLink.names && (
-          <AddToFriendModal
-            onClose={() => setAddToFriendModalVisible(false)}
-            username={dataFromDeepLink.username}
-            friendIdFromDeepLink={dataFromDeepLink.userId}
-            names={dataFromDeepLink.names}
-          />
-        )}
+      {user && addToFriendModalVisible && (
+        <AddToFriendModal
+          onClose={() => setAddToFriendModalVisible(false)}
+          username={dataFromDeepLink.username}
+          friendIdFromDeepLink={dataFromDeepLink.userId}
+          names={dataFromDeepLink.names}
+        />
+      )}
       {QRCodeModalVisible && user && (
         <QRCodeModal onClose={() => setQRCodeModalVisible(false)} user={user} />
       )}
