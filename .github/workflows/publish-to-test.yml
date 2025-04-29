@@ -24,6 +24,7 @@ jobs:
         id: semantic
         with:
           dry_run: true
+          debug: true
           semantic_version: 19
           extra_plugins: |
             @semantic-release/changelog@6
@@ -39,10 +40,11 @@ jobs:
         run: echo "NEW_VERSION=${{ steps.semantic.outputs.new_release_version }}" >> $GITHUB_ENV
 
       - name: Update npm version
-        if: steps.semantic.outputs.new_release_published
+        if: steps.semantic.outputs.new_release_version
         run: npm version ${{ steps.semantic.outputs.new_release_version }} --no-git-tag-version
 
       - name: Make version update script executable
+        if: steps.semantic.outputs.new_release_version
         run: chmod +x ./script/update-app-version.sh
 
       - name: Update app version in app.config.js
@@ -69,7 +71,7 @@ jobs:
         if: steps.semantic.outputs.new_release_version
         run: |
           VERSION=${{ steps.semantic.outputs.new_release_version }}
-          
+
           gh api repos/${{ github.repository }}/git/refs \
             -f ref="refs/heads/stage-${VERSION}" \
             -f sha="$(git rev-parse HEAD)"
