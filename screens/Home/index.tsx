@@ -68,7 +68,7 @@ export default function HomeScreen() {
   useEffect(() => {
     if (!url) return
     const parsedUrl = Linking.parse(url)
-    setAddToFriendModalVisible(!!url)
+    setAddToFriendModalVisible(true)
     setDataFromDeepLink({
       userId: (parsedUrl.queryParams?.user_id as string) || "",
       username: (parsedUrl.queryParams?.username as string) || "",
