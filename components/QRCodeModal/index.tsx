@@ -18,7 +18,7 @@ export default function QRCodeModal({
       modalStyle={styles.modalStyle}
       toggleModalBottomSheet={onClose}>
       <View style={styles.modalDescription}>
-        <CustomText fontWeight="bold" size="lg" style={{ textAlign: "center" }}>
+        <CustomText size="lg" style={{ textAlign: "center" }}>
           Invite Friends
         </CustomText>
         <CustomText style={{ textAlign: "center", lineHeight: 20 }}>
