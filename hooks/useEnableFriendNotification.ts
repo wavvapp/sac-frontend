@@ -24,7 +24,6 @@ export const useEnableFriendNotification = () => {
       await registerForNotifications?.()
     }
     try {
-      console.log({ enableNotification: enabled, friendId: friend.id })
       setNotificationPreferences.mutate({
         enableNotification: enabled,
         friendId: friend.id,

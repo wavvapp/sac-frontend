@@ -5,20 +5,33 @@ import { CustomButton } from "../ui/Button"
 import { onShare } from "../../utils/share"
 import InviteFriendQRCode from "./InviteFriendQRCode"
 import { User } from "@/types"
+import { StyleProp } from "react-native"
+import { ViewStyle } from "react-native"
 
 export default function QRCodeModal({
   onClose,
   user,
+  modalStyles,
+  sheetContainerStyle,
+  isVisible,
 }: {
   onClose: () => void
   user: User
+  modalStyles?: StyleProp<ViewStyle>
+  sheetContainerStyle?: StyleProp<ViewStyle>
+  isVisible: boolean
 }) {
   return (
     <ModalBottomSheet
-      modalStyle={styles.modalStyle}
+      isVisible={isVisible}
+      sheetContainerStyle={sheetContainerStyle}
+      modalStyle={[styles.modalStyle, modalStyles]}
       toggleModalBottomSheet={onClose}>
       <View style={styles.modalDescription}>
-        <CustomText size="lg" style={{ textAlign: "center" }}>
+        <CustomText
+          size="lg"
+          fontWeight="semibold"
+          style={{ textAlign: "center" }}>
           Invite Friends
         </CustomText>
         <CustomText style={{ textAlign: "center", lineHeight: 20 }}>

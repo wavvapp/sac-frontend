@@ -12,7 +12,6 @@ import BellIcon from "@/components/vectors/BellIcon"
 import TrashIcon from "@/components/vectors/TrashIcon"
 import UserProfile from "@/components/cards/UserProfile"
 import { SettingOption } from "@/types"
-import { onShare } from "@/utils/share"
 import AlertDialog from "@/components/AlertDialog"
 import BottomModal from "@/components/BottomModal"
 import EditActivity from "@/screens/EditActivity"
@@ -26,6 +25,7 @@ import UsersIcon from "@/components/vectors/UsersIcon"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { RootStackParamList } from "@/types"
+import QRCodeModal from "@/components/QRCodeModal"
 
 export type SettingsScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -39,7 +39,7 @@ export default function SettingScreen() {
     useUpdateUser()
   const deleteUserMutation = useDeleteUser()
   const bottomDrawerRef = useRef<BottomDrawerRef>(null)
-
+  const [QRCodeModalVisible, setQRCodeModalVisible] = useState(false)
   const navigation = useNavigation<SettingsScreenProps>()
 
   const handleOpenNotificationPreferences = () => {
@@ -68,9 +68,9 @@ export default function SettingScreen() {
     },
     {
       title: "Your friends are not here?",
-      description: "Find/Invite friends on Wavv",
+      description: "Invite friends on Wavv",
       icon: <ShareIcon />,
-      onPress: () => onShare(user?.username),
+      onPress: () => setQRCodeModalVisible(true),
     },
     {
       title: "Push notifications",
@@ -140,6 +140,14 @@ export default function SettingScreen() {
         fullyHiddenOnClose={true}>
         <NotificationPreferences />
       </BottomDrawer>
+      {!!user && QRCodeModalVisible && (
+        <QRCodeModal
+          isVisible={QRCodeModalVisible}
+          onClose={() => setQRCodeModalVisible(false)}
+          user={user}
+          sheetContainerStyle={styles.sheetContainerStyle}
+        />
+      )}
     </SafeAreaView>
   )
 }
@@ -160,5 +168,8 @@ const styles = StyleSheet.create({
   optionsContainer: {
     paddingHorizontal: 20,
     gap: 12,
+  },
+  sheetContainerStyle: {
+    marginBottom: -10,
   },
 })
