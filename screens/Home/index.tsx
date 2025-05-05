@@ -1,15 +1,7 @@
 import UserStatus from "@/components/cards/UserStatus"
 import { RootStackParamList } from "@/types"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
-import {
-  StyleSheet,
-  View,
-  StatusBar,
-  Platform,
-  Pressable,
-  AppState,
-  AppStateStatus,
-} from "react-native"
+import { StyleSheet, View, StatusBar, Platform, Pressable } from "react-native"
 import { runOnJS, useDerivedValue } from "react-native-reanimated"
 import { useCallback, useEffect, useRef, useState } from "react"
 import Signaling from "@/components/lists/signaling"
@@ -55,10 +47,7 @@ export default function HomeScreen() {
   const { data, refetch: refetchPoints } = useFetchPoints()
   const [QRCodeModalVisible, setQRCodeModalVisible] = useState(false)
   const [addToFriendModalVisible, setAddToFriendModalVisible] = useState(false)
-  const [deepLinkUrl, setDeepLinkUrl] = useState<string | null>(null)
-  const [appState, setAppState] = useState<AppStateStatus>(
-    AppState.currentState,
-  )
+  const url = Linking.useURL()
   const [dataFromDeepLink, setDataFromDeepLink] = useState({
     userId: "",
     username: "",
@@ -77,42 +66,15 @@ export default function HomeScreen() {
   }
 
   useEffect(() => {
-    const handleAppStateChange = async (nextAppState: AppStateStatus) => {
-      // When app comes back to foreground from background
-      if (appState.match(/inactive|background/) && nextAppState === "active") {
-        try {
-          // Check if there's a pending URL
-          const currentUrl = await Linking.getInitialURL()
-          console.log({ currentUrl })
-          if (currentUrl) {
-            console.log("Retrieved URL after background:", currentUrl)
-            setDeepLinkUrl(currentUrl)
-          }
-        } catch (e) {
-          console.error("Failed to get URL after background:", e)
-        }
-      }
-
-      setAppState(nextAppState)
-    }
-
-    const subscription = AppState.addEventListener(
-      "change",
-      handleAppStateChange,
-    )
-    return () => subscription.remove()
-  }, [appState])
-
-  useEffect(() => {
-    if (!deepLinkUrl) return
-    const parsedUrl = Linking.parse(deepLinkUrl)
+    if (!url) return
+    const parsedUrl = Linking.parse(url)
     setAddToFriendModalVisible(true)
     setDataFromDeepLink({
       userId: (parsedUrl.queryParams?.user_id as string) || "",
       username: (parsedUrl.queryParams?.username as string) || "",
       names: (parsedUrl.queryParams?.names as string) || "",
     })
-  }, [deepLinkUrl])
+  }, [url])
 
   useFocusEffect(
     useCallback(() => {
