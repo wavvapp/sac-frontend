@@ -50,6 +50,7 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
       }
     } catch (error) {
       console.error("Error while registering for notifications: ", error)
+      throw error
     }
   }
 

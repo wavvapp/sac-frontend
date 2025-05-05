@@ -14,6 +14,7 @@ export default function UserProfile() {
           fullName={names}
           username={username}
           style={styles.userInfoStyles}
+          showUsername={true}
           size="lg"
         />
       )}
