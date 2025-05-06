@@ -47,7 +47,7 @@ export default function HomeScreen() {
   const { data, refetch: refetchPoints } = useFetchPoints()
   const [QRCodeModalVisible, setQRCodeModalVisible] = useState(false)
   const [addToFriendModalVisible, setAddToFriendModalVisible] = useState(false)
-  const url = Linking.useURL()
+  const [url, setUrl] = useState<string | null>(null)
   const [dataFromDeepLink, setDataFromDeepLink] = useState({
     userId: "",
     username: "",
@@ -64,6 +64,18 @@ export default function HomeScreen() {
     refetchFriendsData()
     navigation.navigate("Search")
   }
+
+  useEffect(() => {
+    Linking.getInitialURL().then((initialUrl) => {
+      if (initialUrl) setUrl(initialUrl)
+    })
+
+    const subscription = Linking.addEventListener("url", ({ url }) => {
+      setUrl(url)
+    })
+
+    return () => subscription.remove()
+  }, [])
 
   useEffect(() => {
     if (!url) return
