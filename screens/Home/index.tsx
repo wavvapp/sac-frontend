@@ -79,9 +79,8 @@ export default function HomeScreen() {
   }, [])
 
   useEffect(() => {
-    if (!url) return
+    if (!url || __DEV__) return
     const parsedUrl = Linking.parse(url)
-    if (parsedUrl.hostname !== "wavv") return
     setAddToFriendModalVisible(true)
     setDataFromDeepLink({
       userId: (parsedUrl.queryParams?.user_id as string) || "",
