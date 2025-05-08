@@ -29,6 +29,7 @@ import UserStatusDetailsModal from "../../components/StatusDetails/UserStatusDet
 import QRCodeModal from "../../components/QRCodeModal"
 import AddToFriendModal from "@/components/AddToFriendModal"
 import * as Linking from "expo-linking"
+import useCheckForNotificationPermission from "@/hooks/useCheckForNotificationPermission"
 
 export type HomeScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -53,7 +54,7 @@ export default function HomeScreen() {
     username: "",
     names: "",
   })
-
+  useCheckForNotificationPermission(allFriends || [])
   const queryClient = useQueryClient()
   const refetchFriendsData = useCallback(async () => {
     await queryClient.refetchQueries({ queryKey: ["friend-signals"] })
