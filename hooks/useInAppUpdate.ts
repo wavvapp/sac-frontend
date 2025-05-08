@@ -11,11 +11,7 @@ const useInAppUpdates = () => {
     const checkForUpdate = async () => {
       if (Platform.OS === "android") {
         try {
-          await ExpoInAppUpdates.checkAndStartUpdate(
-            // If you want an immediate update that will cover the app with the update overlay, set it to true.
-            // More details : https://developer.android.com/guide/playcore/in-app-updates#update-flows
-            false,
-          )
+          await ExpoInAppUpdates.checkAndStartUpdate(false)
         } catch (err) {
           console.log({ err })
         }
