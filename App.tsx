@@ -9,6 +9,7 @@ import { useFont } from "@/hooks/useFont"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { NotificationProvider } from "./contexts/NotificationContext"
 import * as Notifications from "expo-notifications"
+import useInAppUpdates from "./hooks/useInAppUpdate"
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync()
@@ -56,6 +57,7 @@ const queryClient = new QueryClient()
 
 export default function App() {
   const { loaded, error } = useFont()
+  useInAppUpdates()
 
   if (!loaded && !error) {
     return null

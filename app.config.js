@@ -39,6 +39,7 @@ export default {
       teamId: "CZ6DRS2DW4",
       associatedDomains: ["applinks:wavvapp.com"],
       infoPlist: {
+        appStoreID: "6738583772",
         NSCameraUsageDescription:
           "This app uses the camera to scan barcodes on event tickets.",
         UIBackgroundModes: ["remote-notification", "remote-notification"],
