@@ -1,4 +1,4 @@
-import { View, StyleSheet } from "react-native"
+import { View, StyleSheet, Text } from "react-native"
 import { theme } from "@/theme"
 import { useAuth } from "@/contexts/AuthContext"
 import LogoutIcon from "@/components/vectors/LogoutIcon"
@@ -26,6 +26,7 @@ import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { RootStackParamList } from "@/types"
 import QRCodeModal from "@/components/QRCodeModal"
+import Constants from "expo-constants"
 
 export type SettingsScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -148,6 +149,19 @@ export default function SettingScreen() {
           sheetContainerStyle={styles.sheetContainerStyle}
         />
       )}
+      <View
+        style={{
+          borderTopColor: theme.colors.black_100,
+          borderTopWidth: 1,
+          height: 50,
+          justifyContent: "center",
+          alignItems: "center",
+        }}>
+        <Text style={{ textAlign: "center", color: theme.colors.black_500 }}>
+          {process.env.APP_ENVIRONMENT === "staging" ? "Stage" : "Beta"} v
+          {Constants.expoConfig?.version}
+        </Text>
+      </View>
     </SafeAreaView>
   )
 }
@@ -163,7 +177,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     gap: 20,
     paddingTop: 10,
-    paddingBottom: 32,
+    paddingBottom: 20,
   },
   optionsContainer: {
     paddingHorizontal: 20,
