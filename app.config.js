@@ -23,7 +23,7 @@ export default {
     platforms: ["ios", "android", "web"],
     version: "1.7.0",
     orientation: "portrait",
-    icon: "./assets/images/icon.png",
+    icon: "./assets/images/wavv-new-icon.png",
     userInterfaceStyle: "light",
     splash: {
       image: "./assets/images/wsplash.png",
@@ -45,7 +45,7 @@ export default {
         UIBackgroundModes: ["remote-notification", "remote-notification"],
         NSAppTransportSecurity: {
           NSExceptionDomains: {
-            "local.hey.bild.de": {
+            "wavvapp.com": {
               NSIncludesSubdomains: true,
               NSTemporaryExceptionMinimumTLSVersion: "TLSv1.2",
               NSTemporaryExceptionAllowsInsecureHTTPLoads: true,
@@ -58,7 +58,7 @@ export default {
     },
     android: {
       adaptiveIcon: {
-        foregroundImage: "./assets/images/icon.png",
+        foregroundImage: "./assets/images/wavv-new-icon.png",
         backgroundColor: "#000000",
       },
       package: "com.apeunit.wavv.app",
