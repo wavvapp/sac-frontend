@@ -21,7 +21,7 @@ export default {
     slug: "Wavv",
     scheme: "wavv",
     platforms: ["ios", "android", "web"],
-    version: "1.7.0",
+    version: "1.7.1",
     orientation: "portrait",
     icon: "./assets/images/wavv-new-icon.png",
     userInterfaceStyle: "light",
@@ -35,7 +35,7 @@ export default {
       usesAppleSignIn: true,
       supportsTablet: true,
       bundleIdentifier: "com.apeunit.social.app",
-      buildNumber: "1.7.0",
+      buildNumber: "1.7.1",
       teamId: "CZ6DRS2DW4",
       associatedDomains: ["applinks:wavvapp.com"],
       infoPlist: {
