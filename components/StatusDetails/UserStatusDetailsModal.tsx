@@ -17,10 +17,12 @@ export default function UserStatusDetailsModal({
   toggleStatusDetailsModal,
   signal,
   user,
+  statusDetailsOpened,
 }: {
   toggleStatusDetailsModal: () => void
   signal: Signal
   user: User
+  statusDetailsOpened: boolean
 }) {
   const listRef = useRef(null)
   const navigation = useNavigation<HomeScreenProps>()
@@ -69,7 +71,9 @@ export default function UserStatusDetailsModal({
   }
 
   return (
-    <ModalBottomSheet toggleModalBottomSheet={toggleStatusDetailsModal}>
+    <ModalBottomSheet
+      isVisible={statusDetailsOpened}
+      toggleModalBottomSheet={toggleStatusDetailsModal}>
       <View style={styles.statusDescriptionContainer}>
         <UserAvailability
           fullName={user.names}

@@ -25,7 +25,7 @@ type ModalBottomSheetProps = {
   dragHandleStyle?: StyleProp<ViewStyle>
   sheetContainerStyle?: StyleProp<ViewStyle>
   blurBackdrop?: BlurViewProps
-  isVisible?: boolean
+  isVisible: boolean
   animationDuration?: number
 }
 

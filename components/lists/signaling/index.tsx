@@ -214,6 +214,7 @@ const Index = forwardRef<BottomDrawerRef>((_, ref) => {
       </BottomDrawer>
       {isStatusDetailsBottomSheetOpened && signalingFriend && (
         <ModalBottomSheet
+          isVisible={isStatusDetailsBottomSheetOpened}
           toggleModalBottomSheet={() =>
             setIsStatusDetailsBottomSheetOpened((prev) => !prev)
           }>

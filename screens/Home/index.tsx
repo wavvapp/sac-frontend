@@ -179,6 +179,7 @@ export default function HomeScreen() {
           toggleStatusDetailsModal={() =>
             setStatusDetailsOpened((prev) => !prev)
           }
+          statusDetailsOpened={statusDetailsOpened}
           signal={signal}
           user={user}
         />
