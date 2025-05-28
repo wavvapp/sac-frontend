@@ -5,6 +5,7 @@ import * as ExpoInAppUpdates from "expo-in-app-updates"
 import AlertDialog from "../components/AlertDialog"
 
 const useInAppUpdates = () => {
+  // test in app update
   useEffect(() => {
     if (__DEV__ || Platform.OS === "web") return
 
