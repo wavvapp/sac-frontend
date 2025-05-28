@@ -10,11 +10,13 @@ const useInAppUpdates = () => {
 
     const checkForUpdate = async () => {
       if (Platform.OS === "android") {
-        try {
-          await ExpoInAppUpdates.startUpdate(true)
-        } catch (err) {
-          console.log({ err })
-        }
+        ExpoInAppUpdates.checkForUpdate()
+          .then(async ({ updateAvailable }) => {
+            if (updateAvailable) await ExpoInAppUpdates.startUpdate(true)
+          })
+          .catch((err) => {
+            console.error("Error checking for update:", err)
+          })
       } else {
         ExpoInAppUpdates.checkForUpdate().then(({ updateAvailable }) => {
           if (!updateAvailable) return
@@ -27,7 +29,7 @@ const useInAppUpdates = () => {
             confirmText: "Update",
             cancelText: "Cancel",
             onConfirm: async () => {
-              await ExpoInAppUpdates.startUpdate()
+              await ExpoInAppUpdates.startUpdate(true)
             },
           })
         })
