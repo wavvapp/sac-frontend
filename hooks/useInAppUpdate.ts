@@ -11,7 +11,7 @@ const useInAppUpdates = () => {
     const checkForUpdate = async () => {
       if (Platform.OS === "android") {
         try {
-          await ExpoInAppUpdates.checkAndStartUpdate(false)
+          await ExpoInAppUpdates.startUpdate(true)
         } catch (err) {
           console.log({ err })
         }
