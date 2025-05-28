@@ -5,7 +5,6 @@ import * as ExpoInAppUpdates from "expo-in-app-updates"
 import AlertDialog from "../components/AlertDialog"
 
 const useInAppUpdates = () => {
-  // test in app update
   useEffect(() => {
     if (__DEV__ || Platform.OS === "web") return
 
@@ -13,16 +12,6 @@ const useInAppUpdates = () => {
       if (Platform.OS === "android") {
         ExpoInAppUpdates.checkForUpdate()
           .then(async ({ updateAvailable }) => {
-            AlertDialog.open({
-              description: `A new version ${updateAvailable ? "is available" : "is not available"}`,
-              title: `Update`,
-              variant: "confirm",
-              confirmText: "Update",
-              cancelText: "Cancel",
-              onConfirm: async () => {
-                await ExpoInAppUpdates.startUpdate(true)
-              },
-            })
             if (updateAvailable) await ExpoInAppUpdates.startUpdate(true)
           })
           .catch((err) => {
