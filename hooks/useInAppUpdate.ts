@@ -13,6 +13,16 @@ const useInAppUpdates = () => {
       if (Platform.OS === "android") {
         ExpoInAppUpdates.checkForUpdate()
           .then(async ({ updateAvailable }) => {
+            AlertDialog.open({
+              description: `A new version ${updateAvailable ? "is available" : "is not available"}`,
+              title: `Update`,
+              variant: "confirm",
+              confirmText: "Update",
+              cancelText: "Cancel",
+              onConfirm: async () => {
+                await ExpoInAppUpdates.startUpdate(true)
+              },
+            })
             if (updateAvailable) await ExpoInAppUpdates.startUpdate(true)
           })
           .catch((err) => {
