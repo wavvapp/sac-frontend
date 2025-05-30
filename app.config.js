@@ -16,19 +16,6 @@ export default {
         },
       ],
       "expo-apple-authentication",
-      [
-        "expo-splash-screen",
-        {
-          backgroundColor: "#000000",
-          image: "./assets/images/splash-icon-light.png",
-          dark: {
-            image: "./assets/images/splash-icon-light.png",
-            backgroundColor: "#000000",
-          },
-          resizeMode: "contain",
-          imageWidth: 200,
-        },
-      ],
     ],
     name: "Wavv",
     slug: "Wavv",
@@ -46,6 +33,15 @@ export default {
       buildNumber: "1.7.4",
       teamId: "CZ6DRS2DW4",
       associatedDomains: ["applinks:wavvapp.com"],
+      splash: {
+        resizeMode: "contain",
+        backgroundColor: "#000000",
+        image: "./assets/images/splash-icon-light.png",
+        dark: {
+          image: "./assets/images/splash-icon-light.png",
+          backgroundColor: "#000000",
+        },
+      },
       infoPlist: {
         appStoreID: "6738583772",
         NSCameraUsageDescription:
@@ -69,6 +65,15 @@ export default {
         foregroundImage: "./assets/images/adaptive-icon.png",
         monochromeImage: "./assets/images/adaptive-icon.png",
         backgroundColor: "#000000",
+      },
+      splash: {
+        resizeMode: "contain",
+        backgroundColor: "#000000",
+        image: "./assets/images/splash-icon-light.png",
+        dark: {
+          image: "./assets/images/splash-icon-light.png",
+          backgroundColor: "#000000",
+        },
       },
       package: "com.apeunit.wavv.app",
       googleServicesFile:
