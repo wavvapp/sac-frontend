@@ -67,7 +67,7 @@ export default {
         backgroundColor: "#000000",
       },
       splash: {
-        resizeMode: "contain",
+        resizeMode: "native",
         backgroundColor: "#000000",
         image: "./assets/images/splash-icon-light.png",
         dark: {
