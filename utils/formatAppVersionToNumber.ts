@@ -1,3 +1,3 @@
 export function formatAppVersionToNumber(version: string): number {
-  return Number(version.split(".").join())
+  return Number(version.split(".").join(""))
 }

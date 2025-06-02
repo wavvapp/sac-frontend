@@ -1,12 +1,13 @@
 import { useEffect } from "react"
-import { Platform } from "react-native"
+import { Linking, Platform } from "react-native"
 
+import { APP_STORE_URL } from "@/constants/app-info"
+import { ITuneLookupResponse } from "@/types/iTuneLookupResponse"
+import { formatAppVersionToNumber } from "@/utils/formatAppVersionToNumber"
+import axios from "axios"
+import Constants from "expo-constants"
 import * as ExpoInAppUpdates from "expo-in-app-updates"
 import AlertDialog from "../components/AlertDialog"
-import axios from "axios"
-import { ITuneLookupResponse } from "@/types/iTuneLookupResponse"
-import Constants from "expo-constants"
-import { formatAppVersionToNumber } from "@/utils/formatAppVersionToNumber"
 
 const useInAppUpdates = () => {
   useEffect(() => {
@@ -53,7 +54,7 @@ const useInAppUpdates = () => {
             confirmText: "Update",
             cancelText: "Cancel",
             onConfirm: async () => {
-              await ExpoInAppUpdates.startUpdate(true)
+              Linking.openURL(APP_STORE_URL)
             },
           })
         }
