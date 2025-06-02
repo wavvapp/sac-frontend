@@ -3,31 +3,12 @@ import { Platform } from "react-native"
 
 import * as ExpoInAppUpdates from "expo-in-app-updates"
 import AlertDialog from "../components/AlertDialog"
-import { useQuery } from "@tanstack/react-query"
 import axios from "axios"
 import { ITuneLookupResponse } from "@/types/iTuneLookupResponse"
 import Constants from "expo-constants"
 import { formatAppVersionToNumber } from "@/utils/formatAppVersionToNumber"
 
 const useInAppUpdates = () => {
-  const { data } = useQuery({
-    queryKey: ["iTuneLookup"],
-    queryFn: async () => {
-      const response = await axios.get<ITuneLookupResponse>(
-        `https://itunes.apple.com/lookup?bundleId=${Constants.expoConfig?.ios?.bundleIdentifier}`,
-      )
-
-      return response.data.results[0]
-    },
-    enabled:
-      Platform.OS === "ios" &&
-      !!Constants.expoConfig?.ios?.bundleIdentifier &&
-      !__DEV__,
-    staleTime: Infinity,
-    retry: 2,
-    retryDelay: 5000,
-  })
-
   useEffect(() => {
     if (__DEV__ || Platform.OS === "web") return
 
@@ -41,11 +22,28 @@ const useInAppUpdates = () => {
             console.error("Error checking for update:", err)
           })
       } else {
-        if (!Constants.expoConfig?.version || !data?.version) return
+        let iTunesResult: ITuneLookupResponse["results"][0] | undefined
+
+        if (
+          Platform.OS === "ios" &&
+          !!Constants.expoConfig?.ios?.bundleIdentifier
+        ) {
+          const response = await axios.get<ITuneLookupResponse>(
+            `https://itunes.apple.com/lookup?bundleId=${Constants.expoConfig?.ios?.bundleIdentifier}`,
+          )
+
+          if (response.data.results[0]) {
+            iTunesResult = response.data.results[0]
+          }
+        }
+
+        if (!Constants.expoConfig?.version || !iTunesResult?.version) return
         const installedAppVersion = formatAppVersionToNumber(
-          Constants.expoConfig?.version,
+          Constants.expoConfig.version,
         )
-        const latestAvailableVersion = formatAppVersionToNumber(data?.version)
+        const latestAvailableVersion = formatAppVersionToNumber(
+          iTunesResult.version,
+        )
 
         if (installedAppVersion < latestAvailableVersion) {
           AlertDialog.open({
@@ -63,7 +61,7 @@ const useInAppUpdates = () => {
     }
 
     checkForUpdate()
-  }, [data])
+  }, [])
 }
 
 export default useInAppUpdates
