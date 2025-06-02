@@ -19,6 +19,17 @@ const useInAppUpdates = () => {
           })
       } else {
         ExpoInAppUpdates.checkForUpdate().then(({ updateAvailable }) => {
+          AlertDialog.open({
+            description: `A new version of the app is available with many improvements and bug fixes. ${updateAvailable ? "Update now" : "Check later"}`,
+            title: `Update available`,
+            variant: "confirm",
+            confirmText: "Update",
+            cancelText: "Cancel",
+            onConfirm: async () => {
+              await ExpoInAppUpdates.startUpdate(true)
+            },
+          })
+
           if (!updateAvailable) return
 
           AlertDialog.open({
