@@ -23,13 +23,8 @@ export default {
     platforms: ["ios", "android", "web"],
     version: "1.7.4",
     orientation: "portrait",
-    icon: "./assets/images/wavv-new-icon.png",
+    icon: "./assets/images/icon.png",
     userInterfaceStyle: "light",
-    splash: {
-      image: "./assets/images/wsplash.png",
-      resizeMode: "contain",
-      backgroundColor: "#000000",
-    },
     assetBundlePatterns: ["**/*"],
     ios: {
       usesAppleSignIn: true,
@@ -38,6 +33,15 @@ export default {
       buildNumber: "1.7.4",
       teamId: "CZ6DRS2DW4",
       associatedDomains: ["applinks:wavvapp.com"],
+      splash: {
+        resizeMode: "contain",
+        backgroundColor: "#000000",
+        image: "./assets/images/splash-icon-light.png",
+        dark: {
+          image: "./assets/images/splash-icon-light.png",
+          backgroundColor: "#000000",
+        },
+      },
       infoPlist: {
         appStoreID: "6738583772",
         NSCameraUsageDescription:
@@ -58,8 +62,18 @@ export default {
     },
     android: {
       adaptiveIcon: {
-        foregroundImage: "./assets/images/wavv-new-icon.png",
+        foregroundImage: "./assets/images/adaptive-icon.png",
+        monochromeImage: "./assets/images/adaptive-icon.png",
         backgroundColor: "#000000",
+      },
+      splash: {
+        resizeMode: "native",
+        backgroundColor: "#000000",
+        image: "./assets/images/splash-icon-light.png",
+        dark: {
+          image: "./assets/images/splash-icon-light.png",
+          backgroundColor: "#000000",
+        },
       },
       package: "com.apeunit.wavv.app",
       googleServicesFile:
