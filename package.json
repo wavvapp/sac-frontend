@@ -1,6 +1,6 @@
 {
   "name": "wavv_app",
-  "version": "1.7.2",
+  "version": "1.7.4",
   "scripts": {
     "start": "expo start",
     "reset-project": "node ./scripts/reset-project.js",
