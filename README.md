@@ -49,3 +49,15 @@ Follow these steps to run the project:
 <p align="center">
   <img src="./assets/images/icp.png" alt="icp image" width="350" height="150">
 </p>
+
+## Documentation
+
+For detailed documentation about the application architecture and functionality, please check the [documentation directory](docs/README.md).
+
+Key documentation topics:
+- [Architecture Overview](docs/architecture.md)
+- [Data Models](docs/data-models.md)
+- [API Reference](docs/api-reference.md)
+- [Error Handling](docs/error-handling.md)
+
+For contributors, please review the documentation before making changes to ensure consistency with the existing architecture.
